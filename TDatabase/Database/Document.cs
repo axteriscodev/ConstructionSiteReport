@@ -15,11 +15,11 @@ public partial class Document
 
     public DateTime Date { get; set; }
 
+    public virtual ICollection<CompanyDocument> CompanyDocuments { get; set; } = new List<CompanyDocument>();
+
     public virtual Client IdClientNavigation { get; set; } = null!;
 
     public virtual ConstructorSite IdConstructorSiteNavigation { get; set; } = null!;
 
     public virtual ICollection<QuestionChosen> QuestionChosens { get; set; } = new List<QuestionChosen>();
-
-    public virtual ICollection<Company> IdCompanies { get; set; } = new List<Company>();
 }

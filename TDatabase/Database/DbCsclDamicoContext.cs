@@ -25,6 +25,8 @@ public partial class DbCsclDamicoContext : DbContext
 
     public virtual DbSet<Company> Companies { get; set; }
 
+    public virtual DbSet<CompanyDocument> CompanyDocuments { get; set; }
+
     public virtual DbSet<ConstructorSite> ConstructorSites { get; set; }
 
     public virtual DbSet<Document> Documents { get; set; }
@@ -32,6 +34,8 @@ public partial class DbCsclDamicoContext : DbContext
     public virtual DbSet<MacroCategory> MacroCategories { get; set; }
 
     public virtual DbSet<Question> Questions { get; set; }
+
+    public virtual DbSet<QuestionChoice> QuestionChoices { get; set; }
 
     public virtual DbSet<QuestionChosen> QuestionChosens { get; set; }
 
@@ -159,6 +163,29 @@ public partial class DbCsclDamicoContext : DbContext
                 .HasColumnName("VATCODE");
         });
 
+        modelBuilder.Entity<CompanyDocument>(entity =>
+        {
+            entity.HasKey(e => new { e.IdDocument, e.IdCompany }).HasName("PK__COMPANY___59D03CB3B3C3E5F7");
+
+            entity.ToTable("COMPANY_DOCUMENT");
+
+            entity.Property(e => e.IdDocument).HasColumnName("ID_DOCUMENT");
+            entity.Property(e => e.IdCompany).HasColumnName("ID_COMPANY");
+            entity.Property(e => e.Notes)
+                .IsUnicode(false)
+                .HasColumnName("NOTES");
+
+            entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.CompanyDocuments)
+                .HasForeignKey(d => d.IdCompany)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__COMPANY_D__ID_CO__49C3F6B7");
+
+            entity.HasOne(d => d.IdDocumentNavigation).WithMany(p => p.CompanyDocuments)
+                .HasForeignKey(d => d.IdDocument)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__COMPANY_D__ID_DO__48CFD27E");
+        });
+
         modelBuilder.Entity<ConstructorSite>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__CONSTRUC__3214EC279A0BB333");
@@ -219,25 +246,6 @@ public partial class DbCsclDamicoContext : DbContext
                 .HasForeignKey(d => d.IdConstructorSite)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__DOCUMENT__ID_CON__44FF419A");
-
-            entity.HasMany(d => d.IdCompanies).WithMany(p => p.IdDocuments)
-                .UsingEntity<Dictionary<string, object>>(
-                    "CompanyDocument",
-                    r => r.HasOne<Company>().WithMany()
-                        .HasForeignKey("IdCompany")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__COMPANY_D__ID_CO__49C3F6B7"),
-                    l => l.HasOne<Document>().WithMany()
-                        .HasForeignKey("IdDocument")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__COMPANY_D__ID_DO__48CFD27E"),
-                    j =>
-                    {
-                        j.HasKey("IdDocument", "IdCompany").HasName("PK__COMPANY___59D03CB3B3C3E5F7");
-                        j.ToTable("COMPANY_DOCUMENT");
-                        j.IndexerProperty<int>("IdDocument").HasColumnName("ID_DOCUMENT");
-                        j.IndexerProperty<int>("IdCompany").HasColumnName("ID_COMPANY");
-                    });
         });
 
         modelBuilder.Entity<MacroCategory>(entity =>
@@ -278,44 +286,29 @@ public partial class DbCsclDamicoContext : DbContext
                 .HasForeignKey(d => d.IdSubCategory)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__QUESTION__ID_SUB__2C3393D0");
+        });
 
-            entity.HasMany(d => d.IdChoices).WithMany(p => p.IdQuestions)
-                .UsingEntity<Dictionary<string, object>>(
-                    "ChoiceQuestion",
-                    r => r.HasOne<Choice>().WithMany()
-                        .HasForeignKey("IdChoice")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__CHOICE_QU__ID_CH__5812160E"),
-                    l => l.HasOne<Question>().WithMany()
-                        .HasForeignKey("IdQuestion")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__CHOICE_QU__ID_QU__571DF1D5"),
-                    j =>
-                    {
-                        j.HasKey("IdQuestion", "IdChoice").HasName("PK__CHOICE_Q__F037DAD3A13BCEBD");
-                        j.ToTable("CHOICE_QUESTION");
-                        j.IndexerProperty<int>("IdQuestion").HasColumnName("ID_QUESTION");
-                        j.IndexerProperty<int>("IdChoice").HasColumnName("ID_CHOICE");
-                    });
+        modelBuilder.Entity<QuestionChoice>(entity =>
+        {
+            entity.HasKey(e => new { e.IdQuestion, e.IdChoice }).HasName("PK__QUESTION__F037DAD3175C9C7F");
 
-            entity.HasMany(d => d.IdChoicesNavigation).WithMany(p => p.IdQuestionsNavigation)
-                .UsingEntity<Dictionary<string, object>>(
-                    "QuestionChoice",
-                    r => r.HasOne<Choice>().WithMany()
-                        .HasForeignKey("IdChoice")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__QUESTION___ID_CH__34C8D9D1"),
-                    l => l.HasOne<Question>().WithMany()
-                        .HasForeignKey("IdQuestion")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__QUESTION___ID_QU__33D4B598"),
-                    j =>
-                    {
-                        j.HasKey("IdQuestion", "IdChoice").HasName("PK__QUESTION__F037DAD3175C9C7F");
-                        j.ToTable("QUESTION_CHOICE");
-                        j.IndexerProperty<int>("IdQuestion").HasColumnName("ID_QUESTION");
-                        j.IndexerProperty<int>("IdChoice").HasColumnName("ID_CHOICE");
-                    });
+            entity.ToTable("QUESTION_CHOICE");
+
+            entity.Property(e => e.IdQuestion).HasColumnName("ID_QUESTION");
+            entity.Property(e => e.IdChoice).HasColumnName("ID_CHOICE");
+            entity.Property(e => e.Notes)
+                .IsUnicode(false)
+                .HasColumnName("NOTES");
+
+            entity.HasOne(d => d.IdChoiceNavigation).WithMany(p => p.QuestionChoices)
+                .HasForeignKey(d => d.IdChoice)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__QUESTION___ID_CH__34C8D9D1");
+
+            entity.HasOne(d => d.IdQuestionNavigation).WithMany(p => p.QuestionChoices)
+                .HasForeignKey(d => d.IdQuestion)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__QUESTION___ID_QU__33D4B598");
         });
 
         modelBuilder.Entity<QuestionChosen>(entity =>
