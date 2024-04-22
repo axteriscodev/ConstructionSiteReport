@@ -1,9 +1,5 @@
-﻿using Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
+using Shared;
 using TDatabase.Database;
 using DB = TDatabase.Database.DbCsclDamicoContext;
 
@@ -11,7 +7,7 @@ namespace TDatabase.Queries
 {
     public class QuestionDbHelper
     {
-     /*   public static List<Question> Select(DB db, int idSubCategory, int idMacroCategory)
+        public static List<QuestionModel> Select(DB db, int idSubCategory, int idMacroCategory)
         {
             var questions = db.Questions.AsQueryable();
 
@@ -34,44 +30,80 @@ namespace TDatabase.Queries
                             select q;
             }
 
-            var list = from q in questions
-                       from c in db.Choices
-                       from qc in db.ch
-        } */
+            var list = questions.Where(x=>x.Active == true).Select(x => new QuestionModel()
+            {
+                Id = x.Id,
+                Text = x.Text,
+                Choices = (from qc in db.QuestionChoices
+                           from c in db.Choices
+                           where qc.IdQuestion == x.Id
+                           && c.Id == qc.IdChoice
+                           select new ChoiceModel()
+                           {
+                               Id = c.Id,
+                               Tag = c.Tag,
+                               Value = c.Value,
+                           }).ToList()
+            }).ToList();
+            return list;
+        } 
 
-        public static async Task<int> Insert(DB db, ChoiceModel choice)
+        public static async Task<int> Insert(DB db, QuestionModel question)
         {
-            var choiseId = 0;
+            var questionId = 0;
             try
             {
-                var nextId = (db.Choices.Any() ? db.Choices.Max(x => x.Id) : 0) + 1;
-                Choice newChoice = new()
+                var nextId = (db.Questions.Any() ? db.Questions.Max(x => x.Id) : 0) + 1;
+                Question newQuestion = new()
                 {
                     Id = nextId,
-                    Value = choice.Value,
-                    Tag = choice.Tag,
+                    Text = question.Text,
+                    IdSubCategory = question.IdSubCategory,
+                    Active = true
                 };
-                db.Choices.Add(newChoice);
+                db.Questions.Add(newQuestion);
+
+                foreach(var c in question.Choices)
+                {
+                    QuestionChoice qc = new()
+                    {
+                        IdChoice = c.Id,
+                        IdQuestion = nextId
+                    };
+                    db.QuestionChoices.Add(qc);
+                }
                 await db.SaveChangesAsync();
-                choiseId = nextId;
+                questionId = nextId;
             }
             catch (Exception) { }
 
-            return choiseId;
+            return questionId;
         }
 
-        public static async Task<List<int>> Update(DB db, List<ChoiceModel> choices)
+        public static async Task<List<int>> Update(DB db, List<QuestionModel> questions)
         {
             List<int> modified = [];
             try
             {
-                foreach (var elem in choices)
+                foreach (var elem in questions)
                 {
-                    var c = db.Choices.Where(x => x.Id == elem.Id).SingleOrDefault();
-                    if (c is not null)
+                    var q = db.Questions.Where(x=>x.Id == elem.Id).FirstOrDefault();
+                    if (q is not null)
                     {
-                        c.Value = elem.Value;
-                        c.Tag = elem.Tag;
+                        q.IdSubCategory = elem.IdSubCategory;
+                        q.Text = elem.Text;
+
+                        db.QuestionChoices.RemoveRange(db.QuestionChoices.Where(x => x.IdQuestion == elem.Id));
+                        foreach(var choice in elem.Choices)
+                        {
+                            QuestionChoice newqc = new()
+                            {
+                                IdChoice = choice.Id,
+                                IdQuestion = elem.Id
+                            };
+                            db.Add(newqc);
+                        }
+
                         if (await db.SaveChangesAsync() > 0)
                         {
                             modified.Add(elem.Id);
@@ -84,27 +116,27 @@ namespace TDatabase.Queries
             return modified;
         }
 
-        public static async Task<List<int>> Delete(DB db, List<ChoiceModel> choices)
+        public static async Task<List<int>> Hide(DB db, List<QuestionModel> questions)
         {
-            List<int> deleted = [];
+            List<int> hiddenItems = [];
             try
             {
-                foreach (var elem in choices)
+                foreach (var elem in questions)
                 {
-                    var c = db.Choices.Where(x => x.Id == elem.Id).SingleOrDefault();
+                    var c = db.Questions.Where(x => x.Id == elem.Id).SingleOrDefault();
                     if (c is not null)
                     {
-                        db.Choices.Remove(c);
+                        c.Active = false;
                         if (await db.SaveChangesAsync() > 0)
                         {
-                            deleted.Add(elem.Id);
+                            hiddenItems.Add(elem.Id);
                         }
                     }
                 }
             }
             catch (Exception) { }
 
-            return deleted;
+            return hiddenItems;
         }
     }
 }

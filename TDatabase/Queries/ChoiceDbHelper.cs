@@ -14,7 +14,7 @@ namespace TDatabase.Queries
 
         public static List<ChoiceModel> Select(DB db)
         {
-            return [.. db.Choices.Select(c => new ChoiceModel
+            return [.. db.Choices.Where(x=>x.Active == true).Select(c => new ChoiceModel
             {
                 Id = c.Id,
                 Value = c.Value,
@@ -33,6 +33,7 @@ namespace TDatabase.Queries
                     Id = nextId,
                     Value = choice.Value,
                     Tag = choice.Tag,
+                    Active = true
                 };
                 db.Choices.Add(newChoice);
                 await db.SaveChangesAsync();
@@ -66,9 +67,9 @@ namespace TDatabase.Queries
             return modified;
         }
 
-        public static async Task<List<int>> Delete(DB db, List<ChoiceModel> choices)
+        public static async Task<List<int>> Hide(DB db, List<ChoiceModel> choices)
         {
-            List<int> deleted = [];
+            List<int> hiddenItems = [];
             try
             {
                 foreach (var elem in choices)
@@ -76,17 +77,17 @@ namespace TDatabase.Queries
                     var c = db.Choices.Where(x => x.Id == elem.Id).SingleOrDefault();
                     if (c is not null)
                     {
-                        db.Choices.Remove(c);
+                        c.Active = false;
                         if (await db.SaveChangesAsync() > 0)
                         {
-                            deleted.Add(elem.Id);
+                            hiddenItems.Add(elem.Id);
                         }
                     }
                 }
             }
             catch (Exception) { }
 
-            return deleted;
+            return hiddenItems;
         }
     }
 }
