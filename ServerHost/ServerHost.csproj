@@ -14,6 +14,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\ClientWebApp\ClientWebApp.csproj" />
 		<ProjectReference Include="..\Shared\Shared.csproj" />
+		<ProjectReference Include="..\TDatabase\TDatabase.csproj" />
 	</ItemGroup>
 
 </Project>
