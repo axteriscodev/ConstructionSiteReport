@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 using Shared;
 using TDatabase.Database;
-using DB = TDatabase.Database.DbCsclDamicoContext;
+using DB = TDatabase.Database.DbCsclAxteriscoContext;
 
 namespace TDatabase.Queries
 {
@@ -14,13 +14,13 @@ namespace TDatabase.Queries
             if (idMacroCategory > 0)
             {
                 questions = from q in questions
-                            where q.IdMacroCategory == idMacroCategory
+                            //where q.IdMacroCategory == idMacroCategory
                             select q;
             }
             if (idSubCategory > 0)
             {
                 questions = from q in questions
-                            where q.IdSubCategory == idSubCategory
+                            //where q.IdSubCategory == idSubCategory
                             select q;
             }
 
@@ -42,7 +42,7 @@ namespace TDatabase.Queries
             return list;
         } 
 
-        public static async Task<int> Insert(DB db, QuestionModel question, SubCategory sub)
+        public static async Task<int> Insert(DB db, QuestionModel question)
         {
             var questionId = 0;
             try
@@ -52,7 +52,7 @@ namespace TDatabase.Queries
                 {
                     Id = nextId,
                     Text = question.Text,
-                    IdSubCategory = sub.Id,
+                    
                     Active = true
                 };
                 db.Questions.Add(newQuestion);
