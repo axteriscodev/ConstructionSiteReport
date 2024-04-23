@@ -82,10 +82,9 @@ public partial class TableCategories
             {
                 //tra i parametri che invio al dialog creo un EventCallback da passare al componente
                 { "OnSaveComplete", EventCallback.Factory.Create(this, ReloadTable) },
-                { "TipoAnagrafica", TipiAnagraficheRame.Sezione},
-                { "Creazione", true },
+                { "CreationMode", true },
             };
-            await DialogService.OpenAsync<FormAnagraficheRame>("Nuova sezione", parameters: param, options: newOptions);
+            await DialogService.OpenAsync<FormCategories>("Nuova categoria", parameters: param, options: newOptions);
         }
 
 
@@ -102,11 +101,10 @@ public partial class TableCategories
             {
                 //tra i parametri che invio al dialog creo un EventCallback da passare al componente
                 { "OnSaveComplete", EventCallback.Factory.Create(this, ReloadTable) },
-                { "TipoAnagrafica", TipiAnagraficheRame.Sezione},
-                { "Oggetto", item},
-                {"Creazione", false },
+                { "Object", item},
+                {"CreationMode", false },
             };
-            await DialogService.OpenAsync<FormAnagraficheRame>("Aggiorna sezione", parameters: param, options: newOptions);
+            await DialogService.OpenAsync<FormCategories>("Aggiorna categoria", parameters: param, options: newOptions);
         }
 
         private async Task Hide(CategoryModel category)
@@ -117,7 +115,7 @@ public partial class TableCategories
             Console.WriteLine("cliccato: " + confirmationResult);
             if (confirmationResult == true)
             {
-                var response = await CategoryController.Hide(category);
+                var response = await HttpManager.SendHttpRequest("Category/Hide", category);
                 NotificationService.Notify(response);
                 if (response.Code.Equals("0"))
                 {

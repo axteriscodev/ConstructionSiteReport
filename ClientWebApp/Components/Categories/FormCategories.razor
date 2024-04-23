@@ -1,5 +1,52 @@
-﻿<h3>FormCategories</h3>
+﻿@using ClientWebApp.Managers;
 
-@code {
+@inject HttpManager HttpManager
+@inject AXT_NotificationService NotificationService
 
-}
+<div class="">
+    <RadzenTemplateForm TItem="FormCategoriesData" Data=@form Submit=@Salva>
+        <RadzenStack class="px-2">
+            <RadzenFormField Text="Nome <span style='color:red'> (obbligatorio)</span>" Variant="@variant">
+                <ChildContent>
+                    <RadzenTextBox Name="nome" @bind-Value="@form.Nome" />
+                </ChildContent>
+                <Helper>
+                    <RadzenRequiredValidator Component="nome" Popup=false
+                                             Text="Il campo nome è obbligatorio" />
+                </Helper>
+            </RadzenFormField>
+           c
+                @* Se sono in creazione *@
+                @if (CreationMode)
+                {
+                    <RadzenFormField Text="Nome categoria <span style='color:red'> (obbligatorio)</span>" Variant="@variant">
+                        <ChildContent>
+                            <RadzenDropDown Name="nomeCategoria" @bind-Value="@form.Nome" Data="tipiMisurazione"
+                                            TextProperty="Nome" />
+                        </ChildContent>
+                        <Helper>
+                            <RadzenRequiredValidator Component="nomeCategoria" Popup=false
+                                                     Text="Il nome della categoria è obbligatorio" />
+                        </Helper>
+                    </RadzenFormField>
+                }
+                @* Se non sono in creazione *@
+                else
+                {
+                    <RadzenFormField Text="Nome Categoria" Variant="@variant">
+                        <ChildContent>
+                            <RadzenTextBox Name="nomeCategoria" @bind-Value="@form.FormCategoriesData!.Nome" Disabled=true />
+                        </ChildContent>
+                    </RadzenFormField>
+                }
+                <!-- <RadzenFormField Text="Descrizione campo" Variant="@variant">
+                    <ChildContent>
+                        <RadzenTextBox Name="descrizioneCampo" @bind-Value="@form.Descrizione" />
+                    </ChildContent>
+                </RadzenFormField> -->
+            
+            <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Salva" class="buttonSalva" IsBusy=@onSaving
+                          BusyText="Salvataggio in corso" />
+        </RadzenStack>
+    </RadzenTemplateForm>
+</div>
