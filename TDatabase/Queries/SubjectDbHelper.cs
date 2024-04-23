@@ -12,7 +12,7 @@ namespace TDatabase.Queries
             {
                 Id = s.Id,
                 Text = s.Text,
-                questions = db.Questions.Where(q => q.IdSubject == s.Id).Select(q => new QuestionModel()
+                Questions = db.Questions.Where(q => q.IdSubject == s.Id).Select(q => new QuestionModel()
                 {
                     Id = q.Id,
                     Text = q.Text,
@@ -73,12 +73,12 @@ namespace TDatabase.Queries
             return modified;
         }
 
-        public static async Task<List<int>> Hide(DB db, List<ChoiceModel> choices)
+        public static async Task<List<int>> Hide(DB db, List<SubjectModel> subjects)
         {
             List<int> hiddenItems = [];
             try
             {
-                foreach (var elem in choices)
+                foreach (var elem in subjects)
                 {
                     var mc = db.Subjects.Where(x => x.Id == elem.Id).SingleOrDefault();
                     if (mc is not null)

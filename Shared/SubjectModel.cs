@@ -11,5 +11,5 @@ public class SubjectModel
     public string Text { get; set; } = "";
     
     [JsonPropertyName("questions")]
-    public List<QuestionModel> questions { get; set; } = [];
+    public List<QuestionModel> Questions { get; set; } = [];
 }

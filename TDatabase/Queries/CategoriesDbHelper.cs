@@ -31,7 +31,7 @@ namespace TDatabase.Queries
             }).ToList();
         }
 
-        public static async Task<int> Insert(DB db, CategoryModel macro)
+        public static async Task<int> Insert(DB db, CategoryModel category)
         {
             var macroId = 0;
             try
@@ -40,7 +40,7 @@ namespace TDatabase.Queries
                 Category newMacro = new()
                 {
                     Id = nextId,
-                    Text = macro.Text,
+                    Text = category.Text,
                     Active = true
                 };
                 db.Categories.Add(newMacro);
@@ -52,12 +52,12 @@ namespace TDatabase.Queries
             return macroId;
         }
 
-        public static async Task<List<int>> Update(DB db, List<CategoryModel> macros)
+        public static async Task<List<int>> Update(DB db, List<CategoryModel> categories)
         {
             List<int> modified = [];
             try
             {
-                foreach (var elem in macros)
+                foreach (var elem in categories)
                 {
                     var m = db.Categories.Where(x => x.Id == elem.Id).SingleOrDefault();
                     if (m is not null)
@@ -75,12 +75,12 @@ namespace TDatabase.Queries
             return modified;
         }
 
-        public static async Task<List<int>> Hide(DB db, List<ChoiceModel> choices)
+        public static async Task<List<int>> Hide(DB db, List<CategoryModel> categories)
         {
             List<int> hiddenItems = [];
             try
             {
-                foreach (var elem in choices)
+                foreach (var elem in categories)
                 {
                     var mc = db.Categories.Where(x => x.Id == elem.Id).SingleOrDefault();
                     if (mc is not null)
