@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using ServerHost.Services;
 using System.Diagnostics;
 using System.Text.Json;
+using TDatabase.Database;
+using TDatabase.Utilities;
 
 namespace ServerHost.Controllers
 {
@@ -10,6 +12,14 @@ namespace ServerHost.Controllers
     {
 
         protected const int ZERO = 0;
+
+
+        [NonAction]
+        protected DbCsclAxteriscoContext GetDbConnection()
+        {
+            var connectionString = ConfigurationService.GetConnection() ?? "";
+            return DatabaseContextFactory.Create(connectionString);
+        }
 
         /// <summary>
         /// Metodo che inizializza un timer per il conto del tempo impiegato ad eseguire la richiesta

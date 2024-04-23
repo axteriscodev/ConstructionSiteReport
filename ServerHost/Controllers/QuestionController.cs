@@ -23,8 +23,7 @@ namespace ServerHost.Controllers
 
             try
             {
-                var connectionString = ConfigurationService.GetConnection() ?? "";
-                var db = DatabaseContextFactory.Create(connectionString);
+                var db = GetDbConnection();
                 var list = ChoiceDbHelper.Select(db);
                 response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
