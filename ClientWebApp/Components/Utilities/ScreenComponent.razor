@@ -1,0 +1,95 @@
+﻿@using ClientWebApp.Managers
+@using ClientWebApp.Model
+
+@inject ScreenManager ScreenManager
+@inject IJSRuntime JS
+
+@code {
+
+    /// <summary>
+    /// Evento che comunica il cambiamento della grandezza dello schermo
+    /// </summary>
+    [Parameter]
+    public EventCallback<ScreenDimension?> OnScreenSizeChanged { get; set; }
+    /// <summary>
+    /// Valore minimo della larghezza dello schermo per considerarlo medium
+    /// </summary>
+    [Parameter]
+    public int MediumWith { get; set; } = 800;
+    /// <summary>
+    /// Valore minimo della larghezza dello schermo per considerarlo big
+    /// </summary>
+    [Parameter]
+    public int BigWith { get; set; } = 1200;
+
+    /// <summary>
+    /// La dimensione attuale dello schermo
+    /// </summary>
+    public ScreenDimension? Screen { get; set; }
+
+
+    protected override Task OnInitializedAsync()
+    {
+        ScreenSetup();
+        return base.OnInitializedAsync();
+    }
+
+    /// <summary>
+    /// Inizializza il componente chiedendo al servizio ScreenManager le dimensioni attuali
+    /// dello schermo e registrandosi all'evento Rezise del ScreenManager per le modifiche
+    /// della view in tempo reale
+    /// </summary>
+    private void ScreenSetup()
+    {
+        ScreenManager.Init(JS);
+        Screen = CalculateScreenDimension(ScreenManager.GetScreenSize());
+        ScreenManager.Resize += ScreenDimensionChanged!;
+        CallEvent();
+    }
+
+    /// <summary>
+    /// Metodo registrato all'evento del ScreenManager Resize
+    /// </summary>
+    /// <param name="sender">oggetto che invoca l'evento</param>
+    /// <param name="dimension">le dimensioni dello schermo</param>
+    private void ScreenDimensionChanged(object sender, ScreenSize dimension)
+    {
+        var newDimension = CalculateScreenDimension(ScreenManager.GetScreenSize());
+        if (newDimension != Screen)
+        {
+            Screen = newDimension;
+            CallEvent();
+        }
+    }
+
+    /// <summary>
+    /// Metodo per calcolare la grandezza dello schermo
+    /// </summary>
+    /// <param name="size"></param>
+    private ScreenDimension? CalculateScreenDimension(ScreenSize? size)
+    {
+        ScreenDimension? dim = null;
+        if(size is not null)
+        {
+            if (size.Width < MediumWith)
+            {
+                dim = ScreenDimension.Small;
+            }
+            else if (size.Width < BigWith)
+            {
+                dim = ScreenDimension.Medium;
+            }
+            else
+            {
+                dim = ScreenDimension.Big;
+            }
+        }
+        return dim;
+    }
+
+    /// <summary>
+    /// Metodo che fa scattare l'evento per comunicare a chi è in ascolto che la dimensione
+    ///  dello schermo è cambiata
+    /// </summary>
+    private void CallEvent() => OnScreenSizeChanged.InvokeAsync(Screen);
+}

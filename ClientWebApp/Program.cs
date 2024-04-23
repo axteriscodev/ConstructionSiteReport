@@ -11,6 +11,8 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddScoped<HttpManager>();
 
+builder.Services.AddSingleton<ScreenManager>();
+
 //componenti radzen
 builder.Services.AddRadzenComponents();
 
