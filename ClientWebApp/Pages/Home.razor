@@ -1,11 +1,8 @@
 ﻿@using ClientWebApp.Model
-@using ClientWebApp.Managers
 
-@inject HttpManager manager
 
 @page "/"
 
-<ScreenComponent OnScreenSizeChanged="@CambiaDimensione"/>
 <PageTitle>Home</PageTitle>
 
 <h1>Hello, world!</h1>
@@ -18,9 +15,4 @@ Welcome to your new app.
 
 
 
-
-    private void CambiaDimensione(ScreenDimension? dimension){
-        dim = dimension;
-        Console.WriteLine(dimension);
-    }
 }

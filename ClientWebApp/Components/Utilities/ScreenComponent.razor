@@ -15,12 +15,12 @@
     /// Valore minimo della larghezza dello schermo per considerarlo medium
     /// </summary>
     [Parameter]
-    public int MediumWith { get; set; } = 1024;
+    public int MediumWith { get; set; } = 800;
     /// <summary>
     /// Valore minimo della larghezza dello schermo per considerarlo big
     /// </summary>
     [Parameter]
-    public int BigWith { get; set; } = 2048;
+    public int BigWith { get; set; } = 1200;
 
     /// <summary>
     /// La dimensione attuale dello schermo
@@ -41,7 +41,6 @@
     /// </summary>
     private void ScreenSetup()
     {
-        Console.WriteLine("ciao setup");
         ScreenManager.Init(JS);
         Screen = CalculateScreenDimension(ScreenManager.GetScreenSize());
         ScreenManager.Resize += ScreenDimensionChanged!;
@@ -55,7 +54,6 @@
     /// <param name="dimension">le dimensioni dello schermo</param>
     private void ScreenDimensionChanged(object sender, ScreenSize dimension)
     {
-        Console.WriteLine("ciao evento");
         var newDimension = CalculateScreenDimension(ScreenManager.GetScreenSize());
         if (newDimension != Screen)
         {

@@ -15,7 +15,6 @@ namespace ClientWebApp.Managers
         /// <param name="js"></param>
         public async void Init(IJSRuntime js)
         {
-            Console.WriteLine("ciao");
             if (JS == null)
             {
                 JS = js;
@@ -42,7 +41,6 @@ namespace ClientWebApp.Managers
         [JSInvokable]
         public void SetScreenDimensions(int jsBrowserWidth, int jsBrowserHeight)
         {
-            Console.WriteLine("cambio dimensione");
             dimension!.Width = jsBrowserWidth;
             dimension!.Height = jsBrowserHeight;
             Resize?.Invoke(this, dimension);
