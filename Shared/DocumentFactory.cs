@@ -6,9 +6,9 @@ public class DocumentFactory
 {
     public QuestionRepository QuestionRepository { get; set; } = new QuestionRepository();
 
-    public List<Question> SelectedQuestion = [];
+    public List<QuestionModel> SelectedQuestion = [];
 
-    public Document createDocument()
+    public static Document CreateDocument()
     {
         return new Document();
     }

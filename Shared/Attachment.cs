@@ -14,7 +14,7 @@ public class Attachment
     public DateTime Date { get; set; }
 
     [JsonPropertyName("question")]
-    public Question question{ get; set; }= new Question();
+    public QuestionModel question{ get; set; }= new QuestionModel();
 
     [JsonPropertyName("path")]
     public string Path { get; set; } = "";
