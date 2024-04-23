@@ -26,7 +26,7 @@ public class Document
     public int Revision { get; set;}
 
     [JsonPropertyName("macroCategories")]
-    public List<MacroCategoryModel> MacroCategories { get; set;} = [];
+    public List<CategoryModel> MacroCategories { get; set;} = [];
 
     [JsonPropertyName("companies")]
     public List<Company> Companiesù { get; set;} = [];

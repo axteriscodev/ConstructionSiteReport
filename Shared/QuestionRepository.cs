@@ -2,5 +2,5 @@
 
 public class QuestionRepository
 {
-    public List<MacroCategoryModel> MacroCategories { get; set; } = [];
+    public List<CategoryModel> MacroCategories { get; set; } = [];
 }
