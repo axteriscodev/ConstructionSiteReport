@@ -1,8 +1,8 @@
 ﻿using AXT_WebComunication.WebResponse;
 using Microsoft.AspNetCore.Mvc;
 using ServerHost.Services;
+using Shared;
 using TDatabase.Queries;
-using TDatabase.Utilities;
 
 namespace ServerHost.Controllers
 {
@@ -12,10 +12,11 @@ namespace ServerHost.Controllers
     public class QuestionController : DefaultController
     {
 
+        #region Questions
 
         [LogAction]
         [HttpPost]
-        public AXT_WebResponse ChoicesList() 
+        public AXT_WebResponse QuestionsList()
         {
             var response = new AXT_WebResponse();
             var stopwatch = StartTime();
@@ -24,16 +25,87 @@ namespace ServerHost.Controllers
             try
             {
                 var db = GetDbConnection();
-                var list = ChoiceDbHelper.Select(db);
+                var list = QuestionDbHelper.Select(db);
                 response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
-                response = ExceptionWebResponse(ex,"");
+                response = ExceptionWebResponse(ex, "");
             }
             StopTime(stopwatch);
             return response;
         }
 
+        [LogAction]
+        [HttpPost]
+        public AXT_WebResponse SaveQuestion(QuestionModel newQuestion)
+        {
+            var response = new AXT_WebResponse();
+            var stopwatch = StartTime();
+            ConfigureLog("", 0);
+
+            try
+            {
+                var db = GetDbConnection();
+                var q = QuestionDbHelper.Insert(db, newQuestion);
+                response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), q);
+
+            }
+            catch (Exception ex)
+            {
+                response = ExceptionWebResponse(ex, "");
+            }
+            StopTime(stopwatch);
+            return response;
+        }
+
+        [LogAction]
+        [HttpPost]
+        public AXT_WebResponse UpdateQuestion(List<QuestionModel> questions)
+        {
+            var response = new AXT_WebResponse();
+            var stopwatch = StartTime();
+            ConfigureLog("", 0);
+
+            try
+            {
+                var db = GetDbConnection();
+                var q = QuestionDbHelper.Update(db, questions);
+                response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), q);
+
+            }
+            catch (Exception ex)
+            {
+                response = ExceptionWebResponse(ex, "");
+            }
+            StopTime(stopwatch);
+            return response;
+        }
+
+        [LogAction]
+        [HttpPost]
+        public AXT_WebResponse HideQuestion(List<QuestionModel> questions)
+        {
+            var response = new AXT_WebResponse();
+            var stopwatch = StartTime();
+            ConfigureLog("", 0);
+
+            try
+            {
+                var db = GetDbConnection();
+                var q = QuestionDbHelper.Hide(db, questions);
+                response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), q);
+
+            }
+            catch (Exception ex)
+            {
+                response = ExceptionWebResponse(ex, "");
+            }
+            StopTime(stopwatch);
+            return response;
+        }
+
+        #endregion
     }
 }
