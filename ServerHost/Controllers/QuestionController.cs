@@ -107,5 +107,102 @@ namespace ServerHost.Controllers
         }
 
         #endregion
+
+
+        #region Choice
+
+        [LogAction]
+        [HttpPost]
+        public AXT_WebResponse ChoicesList()
+        {
+            var response = new AXT_WebResponse();
+            var stopwatch = StartTime();
+            ConfigureLog("", 0);
+
+            try
+            {
+                var db = GetDbConnection();
+                var list = ChoiceDbHelper.Select(db);
+                response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
+
+            }
+            catch (Exception ex)
+            {
+                response = ExceptionWebResponse(ex, "");
+            }
+            StopTime(stopwatch);
+            return response;
+        }
+
+        [LogAction]
+        [HttpPost]
+        public AXT_WebResponse SaveChoice(ChoiceModel newChoice)
+        {
+            var response = new AXT_WebResponse();
+            var stopwatch = StartTime();
+            ConfigureLog("", 0);
+
+            try
+            {
+                var db = GetDbConnection();
+                var c = ChoiceDbHelper.Insert(db, newChoice);
+                response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), c);
+
+            }
+            catch (Exception ex)
+            {
+                response = ExceptionWebResponse(ex, "");
+            }
+            StopTime(stopwatch);
+            return response;
+        }
+
+        [LogAction]
+        [HttpPost]
+        public AXT_WebResponse UpdateChoice(List<ChoiceModel> choices)
+        {
+            var response = new AXT_WebResponse();
+            var stopwatch = StartTime();
+            ConfigureLog("", 0);
+
+            try
+            {
+                var db = GetDbConnection();
+                var c = ChoiceDbHelper.Update(db, choices);
+                response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), c);
+
+            }
+            catch (Exception ex)
+            {
+                response = ExceptionWebResponse(ex, "");
+            }
+            StopTime(stopwatch);
+            return response;
+        }
+
+        [LogAction]
+        [HttpPost]
+        public AXT_WebResponse HideChoice(List<ChoiceModel> choices)
+        {
+            var response = new AXT_WebResponse();
+            var stopwatch = StartTime();
+            ConfigureLog("", 0);
+
+            try
+            {
+                var db = GetDbConnection();
+                var c = ChoiceDbHelper.Hide(db, choices);
+                response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), c);
+
+            }
+            catch (Exception ex)
+            {
+                response = ExceptionWebResponse(ex, "");
+            }
+            StopTime(stopwatch);
+            return response;
+        }
+
+        #endregion
     }
 }
