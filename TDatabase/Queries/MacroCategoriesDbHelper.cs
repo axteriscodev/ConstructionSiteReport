@@ -6,9 +6,9 @@ namespace TDatabase.Queries
 {
     public class MacroCategoriesDbHelper
     {
-        public static List<MacroCategoryModel> Select(DB db)
+        public static List<CategoryModel> Select(DB db)
         {
-            return db.MacroCategories.Select(x => new MacroCategoryModel()
+            return db.MacroCategories.Select(x => new CategoryModel()
             {
                 Id = x.Id,
                 Text = x.Text,
@@ -29,7 +29,7 @@ namespace TDatabase.Queries
             }).ToList();
         }
 
-        public static async Task<int> Insert(DB db, MacroCategoryModel macro)
+        public static async Task<int> Insert(DB db, CategoryModel macro)
         {
             var macroId = 0;
             try
@@ -50,7 +50,7 @@ namespace TDatabase.Queries
             return macroId;
         }
 
-        public static async Task<List<int>> Update(DB db, List<MacroCategoryModel> macros)
+        public static async Task<List<int>> Update(DB db, List<CategoryModel> macros)
         {
             List<int> modified = [];
             try

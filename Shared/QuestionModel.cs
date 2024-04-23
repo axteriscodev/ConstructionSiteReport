@@ -10,6 +10,12 @@ public class QuestionModel
     [JsonPropertyName("text")]
     public string Text { get; set; } = "";
 
+    [JsonPropertyName("idCategory")]
+    public int IdCategory { get; set; }
+
+    [JsonPropertyName("idSubject")]
+    public int? IdSubject { get; set; }
+
     [JsonPropertyName("choices")]
     public List<ChoiceModel> Choices { get; set; } = [];
 

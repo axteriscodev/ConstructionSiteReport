@@ -6,9 +6,9 @@ namespace TDatabase.Queries
 {
     public class SubCategoriesDbHelper
     {
-        public static List<SubCategoryModel> Select(DB db)
+        public static List<SubjectModel> Select(DB db)
         {
-            return db.SubCategories.Select(s => new SubCategoryModel()
+            return db.SubCategories.Select(s => new SubjectModel()
             {
                 Id = s.Id,
                 Text = s.Text,
@@ -29,7 +29,7 @@ namespace TDatabase.Queries
             }).ToList();
         }
 
-        public static async Task<int> Insert(DB db, SubCategoryModel sub)
+        public static async Task<int> Insert(DB db, SubjectModel sub)
         {
             var subId = 0;
             try
@@ -50,7 +50,7 @@ namespace TDatabase.Queries
             return subId;
         }
 
-        public static async Task<List<int>> Update(DB db, List<SubCategoryModel> subs)
+        public static async Task<List<int>> Update(DB db, List<SubjectModel> subs)
         {
             List<int> modified = [];
             try

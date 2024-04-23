@@ -2,14 +2,14 @@
 
 namespace Shared;
 
-public class SubCategoryModel
+public class CategoryModel
 {
     [JsonPropertyName("id")]
     public int Id { get; set; }
 
     [JsonPropertyName("text")]
     public string Text { get; set; } = "";
-    
+
     [JsonPropertyName("questions")]
-    public List<QuestionModel> questions { get; set; } = [];
+    public List<QuestionModel> Questions { get; set; } = [];
 }
