@@ -27,6 +27,32 @@ namespace ServerHost.Services
             return conn;
         }
 
+        public static string? GetConfiguration(string key)
+        {
+            var value = "";
+            try
+            {
+                var config = GetConfigFile();
+                value = config.GetValue<string>(key);
+            }
+            catch (Exception) { }
+
+            return value;
+        }
+
+        public static int GetConfigurationInt(string key)
+        {
+            int value = 0;
+            try
+            {
+                var config = GetConfigFile();
+                value = config.GetValue<int>(key);
+            }
+            catch (Exception) { }
+
+            return value;
+        }
+
         #region Metodi per modificare/creare/leggere il file appsettings.json
 
         /// <summary>
