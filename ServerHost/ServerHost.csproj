@@ -18,8 +18,4 @@
 		<ProjectReference Include="..\TDatabase\TDatabase.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Managers\" />
-	</ItemGroup>
-
 </Project>
