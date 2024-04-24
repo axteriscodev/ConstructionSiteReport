@@ -43,7 +43,7 @@ public class CategoriesRepository(HttpManager httpManager)
         return false;
     }
 
-    public async Task<bool> UpdateCategory(List<CategoryModel> categories)
+    public async Task<bool> UpdateCategories(List<CategoryModel> categories)
     {
         var response = await _httpManager.SendHttpRequest("Category/UpdateCategories", categories);
         //NotificationService.Notify(response);
@@ -57,7 +57,7 @@ public class CategoriesRepository(HttpManager httpManager)
     }
 
     
-    public async Task<bool> HideCategory(List<CategoryModel> categories)
+    public async Task<bool> HideCategories(List<CategoryModel> categories)
     {
         var response = await _httpManager.SendHttpRequest("Category/HideCategories", categories);
         //NotificationService.Notify(response);
@@ -86,6 +86,47 @@ public class CategoriesRepository(HttpManager httpManager)
         }
 
         return Subjects;
+    }
+
+    public async Task<bool> SaveSubject(SubjectModel subject)
+    {
+        var response = await _httpManager.SendHttpRequest("Category/SaveSubject", subject);
+
+        //NotificationService.Notify(response);
+        if (response.Code.Equals("0"))
+        {
+            Subjects.Clear();
+            return true;
+        }
+
+        return false;
+    }
+
+    public async Task<bool> UpdateSubjects(List<SubjectModel> subjects)
+    {
+        var response = await _httpManager.SendHttpRequest("Category/UpdateSubjects", subjects);
+        //NotificationService.Notify(response);
+        if (response.Code.Equals("0"))
+        {
+            Subjects.Clear();
+            return true;
+        }
+
+        return false;
+    }
+
+    
+    public async Task<bool> HideSubjects(List<SubjectModel> subjects)
+    {
+        var response = await _httpManager.SendHttpRequest("Category/HideSubjects", subjects);
+        //NotificationService.Notify(response);
+        if (response.Code.Equals("0"))
+        {
+            Subjects.Clear();
+            return true;
+        }
+
+        return false;
     }
 
     #endregion 

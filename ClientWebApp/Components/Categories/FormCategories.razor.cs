@@ -81,7 +81,7 @@ public partial class FormCategories
         }
         else
         {
-            response = await CategoriesRepository.UpdateCategory([new CategoryModel() { Id = form.Id, Text = form.Nome ?? "" }]);
+            response = await CategoriesRepository.UpdateCategories([new CategoryModel() { Id = form.Id, Text = form.Nome ?? "" }]);
         }
 
         //NotificationService.Notify(response);

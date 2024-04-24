@@ -112,7 +112,7 @@ public partial class TableCategories
             Console.WriteLine("cliccato: " + confirmationResult);
             if (confirmationResult == true)
             {
-                var response = await CategoriesRepository.HideCategory([category]);
+                var response = await CategoriesRepository.HideCategories([category]);
                 //NotificationService.Notify(response);
                 if (response)
                 {
