@@ -1,7 +1,9 @@
 ﻿@using ClientWebApp.Managers
+@using ClientWebApp.Repositories
 @using Shared;
 
 @inject HttpManager HttpManager
+@inject CategoriesRepository CategoriesRepository
 @inject DialogService DialogService
 
 @if (initialLoading)

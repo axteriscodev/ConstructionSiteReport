@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using ClientWebApp.Managers;
+﻿using ClientWebApp.Repositories;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
@@ -57,12 +56,10 @@ public partial class TableCategories
 
         private async Task LoadData()
         {
-            var response = await HttpManager.SendHttpRequest("Category/CategoriesList", "");
-            if (response.Code.Equals("0"))
-            {
-                categories = JsonSerializer.Deserialize<List<CategoryModel>>(response.Content.ToString() ?? "") ?? [];
+           
+                categories = await CategoriesRepository.GetCategories();
                 count = categories.Count;
-            }
+            
         }
 
         /// <summary>
@@ -115,9 +112,9 @@ public partial class TableCategories
             Console.WriteLine("cliccato: " + confirmationResult);
             if (confirmationResult == true)
             {
-                var response = await HttpManager.SendHttpRequest("Category/HideCategories", category);
+                var response = await CategoriesRepository.HideCategory([category]);
                 //NotificationService.Notify(response);
-                if (response.Code.Equals("0"))
+                if (response)
                 {
                     await ReloadTable();
                 }
