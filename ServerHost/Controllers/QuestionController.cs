@@ -39,7 +39,7 @@ namespace ServerHost.Controllers
 
         [LogAction]
         [HttpPost]
-        public AXT_WebResponse SaveQuestion(QuestionModel newQuestion)
+        public async Task<AXT_WebResponse> SaveQuestion(QuestionModel newQuestion)
         {
             var response = new AXT_WebResponse();
             var stopwatch = StartTime();
@@ -48,7 +48,7 @@ namespace ServerHost.Controllers
             try
             {
                 var db = GetDbConnection();
-                var q = QuestionDbHelper.Insert(db, newQuestion);
+                var q = await QuestionDbHelper.Insert(db, newQuestion);
                 response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), q);
 
             }
@@ -62,7 +62,7 @@ namespace ServerHost.Controllers
 
         [LogAction]
         [HttpPost]
-        public AXT_WebResponse UpdateQuestion(List<QuestionModel> questions)
+        public async Task<AXT_WebResponse> UpdateQuestion(List<QuestionModel> questions)
         {
             var response = new AXT_WebResponse();
             var stopwatch = StartTime();
@@ -71,7 +71,7 @@ namespace ServerHost.Controllers
             try
             {
                 var db = GetDbConnection();
-                var q = QuestionDbHelper.Update(db, questions);
+                var q = await QuestionDbHelper.Update(db, questions);
                 response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), q);
 
             }
@@ -85,7 +85,7 @@ namespace ServerHost.Controllers
 
         [LogAction]
         [HttpPost]
-        public AXT_WebResponse HideQuestion(List<QuestionModel> questions)
+        public async Task<AXT_WebResponse> HideQuestion(List<QuestionModel> questions)
         {
             var response = new AXT_WebResponse();
             var stopwatch = StartTime();
@@ -94,7 +94,7 @@ namespace ServerHost.Controllers
             try
             {
                 var db = GetDbConnection();
-                var q = QuestionDbHelper.Hide(db, questions);
+                var q = await QuestionDbHelper.Hide(db, questions);
                 response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), q);
 
             }
@@ -136,7 +136,7 @@ namespace ServerHost.Controllers
 
         [LogAction]
         [HttpPost]
-        public AXT_WebResponse SaveChoice(ChoiceModel newChoice)
+        public async Task<AXT_WebResponse> SaveChoice(ChoiceModel newChoice)
         {
             var response = new AXT_WebResponse();
             var stopwatch = StartTime();
@@ -145,7 +145,7 @@ namespace ServerHost.Controllers
             try
             {
                 var db = GetDbConnection();
-                var c = ChoiceDbHelper.Insert(db, newChoice);
+                var c = await ChoiceDbHelper.Insert(db, newChoice);
                 response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), c);
 
             }
@@ -159,7 +159,7 @@ namespace ServerHost.Controllers
 
         [LogAction]
         [HttpPost]
-        public AXT_WebResponse UpdateChoice(List<ChoiceModel> choices)
+        public async Task<AXT_WebResponse> UpdateChoice(List<ChoiceModel> choices)
         {
             var response = new AXT_WebResponse();
             var stopwatch = StartTime();
@@ -168,7 +168,7 @@ namespace ServerHost.Controllers
             try
             {
                 var db = GetDbConnection();
-                var c = ChoiceDbHelper.Update(db, choices);
+                var c = await ChoiceDbHelper.Update(db, choices);
                 response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), c);
 
             }
@@ -182,7 +182,7 @@ namespace ServerHost.Controllers
 
         [LogAction]
         [HttpPost]
-        public AXT_WebResponse HideChoice(List<ChoiceModel> choices)
+        public async Task<AXT_WebResponse> HideChoice(List<ChoiceModel> choices)
         {
             var response = new AXT_WebResponse();
             var stopwatch = StartTime();
@@ -191,7 +191,7 @@ namespace ServerHost.Controllers
             try
             {
                 var db = GetDbConnection();
-                var c = ChoiceDbHelper.Hide(db, choices);
+                var c = await ChoiceDbHelper.Hide(db, choices);
                 response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), c);
 
             }

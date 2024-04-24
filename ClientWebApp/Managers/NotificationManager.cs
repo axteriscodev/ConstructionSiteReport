@@ -83,4 +83,5 @@ namespace ClientWebApp.Managers
 
             return notification;
         }
+    }
 }
