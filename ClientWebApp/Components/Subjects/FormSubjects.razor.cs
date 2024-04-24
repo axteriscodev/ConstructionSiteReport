@@ -1,5 +1,5 @@
-﻿using AXT_WebComunication.WebResponse;
-using ClientWebApp.Managers;
+﻿using ClientWebApp.Managers;
+using ClientWebApp.Repositories;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Shared;
@@ -75,20 +75,20 @@ public partial class FormSubjects
     private async Task Save()
     {
         onSaving = true;
-        AXT_WebResponse response;
+        bool response;
         if (CreationMode)
         {
-            response = await HttpManager.SendHttpRequest("Category/SaveSubject", new SubjectModel { Text = form.Nome ?? ""});
+            response = await CategoriesRepository.SaveSubject(new SubjectModel { Text = form.Nome ?? "" });
      
         }
         else
         {
-            response = await HttpManager.SendHttpRequest("Category/UpdateSubjects", new[] {new SubjectModel(){ Id = form.Id, Text = form.Nome ?? ""}});
+            response = await CategoriesRepository.UpdateSubjects([new SubjectModel() { Id = form.Id, Text = form.Nome ?? "" }]);
             
         }
 
         //NotificationService.Notify(response);
-        if (response.Code.Equals("0"))
+        if (response)
         {
             await OnSaveComplete!.InvokeAsync();
         }

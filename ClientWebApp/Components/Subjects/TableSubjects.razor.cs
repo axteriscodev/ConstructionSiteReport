@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using ClientWebApp.Managers;
+using ClientWebApp.Repositories;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
@@ -57,12 +58,10 @@ public partial class TableSubjects
 
         private async Task LoadData()
         {
-            var response = await HttpManager.SendHttpRequest("Category/SubjectsList", "");
-            if (response.Code.Equals("0"))
-            {
-                subjects = JsonSerializer.Deserialize<List<SubjectModel>>(response.Content.ToString() ?? "") ?? [];
+            
+                subjects = await CategoriesRepository.GetSubjects();
                 count = subjects.Count;
-            }
+            
         }
 
         /// <summary>
@@ -115,9 +114,9 @@ public partial class TableSubjects
             Console.WriteLine("cliccato: " + confirmationResult);
             if (confirmationResult == true)
             {
-                var response = await HttpManager.SendHttpRequest("Category/HideSubjects", subject);
+                var response = await CategoriesRepository.HideSubjects([subject]);
                 //NotificationService.Notify(response);
-                if (response.Code.Equals("0"))
+                if (response)
                 {
                     await ReloadTable();
                 }

@@ -1,5 +1,6 @@
 using ClientWebApp;
 using ClientWebApp.Managers;
+using ClientWebApp.Repositories;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Radzen;
@@ -15,6 +16,9 @@ builder.Services.AddScoped<HttpManager>();
 builder.Services.AddSingleton<ScreenManager>();
 //notify manager per notificare all'utente il risultato delle operazioni compiute
 builder.Services.AddScoped<NotificationManager>();
+//repository per le categorie e argomenti
+builder.Services.AddScoped<CategoriesRepository>();
+
 
 //componenti radzen
 builder.Services.AddRadzenComponents();

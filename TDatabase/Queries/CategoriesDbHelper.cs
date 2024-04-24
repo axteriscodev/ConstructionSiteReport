@@ -8,7 +8,7 @@ namespace TDatabase.Queries
     {
         public static List<CategoryModel> Select(DB db)
         {
-            return db.Categories.Select(x => new CategoryModel()
+            return db.Categories.Where(x => x.Active == true).Select(x => new CategoryModel()
             {
                 Id = x.Id,
                 Text = x.Text,

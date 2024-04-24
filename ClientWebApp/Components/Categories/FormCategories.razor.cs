@@ -1,5 +1,4 @@
-﻿using AXT_WebComunication.WebResponse;
-using ClientWebApp.Managers;
+﻿using ClientWebApp.Repositories;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Shared;
@@ -75,20 +74,18 @@ public partial class FormCategories
     private async Task Save()
     {
         onSaving = true;
-        AXT_WebResponse response;
+        bool response;
         if (CreationMode)
         {
-            response = await HttpManager.SendHttpRequest("Category/SaveCategory", new CategoryModel { Text = form.Nome ?? ""});
-     
+            response = await CategoriesRepository.SaveCategory(new CategoryModel { Text = form.Nome ?? "" });
         }
         else
         {
-            response = await HttpManager.SendHttpRequest("Category/UpdateCategories", new[] {new CategoryModel(){ Id = form.Id, Text = form.Nome ?? ""}});
-            
+            response = await CategoriesRepository.UpdateCategories([new CategoryModel() { Id = form.Id, Text = form.Nome ?? "" }]);
         }
 
         //NotificationService.Notify(response);
-        if (response.Code.Equals("0"))
+        if (response)
         {
             await OnSaveComplete!.InvokeAsync();
         }
