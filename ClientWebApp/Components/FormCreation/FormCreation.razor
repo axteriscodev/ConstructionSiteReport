@@ -14,21 +14,21 @@ else
     <h2>@Param</h2>
 
     <div class="mt-4 m-5">
-    @foreach(var category in categories)
-    {
-        var oggetto = new IdCategoryAndQuestions() {Id = category.Id};
-        selected.Add(oggetto);
-        <RadzenCheckBoxList class="fw-bold" @bind-Value=@oggetto.QuestionIds AllowSelectAll="true" SelectAllText=@category.Text TValue="int" Orientation="Orientation.Vertical"  >
-        <Items> 
-        @foreach(var question in category.Questions)
+        @foreach (var s in selected)
         {
-            <RadzenCheckBoxListItem class="ps-3 fw-normal" Text=@question.Text Value=@question.Id />
+            <RadzenCheckBoxList Value="@s.QuestionIds" class="fw-bold" AllowSelectAll="true" SelectAllText=@s.Text TValue="int" Orientation="Orientation.Vertical">
+                <Items>
+                    @foreach(var q in s.Questions)
+                    {
+                        <RadzenCheckBoxListItem class="ps-3 fw-normal" Value="@q.Id" Text="@q.Text" />
+                    }
+
+                </Items>
+            </RadzenCheckBoxList>
+            first = false;
         }
-        </Items>
-        </RadzenCheckBoxList> 
-    }
     </div>
 
 }
 
-    
+

@@ -22,7 +22,7 @@ public partial class FormCreation
     /// Booleano che è impostata durante una ricerca
     /// </summary>
     private bool isLoading = false;
-
+    private bool first = true;
 
     /// <summary>
     /// Intero che ci dice quanti sono gli elementi
@@ -45,6 +45,10 @@ public partial class FormCreation
     {
         categories = await CategoriesRepository.GetCategories();
         count = categories.Count;
+        foreach (var category in categories)
+        {
+            selected.Add(new() { Id = category.Id, Text=category.Text, Questions=category.Questions });
+        }
     }
 
     private async Task ReloadTable()
@@ -54,29 +58,13 @@ public partial class FormCreation
         //await grid!.Reload();
     }
 
-    private void Change(IEnumerable<int>  args, int index)
-    {
-        //var values = args.ToList();
-
-        //Console.WriteLine(string.Join( ",", values));
-        //Console.WriteLine(index);
-
-        var asd = selected.Where(x => x.Id == index).FirstOrDefault();
-        
-        if(args is not null) 
-        {
-            asd.QuestionIds.Append(args.First());
-        }
-
-        Console.WriteLine(asd.QuestionIds.Count());
-        
-    }
 
     class IdCategoryAndQuestions
     {
         public int Id { get; set;}
-
+        public string Text { get; set; } = "";
         public IEnumerable<int> QuestionIds { get; set; } = [];
+        public List<QuestionModel> Questions { get; set; } = [];
     }
 
 }
