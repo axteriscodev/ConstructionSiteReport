@@ -16,7 +16,9 @@ else
     <div class="mt-4 m-5">
     @foreach(var category in categories)
     {
-        <RadzenCheckBoxList class="fw-bold" @bind-Value=@selected AllowSelectAll="true" SelectAllText=@category.Text TValue="int" Orientation="Orientation.Vertical" >
+        var oggetto = new IdCategoryAndQuestions() {Id = category.Id};
+        selected.Add(oggetto);
+        <RadzenCheckBoxList class="fw-bold" @bind-Value=@oggetto.QuestionIds AllowSelectAll="true" SelectAllText=@category.Text TValue="int" Orientation="Orientation.Vertical"  >
         <Items> 
         @foreach(var question in category.Questions)
         {

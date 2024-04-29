@@ -9,7 +9,9 @@ public partial class FormCreation
 
     private List<CategoryModel> categories = [];
 
-    private IEnumerable<int> selected = [];
+    //private IEnumerable<int> selected = [1,3,6];
+
+    private List<IdCategoryAndQuestions> selected = [];
 
     /// <summary>
     /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
@@ -50,6 +52,31 @@ public partial class FormCreation
         //DialogService.Close();
         await LoadData();
         //await grid!.Reload();
+    }
+
+    private void Change(IEnumerable<int>  args, int index)
+    {
+        //var values = args.ToList();
+
+        //Console.WriteLine(string.Join( ",", values));
+        //Console.WriteLine(index);
+
+        var asd = selected.Where(x => x.Id == index).FirstOrDefault();
+        
+        if(args is not null) 
+        {
+            asd.QuestionIds.Append(args.First());
+        }
+
+        Console.WriteLine(asd.QuestionIds.Count());
+        
+    }
+
+    class IdCategoryAndQuestions
+    {
+        public int Id { get; set;}
+
+        public IEnumerable<int> QuestionIds { get; set; } = [];
     }
 
 }
