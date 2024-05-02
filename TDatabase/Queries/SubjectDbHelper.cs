@@ -8,7 +8,7 @@ namespace TDatabase.Queries
     {
         public static List<SubjectModel> Select(DB db)
         {
-            return db.Subjects.Select(s => new SubjectModel()
+            return db.Subjects.Where(x => x.Active == true).Select(s => new SubjectModel()
             {
                 Id = s.Id,
                 Text = s.Text,

@@ -1,0 +1,38 @@
+﻿@using ClientWebApp.Managers
+@using ClientWebApp.Repositories
+@using Shared;
+
+@inject CategoriesRepository CategoriesRepository
+@inject DocumentsRepository DocumentsRepository
+@inject DialogService DialogService
+
+@if (initialLoading)
+{
+    <Loading />
+}
+else
+{
+    <h2>@Param</h2>
+    
+    <div class="mt-4 m-5">
+        <RadzenFieldset Text="Seleziona le domande" class="shadow rounded" Style="font-weight:400;">
+            @foreach (var s in selected)
+            {
+                <RadzenCheckBoxList @bind-Value=@s.SelectedQuestionIds class="fw-bold" AllowSelectAll="true" SelectAllText=@s.Text TValue="int" Orientation="Orientation.Vertical">
+                    <Items>
+                        @foreach(var q in s.Questions)
+                        {
+                            <RadzenCheckBoxListItem class="ps-3 fw-normal" Value="@q.Id" Text="@q.Text" />
+                        }
+
+                    </Items>
+                </RadzenCheckBoxList>
+            }
+        </RadzenFieldset>
+        <RadzenButton Icon="add" Text="Crea modulo" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
+                          Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>CreateForm())" />
+    </div>
+
+}
+
+

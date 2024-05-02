@@ -1,7 +1,7 @@
-﻿@using ClientWebApp.Managers
+﻿@using ClientWebApp.Repositories
 @using Shared;
 
-@inject HttpManager HttpManager
+@inject CategoriesRepository CategoriesRepository
 @inject DialogService DialogService
 
 @if (initialLoading)
@@ -12,7 +12,7 @@ else
 {
     <h2>@Param</h2>
 
-    @* La tabella delle formazioni *@
+    @* La tabella delle Categorie *@
     <div class="mt-4 m-5">
 
         <RadzenFieldset Text="Categorie" class="shadow rounded" Style="font-weight:400;">
