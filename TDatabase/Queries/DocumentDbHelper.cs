@@ -42,7 +42,18 @@ public class DocumentDbHelper
                                                        {
                                                            Id = qc.Id,
                                                            Text = q.Text,
-                                                           //TODO aggiungere le risposte
+                                                            Choices = (
+                                                             from qch in db.QuestionChoices
+                                                             from ch in db.Choices
+                                                             where qch.IdQuestion == q.Id
+                                                             && ch.Id == qch.IdQuestion
+                                                             && ch.Active == true
+                                                             select new ChoiceModel()
+                                                             {
+                                                                Id = ch.Id,
+                                                                Value = ch.Value,
+                                                                Tag = ch.Tag,
+                                                             }).ToList()
                                                        }).ToList()
                                       }).ToList(),
 
