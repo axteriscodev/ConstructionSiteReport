@@ -22,13 +22,13 @@
                 </Helper>
             </RadzenFormField> *@
 
-            <RadzenFormField Text="Note <span style='color:red'> (obbligatorio)</span>" Variant="@variant">
+            <RadzenFormField Text="Note" Variant="@variant">
                 <ChildContent>
                     <RadzenTextBox Name="Note" @bind-Value="@form.Note" />
                 </ChildContent>
-                <Helper>
+@*                 <Helper>
                     <RadzenRequiredValidator Component="Note" Popup=false Text="Il campo Note è obbligatorio" />
-                </Helper>
+                </Helper> *@
             </RadzenFormField>
 
             <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Salva" class="buttonSalva" IsBusy=@onSaving

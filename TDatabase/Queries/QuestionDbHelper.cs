@@ -28,6 +28,7 @@ namespace TDatabase.Queries
             {
                 Id = x.Id,
                 Text = x.Text,
+                IdCategory = x.IdCategory,
                 Choices = (from qc in db.QuestionChoices
                            from c in db.Choices
                            where qc.IdQuestion == x.Id
