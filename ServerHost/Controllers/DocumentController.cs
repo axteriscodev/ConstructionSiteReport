@@ -11,8 +11,8 @@ namespace ServerHost.Controllers;
 public class DocumentController : DefaultController
 {
     [LogAction]
-    [HttpPost]
-    public AXT_WebResponse DocumentsList(int idDocument)
+    [HttpPost()]
+    public AXT_WebResponse DocumentsList([FromBody]int idDocument)
     {
         var response = new AXT_WebResponse();
             var stopwatch = StartTime();

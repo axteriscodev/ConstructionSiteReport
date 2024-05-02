@@ -28,10 +28,10 @@ public class DocumentDbHelper
                                                  where qc.IdDocument == d.Id
                                                  && q.Id == qc.Id
                                                  group q by q.IdCategory into q2
-                                                 select new { Id = q2.First().IdCategory })
+                                                 select new { IdCategory = q2.First().IdCategory })
 
                                       from c in db.Categories
-                                      where c.Id == r.Id
+                                      where c.Id == r.IdCategory
                                       select new CategoryModel()
                                       {
                                           Id = c.Id,
