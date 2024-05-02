@@ -60,8 +60,8 @@ public class DocumentDbHelper
             Document newDocument = new()
             {
                 Id = nextId,
-                IdConstructorSite = document.ConstructorSite.Id,
-                IdClient = document.client.Id,
+                IdConstructorSite = document.ConstructorSite?.Id,
+                IdClient = document.Client?.Id,
                 Title = document.Title,
                 Date = document.Date,
             };

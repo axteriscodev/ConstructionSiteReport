@@ -14,10 +14,10 @@ public class DocumentModel
     public DateTime Date { get; set;} = DateTime.Now;
 
     [JsonPropertyName("client")]
-    public Client client { get; set;} = new Client();
+    public Client? Client { get; set;}
 
     [JsonPropertyName("constructorSite")]
-    public ConstructorSite ConstructorSite { get; set;} = new ConstructorSite();
+    public ConstructorSite? ConstructorSite { get; set;}
 
     [JsonPropertyName("version")]
     public int Version { get; set;}
