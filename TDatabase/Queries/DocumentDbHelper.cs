@@ -26,7 +26,7 @@ public class DocumentDbHelper
                         Categories = (from r in (from qc in db.QuestionChosens
                                                  from q in db.Questions
                                                  where qc.IdDocument == d.Id
-                                                 && qc.Id == q.Id
+                                                 && q.Id == qc.Id
                                                  group q by q.IdCategory into q2
                                                  select new { Id = q2.First().IdCategory })
 

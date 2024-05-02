@@ -12,7 +12,7 @@ public class DocumentController : DefaultController
 {
     [LogAction]
     [HttpPost]
-    public AXT_WebResponse DocumentsList(int idDocument = 0)
+    public AXT_WebResponse DocumentsList(int idDocument)
     {
         var response = new AXT_WebResponse();
             var stopwatch = StartTime();
