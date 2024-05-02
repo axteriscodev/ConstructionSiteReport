@@ -1,0 +1,23 @@
+﻿@using ClientWebApp.Repositories
+@using Shared;
+
+@inject DocumentsRepository DocumentsRepository
+@inject DialogService DialogService
+
+@if(initialLoading)
+{
+    <Loading />
+}
+else
+{
+    <h2>@Param</h2>
+    
+    <div class="mt-4 m-5">
+        <RadzenFieldset Text="Seleziona le domande" class="shadow rounded" Style="font-weight:400;">
+        
+        </RadzenFieldset>
+    </div>
+}
+
+
+

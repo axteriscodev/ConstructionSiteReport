@@ -18,9 +18,11 @@ public class DocumentDbHelper
         }
 
         var docs = (from d in documents
-                    where d.Id == idDocument
+                    //where d.Id == idDocument
                     select new DocumentModel()
                     {
+                        Id = d.Id,
+                        Date = d.Date,
                         Categories = (from r in (from qc in db.QuestionChosens
                                                  from q in db.Questions
                                                  where qc.IdDocument == d.Id
