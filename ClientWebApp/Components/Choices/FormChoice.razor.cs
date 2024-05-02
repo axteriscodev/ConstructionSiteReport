@@ -51,7 +51,6 @@ public partial class FormChoice
                 Id = ((ChoiceModel)Object).Id,
                 Tag = ((ChoiceModel)Object).Tag,
                 Value = ((ChoiceModel)Object).Value,
-
             };
         }
     }

@@ -1,0 +1,38 @@
+﻿@using ClientWebApp.Managers
+@inject HttpManager HttpManager
+
+<div class="">
+    <RadzenTemplateForm TItem="FormQuestionData" Data=@form Submit=@Save>
+        <RadzenStack class="px-2">
+            <RadzenFormField Text="Titolo <span style='color:red'> (obbligatorio)</span>" Variant="@variant">
+                <ChildContent>
+                    <RadzenTextBox Name="Titolo" @bind-Value="@form.Text" />
+                </ChildContent>
+                <Helper>
+                    <RadzenRequiredValidator Component="Titolo" Popup=false Text="Il campo Titolo è obbligatorio" />
+                </Helper>
+            </RadzenFormField>
+
+            <RadzenFormField Text="Scelta <span style='color:red'> (obbligatorio)</span>" Variant="@variant">
+                <ChildContent>
+                    <RadzenTextBox Name="Scelta" @bind-Value="@form.Choices[0].Value" />
+                </ChildContent>
+                <Helper>
+                    <RadzenRequiredValidator Component="Scelta" Popup=false Text="Il campo Scelta è obbligatorio" />
+                </Helper>
+            </RadzenFormField>
+
+            <RadzenFormField Text="Note <span style='color:red'> (obbligatorio)</span>" Variant="@variant">
+                <ChildContent>
+                    <RadzenTextBox Name="Note" @bind-Value="@form.Note" />
+                </ChildContent>
+                <Helper>
+                    <RadzenRequiredValidator Component="Note" Popup=false Text="Il campo Note è obbligatorio" />
+                </Helper>
+            </RadzenFormField>
+
+            <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Salva" class="buttonSalva" IsBusy=@onSaving
+                BusyText="Salvataggio in corso" />
+        </RadzenStack>
+    </RadzenTemplateForm>
+</div>

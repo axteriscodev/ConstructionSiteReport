@@ -1,0 +1,42 @@
+﻿@using ClientWebApp.Managers
+@using Shared
+@inject HttpManager HttpManager
+@inject DialogService DialogService
+@inject NotificationManager NotificationManager
+
+@if (initialLoading)
+{
+    <Loading />
+}
+else
+{
+    @* La tabella delle questions *@
+    <div class="mt-4 m-5">
+
+        <RadzenFieldset Text="Possibili Scelte" class="shadow rounded" Style="font-weight:400;">
+            <RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
+                          Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenNewForm())" />
+            <RadzenDataGrid @ref="grid" TItem="QuestionModel" GridLines="@DataGridGridLines.Both" IsLoading=@isLoading Count="@count" PageSize="@pageSize" Data="@list"
+                            AllowColumnResize="true" AllowAlternatingRows="true" ColumnWidth="200px" AllowFiltering="true" FilterMode="FilterMode.Simple"
+                            AllowSorting="true" AllowPaging="true" ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" PagerHorizontalAlign="HorizontalAlign.Left">
+
+                <Columns>
+                    <RadzenDataGridColumn TItem="QuestionModel" Property="Id" Title="Id" Width="40px" />
+                    <RadzenDataGridColumn TItem="QuestionModel" Property="Tag" Title="Nome" Width="100px" />
+                    <RadzenDataGridColumn TItem="QuestionModel" Property="Value" Title="Scelta" />
+                    <RadzenDataGridColumn TItem="QuestionModel" Title="Azioni" Width="60px" Sortable="false">
+                        <Template Context="data">
+                            @* Mostro i bottoni solo se ho i permessi di modifica *@
+                            <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Filled" Size="ButtonSize.Large"
+                                          Click="@(()=>OpenUpdateForm(data))" class="buttonEdit" Style="width: 50%;" />
+                            <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Light" Variant="Variant.Filled" Size="ButtonSize.Large"
+                                          Click="@(()=>Disable(data))" class="buttonDelete" Style="width: 50%;" />
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
+        </RadzenFieldset>
+    </div>
+
+
+}

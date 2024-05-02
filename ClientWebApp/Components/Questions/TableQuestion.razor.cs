@@ -5,9 +5,9 @@ using Radzen.Blazor;
 using Radzen;
 using Shared;
 
-namespace ClientWebApp.Components.Choices
+namespace ClientWebApp.Components.Questions
 {
-    public partial class TableChoice
+    public partial class TableQuestion
     {
         /// <summary>
         /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
@@ -28,15 +28,15 @@ namespace ClientWebApp.Components.Choices
         /// <summary>
         /// Stringa indica la pagina e gli elementi
         /// </summary>
-        private string pagingSummaryFormat = "Pagina {0} di {1} (Totale {2} scelte)";
+        private string pagingSummaryFormat = "Pagina {0} di {1} (Totale {2} domande)";
         /// <summary>
         /// Riferimento al componente tabella
         /// </summary>
-        private RadzenDataGrid<ChoiceModel>? grid;
+        private RadzenDataGrid<QuestionModel>? grid;
         /// <summary>
-        /// Riferimento alla lista di choices
+        /// Riferimento alla lista di questions
         /// </summary>
-        private List<ChoiceModel> list = [];
+        private List<QuestionModel> list = [];
 
         private async Task OpenNewForm()
         {
@@ -53,10 +53,10 @@ namespace ClientWebApp.Components.Choices
                 { "OnSaveComplete", EventCallback.Factory.Create(this, ReloadTable) },
                 { "CreationMode", true },
             };
-            await DialogService.OpenAsync<FormChoice>("Aggiorna argomento", parameters: param, options: newOptions);
+            await DialogService.OpenAsync<FormQuestions>("Aggiorna domanda", parameters: param, options: newOptions);
         }
 
-        private async Task OpenUpdateForm(ChoiceModel model)
+        private async Task OpenUpdateForm(QuestionModel model)
         {
             //creo uno style aggiuntivo da inviare al componente caricato con il popup come options
             var additionalStyle = "min-width:600px;min-height:fit-content;height:fit-content;width:600px;";
@@ -72,19 +72,19 @@ namespace ClientWebApp.Components.Choices
                 { "Object", model},
                 {"CreationMode", false },
             };
-            await DialogService.OpenAsync<FormChoice>("Aggiorna scelta", parameters: param, options: newOptions);
+            await DialogService.OpenAsync<FormQuestions>("Aggiorna domanda", parameters: param, options: newOptions);
         }
 
-        private async Task Disable(ChoiceModel model)
+        private async Task Disable(QuestionModel model)
         {
-            var titolo = "Disattivazione scelta";
-            var text = "Vuoi disattivare la scelta: " + model.Value + "?";
+            var titolo = "Disattivazione domanda";
+            var text = "Vuoi disattivare la domanda: " + model.Text + "?";
             var confirmationResult = await DialogService.Confirm(text, titolo,
             new ConfirmOptions { OkButtonText = "Si", CancelButtonText = "No" });
             Console.WriteLine("cliccato: " + confirmationResult);
             if (confirmationResult == true)
             {
-                var response = await HttpManager.SendHttpRequest("Question/HideChoice", new[] { model });
+                var response = await HttpManager.SendHttpRequest("Question/HideQuestion", new[] { model });
                 if (response.Code.Equals("0"))
                 {
                     await ReloadTable();
@@ -107,12 +107,11 @@ namespace ClientWebApp.Components.Choices
         }
         private async Task GetData()
         {
-            var response = await HttpManager.SendHttpRequest("Question/ChoicesList", "");
+            var response = await HttpManager.SendHttpRequest("Question/QuestionsList", "");
             if (response.Code.Equals("0"))
             {
-                list = JsonSerializer.Deserialize<List<ChoiceModel>>(response.Content.ToString() ?? "") ?? [];
+                list = JsonSerializer.Deserialize<List<QuestionModel>>(response.Content.ToString() ?? "") ?? [];
                 count = list.Count;
-
             }
         }
     }
