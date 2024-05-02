@@ -1,4 +1,5 @@
-﻿namespace Shared;
+﻿using Shared;
+namespace ClientWebApp;
 
 public class QuestionRepository
 {
