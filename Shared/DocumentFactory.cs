@@ -8,8 +8,8 @@ public class DocumentFactory
 
     public List<QuestionModel> SelectedQuestion = [];
 
-    public static Document CreateDocument()
+    public static DocumentModel CreateDocument()
     {
-        return new Document();
+        return new DocumentModel();
     }
 }

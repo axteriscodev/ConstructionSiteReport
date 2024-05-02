@@ -2,7 +2,7 @@
 
 namespace Shared;
 
-public class Document
+public class DocumentModel
 {
     [JsonPropertyName("id")]
     public int Id { get; set;}
@@ -11,13 +11,13 @@ public class Document
     public string Title { get; set;} = "";
 
     [JsonPropertyName("date")]
-    public DateTime Date { get; set;}
+    public DateTime Date { get; set;} = DateTime.Now;
 
     [JsonPropertyName("client")]
-    public Client client { get; set;} = new Client();
+    public Client? Client { get; set;}
 
     [JsonPropertyName("constructorSite")]
-    public ConstructorSite ConstructorSite { get; set;} = new ConstructorSite();
+    public ConstructorSite? ConstructorSite { get; set;}
 
     [JsonPropertyName("version")]
     public int Version { get; set;}
@@ -26,10 +26,10 @@ public class Document
     public int Revision { get; set;}
 
     [JsonPropertyName("macroCategories")]
-    public List<CategoryModel> MacroCategories { get; set;} = [];
+    public List<CategoryModel> Categories { get; set;} = [];
 
     [JsonPropertyName("companies")]
-    public List<Company> Companiesù { get; set;} = [];
+    public List<Company> Companies { get; set;} = [];
 
     [JsonPropertyName("attachments")]
     public List<Attachment> Attachments { get; set;} = [];

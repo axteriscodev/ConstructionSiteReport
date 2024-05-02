@@ -41,7 +41,9 @@ public partial class DbCsclAxteriscoContext : DbContext
 
     public virtual DbSet<Subject> Subjects { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder){}
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=v00rca2-vm.sphostserver.com\\axterisco2019;Initial Catalog=DB_CSCL_AXTERISCO;User ID=sa;password=AdmP@ss2003;TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -254,13 +256,11 @@ public partial class DbCsclAxteriscoContext : DbContext
 
             entity.HasOne(d => d.IdClientNavigation).WithMany(p => p.Documents)
                 .HasForeignKey(d => d.IdClient)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__DOCUMENT__ID_CLI__45F365D3");
+                .HasConstraintName("FK__DOCUMENT__ID_CLI__6FE99F9F");
 
             entity.HasOne(d => d.IdConstructorSiteNavigation).WithMany(p => p.Documents)
                 .HasForeignKey(d => d.IdConstructorSite)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__DOCUMENT__ID_CON__44FF419A");
+                .HasConstraintName("FK__DOCUMENT__ID_CON__70DDC3D8");
         });
 
         modelBuilder.Entity<Question>(entity =>

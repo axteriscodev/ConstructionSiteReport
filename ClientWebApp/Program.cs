@@ -18,6 +18,8 @@ builder.Services.AddSingleton<ScreenManager>();
 builder.Services.AddScoped<NotificationManager>();
 //repository per le categorie e argomenti
 builder.Services.AddScoped<CategoriesRepository>();
+//repository per i documenti
+builder.Services.AddScoped<DocumentsRepository>();
 
 
 //componenti radzen

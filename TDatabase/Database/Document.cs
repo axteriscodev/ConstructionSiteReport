@@ -7,9 +7,9 @@ public partial class Document
 {
     public int Id { get; set; }
 
-    public int IdConstructorSite { get; set; }
+    public int? IdConstructorSite { get; set; }
 
-    public int IdClient { get; set; }
+    public int? IdClient { get; set; }
 
     public string Title { get; set; } = null!;
 
@@ -17,9 +17,9 @@ public partial class Document
 
     public virtual ICollection<CompanyDocument> CompanyDocuments { get; set; } = new List<CompanyDocument>();
 
-    public virtual Client IdClientNavigation { get; set; } = null!;
+    public virtual Client? IdClientNavigation { get; set; }
 
-    public virtual ConstructorSite IdConstructorSiteNavigation { get; set; } = null!;
+    public virtual ConstructorSite? IdConstructorSiteNavigation { get; set; }
 
     public virtual ICollection<QuestionChosen> QuestionChosens { get; set; } = new List<QuestionChosen>();
 }
