@@ -41,7 +41,7 @@ public class DocumentDbHelper
                                                        && q.Id == qc.IdQuestion
                                                        select new QuestionModel()
                                                        {
-                                                           Id = qc.Id,
+                                                           Id = qc.IdQuestion,
                                                            Text = q.Text,
                                                             Choices = (
                                                              from qch in db.QuestionChoices
@@ -114,11 +114,25 @@ public class DocumentDbHelper
         List<int> modified = [];
         try
         {
-            foreach (var elem in documents)
+            foreach (var document in documents)
             {
-                var d = db.Documents.Where(x => x.Id == elem.Id).FirstOrDefault();
+                var d = db.Documents.Where(x => x.Id == document.Id).FirstOrDefault();
                 if (d is not null)
                 {
+                    foreach (var c in document.Categories)
+                    {
+                        foreach(var q in c.Questions)
+                        {
+                            var qc = db.QuestionChosens.Where(x => x.IdDocument == document.Id && x.IdQuestion == q.Id).FirstOrDefault();
+                            if(qc is not null)
+                            {
+                                qc.IdCurrentChoice = q.CurrentChoice.Id;
+                                await db.SaveChangesAsync();
+                                modified.Add(qc.Id);
+                            }
+                        }
+                    }
+
                     // d.IdCategory = elem.IdCategory;
                     // d.IdSubject = elem.IdSubject;
                     // d.Text = elem.Text;

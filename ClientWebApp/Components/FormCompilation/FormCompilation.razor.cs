@@ -28,12 +28,10 @@ public partial class FormCompilation
     private async Task LoadData()
     {
         documentModel = await DocumentsRepository.GetDocumentById(1);
+    }
 
-        Console.WriteLine(documentModel.Id);
-        //count = categories.Count;
-        // foreach (var category in categories)
-        // {
-        //     selected.Add(new() { Id = category.Id, Text = category.Text, Questions = category.Questions });
-        // }
+    private async Task SaveForm()
+    {
+       DocumentsRepository.UpdateDocuments([documentModel]);
     }
 }
