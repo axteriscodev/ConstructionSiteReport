@@ -47,7 +47,7 @@ public class DocumentDbHelper
                                                              from qch in db.QuestionChoices
                                                              from ch in db.Choices
                                                              where qch.IdQuestion == q.Id
-                                                             && ch.Id == qch.IdQuestion
+                                                             && ch.Id == qch.IdChoice
                                                              && ch.Active == true
                                                              select new ChoiceModel()
                                                              {

@@ -20,7 +20,10 @@ else
 
             @foreach(var question in category.Questions)
             {
-                <p>@question.Text</p>
+                <div class="pb-3 ps-2">
+                    <p>@question.Text</p>
+                    <RadzenDropDown @bind-Value=@question.CurrentChoice  Data=@question.Choices  TextProperty="Value" Style="width: 100%; max-width: 400px;" Name="DropDownBindValue" />
+                </div>
             }
         }
         </RadzenFieldset>
