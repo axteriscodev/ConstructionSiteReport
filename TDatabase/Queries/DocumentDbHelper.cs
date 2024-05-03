@@ -44,6 +44,14 @@ public class DocumentDbHelper
                                                        {
                                                            Id = qc.IdQuestion,
                                                            Text = q.Text,
+                                                           CurrentChoice = (from cc in db.Choices
+                                                                            where cc.Id == qc.IdCurrentChoice
+                                                                            select new ChoiceModel() 
+                                                                            {
+                                                                                Id = cc.Id,
+                                                                                Value = cc.Value,
+                                                                                Tag = cc.Tag,
+                                                                            }).FirstOrDefault(),
                                                             Choices = (
                                                              from qch in db.QuestionChoices
                                                              from ch in db.Choices
