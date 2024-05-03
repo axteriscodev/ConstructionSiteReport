@@ -11,8 +11,8 @@ namespace ServerHost.Controllers;
 public class DocumentController : DefaultController
 {
     [LogAction]
-    [HttpPost]
-    public AXT_WebResponse DocumentsList()
+    [HttpPost()]
+    public AXT_WebResponse DocumentsList([FromBody]int idDocument)
     {
         var response = new AXT_WebResponse();
             var stopwatch = StartTime();
@@ -21,7 +21,7 @@ public class DocumentController : DefaultController
             try
             {
                 var db = GetDbConnection();
-                var list = DocumentDbHelper.Select(db);
+                var list = DocumentDbHelper.Select(db, idDocument);
                 response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
             }

@@ -20,7 +20,7 @@ public class QuestionModel
     public List<ChoiceModel> Choices { get; set; } = [];
 
     [JsonPropertyName("currentChoice")]
-    public ChoiceModel CurrentChoice { get; set; } = new ChoiceModel();
+    public ChoiceModel? CurrentChoice { get; set; }
 
     [JsonPropertyName("note")]
     public string Note { get; set; } = "";
