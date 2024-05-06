@@ -22,12 +22,20 @@
 
     [Parameter, AllowNull]
     public List<T> Items { get; set; }
+    [Parameter]
+    public int GroupNumber { get; set; } = 0;
 
     [Parameter]
     public EventCallback<(int oldIndex, int newIndex)> OnUpdate { get; set; }
 
     [Parameter]
+    public EventCallback<(int oldIndex, int newIndex, int groupNumber)> OnGroupUpdate { get; set; }
+
+    [Parameter]
     public EventCallback<(int oldIndex, int newIndex)> OnRemove { get; set; }
+
+    [Parameter]
+    public EventCallback<(int oldIndex, int newIndex, int groupNumber)> OnGroupRemove { get; set; }
 
     [Parameter]
     public string Id { get; set; } = Guid.NewGuid().ToString();
@@ -55,6 +63,12 @@
 
     private DotNetObjectReference<SortableList<T>>? selfReference;
 
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+        Id = Id + GroupNumber;
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -68,8 +82,14 @@
     [JSInvokable]
     public void OnUpdateJS(int oldIndex, int newIndex)
     {
-        // invoke the OnUpdate event passing in the oldIndex and the newIndex
-        OnUpdate.InvokeAsync((oldIndex, newIndex));
+        if(GroupNumber > 0)
+        {
+            OnGroupUpdate.InvokeAsync((oldIndex, newIndex, GroupNumber));
+        }
+        else
+        {
+            OnUpdate.InvokeAsync((oldIndex, newIndex));
+        }
     }
 
     [JSInvokable]
