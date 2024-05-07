@@ -114,5 +114,11 @@ namespace ClientWebApp.Components.Questions
                 count = questions.Count;
             }
         }
+
+
+        private string PrintSubject(int? idSubject)
+        {
+            return idSubject is not null &&  idSubject > 0 ? idSubject.Value.ToString() : "-";
+        }
     }
 }

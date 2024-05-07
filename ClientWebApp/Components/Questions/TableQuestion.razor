@@ -23,7 +23,12 @@ else
                 <Columns>
                     <RadzenDataGridColumn TItem="QuestionModel" Property="Id" Title="Id" Width="40px" />
                     <RadzenDataGridColumn TItem="QuestionModel" Property="Text" Title="Nome" Width="100px" />
-                    <RadzenDataGridColumn TItem="QuestionModel" Property="Choices" Title="Scelta" />
+                    <RadzenDataGridColumn TItem="QuestionModel" Property="IdCategory" Title="Categoria" Width="40px" />
+                    <RadzenDataGridColumn TItem="QuestionModel" Property="IdSubject" Title="Argomento" Width="40px">
+                        <Template>
+                            @PrintSubject(context.IdSubject)
+                        </Template>
+                    </RadzenDataGridColumn>
                     <RadzenDataGridColumn TItem="QuestionModel" Title="Azioni" Width="60px" Sortable="false">
                         <Template Context="data">
                             @* Mostro i bottoni solo se ho i permessi di modifica *@

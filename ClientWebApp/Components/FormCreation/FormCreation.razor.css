@@ -1,0 +1,4 @@
+﻿.bordoInferiore, ::deep .bordoInferiore {
+    border-bottom: 1px solid !important;
+
+}

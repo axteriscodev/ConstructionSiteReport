@@ -62,7 +62,7 @@ namespace ServerHost.Controllers
 
         [LogAction]
         [HttpPost]
-        public async Task<AXT_WebResponse> UpdateQuestion(List<QuestionModel> questions)
+        public async Task<AXT_WebResponse> UpdateQuestions(List<QuestionModel> questions)
         {
             var response = new AXT_WebResponse();
             var stopwatch = StartTime();
@@ -85,7 +85,7 @@ namespace ServerHost.Controllers
 
         [LogAction]
         [HttpPost]
-        public async Task<AXT_WebResponse> HideQuestion(List<QuestionModel> questions)
+        public async Task<AXT_WebResponse> HideQuestions(List<QuestionModel> questions)
         {
             var response = new AXT_WebResponse();
             var stopwatch = StartTime();
@@ -159,7 +159,7 @@ namespace ServerHost.Controllers
 
         [LogAction]
         [HttpPost]
-        public async Task<AXT_WebResponse> UpdateChoice(List<ChoiceModel> choices)
+        public async Task<AXT_WebResponse> UpdateChoices(List<ChoiceModel> choices)
         {
             var response = new AXT_WebResponse();
             var stopwatch = StartTime();
@@ -182,7 +182,7 @@ namespace ServerHost.Controllers
 
         [LogAction]
         [HttpPost]
-        public async Task<AXT_WebResponse> HideChoice(List<ChoiceModel> choices)
+        public async Task<AXT_WebResponse> HideChoices(List<ChoiceModel> choices)
         {
             var response = new AXT_WebResponse();
             var stopwatch = StartTime();

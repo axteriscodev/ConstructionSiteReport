@@ -1,38 +1,75 @@
-﻿@using ClientWebApp.Managers
-@inject HttpManager HttpManager
+﻿@using ClientWebApp.Repositories
+@using Shared
+@inject CategoriesRepository CategoriesRepository
+@inject QuestionRepository QuestionRepository
 
-<div class="">
-    <RadzenTemplateForm TItem="FormQuestionData" Data=@form Submit=@Save>
-        <RadzenStack class="px-2">
-            <RadzenFormField Text="Titolo <span style='color:red'> (obbligatorio)</span>" Variant="@variant">
-                <ChildContent>
-                    <RadzenTextBox Name="Titolo" @bind-Value="@form.Text" />
-                </ChildContent>
-                <Helper>
-                    <RadzenRequiredValidator Component="Titolo" Popup=false Text="Il campo Titolo è obbligatorio" />
-                </Helper>
-            </RadzenFormField>
+@if (onLoading)
+{
+    <Loading/>
+}
+else
+{
+    <div class="">
+        <RadzenTemplateForm TItem="FormQuestionData" Data=@form Submit=@Save>
+            <RadzenStack class="px-2">
+                <RadzenFormField Text="Testo <span style='color:red'> (obbligatorio)</span>" Variant="@variant">
+                    <ChildContent>
+                        <RadzenTextArea Name="Testo" @bind-Value="@form.Text" Rows="3"/>
+                    </ChildContent>
+                    <Helper>
+                        <RadzenRequiredValidator Component="Testo" Popup=false Text="Il campo Testo è obbligatorio" />
+                    </Helper>
+                </RadzenFormField>
+                <RadzenFormField Text="Categoria <span style='color:red'> (obbligatorio)</span>" Variant="@variant">
+                    <ChildContent>
+                        <RadzenDropDownDataGrid Data="@categories" TextProperty="Text" ValueProperty="Id" @bind-Value="@form.IdCategory"
+                                                AllowFiltering="true" AllowColumnResize="true" AllowSorting="true" Name="Categoria">
+                            <Columns>
+                                <RadzenDropDownDataGridColumn Property="Order" Title="N." Width="40px" />
+                                <RadzenDropDownDataGridColumn Property="Text" Title="Categoria" Width="200px" />
+                            </Columns>
+                        </RadzenDropDownDataGrid>
+                    </ChildContent>
+                    <Helper>
+                        <RadzenRequiredValidator Component="Categoria" Popup=false Text="Il campo Categoria è obbligatorio" />
+                    </Helper>
+                </RadzenFormField>
+                <RadzenFormField Text="Argomento" Variant="@variant">
+                    <ChildContent>
+                        <RadzenDropDown Data="@subjects" TextProperty="Text" ValueProperty="Id" @bind-Value="@form.IdSubject"
+                            AllowClear="true" AllowFiltering="true"/>
+                    </ChildContent>
+                </RadzenFormField>             
+                <RadzenFormField Text="Note" Variant="@variant">
+                    <ChildContent>
+                        <RadzenTextBox Name="Note" @bind-Value="@form.Note" />
+                    </ChildContent>
+                </RadzenFormField>
+                @* Gestione della scelta delle risposte *@
+                <RadzenFormField Text="Possibili Scelte <span style='color:red'> (obbligatorio)</span>" Variant="@variant">
+                    <ChildContent>
+                        <RadzenDropDownDataGrid @ref="choicesDropDown" Data="@choices" TextProperty="Tag" @bind-Value="@form.Choices"
+                                Multiple="true" AllowFiltering="true" AllowColumnResize="true" AllowSorting="true">
+                            <Columns>
+                                <RadzenDropDownDataGridColumn Width="60px" Sortable="false">
+                                    <Template Context="data">
+                                        <RadzenCheckBox TriState="false" Value="@ChoiceCheckBoxValue(data)"
+                                                        TValue="bool" Change=@(args => ChoiceCheckBoxChange(args, data)) @onclick:stopPropagation />
+                                    </Template>
+                                </RadzenDropDownDataGridColumn>
+                                <RadzenDropDownDataGridColumn Property="Tag" Title="Tag" Width="60px" />
+                                <RadzenDropDownDataGridColumn Property="Value" Title="Valore" Width="100px" />
+                            </Columns>
+                        </RadzenDropDownDataGrid>
+                    </ChildContent>
+                    <Helper>
+                        <RadzenRequiredValidator Component="Testo" Popup=false Text="Il campo scelte è obbligatorio" />
+                    </Helper>
+                </RadzenFormField>
+                <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Salva" class="buttonSalva" IsBusy=@onSaving
+                              BusyText="Salvataggio in corso" />
+            </RadzenStack>
+        </RadzenTemplateForm>
+    </div>
+}
 
-            @* <RadzenFormField Text="Scelta <span style='color:red'> (obbligatorio)</span>" Variant="@variant">
-                <ChildContent>
-                    <RadzenTextBox Name="Scelta" @bind-Value="@form.Choices[0].Value" />
-                </ChildContent>
-                <Helper>
-                    <RadzenRequiredValidator Component="Scelta" Popup=false Text="Il campo Scelta è obbligatorio" />
-                </Helper>
-            </RadzenFormField> *@
-
-            <RadzenFormField Text="Note" Variant="@variant">
-                <ChildContent>
-                    <RadzenTextBox Name="Note" @bind-Value="@form.Note" />
-                </ChildContent>
-@*                 <Helper>
-                    <RadzenRequiredValidator Component="Note" Popup=false Text="Il campo Note è obbligatorio" />
-                </Helper> *@
-            </RadzenFormField>
-
-            <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Salva" class="buttonSalva" IsBusy=@onSaving
-                BusyText="Salvataggio in corso" />
-        </RadzenStack>
-    </RadzenTemplateForm>
-</div>
