@@ -1,0 +1,75 @@
+﻿
+.colorGreen {
+    color: green;
+}
+
+.colorRed {
+    color: red;
+}
+
+.colorYellow {
+    color: #dbc500;
+}
+
+.colorBrown {
+    color: rosybrown;
+}
+
+.colorOrange {
+    color: #fbb81a;
+}
+
+.colorBlack {
+    color: black;
+}
+
+.bordoRotondo, ::deep .bordoRotondo {
+    border-radius: 1rem !important;
+}
+
+.bgCard, ::deep .bgCard {
+    background-color: ghostwhite !important;
+}
+
+
+tbody, td, tfoot, th, thead, tr {
+    /* border-color: inherit; */
+    border-style: none;
+    border-width: 0;
+}
+
+.borderBottom {
+    border-bottom: 1px solid;
+    border-color: lightgray;
+}
+
+.borderBottomHeader, ::deep .borderBottomHeader {
+    border-bottom: 1px solid;
+}
+
+.borderLeft {
+    border-left: 1px solid;
+    border-color: lightgray;
+}
+
+.borderLeftH {
+    /*    border-left: 1px solid;*/
+}
+
+.border {
+}
+
+.textVerticalAlign {
+    vertical-align: middle;
+}
+
+.disp {
+    padding-top: 0.15rem;
+    padding-bottom: 0rem;
+    font-size: 36px;
+}
+
+.margini {
+    margin-left: 1rem;
+    margin-right: 1rem;
+}

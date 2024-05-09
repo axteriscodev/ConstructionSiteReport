@@ -1,0 +1,31 @@
+﻿@using AppMAUI.Managers
+@inject HttpManager HttpManager
+
+<div class="">
+    <RadzenTemplateForm TItem="FormChoiceData" Data=@form Submit=@Save>
+        <RadzenStack class="px-2">
+            <RadzenFormField Text="Tag <span style='color:red'> (obbligatorio)</span>" Variant="@variant">
+                <ChildContent>
+                    <RadzenTextBox Name="Tag" @bind-Value="@form.Tag" />
+                </ChildContent>
+                <Helper>
+                    <RadzenRequiredValidator Component="Tag"
+                    Popup=false Text="Il campo Tag è obbligatorio" />
+                </Helper>
+            </RadzenFormField>
+
+            <RadzenFormField Text="Valore <span style='color:red'> (obbligatorio)</span>" Variant="@variant">
+                <ChildContent>
+                    <RadzenTextBox Name="Value" @bind-Value="@form.Value" />
+                </ChildContent>
+                <Helper>
+                    <RadzenRequiredValidator Component="Value"
+                    Popup=false Text="Il campo Valore è obbligatorio" />
+                </Helper>
+            </RadzenFormField>
+
+            <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Salva" class="buttonSalva" IsBusy=@onSaving
+                BusyText="Salvataggio in corso" />
+        </RadzenStack>
+    </RadzenTemplateForm>
+</div>
