@@ -1,4 +1,5 @@
-﻿using ConstructionSiteLibrary.Repositories;
+﻿using ConstructionSiteLibrary.Components.Utilities;
+using ConstructionSiteLibrary.Repositories;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
@@ -44,7 +45,7 @@ public partial class TableCategories
     [Parameter]
     public string Param { get; set; } = "";
 
-
+    ScreenComponent screenComponent;
 
     protected override async Task OnInitializedAsync()
     {
@@ -61,9 +62,11 @@ public partial class TableCategories
     }
 
     private async Task OpenOrderForm()
-    {
+    {   
+        var width = screenComponent.ScreenSize.Width;
+
         // creo uno style aggiuntivo da inviare al componente caricato con il popup come options
-        var additionalStyle = "min-width:600px;min-height:fit-content;height:fit-content;width:800px;";
+        var additionalStyle = $"min-height:fit-content;height:fit-content;width:{width}px;max-width:600px";
         var newOptions = new DialogOptions
         {
             Style = additionalStyle
@@ -84,8 +87,10 @@ public partial class TableCategories
     /// <returns></returns>
     private async Task OpenNewForm()
     {
+        var width = screenComponent.ScreenSize.Width;
+
         // creo uno style aggiuntivo da inviare al componente caricato con il popup come options
-        var additionalStyle = "min-width:600px;min-height:fit-content;height:fit-content;width:600px;";
+        var additionalStyle = $"min-height:fit-content;height:fit-content;width:{width}px;max-width:600px";
         var newOptions = new DialogOptions
         {
             Style = additionalStyle
@@ -103,8 +108,10 @@ public partial class TableCategories
 
     private async Task OpenUpdateForm(CategoryModel item)
     {
+        var width = screenComponent.ScreenSize.Width;
+
         //creo uno style aggiuntivo da inviare al componente caricato con il popup come options
-        var additionalStyle = "min-width:600px;min-height:fit-content;height:fit-content;width:600px;";
+        var additionalStyle = $"min-height:fit-content;height:fit-content;width:{width}px;max-width:600px";
         var newOptions = new DialogOptions
         {
             Style = additionalStyle

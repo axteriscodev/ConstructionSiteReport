@@ -19,7 +19,7 @@ public static class MauiProgram
 
 		builder.Services.AddMauiBlazorWebView();
         //screen manager per catturare il resize della view
-        builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7035/") });
+        builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://constructionsitereport.axterisco.it/") });
         //screen manager per catturare il resize della view
         builder.Services.AddScoped<HttpManager>();
 

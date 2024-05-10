@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components;
 using Radzen.Blazor;
 using Radzen;
 using Shared;
+using ConstructionSiteLibrary.Components.Utilities;
 
 namespace ConstructionSiteLibrary.Components.Choices
 {
@@ -38,10 +39,15 @@ namespace ConstructionSiteLibrary.Components.Choices
         /// </summary>
         private List<ChoiceModel> list = [];
 
+
+        ScreenComponent screenComponent;
+
         private async Task OpenNewForm()
         {
+            var width = screenComponent.ScreenSize.Width;
+
             // creo uno style aggiuntivo da inviare al componente caricato con il popup come options
-            var additionalStyle = "min-width:600px;min-height:fit-content;height:fit-content;width:600px;";
+            var additionalStyle = $"min-height:fit-content;height:fit-content;width:{width}px;max-width:600px";
             var newOptions = new DialogOptions
             {
                 Style = additionalStyle
@@ -58,8 +64,10 @@ namespace ConstructionSiteLibrary.Components.Choices
 
         private async Task OpenUpdateForm(ChoiceModel model)
         {
+            var width = screenComponent.ScreenSize.Width;
+
             //creo uno style aggiuntivo da inviare al componente caricato con il popup come options
-            var additionalStyle = "min-width:600px;min-height:fit-content;height:fit-content;width:600px;";
+            var additionalStyle = $"min-height:fit-content;height:fit-content;width:{width}px;max-width:600px";
             var newOptions = new DialogOptions
             {
                 Style = additionalStyle
