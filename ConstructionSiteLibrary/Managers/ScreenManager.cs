@@ -13,7 +13,7 @@ namespace ConstructionSiteLibrary.Managers
         /// 
         /// </summary>
         /// <param name="js"></param>
-        public async void Init(IJSRuntime js)
+        public async Task Init(IJSRuntime js)
         {
             if (JS == null)
             {

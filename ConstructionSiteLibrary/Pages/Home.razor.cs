@@ -1,4 +1,6 @@
-﻿using ConstructionSiteLibrary.Model;
+﻿using ConstructionSiteLibrary.Components.Utilities;
+using ConstructionSiteLibrary.Model;
+using System.Drawing;
 
 namespace ConstructionSiteLibrary.Pages
 {
@@ -6,6 +8,7 @@ namespace ConstructionSiteLibrary.Pages
     {
 
         ScreenDimension? dim;
+        ScreenComponent? screen;
 
         protected override async Task OnInitializedAsync()
         {
@@ -20,7 +23,7 @@ namespace ConstructionSiteLibrary.Pages
 
         private void ScreenSizeChanged(ScreenSize? size)
         {
-            Console.WriteLine("x: " + size.Width + " -  y: " + size.Height );
+           Console.WriteLine("x: " + size.Width + " -  y: " + size.Height );
         }
     }
 }

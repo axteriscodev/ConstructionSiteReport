@@ -34,24 +34,26 @@
     public ScreenSize? ScreenSize { get; set; }
 
 
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
-        ScreenSetup();
-        return base.OnInitializedAsync();
+        await base.OnInitializedAsync();
+        await ScreenSetup();
     }
+
 
     /// <summary>
     /// Inizializza il componente chiedendo al servizio ScreenManager le dimensioni attuali
     /// dello schermo e registrandosi all'evento Rezise del ScreenManager per le modifiche
     /// della view in tempo reale
     /// </summary>
-    private void ScreenSetup()
+    private async Task ScreenSetup()
     {
-        ScreenManager.Init(JS);
+        await ScreenManager.Init(JS);
         ScreenSize = ScreenManager.GetScreenSize();
         ScreenDimension = CalculateScreenDimension(ScreenSize);
         ScreenManager.Resize += ScreenDimensionChanged!;
         CallDimensionEvent();
+        CallSizeEvent();
     }
 
     /// <summary>
