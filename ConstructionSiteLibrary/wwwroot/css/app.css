@@ -6,6 +6,19 @@ h1:focus {
     outline: none;
 }
 
+.marginComponent {
+    margin-top: 1.5rem !important;
+    margin: 3rem !important;
+}
+
+.marginDivComponent {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+    padding-right: 3rem !important;
+    padding-left: 3rem !important;
+}
+
+
 a, .btn-link {
     color: #0071c1;
 }
@@ -100,4 +113,21 @@ a, .btn-link {
 
 code {
     color: #c02d76;
+}
+
+
+
+@media(max-width: 768px) {
+
+    .marginComponent {
+        margin-top: 0.5rem !important;
+        margin: 0rem !important;
+    }
+
+    .marginDivComponent {
+        padding-top: 0.5rem !important;
+        padding-bottom: 0.5rem !important;
+        padding-right: 0.5rem !important;
+        padding-left: 0.5rem !important;
+    }
 }

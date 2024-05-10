@@ -11,8 +11,8 @@
 else
 {
     <h2>@Param</h2>
-    
-    <div class="mt-4 m-5">
+
+    <div class="marginComponent">
         <div class="pb-3 pt-3">
         Seleziona questionario: <RadzenDropDown @bind-Value=@CurrentSelection Data=@DocumentsList Change="@(() => OnDocumentSelected())" Style="width: 100%; max-width: 100px;" Name="DropDownDocumentValue"/>
         </div>
