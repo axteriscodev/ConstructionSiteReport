@@ -4,6 +4,8 @@
 @inject DialogService DialogService
 @inject NotificationManager NotificationManager
 
+<ScreenComponent @ref = "screenComponent"/>
+
 @if (initialLoading)
 {
     <Loading />

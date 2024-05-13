@@ -39,7 +39,7 @@ namespace ConstructionSiteLibrary.Components.Questions
         /// </summary>
         private List<QuestionModel> questions = [];
 
-        ScreenComponent screenComponent;
+        ScreenComponent? screenComponent;
 
         private async Task OpenNewForm()
         {
