@@ -1,7 +1,8 @@
 ﻿@using ConstructionSiteLibrary.Model
+@using ConstructionSiteLibrary.Interfaces
+@inject ICameraService CameraService;
 
-
-@page "/home"
+@page "/"
 <ScreenComponent OnScreenSizeChanged="@ScreenSizeChanged"  OnScreenDimensionChanged="@ScreenDimensionChanged"/>
 <PageTitle>Home</PageTitle>
 

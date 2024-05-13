@@ -9,9 +9,12 @@ public partial class PlatformCamera : ContentPage
 
 	private void CameraView_CamerasLoaded(object sender, EventArgs e)
 	{
+		
 		cameraView.Camera = cameraView.Cameras.First();
+		cameraView.WidthRequest = DeviceDisplay.Current.MainDisplayInfo.Width; 
+		cameraView.HeightRequest = DeviceDisplay.Current.MainDisplayInfo.Height;
 
-		MainThread.BeginInvokeOnMainThread(async () => 
+        MainThread.BeginInvokeOnMainThread(async () => 
 		{
 			await cameraView.StartCameraAsync();
 		});

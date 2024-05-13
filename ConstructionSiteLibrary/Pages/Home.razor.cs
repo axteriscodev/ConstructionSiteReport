@@ -31,7 +31,7 @@ namespace ConstructionSiteLibrary.Pages
         private async void OpenCameraPage()
         {
 
-            //await App.Current.MainPage.Navigation.PushModalAsync(new PlatformCamera());
+            await CameraService.OpenCamera();
         }
     }
 }

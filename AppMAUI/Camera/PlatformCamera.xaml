@@ -4,7 +4,7 @@
              xmlns:cv="clr-namespace:Camera.MAUI;assembly=Camera.MAUI"
              x:Class="AppMAUI.Camera.PlatformCamera">
     <VerticalStackLayout VerticalOptions="Fill" HorizontalOptions="Fill">
-        <cv:CameraView x:Name="cameraView" WidthRequest="300" HeightRequest="200" 
+        <cv:CameraView x:Name="cameraView" 
             CamerasLoaded="CameraView_CamerasLoaded"/>
     </VerticalStackLayout>
 </ContentPage>
