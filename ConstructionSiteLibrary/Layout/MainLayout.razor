@@ -1,8 +1,11 @@
-﻿@inherits LayoutComponentBase
+﻿@using ConstructionSiteLibrary.Model
+@inherits LayoutComponentBase
+
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
+    <div class="sidebar" style="@IconMenuCssClass">
+        <NavMenu ShowIconMenu="ToggleIconMenu"/>
     </div>
+    
 
     <main>
         <article class="content articlePadding">
@@ -11,3 +14,15 @@
     </main>
     <RadzenComponents />
 </div>
+
+@code{
+    private bool _iconMenuActive { get; set; }
+    private string? IconMenuCssClass => _iconMenuActive ? "width: 80px;" : null;
+
+    protected void ToggleIconMenu(bool iconMenuActive)
+    {
+        _iconMenuActive = iconMenuActive;
+    }
+
+  
+}

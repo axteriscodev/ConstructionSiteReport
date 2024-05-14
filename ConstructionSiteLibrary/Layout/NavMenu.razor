@@ -1,8 +1,14 @@
-﻿@using Microsoft.AspNetCore.Components.Routing;
+﻿@using ConstructionSiteLibrary.Model
+@using Microsoft.AspNetCore.Components.Routing;
 
+<ScreenComponent OnScreenSizeChanged="ScreenSizeObserver" />
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">ConstructionSiteLibrary</a>
+        <span class="oi oi-monitor" style="color:white;" aria-hidden="true"></span>
+        @if (!@IconMenuActive)
+        {
+            <a class="navbar-brand" href="">ConstructionSiteLibrary</a>
+        }
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -12,45 +18,110 @@
 <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
     <nav class="flex-column">
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+            <NavLink class="nav-link" style="padding: .5rem .9rem!important;" href="" Match="NavLinkMatch.All">
+                <span class="bi bi-house-door-fill-nav-menu @biClassRules" aria-hidden="true"></span>
+                @if (!@IconMenuActive)
+                {
+                    <label>Home</label>
+                }
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="choices">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Choices
+            <NavLink class="nav-link" style="padding: .5rem .9rem!important;" href="choices">
+                <span class="bi bi-list-nested-nav-menu @biClassRules" aria-hidden="true"></span>
+                @if (!@IconMenuActive)
+                {
+                    <label>Choices</label>
+                }
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="categories">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Categories
-            </NavLink>
-        </div>
-         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="questions">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Questions
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="form_creation">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Creazione form
+            <NavLink class="nav-link" style="padding: .5rem .9rem!important;" href="categories">
+                <span class="bi bi-list-nested-nav-menu @biClassRules" aria-hidden="true"></span>
+                @if (!@IconMenuActive)
+                {
+                    <label>Categories</label>
+                }
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="form_compilation">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Compilazione form
+            <NavLink class="nav-link" style="padding: .5rem .9rem!important;" href="questions">
+                <span class="bi bi-list-nested-nav-menu @biClassRules" aria-hidden="true"></span>
+                @if (!@IconMenuActive)
+                {
+                    <label>Questions</label>
+                }
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" style="padding: .5rem .9rem!important;" href="form_creation">
+                <span class="bi bi-plus-square-fill-nav-menu @biClassRules" aria-hidden="true"></span>
+                @if (!@IconMenuActive)
+                {
+                    <label>Creazione form</label>
+                }
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" style="padding: .5rem .9rem!important;" href="form_compilation">
+                <span class="bi bi-check2-square-nav-menu" aria-hidden="true"></span>
+                @if (!@IconMenuActive)
+                {
+                    <label>Compilazione form</label>
+                }
             </NavLink>
         </div>
     </nav>
 </div>
 
+<div class="bottom-row">
+    <div class="icon-menu-arrow">
+
+        <RadzenButton Icon=@menuIcon Click="ToggleIconMenu" Style="color: white;" Variant="Variant.Text" />
+
+
+
+    </div>
+</div>
+
 @code {
+    //bool to send to MainLayout for shrinking sidebar and showing/hide menu text
+    private bool IconMenuActive { get; set; } = false;
+
+    //EventCallback for sending bool to MainLayout
+    [Parameter]
+    public EventCallback<bool> ShowIconMenu { get; set; }
+
     private bool collapseNavMenu = true;
+
+    private string menuIcon = "arrow_back";
+
+    private string biClassRules = "";
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+
+    }
+
+    //Method to toggle IconMenuActive bool and send bool via EventCallback
+    private async Task ToggleIconMenu()
+    {
+        IconMenuActive = !IconMenuActive;
+        menuIcon = !IconMenuActive ? "arrow_back" : "arrow_forward";
+        biClassRules = !IconMenuActive ? "" : "margin-right-zero";
+        await ShowIconMenu.InvokeAsync(IconMenuActive);
+    }
+
+    private async Task ScreenSizeObserver(ScreenSize size)
+    {
+        if (size.Width < 641)
+        {
+            IconMenuActive = false;
+            biClassRules = "";
+            await ShowIconMenu.InvokeAsync(IconMenuActive);
+        }
     }
 }
