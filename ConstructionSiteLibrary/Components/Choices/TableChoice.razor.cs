@@ -5,6 +5,7 @@ using Radzen.Blazor;
 using Radzen;
 using Shared;
 using ConstructionSiteLibrary.Components.Utilities;
+using ConstructionSiteLibrary.Repositories;
 
 namespace ConstructionSiteLibrary.Components.Choices
 {
@@ -92,7 +93,7 @@ namespace ConstructionSiteLibrary.Components.Choices
             Console.WriteLine("cliccato: " + confirmationResult);
             if (confirmationResult == true)
             {
-                var response = await HttpManager.SendHttpRequest("Question/HideChoice", new[] { model });
+                var response = await QuestionRepository.HideChoices([model]);
                 if (response.Code.Equals("0"))
                 {
                     await ReloadTable();
@@ -102,7 +103,7 @@ namespace ConstructionSiteLibrary.Components.Choices
         private async Task ReloadTable()
         {
             DialogService.Close();
-            await GetData();
+            await LoadData();
             await grid!.Reload();
         }
 
@@ -110,18 +111,16 @@ namespace ConstructionSiteLibrary.Components.Choices
         {
             initialLoading = true;
             await base.OnInitializedAsync();
-            await GetData();
+            await LoadData();
             initialLoading = false;
         }
-        private async Task GetData()
+        private async Task LoadData()
         {
-            var response = await HttpManager.SendHttpRequest("Question/ChoicesList", "");
-            if (response.Code.Equals("0"))
-            {
-                list = JsonSerializer.Deserialize<List<ChoiceModel>>(response.Content.ToString() ?? "") ?? [];
+           
+                list = await QuestionRepository.GetChoices();
                 count = list.Count;
 
-            }
+            
         }
     }
 }
