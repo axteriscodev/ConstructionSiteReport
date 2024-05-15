@@ -1,9 +1,8 @@
-﻿using System.Text.Json;
-using ConstructionSiteLibrary.Managers;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Radzen.Blazor;
 using Radzen;
 using Shared;
+using ConstructionSiteLibrary.Repositories;
 using ConstructionSiteLibrary.Components.Utilities;
 
 namespace ConstructionSiteLibrary.Components.Choices
@@ -92,8 +91,8 @@ namespace ConstructionSiteLibrary.Components.Choices
             Console.WriteLine("cliccato: " + confirmationResult);
             if (confirmationResult == true)
             {
-                var response = await HttpManager.SendHttpRequest("Question/HideChoice", new[] { model });
-                if (response.Code.Equals("0"))
+                var response = await QuestionRepository.HideChoices([model]);
+                if (response)
                 {
                     await ReloadTable();
                 }
@@ -102,7 +101,7 @@ namespace ConstructionSiteLibrary.Components.Choices
         private async Task ReloadTable()
         {
             DialogService.Close();
-            await GetData();
+            await LoadData();
             await grid!.Reload();
         }
 
@@ -110,18 +109,13 @@ namespace ConstructionSiteLibrary.Components.Choices
         {
             initialLoading = true;
             await base.OnInitializedAsync();
-            await GetData();
+            await LoadData();
             initialLoading = false;
         }
-        private async Task GetData()
+        private async Task LoadData()
         {
-            var response = await HttpManager.SendHttpRequest("Question/ChoicesList", "");
-            if (response.Code.Equals("0"))
-            {
-                list = JsonSerializer.Deserialize<List<ChoiceModel>>(response.Content.ToString() ?? "") ?? [];
-                count = list.Count;
-
-            }
+            list = await QuestionRepository.GetChoices();
+            count = list.Count;
         }
     }
 }

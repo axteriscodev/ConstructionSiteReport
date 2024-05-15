@@ -1,5 +1,8 @@
 ﻿@using ConstructionSiteLibrary.Managers
+@using ConstructionSiteLibrary.Repositories
 @inject HttpManager HttpManager
+@inject QuestionRepository QuestionRepository
+
 
 <div class="">
     <RadzenTemplateForm TItem="FormChoiceData" Data=@form Submit=@Save>

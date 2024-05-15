@@ -44,7 +44,7 @@ namespace ConstructionSiteLibrary.Components.Questions
         private async Task OpenNewForm()
         {
             var width = screenComponent.ScreenSize.Width;
-            
+
             // creo uno style aggiuntivo da inviare al componente caricato con il popup come options
             var additionalStyle = $"min-height:fit-content;height:fit-content;width:{width}px;max-width:600px";
             var newOptions = new DialogOptions
@@ -91,8 +91,8 @@ namespace ConstructionSiteLibrary.Components.Questions
             Console.WriteLine("cliccato: " + confirmationResult);
             if (confirmationResult == true)
             {
-                var response = await HttpManager.SendHttpRequest("Question/HideQuestion", new[] { model });
-                if (response.Code.Equals("0"))
+                var response = await QuestionRepository.HideQuestions([model]);
+                if (response)
                 {
                     await ReloadTable();
                 }
@@ -101,7 +101,7 @@ namespace ConstructionSiteLibrary.Components.Questions
         private async Task ReloadTable()
         {
             DialogService.Close();
-            await GetData();
+            await LoadData();
             await grid!.Reload();
         }
 
@@ -109,23 +109,19 @@ namespace ConstructionSiteLibrary.Components.Questions
         {
             initialLoading = true;
             await base.OnInitializedAsync();
-            await GetData();
+            await LoadData();
             initialLoading = false;
         }
-        private async Task GetData()
+        private async Task LoadData()
         {
-            var response = await HttpManager.SendHttpRequest("Question/QuestionsList", "");
-            if (response.Code.Equals("0"))
-            {
-                questions = JsonSerializer.Deserialize<List<QuestionModel>>(response.Content.ToString() ?? "") ?? [];
-                count = questions.Count;
-            }
+            questions = await QuestionRepository.GetQuestions();
+            count = questions.Count;
         }
 
 
         private string PrintSubject(int? idSubject)
         {
-            return idSubject is not null &&  idSubject > 0 ? idSubject.Value.ToString() : "-";
+            return idSubject is not null && idSubject > 0 ? idSubject.Value.ToString() : "-";
         }
     }
 }
