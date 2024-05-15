@@ -6,6 +6,7 @@
  */
 export function loadCanvas(canvasId) {
 
+    console.log("dentro load canvas");
     let canvas = document.getElementById(canvasId);
     let context = canvas.getContext('2d');
     let isIdle = true;
@@ -35,6 +36,8 @@ export function loadCanvas(canvasId) {
     canvas.addEventListener('mousedown', drawstart, false);
     canvas.addEventListener('mousemove', drawmove, false);
     canvas.addEventListener('mouseup', drawend, false);
+
+    console.log("caricato");
 }
 
 /**

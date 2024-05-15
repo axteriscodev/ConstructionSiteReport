@@ -1,6 +1,13 @@
-﻿using ConstructionSiteLibrary.Repositories;
+﻿using ConstructionSiteLibrary.Components.Choices;
+using ConstructionSiteLibrary.Components.Utilities;
+using ConstructionSiteLibrary.Model;
+using ConstructionSiteLibrary.Repositories;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
+using Radzen;
 using Shared;
+using System.Reflection;
 
 namespace ConstructionSiteLibrary.Components.FormCompilation;
 
@@ -15,6 +22,10 @@ public partial class FormCompilation
     private bool initialLoading;
 
     private int CurrentSelection;
+    private string ImgFirma = "";
+    private List<string> ImgAllegati = [];
+    private ScreenComponent? screenComponent;
+    private ScreenSize? canvasSize = new() { Width = 600, Height = 150 };
 
     IEnumerable<int> DocumentsList = [];
     List<VisualCategory> visualCategories = [];
@@ -48,6 +59,7 @@ public partial class FormCompilation
     {
         documentModel = await DocumentsRepository.GetDocumentById(CurrentSelection);
         CreateVisualCategories();
+        ImgFirma = "";
     }
 
     private void CreateVisualCategories()
@@ -62,6 +74,32 @@ public partial class FormCompilation
     private async Task SaveForm()
     {
        await DocumentsRepository.UpdateDocuments([documentModel]);
+    }
+
+    private void SavedSignature(Signature signature)
+    {
+        DialogService.Close();
+        ImgFirma = signature.Image;
+        StateHasChanged();
+    }
+    
+    private void ScreenSizeObservable(ScreenSize? size)
+    {
+        if(size is not null)
+        {
+            if(size.Width < canvasSize.Width)
+            {
+                Console.WriteLine("cv - " + canvasSize.Width);
+                canvasSize.Width = size.Width -60;
+                Console.WriteLine("cv new - " + canvasSize.Width);
+                StateHasChanged();
+            }
+        }
+    }
+
+    private void TakePicture()
+    {
+
     }
 
     #region Visualizzazione

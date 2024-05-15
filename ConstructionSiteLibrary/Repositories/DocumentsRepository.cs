@@ -27,13 +27,14 @@ public class DocumentsRepository(HttpManager httpManager)
 
     public async Task<DocumentModel> GetDocumentById(int idDocument = 0)
     {
+        List<DocumentModel> documents = [];
         var response = await _httpManager.SendHttpRequest("Document/DocumentsList", idDocument);
             if (response.Code.Equals("0"))
             {
-                Documents = JsonSerializer.Deserialize<List<DocumentModel>>(response.Content.ToString() ?? "") ?? [];
+                documents = JsonSerializer.Deserialize<List<DocumentModel>>(response.Content.ToString() ?? "") ?? [];
             }
 
-        return Documents.First();
+        return documents.First();
     }
 
     public async Task<bool> SaveDocument(DocumentModel document)

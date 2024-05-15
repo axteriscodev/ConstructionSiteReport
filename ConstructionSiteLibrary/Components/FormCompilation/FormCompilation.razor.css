@@ -2,14 +2,14 @@
     border-bottom: 1px solid !important;
 }
 
-.margineQuestionario {
+.margineDomande {
     margin-top: 0.5rem;
     margin-bottom: 2rem;
     margin-left: 0.5rem;
     margin-right: 0.5rem;
 }
 
-.categoria{
+.categoria {
     margin: 0.5rem;
     padding: 0.5rem;
 }
@@ -18,8 +18,18 @@
     margin-left: 3rem !important;
 }
 
-.titolo {
+.titoloDocumento, ::deep .titoloDocumento {
     justify-content: center !important;
+    padding-top:3rem;
+}
+
+.questionario, ::deep .questionario {
+    margin: 1rem 2rem;
+    font-weight: 400;
+}
+
+.documento{
+    padding-bottom: 1.5rem;
 }
 
 @media(max-width: 768px) {
@@ -38,5 +48,10 @@
         margin-bottom: 2rem;
         margin-left: 0rem;
         margin-right: 0rem;
+    }
+
+    .questionario, ::deep .questionario {
+        margin: 0rem 0.4rem;
+        font-weight: 400;
     }
 }
