@@ -2,77 +2,19 @@
 
 @inject IJSRuntime JS
 
-
 <RadzenStack>
-    <RadzenFieldset Text="Firma" class="shadow rounded">
-        <RadzenRow>
-            <canvas id="@canvasId" class="canvasBorder" width="500px" height="300px"></canvas>
-        </RadzenRow>
-        <RadzenRow>
-            <RadzenButton Icon="save" Text="Salva" Click="@Save" />
-        </RadzenRow>
-    </RadzenFieldset>
+    <RadzenRow>
+        <canvas id="@canvasId" class="canvasBorder" width="@CanvasWidth" height="@CanvasHeight"></canvas>
+    </RadzenRow>
+    <RadzenRow>
+        <RadzenButton Icon="save" Text="Salva" Click="@Save" />
+    </RadzenRow>
     @if (!string.IsNullOrEmpty(signature.Image))
     {
         <RadzenRow>
-            <img src="@signature.Image" width="@signature.Width" height="@signature.Height"/>
+            <img src="@signature.Image" width="@signature.Width" height="@signature.Height" />
         </RadzenRow>
     }
 </RadzenStack>
 
 
-
-@code {
-
-    [Parameter]
-    public EventCallback<string> OnSavedSignature { get; set; }
-    private string canvasId = "canvasFirma";
-    private bool onSaving = false;
-    private Signature signature = new();
-    IJSObjectReference? module;
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            module = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/ConstructionSiteLibrary/signature.js");
-            // module = await JS.InvokeAsync<IJSObjectReference>("import", "./signature.js");
-            await module.InvokeVoidAsync("loadCanvas", canvasId);
-        }
-    }
-
-    private async Task Save()
-    {
-        onSaving = true;
-        if (await IsCanvasBlank())
-        {
-            signature = await module!.InvokeAsync<Signature>("SaveCanvas", canvasId);
-            StateHasChanged();
-            await OnSavedSignature.InvokeAsync(signature.Image);
-            Console.WriteLine("img: " + signature.Image);
-        }
-        else
-        {
-            Console.WriteLine("il canvas è vuoto");
-        }
-        onSaving = false;
-    }
-
-    private async Task<bool> IsCanvasBlank()
-    {
-        bool empty = true;
-        if(module is not null)
-        {
-            empty = await module.InvokeAsync<bool>("isCanvasBlank", canvasId);
-        }
-        return empty;
-    }
-
-    private class Signature
-    {
-        public string Image { get; set; } = "";
-        public int Width { get; set; }
-        public int Height { get; set; }
-    }
-
-}
