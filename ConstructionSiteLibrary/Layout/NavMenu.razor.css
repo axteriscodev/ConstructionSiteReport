@@ -82,6 +82,11 @@
     color: white;
 }
 
+.navItem-size, ::deep .navItem-size {
+    font-size: large;
+    padding: .5rem .9rem !important;
+}
+
 @media (min-width: 641px) {
     .navbar-toggler {
         display: none;

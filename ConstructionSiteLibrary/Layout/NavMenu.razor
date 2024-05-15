@@ -7,7 +7,7 @@
         <span class="oi oi-monitor" style="color:white;" aria-hidden="true"></span>
         @if (!@IconMenuActive)
         {
-            <a class="navbar-brand" href="">ConstructionSiteLibrary</a>
+            <a class="navbar-brand" href="">Construction Site Report</a>
         }
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
@@ -17,7 +17,7 @@
 
 <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
     <nav class="flex-column">
-        <div class="nav-item px-3">
+@*         <div class="nav-item px-3">
             <NavLink class="nav-link" style="padding: .5rem .9rem!important;" href="" Match="NavLinkMatch.All">
                 <span class="bi bi-house-door-fill @biClassRules" aria-hidden="true"></span>
                 @if (!@IconMenuActive)
@@ -25,49 +25,49 @@
                     <label>Home</label>
                 }
             </NavLink>
-        </div>
+        </div> *@
         <div class="nav-item px-3">
-            <NavLink class="nav-link" style="padding: .5rem .9rem!important;" href="choices">
-                <span class="bi bi-list-nested @biClassRules" aria-hidden="true"></span>
-                @if (!@IconMenuActive)
-                {
-                    <label>Choices</label>
-                }
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" style="padding: .5rem .9rem!important;" href="categories">
-                <span class="bi bi-list-nested @biClassRules" aria-hidden="true"></span>
-                @if (!@IconMenuActive)
-                {
-                    <label>Categories</label>
-                }
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" style="padding: .5rem .9rem!important;" href="questions">
-                <span class="bi bi-list-nested @biClassRules" aria-hidden="true"></span>
-                @if (!@IconMenuActive)
-                {
-                    <label>Questions</label>
-                }
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" style="padding: .5rem .9rem!important;" href="form_creation">
-                <span class="bi bi-plus-square-fill @biClassRules" aria-hidden="true"></span>
-                @if (!@IconMenuActive)
-                {
-                    <label>Creazione form</label>
-                }
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" style="padding: .5rem .9rem!important;" href="form_compilation">
+            <NavLink class="nav-link navItem-size" href="form_compilation">
                 <span class="bi bi-check2-square" aria-hidden="true"></span>
                 @if (!@IconMenuActive)
                 {
-                    <label>Compilazione form</label>
+                    <label>Documenti</label>
+                }
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link navItem-size" href="form_creation">
+                <span class="bi bi-plus-square @biClassRules" aria-hidden="true"></span>
+                @if (!@IconMenuActive)
+                {
+                    <label>Creazione</label>
+                }
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link navItem-size" href="categories">
+                <span class="bi bi-bookmarks @biClassRules" aria-hidden="true"></span>
+                @if (!@IconMenuActive)
+                {
+                    <label>Categorie</label>
+                }
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link navItem-size" href="questions">
+                <span class="bi bi-question-square @biClassRules" aria-hidden="true"></span>
+                @if (!@IconMenuActive)
+                {
+                    <label>Domande</label>
+                }
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link navItem-size" href="choices">
+                <span class="bi bi-exclamation-square @biClassRules" aria-hidden="true"></span>
+                @if (!@IconMenuActive)
+                {
+                    <label>Scelte</label>
                 }
             </NavLink>
         </div>

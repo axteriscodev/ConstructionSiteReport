@@ -61,36 +61,35 @@ export function isCanvasBlank(canvasId) {
  * @param {any} canvasId l'id del canvas
  * @returns l'immagine in formato base63
  */
-export function SaveCanvas(canvasId) {
+export async function SaveCanvas(canvasId) {
     let canvas = document.getElementById(canvasId);    
-    let img2 = cropImage(canvas);
+    let img2 = await cropImage(canvas);
     return img2
 }
 
-function cropImage(canvas) {
+async function cropImage(canvas) {
     let context = canvas.getContext('2d');
-    //let data = context.getImageData(0, 0, oldWidth, oldHeight).data.buffer;
+    //trasformo il contenuto del canvas in un array di uint32
     let data = new Uint32Array(context.getImageData(0, 0, canvas.width, canvas.height).data.buffer);
-    console.log("w: " + canvas.width + " h: " + canvas.height);
+    //cerco nei 4 bordi da che righe e colonne parte la firma
     let top = scanUp(canvas.width, data);
     let bottom = scanDown(canvas.height, canvas.width, data);
     let left = scanLeft(canvas.width, data);
     let right = scanRight(canvas.width, data);
-    console.log(right + " - "+  left);
+    //calcolo la nuova altezza e nuova larghezza togliendo righe e colonne vuote ai bordi
     let new_width = (right - left);
     let new_height = (bottom - top);
-
+    //canvas non visualizzato utilizzato solo per creare l immagine tagliata
     let canvas2 = document.createElement('canvas');
     let context2 = canvas2.getContext('2d');
-    //canvas2.style.width = new_width;
-    //canvas2.style.height = new_height;
-    console.log("new-w: " + new_width + " new-h: " + new_height);
-    context2.drawImage(canvas, left, top, new_width, new_height, 0, 0, new_width, new_height);
-    //let img = canvas2.toDataURL('image/png');
-    //return { image: img, width: new_width, height: new_height };
-    let img = canvas.toDataURL('image/png');
-    return { image: img, width: canvas.width, height: canvas.height };
-
+    canvas2.width = new_width;
+    canvas2.height = new_height;
+    //creo la bitmap del contenuto del canvas per poi tagliarlo nel secondo canvas
+    let bitmap = await createImageBitmap(canvas);
+    context2.drawImage(bitmap, left, top, new_width, new_height, 0, 0, new_width, new_height);
+    
+    let img = canvas2.toDataURL('image/png');
+    return { image: img, width: new_width, height: new_height };
 }
 
 function scanUp(width,data) {
@@ -112,7 +111,6 @@ function scanUp(width,data) {
             found = max >= data.length;
         }
     }
-    console.log("count top " + count);
     return count;
 }
 
@@ -135,7 +133,6 @@ function scanDown(height, width, data) {
             found = max < 0;
         }
     }
-    console.log("count bottom " + count);
     return count;
 }
 
@@ -151,17 +148,13 @@ function scanLeft(width, data) {
         for (x; x < max; x += width) {
             if (data[x] != 0) {
                 found = true;
-                //console.log("pixel left " + data[x]);
-                //console.log("x left " + x);
             }
         }
         if (!found) {
             count++;
-            //console.log("count " + count);
             found = count >= width;
         }
     }
-    console.log("count left" + count);
     return count;
 }
 
@@ -177,18 +170,14 @@ function scanRight(width, data) {
         for (x; x > min; x -= width) {
             if (data[x] != 0) {
                 found = true;
-                //console.log("pixel right " + data[x]);
-                //console.log("x right " + x);
             }
         }
         if (!found) {
             count--;
             index--;
-            //console.log("count " + count);
             found = index <= 0;
         } 
     }
-    console.log("count right " + count);
     return count;
 }
 
