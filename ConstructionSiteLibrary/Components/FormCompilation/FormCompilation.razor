@@ -4,7 +4,9 @@
 @inject DocumentsRepository DocumentsRepository
 @inject DialogService DialogService
 
-@if(initialLoading)
+
+<ScreenComponent @ref="screenComponent" OnScreenSizeChanged="@ScreenSizeObservable" />
+@if (initialLoading)
 {
     <Loading />
 }
@@ -12,28 +14,72 @@ else
 {
     <h2>@Param</h2>
 
-    <div class="marginComponent">
+    <div class="marginComponent marginDivComponent">
         <div class="pb-3 pt-3">
-        Seleziona questionario: <RadzenDropDown @bind-Value=@CurrentSelection Data=@DocumentsList Change="@(() => OnDocumentSelected())" Style="width: 100%; max-width: 100px;" Name="DropDownDocumentValue"/>
+            Seleziona questionario: <RadzenDropDown @bind-Value=@CurrentSelection Data=@DocumentsList Change="@(() => OnDocumentSelected())" Style="width: 100%; max-width: 100px;" Name="DropDownDocumentValue" />
         </div>
-        <RadzenFieldset Text="Questionario" class="shadow rounded" Style="font-weight:400;">
-        @foreach(var category in documentModel.Categories)
-        {
-            <h6>@category.Text</h6>
+        <div class="shadow rounded documento">
+            <RadzenRow class="titoloDocumento">
+                <RadzenText TextStyle="TextStyle.DisplayH4"><strong>@documentModel.Title</strong></RadzenText>
+            </RadzenRow>
+            @* Questionario *@
+            <RadzenFieldset Text="Questionario" class="questionario">
+                @foreach (var visual in visualCategories)
+                {
+                    <div class="categoria pt-3">
+                        <RadzenRow class="bordoInferiore" Style="justify-content:space-between !important;">
+                            <RadzenColumn Size="11" Style="display:flex">
+                                <RadzenText TextStyle="TextStyle.DisplayH6" Style="margin-left:1rem;margin-top:0.5rem;"><strong>@CategoryText(visual.Category)</strong></RadzenText>
+                            </RadzenColumn>
+                            <RadzenColumn Size="1" Style="display:flex;justify-content:end;">
+                                <RadzenButton Icon="@AccordionIcon(visual)" Variant="Variant.Text" Click="@(()=>ShowQuestions(visual))" />
+                            </RadzenColumn>
+                        </RadzenRow>
+                    </div>
+                    if (visual.ShowQuestion)
+                    {
+                        @foreach (var question in visual.Category.Questions)
+                        {
+                            <div class="margineDomande bordoDomanda">
+                                <RadzenText>@QuestionText(visual.Category, question.Text, question.Order)</RadzenText>
+                                <RadzenDropDown @bind-Value=@question.CurrentChoice Data=@question.Choices TextProperty="Value" Style="width: 100%; max-width: 400px;" Name="DropDownBindValue" />
+                            </div>
+                        }
+                    }
+                }
+            </RadzenFieldset>
+            @* Allegati *@
+            <RadzenFieldset Text="Allegati" class="questionario">
+                <RadzenRow>
+                    <RadzenButton Icon="photo_camera" Click="@TakePicture" />
+                </RadzenRow>
+                @if (ImgAllegati.Count > 0)
+                {
+                    foreach(var all in ImgAllegati)
+                    {
+                        <img src="@all"/>
+                    }
+                }
 
-            @foreach(var question in category.Questions)
-            {
-                <div class="pb-3 ps-2">
-                    <p>@question.Text</p>
-                    <RadzenDropDown @bind-Value=@question.CurrentChoice  Data=@question.Choices  TextProperty="Value" Style="width: 100%; max-width: 400px;" Name="DropDownBindValue" />
-                </div>
-            }
-        }
+            </RadzenFieldset>
+            @* Firma *@
+            <RadzenFieldset Text="Firma" class="questionario">
+                @if (string.IsNullOrEmpty(ImgFirma))
+                {
+                    <RadzenRow>
+                        <SignatureComponent CanvasWidth="canvasSize.Width" CanvasHeight="canvasSize.Height" OnSavedSignature="@SavedSignature" />
+                    </RadzenRow>
+                }
+                else
+                {
+                    <img src="@ImgFirma"/>
+                }
+
+            </RadzenFieldset>
+        </div>
 
         <RadzenButton Icon="add" Text="Salva questionario" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
-                          Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>SaveForm())" />
- 
-        </RadzenFieldset>
+                      Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>SaveForm())" />
     </div>
 }
 

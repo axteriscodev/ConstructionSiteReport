@@ -1,6 +1,13 @@
-﻿using ConstructionSiteLibrary.Repositories;
+﻿using ConstructionSiteLibrary.Components.Choices;
+using ConstructionSiteLibrary.Components.Utilities;
+using ConstructionSiteLibrary.Model;
+using ConstructionSiteLibrary.Repositories;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
+using Radzen;
 using Shared;
+using System.Reflection;
 
 namespace ConstructionSiteLibrary.Components.FormCompilation;
 
@@ -15,8 +22,13 @@ public partial class FormCompilation
     private bool initialLoading;
 
     private int CurrentSelection;
+    private string ImgFirma = "";
+    private List<string> ImgAllegati = [];
+    private ScreenComponent? screenComponent;
+    private ScreenSize? canvasSize = new() { Width = 600, Height = 150 };
 
     IEnumerable<int> DocumentsList = [];
+    List<VisualCategory> visualCategories = [];
 
     [Parameter]
     public string Param { get; set; } = "";
@@ -39,16 +51,88 @@ public partial class FormCompilation
             CurrentSelection = docLists.First().Id;
 
             documentModel = await DocumentsRepository.GetDocumentById(CurrentSelection);
+            CreateVisualCategories();
         }
     }
 
     private async Task OnDocumentSelected()
     {
         documentModel = await DocumentsRepository.GetDocumentById(CurrentSelection);
+        CreateVisualCategories();
+        ImgFirma = "";
+    }
+
+    private void CreateVisualCategories()
+    {
+        visualCategories = [];
+        foreach (var cat in documentModel.Categories)
+        {
+            visualCategories.Add(new() { Category = cat });
+        }
     }
 
     private async Task SaveForm()
     {
-        DocumentsRepository.UpdateDocuments([documentModel]);
+       await DocumentsRepository.UpdateDocuments([documentModel]);
     }
+
+    private void SavedSignature(Signature signature)
+    {
+        DialogService.Close();
+        ImgFirma = signature.Image;
+        StateHasChanged();
+    }
+    
+    private void ScreenSizeObservable(ScreenSize? size)
+    {
+        if(size is not null)
+        {
+            if(size.Width < canvasSize.Width)
+            {
+                Console.WriteLine("cv - " + canvasSize.Width);
+                canvasSize.Width = size.Width -60;
+                Console.WriteLine("cv new - " + canvasSize.Width);
+                StateHasChanged();
+            }
+        }
+    }
+
+    private void TakePicture()
+    {
+
+    }
+
+    #region Visualizzazione
+
+    private static string CategoryText(CategoryModel cat)
+    {
+        return cat.Order + ". " + cat.Text;
+    }
+
+    private static string QuestionText(CategoryModel cat, string questionText, int order)
+    {
+        return cat.Order + "." + order + " " + questionText;
+    }
+
+    private static void ShowQuestions(VisualCategory cat)
+    {
+        cat.ShowQuestion = !cat.ShowQuestion;
+    }
+
+    private static string AccordionIcon(VisualCategory cat)
+    {
+        return cat.ShowQuestion ? "remove" : "add";
+    }
+
+    #endregion
+
+    #region Classe interna 
+
+    class VisualCategory
+    {
+        public bool ShowQuestion = true;
+        public CategoryModel Category { get; set; } = new();
+    }
+
+    #endregion
 }

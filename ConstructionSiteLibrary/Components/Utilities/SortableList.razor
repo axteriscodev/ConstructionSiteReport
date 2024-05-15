@@ -75,7 +75,7 @@
         if (firstRender)
         {
             selfReference = DotNetObjectReference.Create(this);
-            var module = await JS.InvokeAsync<IJSObjectReference>("import", "./SortableList.js");
+            var module = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/ConstructionSiteLibrary/SortableList.js");
             await module.InvokeAsync<string>("init", Id, Group, Pull, Put, Sort, Handle, Filter, selfReference, ForceFallback);
         }
     }

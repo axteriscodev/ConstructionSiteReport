@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TDatabase", "TDatabase\TDat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppMAUI", "AppMAUI\AppMAUI.csproj", "{F5147D48-160A-4F32-8F16-3A24D9CC2634}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConstructionSiteLibrary", "ConstructionSiteLibrary\ConstructionSiteLibrary.csproj", "{F0B6E8F6-0DA8-4AB8-AB43-AE8CDAEC359C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConstructionSiteLibrary", "ConstructionSiteLibrary\ConstructionSiteLibrary.csproj", "{F0B6E8F6-0DA8-4AB8-AB43-AE8CDAEC359C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -22,6 +22,7 @@ public class DocumentDbHelper
                     {
                         Id = d.Id,
                         Date = d.Date,
+                        Title = d.Title,
                         Categories = (from r in (from qc in db.QuestionChosens
                                                  from q in db.Questions
                                                  where qc.IdDocument == d.Id
@@ -31,10 +32,12 @@ public class DocumentDbHelper
 
                                       from c in db.Categories
                                       where c.Id == r.IdCategory
+                                      orderby c.Order
                                       select new CategoryModel()
                                       {
                                           Id = c.Id,
                                           Text = c.Text,
+                                          Order = c.Order,
                                           Questions = (from qc in db.QuestionChosens
                                                        from q in db.Questions
                                                        where qc.IdDocument == d.Id
