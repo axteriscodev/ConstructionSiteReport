@@ -1,0 +1,58 @@
+﻿@using ConstructionSiteLibrary.Repositories
+@using Shared;
+
+@inject CategoriesRepository CategoriesRepository
+@inject DialogService DialogService
+
+<ScreenComponent @ref="screenComponent" />
+@if (initialLoading)
+{
+    <Loading />
+}
+else
+{
+    <h2>@Param</h2>
+
+    @* La tabella delle Categorie *@
+    <div class="marginComponent">
+
+        <RadzenFieldset Text="Categorie" class="shadow rounded" Style="font-weight:400;">
+            <RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
+                Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenNewForm())" />
+            <RadzenButton Icon="sort" Text="Ordina" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
+                Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenOrderForm())" />
+
+
+            @foreach (var category in categories)
+            {
+                <RadzenCard Variant="Variant.Filled" Class="rz-my-2 rz-mx-auto" Style="max-width: 420px">
+                    <RadzenStack Gap="0">
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Numero
+                        </RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1"><b>@category.Order</b></RadzenText>
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Categoria
+                        </RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1"><b>@category.Text</b></RadzenText>
+
+                        @* Mostro i bottoni solo se ho i permessi di modifica *@
+                        <RadzenRow Class="rz-mt-2" JustifyContent="JustifyContent.Right" Gap="1rem">
+                            <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Filled"
+                                Size="ButtonSize.Medium" Click="@(()=>OpenUpdateForm(@category))" class="buttonEdit"
+                                />
+                            <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Light" Variant="Variant.Filled"
+                                Size="ButtonSize.Medium" Click="@(()=>Hide(@category))" class="buttonDelete"
+                                 />
+                        </RadzenRow>
+                    </RadzenStack>
+
+                </RadzenCard>
+            }
+
+
+
+
+        </RadzenFieldset>
+    </div>
+
+
+}
