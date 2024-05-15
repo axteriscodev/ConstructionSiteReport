@@ -12,6 +12,8 @@ namespace ConstructionSiteLibrary.Components.Utilities
         [Parameter]
         public int CanvasWidth { get; set; } = 300;
         [Parameter]
+        public bool DebugImage { get; set; } = false;
+        [Parameter]
         public EventCallback<Signature> OnSavedSignature { get; set; }
         private string canvasId = "canvasFirma";
         private bool onSaving = false;
@@ -40,7 +42,6 @@ namespace ConstructionSiteLibrary.Components.Utilities
                 signature = await module!.InvokeAsync<Signature>("SaveCanvas", canvasId);
                 StateHasChanged();
                 await OnSavedSignature.InvokeAsync(signature);
-                Console.WriteLine("img: " + signature.Image);
             }
             else
             {

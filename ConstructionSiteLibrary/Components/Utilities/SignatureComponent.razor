@@ -9,7 +9,7 @@
     <RadzenRow>
         <RadzenButton Icon="save" Text="Salva" Click="@Save" />
     </RadzenRow>
-    @if (!string.IsNullOrEmpty(signature.Image))
+    @if (DebugImage && !string.IsNullOrEmpty(signature.Image))
     {
         <RadzenRow>
             <img src="@signature.Image" width="@signature.Width" height="@signature.Height" />
