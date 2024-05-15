@@ -92,8 +92,8 @@ public partial class TableChoiceMobile
         Console.WriteLine("cliccato: " + confirmationResult);
         if (confirmationResult == true)
         {
-            var response = await HttpManager.SendHttpRequest("Question/HideChoice", new[] { model });
-            if (response.Code.Equals("0"))
+            var response = await QuestionRepository.HideChoices([model]);
+            if (response)
             {
                 await ReloadTable();
             }
