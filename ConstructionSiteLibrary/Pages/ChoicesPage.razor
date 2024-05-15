@@ -1,10 +1,32 @@
 ﻿@using ConstructionSiteLibrary.Components.Choices
+@using ConstructionSiteLibrary.Model
 @page "/Choices"
 
-<h3>ChoicesPage</h3>
-<TableChoice/>  
+<h3>Choices Page</h3>
 
 
-@code {
 
+<ScreenComponent MediumWith="641" OnScreenDimensionChanged="ScreenDimensionObserver" />
+
+<DynamicComponent @ref=dynamicComponent Type=@selectedType />
+
+@code
+{
+
+    private DynamicComponent? dynamicComponent;
+    private Type selectedType = typeof(TableChoice);
+
+    private void ScreenDimensionObserver(ScreenDimension? dimension)
+    {
+        if (dimension == ScreenDimension.Small)
+        {
+            selectedType = typeof(TableChoiceMobile);
+        }
+        else
+        {
+            selectedType = typeof(TableChoice);
+        }
+
+        StateHasChanged();
+    }
 }
