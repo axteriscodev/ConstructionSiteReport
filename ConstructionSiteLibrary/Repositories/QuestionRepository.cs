@@ -55,7 +55,7 @@ public class QuestionRepository(HttpManager httpManager)
     }
 
 
-    public async Task<bool> HideCategories(List<QuestionModel> questions)
+    public async Task<bool> HideQuestions(List<QuestionModel> questions)
     {
         var response = await _httpManager.SendHttpRequest("Question/HideQuestions", questions);
         //NotificationService.Notify(response);
@@ -112,7 +112,7 @@ public class QuestionRepository(HttpManager httpManager)
         return false;
     }
 
-    public async Task<bool> HideCategories(List<ChoiceModel> choices)
+    public async Task<bool> HideChoices(List<ChoiceModel> choices)
     {
         var response = await _httpManager.SendHttpRequest("Question/HideChoices", choices);
         //NotificationService.Notify(response);

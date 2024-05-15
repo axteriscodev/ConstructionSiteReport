@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using ConstructionSiteLibrary.Components.Utilities;
+﻿using ConstructionSiteLibrary.Components.Utilities;
 using ConstructionSiteLibrary.Managers;
 using Microsoft.AspNetCore.Components;
 using Radzen;
@@ -91,8 +90,8 @@ public partial class TableQuestionMobile
             Console.WriteLine("cliccato: " + confirmationResult);
             if (confirmationResult == true)
             {
-                var response = await HttpManager.SendHttpRequest("Question/HideQuestion", new[] { model });
-                if (response.Code.Equals("0"))
+                var response = await QuestionRepository.HideQuestions([model]);
+                if (response)
                 {
                     await ReloadTable();
                 }
@@ -101,7 +100,7 @@ public partial class TableQuestionMobile
         private async Task ReloadTable()
         {
             DialogService.Close();
-            await GetData();
+            await LoadData();
             await grid!.Reload();
         }
 
@@ -109,17 +108,13 @@ public partial class TableQuestionMobile
         {
             initialLoading = true;
             await base.OnInitializedAsync();
-            await GetData();
+            await LoadData();
             initialLoading = false;
         }
-        private async Task GetData()
+        private async Task LoadData()
         {
-            var response = await HttpManager.SendHttpRequest("Question/QuestionsList", "");
-            if (response.Code.Equals("0"))
-            {
-                questions = JsonSerializer.Deserialize<List<QuestionModel>>(response.Content.ToString() ?? "") ?? [];
-                count = questions.Count;
-            }
+             questions = await QuestionRepository.GetQuestions();
+            count = questions.Count;
         }
 
 
