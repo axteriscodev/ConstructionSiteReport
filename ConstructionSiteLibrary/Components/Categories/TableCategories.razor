@@ -4,7 +4,7 @@
 @inject CategoriesRepository CategoriesRepository
 @inject DialogService DialogService
 
-<ScreenComponent @ref="screenComponent"/>
+<ScreenComponent @ref="screenComponent" />
 @if (initialLoading)
 {
     <Loading />
@@ -28,15 +28,16 @@ else
                 <Columns>
                     @*<RadzenDataGridColumn TItem="CategoryModel" Property="Id" Title="Id" Width="40px" />*@
                     <RadzenDataGridColumn TItem="CategoryModel" Property="Order" Title="N." Width="40px" />
-                    <RadzenDataGridColumn TItem="CategoryModel" Property="Text" Title="Nome" />
-
+                    <RadzenDataGridColumn TItem="CategoryModel" Property="Text" Title="Nome" Width="120px" />
                     <RadzenDataGridColumn TItem="CategoryModel" Title="Azioni" Width="60px" Sortable="false">
                         <Template Context="data">
-                            @* Mostro i bottoni solo se ho i permessi di modifica *@
-                            <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Filled" Size="ButtonSize.Large"
-                                          Click="@(()=>OpenUpdateForm(data))" class="buttonEdit" Style="width: 50%;" />
-                            <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Light" Variant="Variant.Filled" Size="ButtonSize.Large"
-                                          Click="@(()=>Hide(data))" class="buttonDelete" Style="width: 50%;" />
+                            <RadzenRow JustifyContent="JustifyContent.SpaceAround">
+                                @* Mostro i bottoni solo se ho i permessi di modifica *@
+                                <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Filled" Size="ButtonSize.Large"
+                                              Click="@(()=>OpenUpdateForm(data))" class="buttonEdit" Style="width: 45%;" />
+                                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Light" Variant="Variant.Filled" Size="ButtonSize.Large"
+                                              Click="@(()=>Hide(data))" class="buttonDelete" Style="width: 45%;" />
+                            </RadzenRow>
                         </Template>
                     </RadzenDataGridColumn>
                 </Columns>

@@ -17,7 +17,6 @@ namespace ConstructionSiteLibrary
             pages.Add(typeof(Pages.FormCompilationPage).Assembly);
             pages.Add(typeof(Pages.ChoicesPage).Assembly);
             pages.Add(typeof(Pages.CategoriesPage).Assembly);
-            pages.Add(typeof(Pages.Counter).Assembly);
 
             return pages;
         }

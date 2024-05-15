@@ -15,7 +15,7 @@ else
     <h2>@Param</h2>
 
     <div class="marginComponent shadow rounded marginDivComponent">
-        <RadzenFormField Text="Titolo <span style='color:red'> (obbligatorio)</span>" Variant="@variant" class="my-4" Style="width:100%">
+        <RadzenFormField Text="Titolo <span style='color:red'> (obbligatorio)</span>" Variant="@variant" class="my-4 formFieldTitolo">
             <ChildContent>
                 <RadzenTextBox Name="Titolo" @bind-Value="@title" />
             </ChildContent>
@@ -23,7 +23,7 @@ else
                 <RadzenRequiredValidator Component="Titolo" Popup=false Text="Il campo Titolo è obbligatorio" />
             </Helper>
         </RadzenFormField>
-        <RadzenFieldset Text="Seleziona le domande" Style="font-weight:400;">
+        <RadzenFieldset Text="Seleziona le domande" class="selezioneDomande">
             @foreach (var g in groups)
             {
                 <div class="m-2 p-2 pt-3">
