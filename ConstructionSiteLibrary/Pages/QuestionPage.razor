@@ -1,7 +1,31 @@
 ﻿@using ConstructionSiteLibrary.Components.Questions;
+@using ConstructionSiteLibrary.Model
 
 @page "/questions"
 
 <h3>QuestionPage</h3>
 
-<TableQuestion />
+<ScreenComponent MediumWith="641" OnScreenDimensionChanged="ScreenDimensionObserver" />
+
+<DynamicComponent @ref=dynamicComponent Type=@selectedType/>
+
+@code
+{
+
+    private DynamicComponent? dynamicComponent;
+    private Type selectedType = typeof(TableQuestion);
+
+     private void ScreenDimensionObserver(ScreenDimension? dimension)
+    {
+        if (dimension == ScreenDimension.Small)
+        {
+            selectedType = typeof(TableQuestionMobile);
+        }
+        else
+        {
+            selectedType = typeof(TableQuestion);
+        }
+
+        StateHasChanged();
+    }
+}

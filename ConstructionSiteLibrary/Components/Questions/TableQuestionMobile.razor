@@ -1,0 +1,53 @@
+﻿@using ConstructionSiteLibrary.Managers
+@using Shared
+@inject HttpManager HttpManager
+@inject DialogService DialogService
+@inject NotificationManager NotificationManager
+
+<ScreenComponent @ref="screenComponent" />
+
+@if (initialLoading)
+{
+    <Loading />
+}
+else
+{
+    @* La tabella delle questions *@
+    <div class="marginComponent">
+
+        <RadzenFieldset Text="Domande" class="shadow rounded" Style="font-weight:400;">
+            <RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
+                Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenNewForm())" />
+
+            @foreach (var question in questions)
+            {
+                <RadzenCard Variant="Variant.Filled" Class="rz-my-2 rz-mx-auto" Style="max-width: 420px">
+                    <RadzenStack Gap="0">
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Nome
+                        </RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1"><b>@question.Text</b></RadzenText>
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Categoria
+                        </RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1"><b>@question.IdCategory</b></RadzenText>
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Argomento
+                        </RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1"><b>@question.IdSubject</b></RadzenText>
+
+                        @* Mostro i bottoni solo se ho i permessi di modifica *@
+                        <RadzenRow Class="rz-mt-2" JustifyContent="JustifyContent.Right" Gap="1rem">
+                            <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Filled"
+                                Size="ButtonSize.Medium" Click="@(()=>OpenUpdateForm(@question))" class="buttonEdit" />
+                            <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Light" Variant="Variant.Filled"
+                                Size="ButtonSize.Medium" Click="@(()=>Disable(@question))" class="buttonDelete" />
+                        </RadzenRow>
+                    </RadzenStack>
+
+                </RadzenCard>
+            }
+
+        </RadzenFieldset>
+    </div>
+
+
+
+}
