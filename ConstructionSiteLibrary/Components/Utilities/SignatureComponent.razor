@@ -12,6 +12,12 @@
             <RadzenButton Icon="save" Text="Salva" Click="@Save" />
         </RadzenRow>
     </RadzenFieldset>
+    @if (!string.IsNullOrEmpty(signature.Image))
+    {
+        <RadzenRow>
+            <img src="@signature.Image" width="@signature.Width" height="@signature.Height"/>
+        </RadzenRow>
+    }
 </RadzenStack>
 
 
@@ -21,8 +27,8 @@
     [Parameter]
     public EventCallback<string> OnSavedSignature { get; set; }
     private string canvasId = "canvasFirma";
-    private string image = "";
     private bool onSaving = false;
+    private Signature signature = new();
     IJSObjectReference? module;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -38,13 +44,35 @@
     private async Task Save()
     {
         onSaving = true;
-        if (module is not null)
+        if (await IsCanvasBlank())
         {
-            image = await module.InvokeAsync<string>("SaveCanvas", canvasId);
+            signature = await module!.InvokeAsync<Signature>("SaveCanvas", canvasId);
             StateHasChanged();
-            await OnSavedSignature.InvokeAsync(image);
+            await OnSavedSignature.InvokeAsync(signature.Image);
+            Console.WriteLine("img: " + signature.Image);
+        }
+        else
+        {
+            Console.WriteLine("il canvas è vuoto");
         }
         onSaving = false;
+    }
+
+    private async Task<bool> IsCanvasBlank()
+    {
+        bool empty = true;
+        if(module is not null)
+        {
+            empty = await module.InvokeAsync<bool>("isCanvasBlank", canvasId);
+        }
+        return empty;
+    }
+
+    private class Signature
+    {
+        public string Image { get; set; } = "";
+        public int Width { get; set; }
+        public int Height { get; set; }
     }
 
 }
