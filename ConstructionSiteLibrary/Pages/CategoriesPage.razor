@@ -1,9 +1,32 @@
 ﻿@using ConstructionSiteLibrary.Components.Subjects;
 @using ConstructionSiteLibrary.Components.Categories;
+@using ConstructionSiteLibrary.Model
 
 @page "/categories"
 
-<h3>CategoriesPage</h3>
+<h3>Categorie</h3>
 
-<TableCategories />
+<ScreenComponent MediumWith="641" OnScreenDimensionChanged="ScreenDimensionObserver" />
 
+<DynamicComponent @ref=dynamicComponent Type=@selectedType/>
+
+@code
+{
+
+    private DynamicComponent? dynamicComponent;
+    private Type selectedType = typeof(TableCategories);
+
+     private void ScreenDimensionObserver(ScreenDimension? dimension)
+    {
+        if (dimension == ScreenDimension.Small)
+        {
+            selectedType = typeof(TableCategoriesMobile);
+        }
+        else
+        {
+            selectedType = typeof(TableCategories);
+        }
+
+        StateHasChanged();
+    }
+}
