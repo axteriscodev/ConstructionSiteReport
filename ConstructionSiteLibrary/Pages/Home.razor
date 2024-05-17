@@ -3,21 +3,35 @@
 @inject ICameraService CameraService;
 
 @page "/"
-<ScreenComponent OnScreenSizeChanged="@ScreenSizeChanged"  OnScreenDimensionChanged="@ScreenDimensionChanged"/>
+<ScreenComponent OnScreenSizeChanged="@ScreenSizeChanged" OnScreenDimensionChanged="@ScreenDimensionChanged" />
 <PageTitle>Construction Site Report</PageTitle>
 
 <h1>Construction Site Report</h1>
 <p style="margin-top:2rem;font-size: large;">
-    Benvenuto nella tua app per la gestione di documenti della sicurezza!<br/>
+    Benvenuto nella tua app per la gestione di documenti della sicurezza!<br />
     Qui puoi creare, personalizzare e compilare i documenti in base alle tue necessità e a quelle del cliente.
 </p>
-@* @* <img src="images/Paolo.png" width="400" height="400" />  *@
-<RadzenButton Icon="add" Text="Fotocamera" Click=@OpenCameraPage/> 
 
-@if(!string.IsNullOrEmpty(PhotoPath))
-{
-    <img src="@PhotoPath" width="400" height="400" />
-    @* <RadzenImage Path="@PhotoPath" Style="width:200px;height:200px;" AlternateText="url image" /> *@
-} 
+<RadzenCard class="p-0">
+    <RadzenStack Orientation="@orientation" Gap="@gap" JustifyContent="@justifyContent" AlignItems="@alignItems"
+        Wrap="@wrap" Style="margin-top: 20px, margin-bottom: 20px;">
+        <RadzenCard class="p-1 rz-background-color-info rz-color-on-info rz-text-align-center">
+            <RadzenButton Icon="add" Text="Fotocamera" Click=@OpenCameraPage />
+        </RadzenCard>
+        @if (!string.IsNullOrEmpty(PhotoPath))
+        {
+            <RadzenCard class="p-1 rz-background-color-success rz-color-on-success rz-text-align-center"
+                style="height: 508px;">
+                <img src="@PhotoPath" height="500"/>
+            </RadzenCard>
+        }
+    </RadzenStack>
+</RadzenCard>
 
-@* <SignatureComponent DebugImage="true"/> *@
+@code {
+    Orientation orientation = Orientation.Vertical;
+    AlignItems alignItems = AlignItems.Center;
+    JustifyContent justifyContent = JustifyContent.Center;
+    FlexWrap wrap = FlexWrap.NoWrap;
+    string gap = "10px";
+}
