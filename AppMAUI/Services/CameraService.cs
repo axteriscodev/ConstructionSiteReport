@@ -32,23 +32,25 @@ namespace AppMAUI.Services
                         //Aggiunta testo all'immagine
                         SkiaBitmapExportContext bmp = new(width: (int)skiaImage.Width, height: (int)skiaImage.Height, 1.0f);
 
+                        DateTime dt = DateTime.Now.ToLocalTime();
+                        string dateString = dt.ToString("HH:mm - dd/MM/yyyy");
+
                         ICanvas canvas = bmp.Canvas;
                         bmp.Canvas.DrawImage(skiaImage, 0, 0, skiaImage.Width, skiaImage.Height);
 
-                        string myText = "Hello, World!";
                         Microsoft.Maui.Graphics.Font myFont = new("Impact");
-                        float myFontSize = 80;
+                        float myFontSize = 30;
                         canvas.Font = myFont;
-                        SizeF textSize = canvas.GetStringSize(myText, myFont, myFontSize);
+                        SizeF textSize = canvas.GetStringSize(dateString, myFont, myFontSize);
                         // Draw a rectangle to hold the string
                         Point point = new(
-                            x: (bmp.Width - textSize.Width) / 2,
-                            y: (bmp.Height - textSize.Height) / 2);
+                            x: (bmp.Width - textSize.Width),
+                            y: (bmp.Height - textSize.Height));
                         Rect myTextRectangle = new(point, textSize);
                         // Daw the string itself
                         canvas.FontSize = myFontSize * .9f; // smaller than the rectangle
-                        canvas.FontColor = Colors.White;
-                        canvas.DrawString(myText, myTextRectangle,HorizontalAlignment.Center, VerticalAlignment.Center, TextFlow.OverflowBounds);
+                        canvas.FontColor = Colors.Fuchsia;
+                        canvas.DrawString(dateString, myTextRectangle, HorizontalAlignment.Center, VerticalAlignment.Center, TextFlow.OverflowBounds);
 
                         bmp.Canvas.SaveState();
                         var temp = bmp.Image;
