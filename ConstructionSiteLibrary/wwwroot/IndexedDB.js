@@ -16,6 +16,11 @@ export function CheckDBSupport() {
     return exist;
 }
 
+/**
+ * Metodo che restitusce i riferimenti al database se esiste, altrimenti
+ * lo crea 
+ * @param {any} dotnethelper
+ */
 export function CreateDB(dotnethelper) {
     let request = indexedDB.open(DB_NAME, VERSION);
     //se il db viene restituito scatta questo evento
@@ -42,6 +47,12 @@ export function CreateDB(dotnethelper) {
     };
 }
 
+/**
+ * Metodo che restisce uno object store con i dati
+ * @param {any} storeName
+ * @param {any} mode
+ * @returns
+ */
 export function GetObjectStorage(storeName, mode) {
 
     let trans = db.transaction(storeName, mode);
@@ -49,7 +60,11 @@ export function GetObjectStorage(storeName, mode) {
 
 }
 
-
+/**
+ * Metodo per inserire nuovi record in un determinato object store
+ * @param {any} storeName
+ * @param {any} records
+ */
 export function InsertRecords(storeName, records) {
     console.log(records);
     let store = GetObjectStorage(storeName, "readwrite");
@@ -60,6 +75,11 @@ export function InsertRecords(storeName, records) {
     }
 }
 
+/**
+ * Metodo per selezionare tutti i record presenti da un determinato object store
+ * @param {any} storeName
+ * @param {any} dotnethelper
+ */
 export function selectRecords(storeName, dotnethelper) {
     let results = [];
 
