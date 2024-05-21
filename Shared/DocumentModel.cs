@@ -14,7 +14,7 @@ public class DocumentModel
     public DateTime Date { get; set;} = DateTime.Now;
 
     [JsonPropertyName("client")]
-    public Client? Client { get; set;}
+    public ClientModel? Client { get; set;}
 
     [JsonPropertyName("constructorSite")]
     public ConstructorSiteModel? ConstructorSite { get; set;}

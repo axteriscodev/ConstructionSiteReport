@@ -8,7 +8,7 @@ public class ConstructorSiteModel
     public int Id { get; set; }
 
     [JsonPropertyName("client")]
-    public Client Client { get; set; } = new Client();
+    public ClientModel Client { get; set; } = new ClientModel();
 
     [JsonPropertyName("jobDescription")]
     public string JobDescription { get; set;} = "";

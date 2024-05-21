@@ -2,7 +2,7 @@
 
 namespace Shared;
 
-public class Client
+public class ClientModel
 {
     [JsonPropertyName("id")]
     public int Id { get; set; }
