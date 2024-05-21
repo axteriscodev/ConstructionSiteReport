@@ -58,10 +58,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Remove="wwwroot\indexedDB.js" />
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.21" />
         <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.21" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="8.0.21" />
@@ -76,8 +72,5 @@
       <Folder Include="wwwroot\images\" />
     </ItemGroup>
 
-    <ItemGroup>
-      <None Include="wwwroot\indexedDB.js" />
-    </ItemGroup>
 
 </Project>

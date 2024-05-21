@@ -20,7 +20,7 @@ namespace ConstructionSiteLibrary.Managers
                 if (JS == null)
                 {
                     JS = js;
-                    var jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/ConstructionSiteLibrary/ScreenListener.js");
+                    var jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/ConstructionSiteLibrary/screenService.js");
                     //setto la dimensione corrente dello schermo
                     dimension = await jsModule.InvokeAsync<ScreenSize>("getWindowSize");
                     //invoco la funzione js per rimanere in ascolto del ridimensionamento dello schermo

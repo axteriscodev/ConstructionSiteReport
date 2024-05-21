@@ -7,8 +7,7 @@ namespace ConstructionSiteLibrary.Services
 {
     public class IndexedDBService
     {
-        //private const string JS_FILE = "./_content/ConstructionSiteLibrary/exampleJsInterop.js";
-        private const string JS_FILE = "./indexedDB.js";
+        private const string JS_FILE = "./_content/ConstructionSiteLibrary/indexedDB.js";
         private IJSObjectReference? jsModule;
 
         public bool DbSupport { get; set; } = false;
@@ -67,6 +66,7 @@ namespace ConstructionSiteLibrary.Services
         public async Task<object?> Read()
         {
             object? result = null ;
+            
             if (DbSupport)
             {
                result = await jsModule.InvokeAsync<object>("selectByKey", ["choices", 1]);
