@@ -12,12 +12,12 @@
     Qui puoi creare, personalizzare e compilare i documenti in base alle tue necessità e a quelle del cliente.
 </p>
 @* @* <img src="images/Paolo.png" width="400" height="400" />  *@
-<RadzenButton Icon="add" Text="Fotocamera" Click=@OpenCameraPage/> 
+@* <RadzenButton Icon="add" Text="Fotocamera" Click=@OpenCameraPage/> 
 
 @if(!string.IsNullOrEmpty(PhotoPath))
 {
     <img src="@PhotoPath" width="400" height="400" />
-    @* <RadzenImage Path="@PhotoPath" Style="width:200px;height:200px;" AlternateText="url image" /> *@
-} 
+    @* <RadzenImage Path="@PhotoPath" Style="width:200px;height:200px;" AlternateText="url image" /> 
+}  *@
 
 @* <SignatureComponent DebugImage="true"/> *@

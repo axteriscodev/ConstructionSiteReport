@@ -5,12 +5,17 @@
              x:Class="AppMAUI.MainPage"
              BackgroundColor="{DynamicResource PageBackgroundColor}">
 
-
-    <local:CustomBlazorWebView HostPage="wwwroot/index.html" x:Name="blazorWebView">
+    <BlazorWebView x:Name="blazorWebView" HostPage="wwwroot/index.html">
         <BlazorWebView.RootComponents>
             <RootComponent Selector="#app" ComponentType="{x:Type local:Components.Routes}" />
         </BlazorWebView.RootComponents>
-    </local:CustomBlazorWebView>
+    </BlazorWebView>
+    
+    <!--<local:CustomBlazorWebView HostPage="wwwroot/index.html" x:Name="blazorWebView">
+        <BlazorWebView.RootComponents>
+            <RootComponent Selector="#app" ComponentType="{x:Type local:Components.Routes}" />
+        </BlazorWebView.RootComponents>
+    </local:CustomBlazorWebView>-->
 
 
 

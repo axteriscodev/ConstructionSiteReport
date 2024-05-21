@@ -1,6 +1,8 @@
 ﻿@using ConstructionSiteLibrary.Model
+@using Microsoft.JSInterop
 @inherits LayoutComponentBase
 
+@inject IJSRuntime JS
 @inject IndexedDBService DBService
 
 <div class="page">
@@ -40,7 +42,7 @@
     /// <returns></returns>
     private async Task InitializeIndexedDB()
     {
-        var dbSupport = await DBService.Init();
+        var dbSupport = await DBService.Init(JS);
         if (dbSupport)
         {
             await DBService.OpenDB();

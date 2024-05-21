@@ -1,31 +1,32 @@
-﻿using Microsoft.JSInterop;
+﻿using ConstructionSiteLibrary.Components.Utilities;
+using Microsoft.JSInterop;
 
 
 
 namespace ConstructionSiteLibrary.Services
 {
-    public class IndexedDBService(IJSRuntime js)
+    public class IndexedDBService
     {
-        //private const string JS_FILE = "./_content/ConstructionSiteLibrary/indexedDB.js";
+        //private const string JS_FILE = "./_content/ConstructionSiteLibrary/exampleJsInterop.js";
         private const string JS_FILE = "./indexedDB.js";
-        private readonly IJSRuntime jsRuntime = js;
         private IJSObjectReference? jsModule;
 
         public bool DbSupport { get; set; } = false;
 
 
-        public async Task<bool> Init()
+        public async Task<bool> Init(IJSRuntime js)
         {
-            bool dbSupport; 
+            bool dbSupport;
             try
             {
-                jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", JS_FILE);
+                jsModule = await js.InvokeAsync<IJSObjectReference>("import", JS_FILE);
                 //setto la dimensione corrente dello schermo
                 dbSupport = await jsModule.InvokeAsync<bool>("checkDBSupport");
                 DbSupport = dbSupport;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                var ciao = e.Message;
                 dbSupport = false;
             }
             return dbSupport;

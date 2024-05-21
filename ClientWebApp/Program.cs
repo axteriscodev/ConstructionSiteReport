@@ -27,7 +27,7 @@ builder.Services.AddScoped<QuestionRepository>();
 builder.Services.AddScoped<DocumentsRepository>();
 
 builder.Services.AddScoped<ICameraService, CameraService>();
-builder.Services.AddSingleton<IndexedDBService>();
+builder.Services.AddScoped<IndexedDBService>();
 
 
 //componenti radzen
