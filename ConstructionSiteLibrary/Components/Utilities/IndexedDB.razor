@@ -1,6 +1,7 @@
 ﻿@using Microsoft.JSInterop
 @using Shared
 
+@inject IndexedDBService dbService
 @inject IJSRuntime JS
 
 @if (dbSupport is not null)
@@ -13,8 +14,11 @@
                 <RadzenButton Text="Crea" Click="CreateDB" />
                 <RadzenButton Text="ObjectStore" Click=@(()=>CreateObjectStore("Choices", "idChoice"))/>
                 <RadzenButton Text="Leggi" Click="@ReadObjectStore" />
+                <RadzenButton Text="Leggi Singolo" Click="@Read" />
+                <RadzenButton Text="Cancella" Click="@Delete" />
             </RadzenRow>
         </div>
+        <p>@testo</p>
     }
     else
     {
@@ -41,26 +45,15 @@
 
     public async Task Init()
     {
-        try
-        {       
-            jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/ConstructionSiteLibrary/indexedDB.js");
-            //setto la dimensione corrente dello schermo
-            dbSupport = await jsModule.InvokeAsync<bool>("CheckDBSupport");
-        }
-        catch (Exception e)
-        {
-            dbSupport = false;
-            testo = e.Message;
-        }
+
+        dbSupport = dbService.DbSupport;
+        testo = dbSupport.ToString();
         StateHasChanged();
     }
 
     public async Task CreateDB()
     {
-        if(jsModule is not null)
-        {
-            await jsModule.InvokeVoidAsync("CreateDB", DotNetObjectReference.Create(this));
-        }
+        var result = await dbService.OpenDB();
     }
 
     public async Task CreateObjectStore(string osName, string key)
@@ -69,32 +62,26 @@
         choices.Add(new ChoiceModel(){ Id=1, Value = "Vero", Tag ="v"});
         choices.Add(new ChoiceModel(){ Id=2, Value = "Falso", Tag ="f"});
         Console.WriteLine("osName: " + osName + " key: " + key);
-        if (jsModule is not null)
-        {
-            await jsModule.InvokeVoidAsync("InsertRecords", ["choices", choices.ToArray()]);
-        }
+        var result = await dbService.Insert(choices.Cast<object>().ToArray());
+        testo = result.ToString();
     }
 
     public async Task ReadObjectStore()
     {
-        if (jsModule is not null)
-        {
-            await jsModule.InvokeVoidAsync("selectRecords", ["choices", DotNetObjectReference.Create(this)]);
-        }
+        var result = await dbService.ReadObjectStore();
+        testo = result.Count().ToString();
     }
 
-    [JSInvokable]
-    public void DbResultObservable(bool result)
+    public async Task Read()
     {
-        Console.WriteLine("db result: " + result);
+        var result = await dbService.Read();
+        testo = result.ToString();
     }
 
-    [JSInvokable]
-    public void DbObjectResultObservable(List<ChoiceModel> results)
+    public async Task Delete()
     {
-        foreach(var r in results)
-        {
-            Console.WriteLine(r.Id + " - " + r.Value);
-        }
+       var result = await dbService.Delete();
+        testo = result.ToString();
     }
+
 }

@@ -1,6 +1,8 @@
 ﻿@using ConstructionSiteLibrary.Model
 @inherits LayoutComponentBase
 
+@inject IndexedDBService DBService
+
 <div class="page">
     <div class="sidebar" style="@IconMenuCssClass">
         <NavMenu ShowIconMenu="ToggleIconMenu"/>
@@ -19,10 +21,30 @@
     private bool _iconMenuActive { get; set; }
     private string? IconMenuCssClass => _iconMenuActive ? "width: 80px;" : null;
 
+
+    protected override async Task OnInitializedAsync()
+    {
+        //inizializzo 
+        await base.OnInitializedAsync();
+        await InitializeIndexedDB();
+    }
+
     protected void ToggleIconMenu(bool iconMenuActive)
     {
         _iconMenuActive = iconMenuActive;
     }
 
+    /// <summary>
+    /// Controllo subito che i indexedDB sia supportato e lo attivo
+    /// </summary>
+    /// <returns></returns>
+    private async Task InitializeIndexedDB()
+    {
+        var dbSupport = await DBService.Init();
+        if (dbSupport)
+        {
+            await DBService.OpenDB();
+        }
+    }
   
 }
