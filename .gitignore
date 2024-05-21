@@ -368,3 +368,4 @@ GestioneStrumenti/Server/.DS_Store
 docker-compose.yml
 ContainerNGIX/docker-share-files/config/.DS_Store
 GestioneStrumenti/Client/Components/.DS_Store
+AppMAUI/.meteor/generated

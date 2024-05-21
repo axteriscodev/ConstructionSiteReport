@@ -1,0 +1,52 @@
+﻿@using ConstructionSiteLibrary.Managers
+@using ConstructionSiteLibrary.Repositories
+@using Shared
+@inject DialogService DialogService
+@inject NotificationManager NotificationManager
+@inject QuestionRepository QuestionRepository
+
+<ScreenComponent @ref = "screenComponent"/>
+
+@if (initialLoading)
+{
+    <Loading />
+}
+else
+{
+    @* La tabella delle questions *@
+    <div class="marginComponent">
+
+        <RadzenFieldset Text="Domande" class="shadow rounded" Style="font-weight:400;">
+            <RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
+                          Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenNewForm())" />
+            <RadzenDataGrid @ref="grid" TItem="QuestionModel" GridLines="@DataGridGridLines.Both" IsLoading=@isLoading Count="@count" PageSize="@pageSize" Data="@questions"
+                            AllowColumnResize="true" AllowAlternatingRows="true" ColumnWidth="200px" AllowFiltering="true" FilterMode="FilterMode.Simple"
+                            AllowSorting="true" AllowPaging="true" ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" PagerHorizontalAlign="HorizontalAlign.Left">
+
+                <Columns>
+                    @*<RadzenDataGridColumn TItem="QuestionModel" Property="Id" Title="Id" Width="40px" />*@
+                    <RadzenDataGridColumn TItem="QuestionModel" Property="Text" Title="Nome" Width="100px" />
+                    <RadzenDataGridColumn TItem="QuestionModel" Property="IdCategory" Title="Categoria" Width="40px" />
+                    <RadzenDataGridColumn TItem="QuestionModel" Property="IdSubject" Title="Argomento" Width="40px">
+                        <Template>
+                            @PrintSubject(context.IdSubject)
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="QuestionModel" Title="Azioni" Width="60px" Sortable="false">
+                        <Template Context="data">
+                            <RadzenRow JustifyContent="JustifyContent.SpaceAround">
+                                @* Mostro i bottoni solo se ho i permessi di modifica *@
+                                <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Filled" Size="ButtonSize.Large"
+                                              Click="@(()=>OpenUpdateForm(data))" class="buttonEdit" Style="width: 45%;" />
+                                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Light" Variant="Variant.Filled" Size="ButtonSize.Large"
+                                              Click="@(()=>Disable(data))" class="buttonDelete" Style="width: 45%;" />
+                            </RadzenRow>
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
+        </RadzenFieldset>
+    </div>
+
+
+}

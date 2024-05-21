@@ -1,0 +1,40 @@
+﻿@using ConstructionSiteLibrary.Repositories
+@inject CategoriesRepository CategoriesRepository
+
+<div>
+     <RadzenStack class="px-2">
+            <RadzenText>
+                Ordinare le categorie trascinandole verso l'alto o verso il basso
+            </RadzenText>
+                <RadzenFieldset Text="Campi misurazione rame" class="shadow rounded">
+                    <RadzenRow class="borderBottomHeader mt-2 p-2">
+                        <RadzenColumn Size="3">
+                            <RadzenText TextAlign="TextAlign.Center"><strong>Ordine</strong></RadzenText>
+                        </RadzenColumn>
+                        <RadzenColumn Size="9">
+                            <RadzenText TextAlign="TextAlign.Center"><strong>Testo</strong></RadzenText>
+                        </RadzenColumn>
+                    </RadzenRow>
+                    <div style="max-height:550px;overflow-y:auto;">
+                    <SortableList Id="sortable" Items="@Categories" OnUpdate="@OrderList" Context="item">
+                            <SortableItemTemplate>
+                                <div class="card shadow m-2 p-2 pt-3">
+                                    <RadzenRow>
+                                    <RadzenColumn Size="3">
+                                        <RadzenText TextAlign="TextAlign.Center">@item.Order</RadzenText>
+                                    </RadzenColumn>
+                                        <RadzenColumn Size="9">
+                                            <RadzenText TextAlign="TextAlign.Center">@item.Text</RadzenText>
+                                        </RadzenColumn>
+                                    </RadzenRow>
+                                </div>
+                            </SortableItemTemplate>
+                        </SortableList>
+                    </div>
+                </RadzenFieldset>
+                <div style="width:100%;display:flex;justify-content:center;">
+                    <RadzenButton Click="@Save" Icon="save" Text="Salva" IsBusy=@onSaving
+                                  BusyText="Salvataggio in corso" Style="width:50%;height:40px;" />
+                </div>
+            </RadzenStack>
+</div>

@@ -1,0 +1,138 @@
+﻿@using ConstructionSiteLibrary.Managers
+@using ConstructionSiteLibrary.Repositories
+@using Shared;
+
+@inject CategoriesRepository CategoriesRepository
+@inject DocumentsRepository DocumentsRepository
+@inject DialogService DialogService
+
+@if (initialLoading)
+{
+    <Loading />
+}
+else
+{
+    <h2>@Param</h2>
+
+    <div class="marginComponent shadow rounded marginDivComponent">
+        <RadzenFormField Text="Titolo <span style='color:red'> (obbligatorio)</span>" Variant="@variant" class="my-4 formFieldTitolo">
+            <ChildContent>
+                <RadzenTextBox Name="Titolo" @bind-Value="@title" />
+            </ChildContent>
+            <Helper>
+                <RadzenRequiredValidator Component="Titolo" Popup=false Text="Il campo Titolo è obbligatorio" />
+            </Helper>
+        </RadzenFormField>
+        <RadzenFieldset Text="Seleziona le domande" class="selezioneDomande">
+            @foreach (var g in groups)
+            {
+                <div class="m-2 p-2 pt-3">
+                    <RadzenRow class="bordoInferiore" Style="justify-content:space-between !important;">
+                        <RadzenColumn Size="11" Style="display:flex">
+                            <RadzenCheckBox TValue="bool?" TriState="true" @bind-Value="g.State" Style="margin-top: 0.2rem;" Change="@(args=> ChangeCheckBoxCategory(args, g))" />
+                            <RadzenText TextStyle="TextStyle.DisplayH6" Style="margin-left:1rem;"><strong>@CategoryText(g)</strong></RadzenText>
+                        </RadzenColumn>
+                        <RadzenColumn Size="1" Style="display:flex;justify-content:end;">
+                            <RadzenButton Icon="@AccordionIcon(g)" Variant="Variant.Text" Click="@(()=>ShowQuestions(g))" />
+                        </RadzenColumn>
+                    </RadzenRow>
+                </div>
+                @if (g.ShowQuestion)
+                {
+                    <div style="margin-bottom:2rem;">
+                        <SortableList Id="sortable" GroupNumber="@g.Id" Items="@g.Questions" OnGroupUpdate="@OrderList" Context="item">
+                            <SortableItemTemplate>
+                                <div class="card shadow margineQuestionario p-2 pt-3 bordoDomanda">
+                                    <RadzenRow Style="flex-wrap:nowrap !important">
+                                        <RadzenCheckBox class="ps-3 fw-normal" TValue="bool" Value="@ValoreCheckBoxQuestion(item.Id, g)" TriState="false"
+                                                        Change="@(args => ChangeCheckBoxQuestion(args, item.Id, g))" Style="margin-top: 0.2rem;" />
+                                        <RadzenText>@QuestionText(g, item.Text, item.Order)</RadzenText>
+                                    </RadzenRow>
+                                </div>
+                            </SortableItemTemplate>
+                        </SortableList>
+                    </div>
+                }
+            }
+
+        </RadzenFieldset>
+        <RadzenButton Icon="add" Text="Crea modulo" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
+                      Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>CreateForm())"
+                      IsBusy="@onSaving" BusyText="Salvataggio in corso" />
+    </div>
+}
+
+
+@* CODICE TOLTO DA CANCELLARE *@
+
+@* <RadzenCheckBoxList @bind-Value=@g.SelectedQuestionIds class="fw-bold" AllowSelectAll="true" SelectAllText=@g.Text TValue="int" Orientation="Orientation.Vertical">
+                   <Items>
+                        @foreach (var q in g.Questions)
+                        {
+                            <RadzenCheckBoxListItem class="ps-3 fw-normal" Value="@q.Id" Text="@q.Text" />
+                        }
+                    </Items>
+        </RadzenCheckBoxList>*@
+
+@*             @foreach (var g in groups)
+            {
+                <div class="m-2 p-2 pt-3">
+                    <RadzenRow class="bordoInferiore" Style="justify-content:space-between !important;">
+                        <RadzenColumn Size="11" Style="display:flex">
+                            <RadzenCheckBox TValue="bool?" TriState="true" @bind-Value="g.State" Style="margin-top: 0.2rem;" Change="@(args=> ChangeCheckBoxCategory(args, g))" />
+                            <RadzenText TextStyle="TextStyle.DisplayH6" Style="margin-left:1rem;"><strong>@CategoryText(g)</strong></RadzenText>
+                        </RadzenColumn>
+                        <RadzenColumn Size="1" Style="display:flex;justify-content:end;">
+                            <RadzenButton Icon="@AccordionIcon(g)" Variant="Variant.Text" Click="@(()=>ShowQuestions(g))" />
+                        </RadzenColumn>
+                    </RadzenRow>
+                </div>
+                @if (g.ShowQuestion)
+                {
+                    <div style="margin-bottom:2rem;">
+                        <SortableList Id="sortable" GroupNumber="@g.Id" Items="@g.Questions" OnGroupUpdate="@OrderList" Context="item">
+                            <SortableItemTemplate>
+                                <div class="card shadow m-2 p-2 pt-3" style="margin-left:3rem !important;">
+                                    <RadzenRow Style="flex-wrap:nowrap !important">
+                                        <RadzenCheckBox class="ps-3 fw-normal" TValue="bool" Value="@ValoreCheckBoxQuestion(item.Id, g)" TriState="false"
+                                                        Change="@(args => ChangeCheckBoxQuestion(args, item.Id, g))" Style="margin-top: 0.2rem;" />
+                                        <RadzenText>@QuestionText(g, item.Text, item.Order)</RadzenText>
+                                    </RadzenRow>
+                                </div>
+                            </SortableItemTemplate>
+                        </SortableList>
+                    </div>
+                }
+            } *@
+
+@* <SortableList Id="sortable" Items="@groups" OnUpdate="@OrderCategories" Context="g">
+    <SortableItemTemplate>
+        <div class="margineQuestionario p-2 pt-3">
+            <RadzenRow class="bordoInferiore" Style="justify-content:space-between !important;">
+                <RadzenColumn Size="11" Style="display:flex">
+                    <RadzenCheckBox TValue="bool?" TriState="true" @bind-Value="g.State" Style="margin-top: 0.2rem;" Change="@(args=> ChangeCheckBoxCategory(args, g))" />
+                    <RadzenText TextStyle="TextStyle.DisplayH6" Style="margin-left:1rem;"><strong>@CategoryText(g)</strong></RadzenText>
+                </RadzenColumn>
+                <RadzenColumn Size="1" Style="display:flex;justify-content:end;">
+                    <RadzenButton Icon="@AccordionIcon(g)" Variant="Variant.Text" Click="@(()=>ShowQuestions(g))" />
+                </RadzenColumn>
+            </RadzenRow>
+        </div>
+        @if (g.ShowQuestion)
+        {
+            <div style="margin-bottom:2rem;">
+                <SortableList Id="sortable" GroupNumber="@g.Id" Items="@g.Questions" OnGroupUpdate="@OrderList" Context="item">
+                    <SortableItemTemplate>
+                        <div class="card shadow margineQuestionario p-2 pt-3 bordoDomanda">
+                            <RadzenRow Style="flex-wrap:nowrap !important">
+                                <RadzenCheckBox class="ps-3 fw-normal" TValue="bool" Value="@ValoreCheckBoxQuestion(item.Id, g)" TriState="false"
+                                                Change="@(args => ChangeCheckBoxQuestion(args, item.Id, g))" Style="margin-top: 0.2rem;" />
+                                <RadzenText>@QuestionText(g, item.Text, item.Order)</RadzenText>
+                            </RadzenRow>
+                        </div>
+                    </SortableItemTemplate>
+                </SortableList>
+            </div>
+        }
+    </SortableItemTemplate>
+</SortableList> *@

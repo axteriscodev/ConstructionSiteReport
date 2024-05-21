@@ -1,0 +1,24 @@
+﻿@using ConstructionSiteLibrary.Managers;
+@using ConstructionSiteLibrary.Repositories;
+
+@inject CategoriesRepository CategoriesRepository
+@*@inject AXT_NotificationService NotificationService*@
+
+<div class="">
+    <RadzenTemplateForm TItem="FormSubjectsData" Data=@form Submit=@Save>
+        <RadzenStack class="px-2">
+            <RadzenFormField Text="Nome <span style='color:red'> (obbligatorio)</span>" Variant="@variant">
+                <ChildContent>
+                    <RadzenTextBox Name="nome" @bind-Value="@form.Nome" />
+                </ChildContent>
+                <Helper>
+                    <RadzenRequiredValidator Component="nome" Popup=false
+                                             Text="Il campo nome è obbligatorio" />
+                </Helper>
+            </RadzenFormField>
+           
+            <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Salva" class="buttonSalva" IsBusy=@onSaving
+                          BusyText="Salvataggio in corso" />
+        </RadzenStack>
+    </RadzenTemplateForm>
+</div>

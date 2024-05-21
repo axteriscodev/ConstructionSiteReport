@@ -1,0 +1,36 @@
+﻿<RadzenStack AlignItems="AlignItems.Center" Gap="2rem" class="mt-5">
+    <RadzenProgressBarCircular Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" Size="@size" />
+    <RadzenText TextStyle="@textSize" TagName="TagName.H3">@Testo</RadzenText>
+</RadzenStack>
+
+@code {
+
+    [Parameter]
+    public string Testo { get; set; } = "Caricamento in corso...";
+    [Parameter]
+    public bool CaricamentoCSS { get; set; } = false;
+
+    private ProgressBarCircularSize size;
+    private TextStyle textSize;
+    private TagName tagText;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        SetSize();
+    }
+
+    private void SetSize()
+    {
+        if (CaricamentoCSS)
+        {
+            textSize = TextStyle.Body1;
+            size = ProgressBarCircularSize.Large;
+        }
+        else
+        {
+            textSize = TextStyle.Subtitle1;
+            size = ProgressBarCircularSize.Medium;
+        }
+    }
+}

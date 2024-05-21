@@ -1,0 +1,20 @@
+﻿@using Microsoft.JSInterop
+
+@inject IJSRuntime JS
+
+<RadzenStack>
+    <RadzenRow>
+        <canvas id="@canvasId" class="canvasBorder" width="@CanvasWidth" height="@CanvasHeight"></canvas>
+    </RadzenRow>
+    <RadzenRow>
+        <RadzenButton Icon="save" Text="Salva" Click="@Save" />
+    </RadzenRow>
+    @if (DebugImage && !string.IsNullOrEmpty(signature.Image))
+    {
+        <RadzenRow>
+            <img src="@signature.Image" width="@signature.Width" height="@signature.Height" />
+        </RadzenRow>
+    }
+</RadzenStack>
+
+
