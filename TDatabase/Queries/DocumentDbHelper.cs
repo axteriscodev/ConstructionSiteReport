@@ -48,6 +48,7 @@ public class DocumentDbHelper
                                                            Id = qc.IdQuestion,
                                                            Text = q.Text,
                                                            Order = qc.Order,
+                                                           Note = qc.Note ?? "",
                                                            CurrentChoice = (from cc in db.Choices
                                                                             where cc.Id == qc.IdCurrentChoice
                                                                             select new ChoiceModel() 
