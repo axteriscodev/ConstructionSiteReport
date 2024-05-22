@@ -144,7 +144,7 @@ public class DocumentDbHelper
                             var qc = db.QuestionChosens.Where(x => x.IdDocument == document.Id && x.IdQuestion == q.Id).FirstOrDefault();
                             if(qc is not null)
                             {
-                                qc.IdCurrentChoice = q.CurrentChoice.Id;
+                                qc.IdCurrentChoice = q.CurrentChoice?.Id;
                                 qc.Order = q.Order;
                                 qc.Printable = q.Printable;
                                 qc.Hidden = q.Hidden;

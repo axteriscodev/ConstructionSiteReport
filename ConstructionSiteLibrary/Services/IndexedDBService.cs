@@ -17,32 +17,34 @@ namespace ConstructionSiteLibrary.Services
         public delegate void DbSupportValidated(bool supported);
         public event DbSupportValidated OnDbSupportValidated;
 
-        public bool DbSupport { get; set; } = false;
+        private bool dbSupport = false;
 
-
-        public async Task<bool> Init(IJSRuntime js)
+        public async Task Init(IJSRuntime js)
         {
-            bool dbSupport;
-            try
+            if(jsModule is null)
             {
-                jsModule = await js.InvokeAsync<IJSObjectReference>("import", JS_FILE);
-                //setto la dimensione corrente dello schermo
-                dbSupport = await jsModule.InvokeAsync<bool>("checkDBSupport");
-                DbSupport = dbSupport;
-            }
-            catch (Exception e)
-            {
-                var ciao = e.Message;
-                dbSupport = false;
+                try
+                {
+                    jsModule = await js.InvokeAsync<IJSObjectReference>("import", JS_FILE);
+                    //setto la dimensione corrente dello schermo
+                    dbSupport = await jsModule.InvokeAsync<bool>("checkDBSupport");
+                    if (dbSupport)
+                    {
+                        _ = await OpenDB();
+                    }
+                }
+                catch (Exception)
+                {
+                    dbSupport = false;
+                }
             }
             OnDbSupportValidated.Invoke(dbSupport);
-            return dbSupport;
         }
 
         public async Task<bool> OpenDB()
         {
             bool result = false;
-            if (DbSupport)
+            if (dbSupport)
             {
                 result = await jsModule!.InvokeAsync<bool>("openDB");
                 Console.WriteLine("CS: " + result);
@@ -54,7 +56,7 @@ namespace ConstructionSiteLibrary.Services
         {
             var tableName = table.ToString();
             int result = 0;
-            if (DbSupport)
+            if (dbSupport)
             {
                 result = await jsModule!.InvokeAsync<int>("inserts", [tableName, list]);
             }
@@ -64,7 +66,7 @@ namespace ConstructionSiteLibrary.Services
         public async Task<string?> ReadObjectStore(IndexedDBTables table)
         {
             string? jsonResponse = null;
-            if (DbSupport)
+            if (dbSupport)
             {
                 var results = await jsModule!.InvokeAsync<List<object>>("selectMulti", [table.ToString()]);
                 jsonResponse = JsonSerializer.Serialize(results);
@@ -75,7 +77,7 @@ namespace ConstructionSiteLibrary.Services
         public async Task<string?> Read(IndexedDBTables table, int id)
         {
             string? jsonResponse = null;
-            if (DbSupport)
+            if (dbSupport)
             {
               var result = await jsModule!.InvokeAsync<object>("selectByKey", [table.ToString(), id]);
                 jsonResponse = JsonSerializer.Serialize(result);
@@ -86,7 +88,7 @@ namespace ConstructionSiteLibrary.Services
         public async Task<string?> SelectByIndex(IndexedDBTables table, string idx, object value)
         {
             string? jsonResponse = null;
-            if (DbSupport)
+            if (dbSupport)
             {
                 var result = await jsModule!.InvokeAsync<object>("selectByIndex", [table.ToString(), idx, value]);
                 jsonResponse = JsonSerializer.Serialize(result);
@@ -97,7 +99,7 @@ namespace ConstructionSiteLibrary.Services
         public async Task<bool> Delete()
         {
             var result = false;
-            if (DbSupport)
+            if (dbSupport)
             {
                 result = await jsModule!.InvokeAsync<bool>("deleteRecord", ["choices", 2]);
             }
