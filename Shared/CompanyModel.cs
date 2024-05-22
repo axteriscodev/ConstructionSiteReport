@@ -2,7 +2,7 @@
 
 namespace Shared;
 
-public class Company
+public class CompanyModel
 {
     [JsonPropertyName("Id")]
     public int Id { get; set; }

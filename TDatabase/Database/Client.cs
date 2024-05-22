@@ -9,6 +9,8 @@ public partial class Client
 
     public string Name { get; set; } = null!;
 
+    public bool Active { get; set; }
+
     public virtual ICollection<ConstructorSite> ConstructorSites { get; set; } = new List<ConstructorSite>();
 
     public virtual ICollection<Document> Documents { get; set; } = new List<Document>();

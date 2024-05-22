@@ -13,5 +13,7 @@ public partial class Company
 
     public string Vatcode { get; set; } = null!;
 
+    public bool Active { get; set; }
+
     public virtual ICollection<CompanyDocument> CompanyDocuments { get; set; } = new List<CompanyDocument>();
 }

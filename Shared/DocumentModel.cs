@@ -29,7 +29,7 @@ public class DocumentModel
     public List<CategoryModel> Categories { get; set;} = [];
 
     [JsonPropertyName("companies")]
-    public List<Company> Companies { get; set;} = [];
+    public List<CompanyModel> Companies { get; set;} = [];
 
     [JsonPropertyName("attachments")]
     public List<Attachment> Attachments { get; set;} = [];
