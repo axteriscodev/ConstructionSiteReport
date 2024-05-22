@@ -9,7 +9,7 @@ namespace ConstructionSiteLibrary.Services
 {
     public class IndexedDBService
     {
-        private const string JS_FILE = "./_content/ConstructionSiteLibrary/indexedDB.js";
+        private const string JS_FILE = "./_content/ConstructionSiteLibrary/IndexedDB.js";
         private IJSObjectReference? jsModule;
 
         public bool DbSupport { get; set; } = false;
