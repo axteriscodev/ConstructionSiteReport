@@ -56,25 +56,26 @@ namespace ConstructionSiteLibrary.Services
             return result;
         }
 
-        public async Task<string> ReadObjectStore(IndexedDBTables table)
+        public async Task<string?> ReadObjectStore(IndexedDBTables table)
         {
-            List<object> result = [];
+            string? jsonResponse = null;
             if (DbSupport)
             {
-                result = await jsModule!.InvokeAsync<List<object>>("selectMulti", [table.ToString()]);
+                var results = await jsModule!.InvokeAsync<List<object>>("selectMulti", [table.ToString()]);
+                jsonResponse = JsonSerializer.Serialize(results);
             }
-            return JsonSerializer.Serialize(result);
+            return jsonResponse;
         }
 
-        public async Task<string> Read(IndexedDBTables table, int id)
+        public async Task<string?> Read(IndexedDBTables table, int id)
         {
-            object? result = null ;
-            
+            string? jsonResponse = null;
             if (DbSupport)
             {
-               result = await jsModule!.InvokeAsync<object>("selectByKey", [table.ToString(), id]);
+              var result = await jsModule!.InvokeAsync<object>("selectByKey", [table.ToString(), id]);
+                jsonResponse = JsonSerializer.Serialize(result);
             }
-            return JsonSerializer.Serialize(result);
+            return jsonResponse;
         }
 
         public async Task<bool> Delete()
