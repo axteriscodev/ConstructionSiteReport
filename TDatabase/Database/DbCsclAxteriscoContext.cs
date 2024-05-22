@@ -213,7 +213,9 @@ public partial class DbCsclAxteriscoContext : DbContext
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("ID");
-            entity.Property(e => e.Active).HasColumnName("ACTIVE");
+            entity.Property(e => e.Active)
+                .HasDefaultValue(true)
+                .HasColumnName("ACTIVE");
             entity.Property(e => e.Address)
                 .HasMaxLength(200)
                 .IsUnicode(false)
@@ -245,6 +247,9 @@ public partial class DbCsclAxteriscoContext : DbContext
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("ID");
+            entity.Property(e => e.Active)
+                .HasDefaultValue(true)
+                .HasColumnName("ACTIVE");
             entity.Property(e => e.Date)
                 .HasColumnType("datetime")
                 .HasColumnName("DATE");

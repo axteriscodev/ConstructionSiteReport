@@ -91,6 +91,7 @@ public class DocumentDbHelper
                 IdClient = document.Client?.Id,
                 Title = document.Title,
                 Date = document.Date,
+                Active = true,
             };
 
             db.Documents.Add(newDocument);
@@ -190,7 +191,7 @@ public class DocumentDbHelper
                 var c = db.Documents.Where(x => x.Id == elem.Id).SingleOrDefault();
                 if (c is not null)
                 {
-                    //c.Active = false;
+                    c.Active = false;
                     if (await db.SaveChangesAsync() > 0)
                     {
                         hiddenItems.Add(elem.Id);

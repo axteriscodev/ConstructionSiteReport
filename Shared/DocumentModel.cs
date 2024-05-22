@@ -39,4 +39,6 @@ public class DocumentModel
     /// campo utilizzato per mappare le modifiche offline
     /// </summary>
     public bool OfflineChange { get; set; } = false;
+
+    public bool Active { get; set; }
 }
