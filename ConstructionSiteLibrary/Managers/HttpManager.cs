@@ -58,19 +58,29 @@ public class HttpManager(HttpClient client)
     /// <returns>WebResponse</returns>
     public async Task<AXT_WebResponse> SendHttpRequest(string path, object content)
     {
+
         AXT_WebResponse webResponse;
-        var url = GetServerBaseUrl() + path;
-        var watch = Stopwatch.StartNew();
-        var response = await httpClient.PostAsJsonAsync(url, content);
-        Console.WriteLine("tempo chiamata: " + watch.ElapsedMilliseconds + " ms");
-        if (response is not null)
+
+        try
         {
-            webResponse = await ProcessServerResponse(response);
+            var url = GetServerBaseUrl() + path;
+            var watch = Stopwatch.StartNew();
+            var response = await httpClient.PostAsJsonAsync(url, content);
+            Console.WriteLine("tempo chiamata: " + watch.ElapsedMilliseconds + " ms");
+            if (response is not null && response.StatusCode == HttpStatusCode.OK)
+            {
+                webResponse = await ProcessServerResponse(response);
+            }
+            else
+            {
+                webResponse = new(StatusResponse.GetStatus(Status.NO_RESPONSE), "");
+            }
         }
-        else
+        catch (Exception)
         {
             webResponse = new(StatusResponse.GetStatus(Status.NO_RESPONSE), "");
         }
+
         return webResponse;
     }
 
@@ -117,4 +127,4 @@ public class HttpManager(HttpClient client)
     #endregion
 }
 
-    
+

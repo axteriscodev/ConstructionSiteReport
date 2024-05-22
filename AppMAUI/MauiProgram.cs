@@ -2,6 +2,7 @@
 using ConstructionSiteLibrary.Interfaces;
 using ConstructionSiteLibrary.Managers;
 using ConstructionSiteLibrary.Repositories;
+using ConstructionSiteLibrary.Services;
 using Microsoft.Extensions.Logging;
 using Radzen;
 
@@ -40,6 +41,7 @@ public static class MauiProgram
         builder.Services.AddRadzenComponents();
         //Componente fotocamera
         builder.Services.AddScoped<ICameraService, CameraService>();
+        builder.Services.AddSingleton<IndexedDBService>();
         ///Componente GPS
         builder.Services.AddScoped<ILocationService, LocationService>();
 

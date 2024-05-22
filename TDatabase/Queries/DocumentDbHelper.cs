@@ -23,6 +23,7 @@ public class DocumentDbHelper
                         Id = d.Id,
                         Date = d.Date,
                         Title = d.Title,
+                        LastModified = d.LastModified,
                         Categories = (from r in (from qc in db.QuestionChosens
                                                  from q in db.Questions
                                                  where qc.IdDocument == d.Id
@@ -90,6 +91,7 @@ public class DocumentDbHelper
                 IdClient = document.Client?.Id,
                 Title = document.Title,
                 Date = document.Date,
+                Active = true,
             };
 
             db.Documents.Add(newDocument);
@@ -132,8 +134,9 @@ public class DocumentDbHelper
             foreach (var document in documents)
             {
                 var d = db.Documents.Where(x => x.Id == document.Id).FirstOrDefault();
-                if (d is not null)
+                if (d is not null && CheckLastEdit(d.LastModified, document.LastModified!.Value))
                 {
+                    d.LastModified = document.LastModified;
                     foreach (var c in document.Categories)
                     {
                         foreach(var q in c.Questions)
@@ -141,7 +144,7 @@ public class DocumentDbHelper
                             var qc = db.QuestionChosens.Where(x => x.IdDocument == document.Id && x.IdQuestion == q.Id).FirstOrDefault();
                             if(qc is not null)
                             {
-                                qc.IdCurrentChoice = q.CurrentChoice.Id;
+                                qc.IdCurrentChoice = q.CurrentChoice?.Id;
                                 qc.Order = q.Order;
                                 qc.Printable = q.Printable;
                                 qc.Hidden = q.Hidden;
@@ -188,7 +191,7 @@ public class DocumentDbHelper
                 var c = db.Documents.Where(x => x.Id == elem.Id).SingleOrDefault();
                 if (c is not null)
                 {
-                    //c.Active = false;
+                    c.Active = false;
                     if (await db.SaveChangesAsync() > 0)
                     {
                         hiddenItems.Add(elem.Id);
@@ -199,5 +202,10 @@ public class DocumentDbHelper
         catch (Exception) { }
 
         return hiddenItems;
+    }
+
+    private static bool CheckLastEdit(DateTime? oldEdit, DateTime newEdit)
+    {
+        return oldEdit is null || oldEdit < newEdit;
     }
 }

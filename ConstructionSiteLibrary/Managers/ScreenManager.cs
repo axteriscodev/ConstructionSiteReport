@@ -15,15 +15,18 @@ namespace ConstructionSiteLibrary.Managers
         /// <param name="js"></param>
         public async Task Init(IJSRuntime js)
         {
-            if (JS == null)
+            try
             {
-                JS = js;
-                var jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/ConstructionSiteLibrary/ScreenListener.js");
-                //setto la dimensione corrente dello schermo
-                dimension = await jsModule.InvokeAsync<ScreenSize>("getWindowSize");
-                //invoco la funzione js per rimanere in ascolto del ridimensionamento dello schermo
-                await jsModule.InvokeAsync<string>("resizeListener", DotNetObjectReference.Create(this));
-            }
+                if (JS == null)
+                {
+                    JS = js;
+                    var jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/ConstructionSiteLibrary/screenService.js");
+                    //setto la dimensione corrente dello schermo
+                    dimension = await jsModule.InvokeAsync<ScreenSize>("getWindowSize");
+                    //invoco la funzione js per rimanere in ascolto del ridimensionamento dello schermo
+                    await jsModule.InvokeAsync<string>("resizeListener", DotNetObjectReference.Create(this));
+                }
+            }catch(Exception) { }
         }
 
         public ScreenSize? GetScreenSize()

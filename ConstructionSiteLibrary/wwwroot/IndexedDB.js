@@ -1,7 +1,10 @@
+Ôªø
+
 const DB_NAME = "ConstructorSideReport";
 const VERSION = 1;
 const READ_WRITE = "readwrite";
 const READ_ONLY = "readonly";
+const IndexOfflineChange = "OfflineChange";
 var db;
 
 //-------------------------------------------------//
@@ -25,7 +28,7 @@ export function checkDBSupport() {
 /**
  * Metodo che restitusce i riferimenti al database se esiste, altrimenti
  * lo crea (object store compresi)
- * @returns true se il db Ë stato aperto/creato correttamente
+ * @returns true se il db √® stato aperto/creato correttamente
  */
 export function openDB() {
     return new Promise((resolve) => {
@@ -36,14 +39,11 @@ export function openDB() {
             resolve(true);
         };
         request.onupgradeneeded = (event) => {
-            let choiceStore = event.currentTarget.result.createObjectStore("choices", { keyPath: "id" });
-            let questionStore = event.currentTarget.result.createObjectStore("questions", { keyPath: "id" });
-            let categoryStore = event.currentTarget.result.createObjectStore("categories", { keyPath: "id" });
+            //creo l objectStore per i documenti
             let documentStore = event.currentTarget.result.createObjectStore("documents", { keyPath: "id" });
-            console.log("objectStore: " + choiceStore.name);
-            console.log("objectStore: " + questionStore.name);
-            console.log("objectStore: " + categoryStore.name);
             console.log("objectStore: " + documentStore.name);
+            //creo un indice sul campo OfflineChange
+            documentStore.createIndex("offlineChange", "offlineChange", { unique: false });
         };
         // evento di errore 
         request.onerror = (event) => {
@@ -54,7 +54,7 @@ export function openDB() {
 }
 
 /**
- * Metodo utilizzato per inserire pi˘ oggetti in un object store definito
+ * Metodo utilizzato per inserire pi√π oggetti in un object store definito
  * @param {any} storeName il nome dell'objectStore
  * @param {any} records la lista di record da inserire
  * @returns il count con il numero degli oggetti inseriti
@@ -116,6 +116,26 @@ export function selectByKey(storeName, key) {
     });
 }
 
+export function selectByIndex(storeName, idx, value) {
+    console.log("indice: " + idx);
+    return new Promise((resolve) => {
+        let results = [];
+        let store = GetObjectStorage(storeName, READ_ONLY);
+        const index = store.index(idx);
+        index.openCursor(value).onsuccess = (event) => {
+            const cursor = event.target.result;
+            if (cursor) {
+                console.log("cursorKey = " + cursor.key);
+                console.log( cursor.value);
+                results.push(cursor.value);
+                cursor.continue();
+            } else {
+                resolve(results);
+            }
+        }
+    });
+}
+
 export function deleteRecord(storeName, key) {
     return new Promise((resolve) => {
         let store = GetObjectStorage(storeName, READ_WRITE);
@@ -136,7 +156,7 @@ export function deleteRecord(storeName, key) {
 /**
  * Metodo che restisce uno object store con i dati
  * @param {any} storeName il nome dell objectStore
- * @param {any} mode la modalit‡ di utilizzo (read_write/ read_only)
+ * @param {any} mode la modalit√† di utilizzo (read_write/ read_only)
  * @returns l'oggetto objectStore
  */
 function GetObjectStorage(storeName, mode) {
@@ -175,3 +195,32 @@ async function NextKey(storeName) {
         }
     });
 }
+
+//------------------------------------------------------------
+// CODICE TOLTO/NON UTILIZZATO
+
+
+/*export function ModifyRecords(storeName, records) {
+    let store = GetObjectStorage(storeName, READ_WRITE);
+    for (let i = 0; i < records.length; i++) {
+        const request = store.put(records[i]);
+        request.onsuccess = () => { console.log("inserito record") };
+        request.onerror = (event) => { console.error("errore inserimento record: " + event.target.errorCode) };
+    }
+}*/
+
+/*  let choiceStore = event.currentTarget.result.createObjectStore("choices", { keyPath: "id" });
+    let questionStore = event.currentTarget.result.createObjectStore("questions", { keyPath: "id" });
+    let categoryStore = event.currentTarget.result.createObjectStore("categories", { keyPath: "id" });*/
+/* console.log("objectStore: " + choiceStore.name);
+   console.log("objectStore: " + questionStore.name);
+   console.log("objectStore: " + categoryStore.name);*/
+
+
+
+
+
+
+
+
+

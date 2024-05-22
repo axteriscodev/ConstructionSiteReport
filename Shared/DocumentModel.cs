@@ -33,4 +33,18 @@ public class DocumentModel
 
     [JsonPropertyName("attachments")]
     public List<Attachment> Attachments { get; set;} = [];
+    [JsonPropertyName("lastModified")]
+    public DateTime? LastModified { get; set;}
+    /// <summary>
+    /// campo utilizzato per mappare le modifiche offline
+    /// </summary>
+    /// <remarks>
+    /// bisogna usare il campo ad int per poterlo usare come indice di recarca su indexedDB
+    /// 0 = false;
+    /// 1 = true;
+    /// </remarks>
+    [JsonPropertyName("offlineChange")]
+    public int OfflineChange { get; set; } = 0;
+    [JsonPropertyName("active")]
+    public bool Active { get; set; }
 }

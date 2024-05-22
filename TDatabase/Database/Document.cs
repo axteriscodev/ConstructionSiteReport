@@ -15,6 +15,10 @@ public partial class Document
 
     public DateTime Date { get; set; }
 
+    public DateTime? LastModified { get; set; }
+
+    public bool Active { get; set; }
+
     public virtual ICollection<CompanyDocument> CompanyDocuments { get; set; } = new List<CompanyDocument>();
 
     public virtual Client? IdClientNavigation { get; set; }

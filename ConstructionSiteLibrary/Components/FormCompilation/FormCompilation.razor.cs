@@ -1,13 +1,10 @@
-﻿using ConstructionSiteLibrary.Components.Choices;
-using ConstructionSiteLibrary.Components.Utilities;
+﻿using ConstructionSiteLibrary.Components.Utilities;
 using ConstructionSiteLibrary.Model;
 using ConstructionSiteLibrary.Repositories;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.JSInterop;
 using Radzen;
 using Shared;
-using System.Reflection;
+
 
 namespace ConstructionSiteLibrary.Components.FormCompilation;
 
@@ -20,6 +17,7 @@ public partial class FormCompilation
     /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
     /// </summary>
     private bool initialLoading;
+    private bool onSaving = false;
 
     private int CurrentSelection;
     private string ImgFirma = "";
@@ -48,9 +46,12 @@ public partial class FormCompilation
         if (docLists.Count != 0)
         {
             DocumentsList = docLists.Select(x => x.Id);
-            CurrentSelection = docLists.First().Id;
+            if(CurrentSelection == 0)
+            {
+                CurrentSelection = docLists.First().Id;
+            }
 
-            documentModel = await DocumentsRepository.GetDocumentById(CurrentSelection);
+            documentModel = docLists.Where(x => x.Id == CurrentSelection).FirstOrDefault() ?? new();
             CreateVisualCategories();
         }
     }
@@ -74,7 +75,11 @@ public partial class FormCompilation
 
     private async Task SaveForm()
     {
+        onSaving = true;
+        documentModel.LastModified = DateTime.Now;
        await DocumentsRepository.UpdateDocuments([documentModel]);
+       await LoadData();
+        onSaving = false;
     }
 
     private void SavedSignature(Signature signature)

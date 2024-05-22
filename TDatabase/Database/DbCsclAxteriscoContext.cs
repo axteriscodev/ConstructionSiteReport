@@ -41,9 +41,7 @@ public partial class DbCsclAxteriscoContext : DbContext
 
     public virtual DbSet<Subject> Subjects { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=v00rca2-vm.sphostserver.com\\axterisco2019;Initial Catalog=DB_CSCL_AXTERISCO;User ID=sa;password=AdmP@ss2003;TrustServerCertificate=True");
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -215,7 +213,9 @@ public partial class DbCsclAxteriscoContext : DbContext
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("ID");
-            entity.Property(e => e.Active).HasColumnName("ACTIVE");
+            entity.Property(e => e.Active)
+                .HasDefaultValue(true)
+                .HasColumnName("ACTIVE");
             entity.Property(e => e.Address)
                 .HasMaxLength(200)
                 .IsUnicode(false)
@@ -247,11 +247,17 @@ public partial class DbCsclAxteriscoContext : DbContext
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("ID");
+            entity.Property(e => e.Active)
+                .HasDefaultValue(true)
+                .HasColumnName("ACTIVE");
             entity.Property(e => e.Date)
                 .HasColumnType("datetime")
                 .HasColumnName("DATE");
             entity.Property(e => e.IdClient).HasColumnName("ID_CLIENT");
             entity.Property(e => e.IdConstructorSite).HasColumnName("ID_CONSTRUCTOR_SITE");
+            entity.Property(e => e.LastModified)
+                .HasColumnType("datetime")
+                .HasColumnName("LAST_MODIFIED");
             entity.Property(e => e.Title)
                 .IsUnicode(false)
                 .HasColumnName("TITLE");

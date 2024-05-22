@@ -28,7 +28,10 @@ namespace ConstructionSiteLibrary.Pages
 
         private void ScreenSizeChanged(ScreenSize? size)
         {
-            Console.WriteLine("x: " + size.Width + " -  y: " + size.Height);
+            if(size is not null)
+            {
+                Console.WriteLine("x: " + size.Width + " -  y: " + size.Height);
+            }
         }
 
         private async void OpenCameraPage()
