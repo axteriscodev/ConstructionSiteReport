@@ -8,11 +8,11 @@ namespace ServerHost.Controllers;
 
 [ApiController]
 [Route("[controller]/[action]")]
-public class ClientController : DefaultController
+public class CompanyController : DefaultController
 {
     [LogAction]
     [HttpPost]
-    public AXT_WebResponse ClientsList()
+    public AXT_WebResponse CompaniesList()
     {
         var response = new AXT_WebResponse();
         var stopwatch = StartTime();
@@ -21,52 +21,7 @@ public class ClientController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var list = ClientDbHelper.Select(db);
-            response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
-        }
-        catch (Exception ex)
-        {
-            response = ExceptionWebResponse(ex, "");
-        }
-        StopTime(stopwatch);
-        return response;
-    }
-
-    [LogAction]
-    [HttpPost]
-    public async Task<AXT_WebResponse> SaveClient(ClientModel newClient)
-    {
-        var response = new AXT_WebResponse();
-        var stopwatch = StartTime();
-        ConfigureLog("", 0);
-
-        try
-        {
-            var db = GetDbConnection();
-            var list = await ClientDbHelper.Insert(db, newClient);
-            response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
-
-        }
-        catch (Exception ex)
-        {
-            response = ExceptionWebResponse(ex, "");
-        }
-        StopTime(stopwatch);
-        return response;   
-    }
-
-    [LogAction]
-    [HttpPost]
-    public async Task<AXT_WebResponse> UpdateClients(List<ClientModel> clients)
-    {
-        var response = new AXT_WebResponse();
-        var stopwatch = StartTime();
-        ConfigureLog("", 0);
-
-        try
-        {
-            var db = GetDbConnection();
-            var list = await ClientDbHelper.Update(db, clients);
+            var list = CompanyDbHelper.Select(db);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
         }
@@ -80,7 +35,7 @@ public class ClientController : DefaultController
 
     [LogAction]
     [HttpPost]
-    public async Task<AXT_WebResponse> HideClients(List<ClientModel> clients)
+    public async Task<AXT_WebResponse> SaveCompany(CompanyModel newCompany)
     {
         var response = new AXT_WebResponse();
         var stopwatch = StartTime();
@@ -89,7 +44,7 @@ public class ClientController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var list = await ClientDbHelper.Hide(db, clients);
+            var list = await CompanyDbHelper.Insert(db, newCompany);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
         }
@@ -100,4 +55,51 @@ public class ClientController : DefaultController
         StopTime(stopwatch);
         return response;
     }
+
+    [LogAction]
+    [HttpPost]
+    public async Task<AXT_WebResponse> UpdateCompanies(List<CompanyModel> companies)
+    {
+        var response = new AXT_WebResponse();
+        var stopwatch = StartTime();
+        ConfigureLog("", 0);
+
+        try
+        {
+            var db = GetDbConnection();
+            var list = await CompanyDbHelper.Update(db, companies);
+            response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
+
+        }
+        catch (Exception ex)
+        {
+            response = ExceptionWebResponse(ex, "");
+        }
+        StopTime(stopwatch);
+        return response;
+    }
+
+    [LogAction]
+    [HttpPost]
+    public async Task<AXT_WebResponse> HideCompanies(List<CompanyModel> companies)
+    {
+        var response = new AXT_WebResponse();
+        var stopwatch = StartTime();
+        ConfigureLog("", 0);
+
+        try
+        {
+            var db = GetDbConnection();
+            var list = await CompanyDbHelper.Hide(db, companies);
+            response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
+
+        }
+        catch (Exception ex)
+        {
+            response = ExceptionWebResponse(ex, "");
+        }
+        StopTime(stopwatch);
+        return response;
+    }
+
 }
