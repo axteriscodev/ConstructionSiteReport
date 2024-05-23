@@ -1,0 +1,31 @@
+﻿@using ConstructionSiteLibrary.Components.Clients;
+@using ConstructionSiteLibrary.Model
+
+@page "/clients"
+
+<h3>Clienti</h3>
+
+<ScreenComponent MediumWith="800" OnScreenDimensionChanged="ScreenDimensionObserver" />
+
+<DynamicComponent @ref=dynamicComponent Type=@selectedType/>
+
+@code
+{
+
+    private DynamicComponent? dynamicComponent;
+    private Type selectedType = typeof(TableClient);
+
+     private void ScreenDimensionObserver(ScreenDimension? dimension)
+    {
+        if (dimension == ScreenDimension.Small)
+        {
+            selectedType = typeof(TableClientMobile);
+        }
+        else
+        {
+            selectedType = typeof(TableClient);
+        }
+
+        StateHasChanged();
+    }
+}
