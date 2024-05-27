@@ -15,7 +15,7 @@ public partial class Question
 
     public virtual Category IdCategoryNavigation { get; set; } = null!;
 
-    public virtual ICollection<QuestionChosen> QuestionChosens { get; set; } = new List<QuestionChosen>();
+    public virtual ICollection<QuestionChoice> QuestionChoices { get; set; } = new List<QuestionChoice>();
 
-    public virtual ICollection<Choice> IdChoices { get; set; } = new List<Choice>();
+    public virtual ICollection<QuestionChosen> QuestionChosens { get; set; } = new List<QuestionChosen>();
 }

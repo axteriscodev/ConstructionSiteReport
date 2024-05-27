@@ -1,7 +1,7 @@
 ﻿using System.Data.Common;
 using Shared;
 using TDatabase.Database;
-using DB = TDatabase.Database.DbCsclAxteriscoContext;
+using DB = TDatabase.Database.DbCsclDamicoV2Context;
 using DocumentModel = Shared.DocumentModel;
 
 namespace TDatabase.Queries;
@@ -16,17 +16,17 @@ public class DocumentDbHelper
         {
             documents = documents.Where(d => d.Id == idDocument);
         }
-
-        var docs = (from d in documents
+        return [];
+        /*var docs = (from d in documents
                     select new DocumentModel()
                     {
                         Id = d.Id,
-                        Date = d.Date,
+                        //Date = d.Date,
                         Title = d.Title,
-                        LastModified = d.LastModified,
+                       // LastModified = d.LastModified,
                         Categories = (from r in (from qc in db.QuestionChosens
                                                  from q in db.Questions
-                                                 where qc.IdDocument == d.Id
+                                                 where qc. == d.Id
                                                  && q.Id == qc.IdQuestion
                                                  group q by q.IdCategory into q2
                                                  select new { q2.First().IdCategory })
@@ -97,7 +97,7 @@ public class DocumentDbHelper
                                   }).SingleOrDefault(),
                     }).ToList();
 
-        return docs;
+        return docs;*/
     }
 
     public static async Task<int> Insert(DB db, DocumentModel document)
@@ -112,8 +112,8 @@ public class DocumentDbHelper
                 IdConstructorSite = document.ConstructorSite?.Id,
                 IdClient = document.Client?.Id,
                 Title = document.Title,
-                Date = document.Date,
-                Active = true,
+                //Date = document.Date,
+                //Active = true,
             };
 
             db.Documents.Add(newDocument);
@@ -127,11 +127,11 @@ public class DocumentDbHelper
                     QuestionChosen qc = new()
                     {
                         Id = nextQuestionChosenId,
-                        IdDocument = nextId,
+                      //  IdDocument = nextId,
                         IdQuestion = q.Id,
                         Order = q.Order,
-                        Printable = true,
-                        Hidden = false
+                       // Printable = true,
+                       // Hidden = false
                     };
                     db.QuestionChosens.Add(qc);
                     nextQuestionChosenId++;
@@ -156,9 +156,9 @@ public class DocumentDbHelper
             foreach (var document in documents)
             {
                 var d = db.Documents.Where(x => x.Id == document.Id).FirstOrDefault();
-                if (d is not null && CheckLastEdit(d.LastModified, document.LastModified!.Value))
+           /*     if (d is not null && CheckLastEdit(d.LastModified, document.LastModified!.Value))
                 {
-                    d.LastModified = document.LastModified;
+                  //  d.LastModified = document.LastModified;
                     foreach (var c in document.Categories)
                     {
                         foreach(var q in c.Questions)
@@ -195,7 +195,7 @@ public class DocumentDbHelper
                     // {
                     //     modified.Add(elem.Id);
                     // }
-                }
+                } */
             }
         }
         catch (Exception) { }
@@ -213,7 +213,7 @@ public class DocumentDbHelper
                 var c = db.Documents.Where(x => x.Id == elem.Id).SingleOrDefault();
                 if (c is not null)
                 {
-                    c.Active = false;
+                   // c.Active = false;
                     if (await db.SaveChangesAsync() > 0)
                     {
                         hiddenItems.Add(elem.Id);

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 using Shared;
 using TDatabase.Database;
-using DB = TDatabase.Database.DbCsclAxteriscoContext;
+using DB = TDatabase.Database.DbCsclDamicoV2Context;
 
 namespace TDatabase.Queries
 {
@@ -13,9 +13,9 @@ namespace TDatabase.Queries
 
             if (idSubject > 0)
             {
-                questions = from q in questions
+               /* questions = from q in questions
                             where q.IdSubject == idSubject
-                            select q;
+                            select q;*/
             }
             if (idCategory > 0)
             {
@@ -53,7 +53,6 @@ namespace TDatabase.Queries
                 {
                     Id = nextId,
                     Text = question.Text,
-                    IdSubject = question.IdSubject,
                     IdCategory = question.IdCategory,
                     Active = true
                 };
@@ -87,7 +86,6 @@ namespace TDatabase.Queries
                     if (q is not null)
                     {
                         q.IdCategory = elem.IdCategory;
-                        q.IdSubject = elem.IdSubject;
                         q.Text = elem.Text;
 
                         db.QuestionChoices.RemoveRange(db.QuestionChoices.Where(x => x.IdQuestion == elem.Id));

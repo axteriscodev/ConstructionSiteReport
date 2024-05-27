@@ -47,15 +47,15 @@ public partial class DbCsclDamicoV2Context : DbContext
 
     public virtual DbSet<QuestionAnswered> QuestionAnswereds { get; set; }
 
+    public virtual DbSet<QuestionChoice> QuestionChoices { get; set; }
+
     public virtual DbSet<QuestionChosen> QuestionChosens { get; set; }
 
     public virtual DbSet<ReportedCompany> ReportedCompanies { get; set; }
 
     public virtual DbSet<Template> Templates { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=v00rca2-vm.sphostserver.com\\axterisco2019;Initial Catalog=DB_CSCL_DAMICO_V2;User ID=sa;password=AdmP@ss2003;TrustServerCertificate=True");
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -423,24 +423,6 @@ public partial class DbCsclDamicoV2Context : DbContext
                 .HasForeignKey(d => d.IdCategory)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__QUESTION__ID_CAT__29572725");
-
-            entity.HasMany(d => d.IdChoices).WithMany(p => p.IdQuestions)
-                .UsingEntity<Dictionary<string, object>>(
-                    "QuestionChoice",
-                    r => r.HasOne<Choice>().WithMany()
-                        .HasForeignKey("IdChoice")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__QUESTION___ID_CH__31EC6D26"),
-                    l => l.HasOne<Question>().WithMany()
-                        .HasForeignKey("IdQuestion")
-                        .HasConstraintName("FK__QUESTION___ID_QU__32E0915F"),
-                    j =>
-                    {
-                        j.HasKey("IdQuestion", "IdChoice").HasName("PK__QUESTION__F037DAD3DDCA2B53");
-                        j.ToTable("QUESTION_CHOICE");
-                        j.IndexerProperty<int>("IdQuestion").HasColumnName("ID_QUESTION");
-                        j.IndexerProperty<int>("IdChoice").HasColumnName("ID_CHOICE");
-                    });
         });
 
         modelBuilder.Entity<QuestionAnswered>(entity =>
@@ -470,6 +452,28 @@ public partial class DbCsclDamicoV2Context : DbContext
                 .HasForeignKey(d => d.IdQuestionChosen)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__QUESTION___ID_QU__693CA210");
+        });
+
+        modelBuilder.Entity<QuestionChoice>(entity =>
+        {
+            entity.HasKey(e => new { e.IdQuestion, e.IdChoice }).HasName("PK__QUESTION__F037DAD3DDCA2B53");
+
+            entity.ToTable("QUESTION_CHOICE");
+
+            entity.Property(e => e.IdQuestion).HasColumnName("ID_QUESTION");
+            entity.Property(e => e.IdChoice).HasColumnName("ID_CHOICE");
+            entity.Property(e => e.Note)
+                .IsUnicode(false)
+                .HasColumnName("NOTE");
+
+            entity.HasOne(d => d.IdChoiceNavigation).WithMany(p => p.QuestionChoices)
+                .HasForeignKey(d => d.IdChoice)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__QUESTION___ID_CH__31EC6D26");
+
+            entity.HasOne(d => d.IdQuestionNavigation).WithMany(p => p.QuestionChoices)
+                .HasForeignKey(d => d.IdQuestion)
+                .HasConstraintName("FK__QUESTION___ID_QU__32E0915F");
         });
 
         modelBuilder.Entity<QuestionChosen>(entity =>

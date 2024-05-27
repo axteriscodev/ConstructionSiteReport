@@ -19,5 +19,5 @@ public partial class Choice
 
     public virtual ICollection<QuestionAnswered> QuestionAnswereds { get; set; } = new List<QuestionAnswered>();
 
-    public virtual ICollection<Question> IdQuestions { get; set; } = new List<Question>();
+    public virtual ICollection<QuestionChoice> QuestionChoices { get; set; } = new List<QuestionChoice>();
 }
