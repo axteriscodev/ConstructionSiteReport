@@ -1,7 +1,7 @@
 ﻿using System.Data.Common;
 using Shared;
 using TDatabase.Database;
-using DB = TDatabase.Database.DbCsclAxteriscoContext;
+using DB = TDatabase.Database.DbCsclDamicoV2Context;
 using DocumentModel = Shared.DocumentModel;
 
 namespace TDatabase.Queries;

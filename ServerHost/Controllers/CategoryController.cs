@@ -24,7 +24,7 @@ public class CategoryController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var list = CategoriesDbHelper.Select(db);
+            var list = CategoryDbHelper.Select(db);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
         }
@@ -47,7 +47,7 @@ public class CategoryController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var list = await CategoriesDbHelper.Insert(db, newCategory);
+            var list = await CategoryDbHelper.Insert(db, newCategory);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
         }
@@ -70,7 +70,7 @@ public class CategoryController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var list = await CategoriesDbHelper.Update(db, categories);
+            var list = await CategoryDbHelper.Update(db, categories);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
         }
@@ -93,7 +93,7 @@ public class CategoryController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var list = await CategoriesDbHelper.Hide(db, categories);
+            var list = await CategoryDbHelper.Hide(db, categories);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
         }

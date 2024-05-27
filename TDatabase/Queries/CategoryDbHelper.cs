@@ -1,10 +1,10 @@
 ﻿using Shared;
 using TDatabase.Database;
-using DB = TDatabase.Database.DbCsclAxteriscoContext;
+using DB = TDatabase.Database.DbCsclDamicoV2Context;
 
 namespace TDatabase.Queries
 {
-    public class CategoriesDbHelper
+    public class CategoryDbHelper
     {
         public static List<CategoryModel> Select(DB db)
         {
