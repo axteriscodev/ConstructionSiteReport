@@ -15,5 +15,9 @@ public partial class Company
 
     public bool Active { get; set; }
 
+    public virtual ICollection<CompanyConstructorSite> CompanyConstructorSites { get; set; } = new List<CompanyConstructorSite>();
+
     public virtual ICollection<CompanyDocument> CompanyDocuments { get; set; } = new List<CompanyDocument>();
+
+    public virtual ICollection<ReportedCompany> ReportedCompanies { get; set; } = new List<ReportedCompany>();
 }

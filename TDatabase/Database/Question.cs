@@ -9,17 +9,11 @@ public partial class Question
 
     public int IdCategory { get; set; }
 
-    public int? IdSubject { get; set; }
-
     public string Text { get; set; } = null!;
 
     public bool Active { get; set; }
 
-    public virtual ICollection<AttachmentQuestion> AttachmentQuestions { get; set; } = new List<AttachmentQuestion>();
-
     public virtual Category IdCategoryNavigation { get; set; } = null!;
-
-    public virtual Subject? IdSubjectNavigation { get; set; }
 
     public virtual ICollection<QuestionChoice> QuestionChoices { get; set; } = new List<QuestionChoice>();
 

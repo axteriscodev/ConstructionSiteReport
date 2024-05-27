@@ -9,7 +9,7 @@ public partial class QuestionChoice
 
     public int IdChoice { get; set; }
 
-    public string? Notes { get; set; }
+    public string? Note { get; set; }
 
     public virtual Choice IdChoiceNavigation { get; set; } = null!;
 

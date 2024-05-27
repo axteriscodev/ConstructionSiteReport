@@ -7,9 +7,7 @@ public partial class QuestionChosen
 {
     public int Id { get; set; }
 
-    public int IdDocument { get; set; }
-
-    public int? IdCurrentChoice { get; set; }
+    public int IdTemplate { get; set; }
 
     public int IdQuestion { get; set; }
 
@@ -17,13 +15,9 @@ public partial class QuestionChosen
 
     public string? Note { get; set; }
 
-    public bool Printable { get; set; }
-
-    public bool Hidden { get; set; }
-
-    public virtual Choice? IdCurrentChoiceNavigation { get; set; }
-
-    public virtual Document IdDocumentNavigation { get; set; } = null!;
-
     public virtual Question IdQuestionNavigation { get; set; } = null!;
+
+    public virtual Template IdTemplateNavigation { get; set; } = null!;
+
+    public virtual ICollection<QuestionAnswered> QuestionAnswereds { get; set; } = new List<QuestionAnswered>();
 }
