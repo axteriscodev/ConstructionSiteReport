@@ -11,13 +11,19 @@ public partial class Document
 
     public int? IdClient { get; set; }
 
+    public int? IdTemplate { get; set; }
+
     public string Title { get; set; } = null!;
 
-    public DateTime Date { get; set; }
+    public DateTime CompilationDate { get; set; }
 
-    public DateTime? LastModified { get; set; }
+    public DateTime? LastEditDate { get; set; }
 
-    public bool Active { get; set; }
+    public DateTime? CreationDate { get; set; }
+
+    public bool ReadOnly { get; set; }
+
+    public virtual ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
 
     public virtual ICollection<CompanyDocument> CompanyDocuments { get; set; } = new List<CompanyDocument>();
 
@@ -25,5 +31,9 @@ public partial class Document
 
     public virtual ConstructorSite? IdConstructorSiteNavigation { get; set; }
 
-    public virtual ICollection<QuestionChosen> QuestionChosens { get; set; } = new List<QuestionChosen>();
+    public virtual Template? IdTemplateNavigation { get; set; }
+
+    public virtual ICollection<Note> Notes { get; set; } = new List<Note>();
+
+    public virtual ICollection<QuestionAnswered> QuestionAnswereds { get; set; } = new List<QuestionAnswered>();
 }
