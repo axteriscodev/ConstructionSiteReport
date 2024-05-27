@@ -1,6 +1,6 @@
 ﻿using Shared;
 using TDatabase.Database;
-using DB = TDatabase.Database.DbCsclAxteriscoContext;
+using DB = TDatabase.Database.DbCsclDamicoV2Context;
 
 namespace TDatabase.Queries;
 
