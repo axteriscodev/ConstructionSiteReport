@@ -13,21 +13,21 @@ namespace TDatabase.Queries
                 Id = x.Id,
                 Text = x.Text,
                 Order = x.Order,
-                Questions = db.Questions.Where(q => q.IdCategory == x.Id).Select(q => new QuestionModel()
+                Questions = db.Questions.Where(q => q.IdCategory == x.Id).Select(q => new DocumentQuestionModel()
                 {
                     Id = q.Id,
                     Text = q.Text,
-                    IdCategory = q.IdCategory,
                     Choices = (from qc in db.QuestionChoices
                                join c in db.Choices on qc.IdChoice equals c.Id
                                where qc.IdQuestion == q.Id
-                               select new ChoiceModel()
+                               select new DocumentChoiceModel()
                                {
                                    Id = c.Id,
-                                   Tag = c.Tag,
+                                   //Tag = c.Tag,
                                    Value = c.Value,
+                                   Reportable = c.Reportable,
                                }).ToList(),
-                }).ToList(),
+                }).ToList().Cast<IQuestion>().ToList(),
             }).OrderBy(x => x.Order).ToList();
         }
 

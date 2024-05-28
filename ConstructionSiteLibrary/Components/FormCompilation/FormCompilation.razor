@@ -42,10 +42,10 @@ else
                     {
                         @foreach (var question in visual.Category.Questions)
                         {
-                            <div class="margineDomande bordoDomanda">
+                            @* <div class="margineDomande bordoDomanda">
                                 <RadzenText>@QuestionText(visual.Category, question.Text, question.Order)</RadzenText>
                                 <RadzenDropDown @bind-Value=@question.CurrentChoice Data=@question.Choices TextProperty="Value" Style="width: 100%; max-width: 400px;" Name="DropDownBindValue" />
-                            </div>
+                            </div> *@
                         }
                     }
                 }

@@ -8,11 +8,11 @@ namespace ServerHost.Controllers;
 
 [ApiController]
 [Route("[controller]/[action]")]
-public class DocumentController : DefaultController
+public class TemplateController : DefaultController
 {
     [LogAction]
     [HttpPost()]
-    public AXT_WebResponse DocumentsList([FromBody]int idDocument)
+    public AXT_WebResponse TemplatesList([FromBody]int idTemplate)
     {
         var response = new AXT_WebResponse();
             var stopwatch = StartTime();
@@ -21,7 +21,7 @@ public class DocumentController : DefaultController
             try
             {
                 var db = GetDbConnection();
-                var list = DocumentDbHelper.Select(db, idDocument);
+                var list = TemplateDbHelper.Select(db, idTemplate);
                 response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
             }
@@ -35,7 +35,7 @@ public class DocumentController : DefaultController
 
     [LogAction]
     [HttpPost]
-    public async Task<AXT_WebResponse> SaveDocument(DocumentModel newDocument)
+    public async Task<AXT_WebResponse> SaveTemplate(TemplateModel newTemplate)
     {
         var response = new AXT_WebResponse();
         var stopwatch = StartTime();
@@ -44,7 +44,7 @@ public class DocumentController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var q = await DocumentDbHelper.Insert(db, newDocument);
+            var q = await TemplateDbHelper.Insert(db, newTemplate);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), q);
 
         }
@@ -55,10 +55,33 @@ public class DocumentController : DefaultController
         StopTime(stopwatch);
         return response;
     }
+
+    // [LogAction]
+    // [HttpPost]
+    // public async Task<AXT_WebResponse> UpdateDocument(List<DocumentModel> documents)
+    // {
+    //     var response = new AXT_WebResponse();
+    //     var stopwatch = StartTime();
+    //     ConfigureLog("", 0);
+
+    //     try
+    //     {
+    //         var db = GetDbConnection();
+    //         var q = await DocumentDbHelper.Update(db, documents);
+    //         response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), q);
+
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         response = ExceptionWebResponse(ex, "");
+    //     }
+    //     StopTime(stopwatch);
+    //     return response;
+    // }
 
     [LogAction]
     [HttpPost]
-    public async Task<AXT_WebResponse> UpdateDocument(List<DocumentModel> documents)
+    public async Task<AXT_WebResponse> HideTemplates(List<TemplateModel> templates)
     {
         var response = new AXT_WebResponse();
         var stopwatch = StartTime();
@@ -67,7 +90,7 @@ public class DocumentController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var q = await DocumentDbHelper.Update(db, documents);
+            var q = await TemplateDbHelper.Hide(db, templates);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), q);
 
         }
@@ -78,28 +101,4 @@ public class DocumentController : DefaultController
         StopTime(stopwatch);
         return response;
     }
-
-    [LogAction]
-    [HttpPost]
-    public async Task<AXT_WebResponse> HideDocuments(List<DocumentModel> documents)
-    {
-        var response = new AXT_WebResponse();
-        var stopwatch = StartTime();
-        ConfigureLog("", 0);
-
-        try
-        {
-            var db = GetDbConnection();
-            var q = await DocumentDbHelper.Hide(db, documents);
-            response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), q);
-
-        }
-        catch (Exception ex)
-        {
-            response = ExceptionWebResponse(ex, "");
-        }
-        StopTime(stopwatch);
-        return response;
-    }
-
 }

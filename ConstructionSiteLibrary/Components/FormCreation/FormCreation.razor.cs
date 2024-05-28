@@ -45,26 +45,26 @@ public partial class FormCreation
     {
         initialLoading = true;
         await base.OnInitializedAsync();
-        await LoadData();
+        //await LoadData();
         initialLoading = false;
     }
 
-    private async Task LoadData()
-    {
-        categories = await CategoriesRepository.GetCategories();
-        count = categories.Count;
-        foreach (var category in categories)
-        {
+    // private async Task LoadData()
+    // {
+    //     categories = await CategoriesRepository.GetCategories();
+    //     count = categories.Count;
+    //     foreach (var category in categories)
+    //     {
 
-            OrderElements(category.Questions);
-            groups.Add(new() { Id = category.Id, Order=category.Order, Text = category.Text, Questions = category.Questions });
-        }
-    }
+    //         //OrderElements(category.Questions.Cast<DocumentQuestionModel>());
+    //         groups.Add(new() { Id = category.Id, Order=category.Order, Text = category.Text, Questions = category.Questions });
+    //     }
+    // }
 
     private async Task ReloadTable()
     {
         //DialogService.Close();
-        await LoadData();
+        //await LoadData();
         //await grid!.Reload();
     }
 
@@ -86,7 +86,7 @@ public partial class FormCreation
                 foreach (var selectedQuestionId in group.SelectedQuestionIds)
                 {
                     var selectedQuestion = group.Questions.First(x => x.Id == selectedQuestionId);
-                    category.Questions.Add(selectedQuestion);
+                    //category.Questions.Add(selectedQuestion);
                 }
 
                 documentCategories.Add(category);
@@ -213,15 +213,15 @@ public partial class FormCreation
             items.Add(itemToMove);
         }
 
-        OrderElements(items);
+        //OrderElements(items);
         StateHasChanged();
     }
 
-    private static void OrderElements(List<QuestionModel> lista)
+    private static void OrderElements(List<DocumentQuestionModel> lista)
     {
         for (int i = 0; i < lista.Count; i++)
         {
-            lista[i].Order = i + 1;
+            //lista[i].Order = i + 1;
         }
     }
 

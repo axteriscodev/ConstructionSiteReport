@@ -18,5 +18,5 @@ public class TemplateModel
     public DateTime CreationDate { get; set; } = DateTime.Now;
 
     [JsonPropertyName("categories")]
-    public List<int> Categories { get; set; } = [];
+    public List<CategoryModel> Categories { get; set; } = [];
 }

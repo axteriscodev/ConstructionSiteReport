@@ -102,50 +102,55 @@ public class DocumentDbHelper
 
     public static async Task<int> Insert(DB db, DocumentModel document)
     {
-        var documentId = 0;
-        try
-        {
-            var nextId = (db.Documents.Any() ? db.Documents.Max(x => x.Id) : 0) + 1;
-            Document newDocument = new()
-            {
-                Id = nextId,
-                IdConstructorSite = document.ConstructorSite?.Id,
-                IdClient = document.Client?.Id,
-                Title = document.Title,
-                //Date = document.Date,
-                //Active = true,
-            };
 
-            db.Documents.Add(newDocument);
+        //TODO associare template
 
-            var nextQuestionChosenId = (db.QuestionChosens.Any() ? db.QuestionChosens.Max(x => x.Id) : 0) + 1;
+        // var documentId = 0;
+        // try
+        // {
+        //     var nextId = (db.Documents.Any() ? db.Documents.Max(x => x.Id) : 0) + 1;
+        //     Document newDocument = new()
+        //     {
+        //         Id = nextId,
+        //         IdConstructorSite = document.ConstructorSite?.Id,
+        //         IdClient = document.Client?.Id,
+        //         Title = document.Title,
+        //         //Date = document.Date,
+        //         //Active = true,
+        //     };
 
-            foreach (var c in document.Categories)
-            {
-                foreach (var q in c.Questions)
-                {
-                    QuestionChosen qc = new()
-                    {
-                        Id = nextQuestionChosenId,
-                      //  IdDocument = nextId,
-                        IdQuestion = q.Id,
-                        Order = q.Order,
-                       // Printable = true,
-                       // Hidden = false
-                    };
-                    db.QuestionChosens.Add(qc);
-                    nextQuestionChosenId++;
-                }
+        //     db.Documents.Add(newDocument);
 
-            }
-            await db.SaveChangesAsync();
-            documentId = nextId;
-        }
-        catch (Exception e) {
-            var ex = e.Message;
-         }
+        //     var nextQuestionChosenId = (db.QuestionChosens.Any() ? db.QuestionChosens.Max(x => x.Id) : 0) + 1;
 
-        return documentId;
+        //     foreach (var c in document.Categories)
+        //     {
+        //         foreach (DocumentQuestionModel q in c.Questions)
+        //         {
+        //             QuestionChosen qc = new()
+        //             {
+        //                 Id = nextQuestionChosenId,
+        //               //  IdDocument = nextId,
+        //                 IdQuestion = q.Id,
+        //                 Order = q.Order,
+        //                // Printable = true,
+        //                // Hidden = false
+        //             };
+        //             db.QuestionChosens.Add(qc);
+        //             nextQuestionChosenId++;
+        //         }
+
+        //     }
+        //     await db.SaveChangesAsync();
+        //     documentId = nextId;
+        // }
+        // catch (Exception e) {
+        //     var ex = e.Message;
+        //  }
+
+        //return documentId;
+
+        return 0;
     }
 
     public static async Task<List<int>> Update(DB db, List<DocumentModel> documents)

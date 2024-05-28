@@ -35,26 +35,26 @@ public partial class FormCompilation
     {
         initialLoading = true;
         await base.OnInitializedAsync();
-        await LoadData();
+        //await LoadData();
         initialLoading = false;
     }
 
-    private async Task LoadData()
-    {
-        List<DocumentModel> docLists = await DocumentsRepository.GetDocuments();
+    // private async Task LoadData()
+    // {
+    //     List<DocumentModel> docLists = await DocumentsRepository.GetDocuments();
 
-        if (docLists.Count != 0)
-        {
-            DocumentsList = docLists.Select(x => x.Id);
-            if(CurrentSelection == 0)
-            {
-                CurrentSelection = docLists.First().Id;
-            }
+    //     if (docLists.Count != 0)
+    //     {
+    //         DocumentsList = docLists.Select(x => x.Id);
+    //         if(CurrentSelection == 0)
+    //         {
+    //             CurrentSelection = docLists.First().Id;
+    //         }
 
-            documentModel = docLists.Where(x => x.Id == CurrentSelection).FirstOrDefault() ?? new();
-            CreateVisualCategories();
-        }
-    }
+    //         documentModel = docLists.Where(x => x.Id == CurrentSelection).FirstOrDefault() ?? new();
+    //         CreateVisualCategories();
+    //     }
+    // }
 
     private async Task OnDocumentSelected()
     {
@@ -76,9 +76,9 @@ public partial class FormCompilation
     private async Task SaveForm()
     {
         onSaving = true;
-        documentModel.LastModified = DateTime.Now;
+        //documentModel.LastModified = DateTime.Now;
        await DocumentsRepository.UpdateDocuments([documentModel]);
-       await LoadData();
+       //await LoadData();
         onSaving = false;
     }
 

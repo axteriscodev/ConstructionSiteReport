@@ -236,7 +236,7 @@ public class DocumentsRepository(HttpManager httpManager, IndexedDBService index
     {
         foreach (var doc in list)
         {
-            doc.OfflineChange = 1;
+            doc.ChangedOffline = 1;
         }
     }
 
