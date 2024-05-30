@@ -244,7 +244,7 @@ public class DocumentDbHelper
             foreach (var document in documents)
             {
                 var d = db.Documents.Where(x => x.Id == document.Id).FirstOrDefault();
-                /*     if (d is not null && CheckLastEdit(d.LastModified, document.LastModified!.Value))
+                     if (d is not null && CheckLastEdit(d.LastEditDate, document.LastEditDate))
                      {
                        //  d.LastModified = document.LastModified;
                          foreach (var c in document.Categories)
@@ -264,26 +264,26 @@ public class DocumentDbHelper
                              }
                          }
 
-                         // d.IdCategory = elem.IdCategory;
-                         // d.IdSubject = elem.IdSubject;
-                         // d.Text = elem.Text;
+                         d.IdCategory = elem.IdCategory;
+                         d.IdSubject = elem.IdSubject;
+                         d.Text = elem.Text;
 
-                         // db.QuestionChoices.RemoveRange(db.QuestionChoices.Where(x => x.IdQuestion == elem.Id));
-                         // foreach(var choice in elem.Choices)
-                         // {
-                         //     QuestionChoice newqc = new()
-                         //     {
-                         //         IdChoice = choice.Id,
-                         //         IdQuestion = elem.Id
-                         //     };
-                         //     db.Add(newqc);
-                         // }
+                         db.QuestionChoices.RemoveRange(db.QuestionChoices.Where(x => x.IdQuestion == elem.Id));
+                         foreach(var choice in elem.Choices)
+                         {
+                             QuestionChoice newqc = new()
+                             {
+                                 IdChoice = choice.Id,
+                                 IdQuestion = elem.Id
+                             };
+                             db.Add(newqc);
+                         }
 
-                         // if (await db.SaveChangesAsync() > 0)
-                         // {
-                         //     modified.Add(elem.Id);
-                         // }
-                     } */
+                         if (await db.SaveChangesAsync() > 0)
+                         {
+                             modified.Add(elem.Id);
+                         }
+                     } 
             }
         }
         catch (Exception) { }

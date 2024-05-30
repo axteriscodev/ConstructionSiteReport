@@ -11,6 +11,7 @@ namespace ConstructionSiteLibrary.Model
         choices,
         categories,
         documents,
-        questions
+        questions,
+        templates,
     }
 }
