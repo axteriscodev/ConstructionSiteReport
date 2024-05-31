@@ -1,0 +1,28 @@
+﻿:root {
+    /* Colori principali APP */
+    --rz-primary: #D51116 !important;
+    --rz-primary-lighter: rgba(244, 67, 54, 0.2) !important;
+    --rz-primary-light: #ed0e16 !important;
+    --rz-primary-dark: #bd1317 !important;
+    --rz-primary-darker: #bd1317 !important;
+    --rz-secondary: #b1b1b1 !important;
+    --rz-secondary-lighter: rgba(177, 177, 177, 0.2) !important;
+    --rz-secondary-light: #ed0e16 !important;
+    --rz-secondary-dark: #858585 !important;
+    --rz-secondary-darker: #696969 !important;
+    --rz-on-primary-lighter: #D51116 !important;
+    /* Colori sidebar */
+    --side-bar-color: #D51116 !important;
+    --side-bar-color2: #a5060a !important;
+    --topRow-Background-Color: rgb(138,17,17) !important;
+    --topRow-Background-alpha: rgba(138,17,17,.6) !important;
+    /* Bottoni particolari */
+    --button-Delete: #b1b1b1 !important;
+    --button-Confirm: #D51116 !important;
+    --button-Info: #dbdbdb !important;
+    /* Background elementi */
+    --background-page-color: #FFFFFF !important;
+    --background-Card-color1: #f1f1f1 !important;
+    --background-Card-color2: #f7f7f7 !important;
+    --background-tabella-color1: #ffffff !important;
+}
