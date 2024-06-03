@@ -118,6 +118,7 @@ public partial class TemplateCreation
 
         var document = new TemplateModel()
         {
+            TitleTemplate = title,
             Categories = templateCategories,
         };
 

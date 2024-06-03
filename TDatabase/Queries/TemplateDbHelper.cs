@@ -18,6 +18,7 @@ public class TemplateDbHelper
         }
 
         var docs = (from t in templateSelect
+                    where t.Active == true
                     select new TemplateModel()
                     {
                         IdTemplate = t.Id,
@@ -78,10 +79,11 @@ public class TemplateDbHelper
             var nextId = (db.Templates.Any() ? db.Templates.Max(x => x.Id) : 0) + 1;
             Template newTemplate = new()
             {
-                Id = template.IdTemplate,
+                Id = nextId,
                 Title = template.TitleTemplate,
                 Note = template.Note,
                 Date = template.CreationDate,
+                Active = true,
             };
 
             db.Templates.Add(newTemplate);
@@ -107,9 +109,9 @@ public class TemplateDbHelper
             await db.SaveChangesAsync();
             templateId = nextId;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-
+            Console.WriteLine(ex.Message);
         }
 
         return templateId;

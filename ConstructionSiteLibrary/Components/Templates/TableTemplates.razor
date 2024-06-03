@@ -27,8 +27,8 @@ else
 
                 <Columns>
                     @*<RadzenDataGridColumn TItem="CategoryModel" Property="Id" Title="Id" Width="40px" />*@
-                    <RadzenDataGridColumn TItem="TemplateModel" Property="Order" Title="N." Width="40px" />
-                    <RadzenDataGridColumn TItem="TemplateModel" Property="Text" Title="Nome" Width="120px" />
+                    <RadzenDataGridColumn TItem="TemplateModel" Property="TitleTemplate" Title="Titolo" Width="120px" />
+                    <RadzenDataGridColumn TItem="TemplateModel" Property="CreationDate" Title="Date" Width="40px" />
                     <RadzenDataGridColumn TItem="TemplateModel" Title="Azioni" Width="60px" Sortable="false">
                         <Template Context="data">
                             <RadzenRow JustifyContent="JustifyContent.SpaceAround">
