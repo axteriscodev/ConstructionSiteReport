@@ -1,6 +1,4 @@
-﻿using System.Data.Common;
-using Shared;
-using Shared.Documents;
+﻿using Shared.Documents;
 using TDatabase.Database;
 using DB = TDatabase.Database.DbCsclDamicoV2Context;
 
@@ -16,7 +14,6 @@ public class DocumentDbHelper
         {
             documents = documents.Where(d => d.Id == idDocument);
         }
-
 
         var docs = (from d in documents
                     select new DocumentModel()
@@ -174,6 +171,7 @@ public class DocumentDbHelper
         try
         {
             var nextId = (db.Documents.Any() ? db.Documents.Max(x => x.Id) : 0) + 1;
+            // inserisco i dati principali del documento
             Document newDocument = new()
             {
                 Id = nextId,
@@ -188,6 +186,7 @@ public class DocumentDbHelper
 
             db.Documents.Add(newDocument);
 
+            //aggiungo le compagnia associate al documento
             foreach (var companyDoc in document.Companies)
             {
                 CompanyDocument cd = new()
@@ -200,6 +199,9 @@ public class DocumentDbHelper
                 db.CompanyDocuments.Add(cd);
             }
 
+            var nextAttachId = (db.Attachments.Any() ? db.Attachments.Max(x => x.Id) : 0) + 1;
+
+            //aggiungo le risposte compilate del documento
             foreach (var cat in document.Categories)
             {
                 foreach (var q in cat.Questions.Cast<DocumentQuestionModel>())
@@ -213,7 +215,7 @@ public class DocumentDbHelper
                             IdQuestionChosen = q.Id
                         };
                         db.QuestionAnswereds.Add(qc);
-
+                        //aggiungo le compagnie riportate delle varie risposte se ci sono
                         foreach (var rci in cc.ReportedCompanyIds)
                         {
                             ReportedCompany rc = new()
@@ -226,10 +228,9 @@ public class DocumentDbHelper
                             db.ReportedCompanies.Add(rc);
                         }
                     }
-
+                    /* da finire */
                     foreach (var attach in q.Attachments)
                     {
-                        var nextAttachId = (db.Attachments.Any() ? db.Attachments.Max(x => x.Id) : 0) + 1;
 
                         Attachment attachment = new()
                         {
@@ -245,8 +246,49 @@ public class DocumentDbHelper
                             IdQuestion = q.Id,
                         };
                         db.AttachmentQuestions.Add(attachmentQuestion);
+                        nextAttachId++;
                     }
                 }
+            }
+            //carico le note
+            foreach(var n in document.Notes)
+            {
+                var nextNoteId = (db.Notes.Any() ? db.Attachments.Max(x => x.Id) : 0) + 1;
+                var note = new Note()
+                {
+                    Id = nextNoteId,
+                    IdDocument = document.Id,
+                    Text = n.Text,
+                };
+                //inserisco gli allegati della nota se presenti
+                foreach(var a in n.Attachments)
+                {
+                    Attachment attachment = new()
+                    {
+                        Id = nextAttachId,
+                        IdDocument = document.Id,
+                        DateTime = a.Date,
+                    };
+                    db.Attachments.Add(attachment);
+
+                    AttachmentNote attachmentNote = new()
+                    {
+                        IdAttachment = nextAttachId,
+                        IdNote = nextNoteId,
+                    };
+                    db.AttachmentNotes.Add(attachmentNote);
+                    nextAttachId++;
+                }
+                //inserisco le compagnie associate alle note se presenti
+                foreach (var c in n.CompanyListIds)
+                {
+                    var companyNote = new CompanyNote()
+                    {
+                        IdCompany = c,
+                        IdNote = nextNoteId
+                    };
+                }
+                nextNoteId++;
             }
             await db.SaveChangesAsync();
             documentId = nextId;
