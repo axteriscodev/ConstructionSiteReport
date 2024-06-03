@@ -18,7 +18,7 @@ public partial class TemplateCreation
 
     private List<IdCategoryAndQuestions> groups = [];
     private string title = "";
-    
+
 
     /// <summary>
     /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
@@ -29,7 +29,7 @@ public partial class TemplateCreation
     /// Booleano che è impostata durante una ricerca
     /// </summary>
     private bool isLoading = false;
-    
+
     private bool onSaving = false;
 
     /// <summary>
@@ -37,7 +37,7 @@ public partial class TemplateCreation
     /// </summary>
     private int count;
 
-     /// <summary>
+    /// <summary>
     /// Riferimento al componente tabella
     /// </summary>
     private RadzenDataGrid<TemplateCategoryModel>? grid;
@@ -56,7 +56,20 @@ public partial class TemplateCreation
         initialLoading = true;
         await base.OnInitializedAsync();
         await LoadData();
+        InitData();
         initialLoading = false;
+    }
+
+    private void InitData()
+    {
+        foreach (var group in groups)
+        {
+            group.State = true;
+            foreach (var question in group.Questions)
+            {
+                group.SelectedQuestionIds.Add(question.Id);
+            }
+        }
     }
 
     private async Task LoadData()
@@ -67,7 +80,7 @@ public partial class TemplateCreation
         {
 
             //OrderElements(category.Questions.Cast<DocumentQuestionModel>());
-            groups.Add(new() { Id = category.Id, Order=category.Order, Text = category.Text, Questions = category.Questions });
+            groups.Add(new() { Id = category.Id, Order = category.Order, Text = category.Text, Questions = category.Questions });
         }
     }
 
@@ -121,7 +134,7 @@ public partial class TemplateCreation
 
     private static string QuestionText(IdCategoryAndQuestions group, string questionText, int order)
     {
-        return group.Order + "."  + order + " " + questionText;
+        return group.Order + "." + order + " " + questionText;
     }
 
     private void ShowQuestions(IdCategoryAndQuestions group)
@@ -210,7 +223,7 @@ public partial class TemplateCreation
         // spezzo la tupla
         var (oldIndex, newIndex, groupNumber) = indici;
 
-        var items = groups.Where(x=>x.Id == groupNumber).SingleOrDefault().Questions;
+        var items = groups.Where(x => x.Id == groupNumber).SingleOrDefault().Questions;
         var itemToMove = items[oldIndex];
         items.RemoveAt(oldIndex);
 
