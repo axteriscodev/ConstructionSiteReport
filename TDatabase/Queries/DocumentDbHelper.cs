@@ -1,4 +1,5 @@
 ﻿using Shared.Documents;
+using System.Reflection.Emit;
 using TDatabase.Database;
 using DB = TDatabase.Database.DbCsclDamicoV2Context;
 
@@ -164,9 +165,7 @@ public class DocumentDbHelper
 
     public static async Task<int> Insert(DB db, DocumentModel document)
     {
-
-        //TODO associare template
-
+        //valore restituito dalla funzione
         var documentId = 0;
         try
         {
@@ -177,6 +176,7 @@ public class DocumentDbHelper
                 Id = nextId,
                 IdConstructorSite = document.ConstructorSite?.Id,
                 IdClient = document.Client?.Id,
+                IdTemplate = document.IdTemplate,
                 CreationDate = document.CreationDate,
                 LastEditDate = document.LastEditDate,
                 CompilationDate = document.CompilationDate,
@@ -204,7 +204,7 @@ public class DocumentDbHelper
             //aggiungo le risposte compilate del documento
             foreach (var cat in document.Categories)
             {
-                foreach (var q in cat.Questions.Cast<DocumentQuestionModel>())
+                foreach (var q in cat.Questions)
                 {
                     foreach (var cc in q.CurrentChoices)
                     {
@@ -228,7 +228,6 @@ public class DocumentDbHelper
                             db.ReportedCompanies.Add(rc);
                         }
                     }
-                    /* da finire */
                     foreach (var attach in q.Attachments)
                     {
 
@@ -304,53 +303,24 @@ public class DocumentDbHelper
     public static async Task<List<int>> Update(DB db, List<DocumentModel> documents)
     {
         List<int> modified = [];
+
         try
         {
-            /*  foreach (var document in documents)
-              {
-                  var d = db.Documents.Where(x => x.Id == document.Id).FirstOrDefault();
-                       if (d is not null && CheckLastEdit(d.LastEditDate, document.LastEditDate))
-                       {
-                         //  d.LastModified = document.LastModified;
-                           foreach (var c in document.Categories)
-                           {
-                               foreach(var q in c.Questions)
-                               {
-                                   var qc = db.QuestionChosens.Where(x => x.IdDocument == document.Id && x.IdQuestion == q.Id).FirstOrDefault();
-                                   if(qc is not null)
-                                   {
-                                       qc.IdCurrentChoice = q.CurrentChoice?.Id;
-                                       qc.Order = q.Order;
-                                       qc.Printable = q.Printable;
-                                       qc.Hidden = q.Hidden;
-                                       await db.SaveChangesAsync();
-                                       modified.Add(qc.Id);
-                                   }
-                               }
-                           }
+            foreach(var document in documents)
+            {
+                var doc = db.Documents.Where(x => x.Id == document.Id).SingleOrDefault();
+                if(doc is not null)
+                {
+                    db.Documents.Remove(doc);
+                    await Insert(db, document);
+                }
+            }
 
-                           //d.IdCategory = elem.IdCategory;
-                           //d.Text = elem.Text;
-
-                           db.QuestionChoices.RemoveRange(db.QuestionChoices.Where(x => x.IdQuestion == elem.Id));
-                           foreach(var choice in elem.Choices)
-                           {
-                               QuestionChoice newqc = new()
-                               {
-                                   IdChoice = choice.Id,
-                                   IdQuestion = elem.Id
-                               };
-                               db.Add(newqc);
-                           }
-
-                           if (await db.SaveChangesAsync() > 0)
-                           {
-                               modified.Add(elem.Id);
-                           }
-                       } 
-              }*/
         }
-        catch (Exception) { }
+        catch (Exception e)
+        {
+            var ex = e.Message;
+        }
 
         return modified;
     }
@@ -383,3 +353,157 @@ public class DocumentDbHelper
         return oldEdit is null || oldEdit < newEdit;
     }
 }
+
+
+
+/*
+ 
+
+        var nextAttachId = (db.Attachments.Any() ? db.Attachments.Max(x => x.Id) : 0) + 1;
+ 
+            foreach (var document in documents)
+            {
+                var doc = db.Documents.Where(x => x.Id == document.Id).SingleOrDefault();
+                //aggiorno i dati base del documento
+                if (doc is not null)
+                {
+                    doc.LastEditDate = document.LastEditDate;
+                    doc.CompilationDate = document.CompilationDate;
+                    doc.Title = document.Title;
+                    doc.ReadOnly = document.ReadOnly;
+
+                    //aggiungo le compagnia associate al documento
+                    foreach (var companyDoc in document.Companies)
+                    {
+                        var comp = db.CompanyDocuments.Where(x => x.IdDocument == document.Id && x.IdCompany == companyDoc.Id).SingleOrDefault();
+                        if (comp is not null)
+                        {
+                            comp.Present = companyDoc.Present ?? false;
+                        }
+                        else
+                        {
+                            CompanyDocument cd = new()
+                            {
+                                IdCompany = companyDoc.Id,
+                                IdDocument = document.Id,
+                                Present = companyDoc.Present ?? false,
+                            };
+
+                            db.CompanyDocuments.Add(cd);
+                        }
+                    }
+
+                    foreach (var cat in document.Categories)
+                    {
+                        foreach (var q in cat.Questions)
+                        {
+                            var responses = db.QuestionAnswereds.Where(x => x.IdDocument == document.Id
+                                                                       && x.IdQuestionChosen == q.Id).ToList();
+                            foreach (var cc in q.CurrentChoices)
+                            {
+                                var current = responses.Where(x => x.IdDocument == document.Id
+                                                                         && x.IdQuestionChosen == q.Id
+                                                                         && x.IdCurrentChoice == cc.Id).SingleOrDefault();
+                                //se è null creo la nuova risposta
+                                if (current is null)
+                                {
+                                    current = new()
+                                    {
+                                        IdDocument = document.Id,
+                                        IdCurrentChoice = cc.Id,
+                                        IdQuestionChosen = q.Id
+                                    };
+                                    db.QuestionAnswereds.Add(current);
+                                    //aggiungo le compagnie riportate delle varie risposte se ci sono
+                                    foreach (var rci in cc.ReportedCompanyIds)
+                                    {
+                                        ReportedCompany rc = new()
+                                        {
+                                            IdCompany = rci,
+                                            IdDocument = document.Id,
+                                            IdCurrentChoice = cc.Id,
+                                            IdQuestionChosen = q.Id
+                                        };
+                                        db.ReportedCompanies.Add(rc);
+                                    }
+                                }
+                                else
+                                {
+                                    var oldReported = db.ReportedCompanies.Where(x => x.IdDocument == document.Id
+                                                                                 && x.IdQuestionChosen == q.Id
+                                                                                 && x.IdCurrentChoice == cc.Id).ToList();
+                                    foreach(var idcomp in cc.ReportedCompanyIds)
+                                    {
+                                        var repComp = oldReported.Where(x => x.IdCompany == idcomp).SingleOrDefault();
+                                        if(repComp is null)
+                                        {
+                                            ReportedCompany rc = new()
+                                            {
+                                                IdCompany = idcomp,
+                                                IdDocument = document.Id,
+                                                IdCurrentChoice = cc.Id,
+                                                IdQuestionChosen = q.Id
+                                            };
+                                            db.ReportedCompanies.Add(rc);
+                                        } else
+                                        {
+                                            oldReported.Remove(repComp);
+                                        }
+                                    }
+                                    if(oldReported.Count > 0)
+                                    {
+                                        db.ReportedCompanies.RemoveRange(oldReported);
+                                    }
+
+                                    responses.Remove(current);
+                                }
+                            }
+
+                            if (responses.Count > 0)
+                            {
+                                db.QuestionAnswereds.RemoveRange(responses);
+                            }
+
+                            var oldAttach = (from a in db.Attachments
+                                             join aq in db.AttachmentQuestions on a.Id equals aq.IdAttachment
+                                             where a.IdDocument == document.Id
+                                             && aq.IdQuestion == q.Id
+                                             select aq).ToList();
+
+                            foreach (var attach in q.Attachments)
+                            {
+
+                                var att = oldAttach.Where(x => x.IdAttachment == attach.Id).SingleOrDefault();
+                                if(att is null)
+                                {
+                                    Attachment attachment = new()
+                                    {
+                                        Id = nextAttachId,
+                                        IdDocument = document.Id,
+                                        DateTime = attach.Date,
+                                    };
+                                    db.Attachments.Add(attachment);
+
+                                    AttachmentQuestion attachmentQuestion = new()
+                                    {
+                                        IdAttachment = nextAttachId,
+                                        IdQuestion = q.Id,
+                                    };
+                                    db.AttachmentQuestions.Add(attachmentQuestion);
+                                    nextAttachId++;
+                                } else
+                                {
+                                    oldAttach.Remove(att);
+                                }
+                            }
+                            if(oldAttach.Count > 0)
+                            {
+                                db.AttachmentQuestions.Where
+                            }
+                        }
+                    }
+
+                }
+            }
+ 
+ */

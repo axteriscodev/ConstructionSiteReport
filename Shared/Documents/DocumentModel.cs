@@ -7,6 +7,8 @@ public class DocumentModel
 {
     [JsonPropertyName("id")]
     public int Id { get; set; }
+    [JsonPropertyName("idTemplate")]
+    public int IdTemplate { get; set; }
 
     [JsonPropertyName("title")]
     public string Title { get; set; } = "";
