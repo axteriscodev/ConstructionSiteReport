@@ -3,7 +3,6 @@ using Shared;
 using Shared.Documents;
 using TDatabase.Database;
 using DB = TDatabase.Database.DbCsclDamicoV2Context;
-using DocumentModel = Shared.Documents.DocumentModel;
 
 namespace TDatabase.Queries;
 
@@ -137,7 +136,19 @@ public class DocumentDbHelper
                                          Address = comp.Address ?? "",
                                          VatCode = comp.Vatcode,
                                          Present = compDoc.Present
-                                     }).ToList()
+                                     }).ToList(),
+                        Notes = (from n in db.Notes
+                                 where n.IdDocument == d.Id
+                                 && n.Active == true
+                                 orderby n.Id
+                                 select new NoteModel()
+                                 {
+                                     Id = n.Id,
+                                     Text = n.Text ?? "",
+                                     CompanyListIds = (from cn in db.CompanyNotes
+                                                       where cn.IdNote == n.Id
+                                                       select cn.IdCompany).ToList(),
+                                 }).ToList(),
                     }).ToList();
 
         return docs;
@@ -205,9 +216,9 @@ public class DocumentDbHelper
                         }
                     }
 
-                    foreach(var attach in q.Attachments)
+                    foreach (var attach in q.Attachments)
                     {
-                        var nextAttachId =(db.Attachments.Any() ? db.Attachments.Max(x => x.Id) : 0) + 1; 
+                        var nextAttachId = (db.Attachments.Any() ? db.Attachments.Max(x => x.Id) : 0) + 1;
 
                         Attachment attachment = new()
                         {

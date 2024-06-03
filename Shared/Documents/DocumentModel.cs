@@ -12,13 +12,13 @@ public class DocumentModel
     public string Title { get; set; } = "";
 
     [JsonPropertyName("creationDate")]
-    public DateTime CreationDate { get; set; } = DateTime.Now;
+    public DateTime? CreationDate { get; set; }
 
     [JsonPropertyName("compilationDate")]
-    public DateTime CompilationDate { get; set; } = DateTime.Now;
+    public DateTime? CompilationDate { get; set; }
 
     [JsonPropertyName("lastEditDate")]
-    public DateTime LastEditDate { get; set; } = DateTime.Now;
+    public DateTime? LastEditDate { get; set; }
 
     [JsonPropertyName("readonly")]
     public bool ReadOnly { get; set; }

@@ -15,7 +15,7 @@ public partial class Document
 
     public string Title { get; set; } = null!;
 
-    public DateTime CompilationDate { get; set; }
+    public DateTime? CompilationDate { get; set; }
 
     public DateTime? LastEditDate { get; set; }
 
