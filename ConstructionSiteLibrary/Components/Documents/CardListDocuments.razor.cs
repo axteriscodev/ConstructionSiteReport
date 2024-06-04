@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using ConstructionSiteLibrary.Utility;
+using Microsoft.AspNetCore.Components;
 using Radzen;
 using Shared.Documents;
 
@@ -17,7 +18,7 @@ namespace ConstructionSiteLibrary.Components.Documents
         private string search = "";
         private string pagingSummaryFormat = "";
         private int count = 0;
-        private int pageSize = 2;
+        private int pageSize = GlobalVariables.PageSize;
         private int pageIndex = 0;
 
 

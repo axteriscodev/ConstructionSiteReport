@@ -1,4 +1,5 @@
-﻿using Radzen;
+﻿using ConstructionSiteLibrary.Utility;
+using Radzen;
 using Shared.Documents;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace ConstructionSiteLibrary.Components.ConstructorSites
         private string search = "";
         private string pagingSummaryFormat = "";
         private int count = 0;
-        private int pageSize = 2;
+        private int pageSize = GlobalVariables.PageSize;
         private int pageIndex = 0;
 
         protected override async Task OnInitializedAsync()

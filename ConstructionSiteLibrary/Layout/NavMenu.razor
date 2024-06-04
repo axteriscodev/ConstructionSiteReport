@@ -1,5 +1,6 @@
 ﻿@using ConstructionSiteLibrary.Model
 @using Microsoft.AspNetCore.Components.Routing;
+@inject NavigationService Navigation
 
 <ScreenComponent MediumWith="641" OnScreenDimensionChanged="ScreenDimensionObserver" />
 <div class="top-row ps-3 navbar navbar-dark">
@@ -7,7 +8,7 @@
         <span class="oi oi-monitor" style="color:white;" aria-hidden="true"></span>
         @if (!@IconMenuActive)
         {
-            <a class="navbar-brand" href="">Construction Site Report</a>
+            <a class="navbar-brand" href="" onclick="@(()=>OnLinkClick(PageRouting.HomePage))">Construction Site Report</a>
         }
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
@@ -27,7 +28,7 @@
             </NavLink>
         </div> *@
         <div class="nav-item px-3">
-            <NavLink class="nav-link navItem-size" href="form_compilation">
+            <NavLink class="nav-link navItem-size" href="@PageRouting.DocumentCompilationPage">
                 <span class="bi bi-check2-square" aria-hidden="true"></span>
                 @if (!@IconMenuActive)
                 {
@@ -36,7 +37,7 @@
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link navItem-size" href="form_creation">
+            <NavLink class="nav-link navItem-size" href="@PageRouting.TemplateCreationPage">
                 <span class="bi bi-plus-square @biClassRules" aria-hidden="true"></span>
                 @if (!@IconMenuActive)
                 {
@@ -45,7 +46,7 @@
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link navItem-size" href="categories">
+            <NavLink class="nav-link navItem-size" href="@PageRouting.CategoriesPage">
                 <span class="bi bi-bookmarks @biClassRules" aria-hidden="true"></span>
                 @if (!@IconMenuActive)
                 {
@@ -54,7 +55,7 @@
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link navItem-size" href="questions">
+            <NavLink class="nav-link navItem-size" href="@PageRouting.QuestionPage">
                 <span class="bi bi-question-square @biClassRules" aria-hidden="true"></span>
                 @if (!@IconMenuActive)
                 {
@@ -63,7 +64,7 @@
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link navItem-size" href="choices">
+            <NavLink class="nav-link navItem-size" href="@PageRouting.ChoicesPage">
                 <span class="bi bi-exclamation-square @biClassRules" aria-hidden="true"></span>
                 @if (!@IconMenuActive)
                 {
@@ -72,7 +73,7 @@
             </NavLink>
         </div>
          <div class="nav-item px-3">
-            <NavLink class="nav-link navItem-size" href="constructor_sites">
+            <NavLink class="nav-link navItem-size" href="@PageRouting.ConstructorSitePage">
                 <span class="bi bi-building-fill @biClassRules" aria-hidden="true"></span>
                 @if (!@IconMenuActive)
                 {
@@ -81,7 +82,7 @@
             </NavLink>
         </div>
          <div class="nav-item px-3">
-            <NavLink class="nav-link navItem-size" href="clients">
+            <NavLink class="nav-link navItem-size" href="@PageRouting.ClientsPage">
                 <span class="bi bi-person-lines-fill @biClassRules" aria-hidden="true"></span>
                 @if (!@IconMenuActive)
                 {
@@ -89,16 +90,6 @@
                 }
             </NavLink>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link navItem-size" href="test">
-                <span class="bi bi-database @biClassRules" aria-hidden="true"></span>
-                @if (!@IconMenuActive)
-                {
-                    <label>Test</label>
-                }
-            </NavLink>
-        </div>
-
 
     </nav>
 </div>
@@ -162,5 +153,10 @@
             biClassRules = "";
             await ShowIconMenu.InvokeAsync(IconMenuActive);
         }
+    }
+
+    private void OnLinkClick(string url)
+    {
+        Navigation.ChangePage(url);
     }
 }

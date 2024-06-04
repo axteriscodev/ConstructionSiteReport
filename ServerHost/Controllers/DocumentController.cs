@@ -8,7 +8,6 @@ using Shared.ApiRouting;
 namespace ServerHost.Controllers;
 
 [ApiController]
-//[Route("[controller]/[action]")]
 public class DocumentController : DefaultController
 {
     [LogAction]

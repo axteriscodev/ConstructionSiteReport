@@ -11,8 +11,11 @@ namespace Shared.ApiRouting
 
 
         #region Funzionality Check
+
         public const string CheckOnline = "CheckOnline";
+
         #endregion
+
         #region Document routing
 
         public const string SiteDocumentsList = "SiteDocumentsList";
