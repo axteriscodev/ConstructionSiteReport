@@ -101,25 +101,29 @@ public partial class TemplateCreation
 
             if (selectedTemplate is not null)
             {
-                var tempCat = selectedTemplate.Categories.Where(c => c.Id == category.Id);
-                foreach (var question in tempCat)
+                var tempCat = selectedTemplate.Categories.Where(c => c.Id == category.Id).FirstOrDefault();
+
+                if (tempCat is not null)
                 {
-                    templateSelectedId.Add(question.Id);
+                    foreach (var question in tempCat.Questions)
+                    {
+                        templateSelectedId.Add(question.Id);
+                    }
                 }
+
+
             }
 
             bool? groupState = null;
 
-            if(templateSelectedId.Count == 0)
+            if (templateSelectedId.Count == 0)
             {
                 groupState = false;
-            } 
+            }
             else if (templateSelectedId.Count == category.Questions.Count)
             {
                 groupState = true;
             }
-            
-
 
             //OrderElements(category.Questions.Cast<DocumentQuestionModel>());
             groups.Add(new() { Id = category.Id, Order = category.Order, Text = category.Text, State = groupState, Questions = category.Questions, SelectedQuestionIds = templateSelectedId });

@@ -97,7 +97,7 @@ public class TemplateDbHelper
                     QuestionChosen qc = new()
                     {
                         Id = nextQuestionChosenId,
-                        IdTemplate = template.IdTemplate,
+                        IdTemplate = nextId,
                         IdQuestion = tq.Id,
                         Order = tq.Order,
                     };
