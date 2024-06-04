@@ -1,0 +1,48 @@
+﻿@using Shared.Documents
+
+@inject ConstructorSitesRepository SiteRepository
+
+@if (onLoading)
+{
+    <Loading />
+}
+else
+{
+    <div class="">
+        <RadzenTemplateForm TItem="FormSite" Data=@form Submit=@Save>
+            <RadzenStack class="px-2">
+                <RadzenFormField Text="Nome <span style='color:red'> (obbligatorio)</span>" Variant="@GlobalVariables.ComponentVariant">
+                    <ChildContent>
+                        <RadzenTextBox Name="Nome" @bind-Value="@form.Name"/>
+                    </ChildContent>
+                    <Helper>
+                        <RadzenRequiredValidator Component="Nome" Popup=false Text="Il campo Nome è obbligatorio" />
+                    </Helper>
+                </RadzenFormField>
+                <RadzenFormField Text="Descrizione" Variant="@GlobalVariables.ComponentVariant">
+                    <ChildContent>
+                        <RadzenTextArea Name="Nome" @bind-Value="@form.Name" Rows="3" />
+                    </ChildContent>
+                </RadzenFormField>
+                <RadzenFormField Text="Indirizzo <span style='color:red'> (obbligatorio)</span>" Variant="@GlobalVariables.ComponentVariant">
+                    <ChildContent>
+                        <RadzenTextBox Name="Indirizzo" @bind-Value="@form.Address" />
+                    </ChildContent>
+                    <Helper>
+                        <RadzenRequiredValidator Component="Indirizzo" Popup=false Text="Il campo Indirizzo è obbligatorio" />
+                    </Helper>
+                </RadzenFormField>
+                <RadzenFormField Text="Data inizio cantiere <span style='color:red'> (obbligatorio)</span>" Variant="@GlobalVariables.ComponentVariant">
+                    <ChildContent>
+                        <RadzenDatePicker @bind-Value="@form.StartDate" DateFormat="dd/MM/yyyy" ShowTime="false" />
+                    </ChildContent>
+                    <Helper>
+                        <RadzenRequiredValidator Component="Indirizzo" Popup=false Text="Il campo Indirizzo è obbligatorio" />
+                    </Helper>
+                </RadzenFormField>
+                <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Salva" class="buttonSalva" IsBusy=@onSaving
+                              BusyText="Salvataggio in corso" />
+            </RadzenStack>
+        </RadzenTemplateForm>
+    </div>
+}

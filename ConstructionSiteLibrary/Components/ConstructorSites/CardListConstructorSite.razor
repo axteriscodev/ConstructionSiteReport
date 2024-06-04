@@ -1,7 +1,11 @@
 ﻿@using ConstructionSiteLibrary.Model;
 @using ConstructionSiteLibrary.Utility;
-@inject ConstructorSitesRepository SiteRepository;
 
+@inject ConstructorSitesRepository SiteRepository
+@inject DialogService DialogService
+
+
+<ScreenComponent @ref="screenComponent" />
 
 @if (onLoading)
 {
@@ -28,7 +32,16 @@
             </div>
         }
         <RadzenPager ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" HorizontalAlign="HorizontalAlign.Center" Count="count" PageSize="@pageSize" PageChanged="@PageChanged" />
+        
+        <div class="my-3">
+            <div class="vstack">
+                <RadzenButton class="buttonNewSite" Icon="add" Text="Crea nuovo cantiere" Click="@OpenForm" />
+            </div>
+        </div>
     </div>
 }
+
+@*                 <RadzenText Text="Crea nuovo cantiere" class="textNewSite" />
+                <RadzenIcon Icon="add"/> *@
 
 
