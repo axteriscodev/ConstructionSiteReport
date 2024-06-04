@@ -13,7 +13,7 @@ public class ConstructorSitesRepository(HttpManager httpManager)
 
     public async Task<List<ConstructorSiteModel>> GetConstructorSites()
     {
-        if(ConstructorSites.Count == 0)
+        if(true)
         {
             var response = await _httpManager.SendHttpRequest("ConstructorSite/ConstructorSitesList" , "");
             if (response.Code.Equals("0"))

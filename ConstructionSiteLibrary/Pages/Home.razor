@@ -1,6 +1,8 @@
 ﻿@using ConstructionSiteLibrary.Model
 @using ConstructionSiteLibrary.Interfaces
+@using ConstructionSiteLibrary.Components.ConstructorSites
 @inject ICameraService CameraService;
+
 
 @page "/"
 <ScreenComponent OnScreenSizeChanged="@ScreenSizeChanged" OnScreenDimensionChanged="@ScreenDimensionChanged" />
@@ -11,9 +13,13 @@
     Benvenuto nella tua app per la gestione di documenti della sicurezza!<br />
     Qui puoi creare, personalizzare e compilare i documenti in base alle tue necessità e a quelle del cliente.
 </p>
+@* <div>
+    <OnlineSyncComponent />
+</div> *@
 
-<OnlineSyncComponent />
+<div class="my-3">
+    <CardListConstructorSite />
+</div>
 
-@code {
 
-}
+

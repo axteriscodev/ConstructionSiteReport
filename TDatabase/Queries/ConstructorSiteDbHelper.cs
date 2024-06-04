@@ -20,6 +20,7 @@ public class ConstructorSiteDbHelper
         return constructorSites.Select(x => new ConstructorSiteModel()
         {
             Id = x.Id,
+            Name = x.Name,
             JobDescription = x.JobDescription,
             Address = x.Address,
             StartDate = x.StartDate,
@@ -41,6 +42,7 @@ public class ConstructorSiteDbHelper
             ConstructorSite newConstructorSite = new()
             {
                 Id = nextId,
+                Name = constructorSite.Name,
                 JobDescription = constructorSite.JobDescription,
                 Address = constructorSite.Address,
                 StartDate = constructorSite.StartDate,
@@ -67,6 +69,7 @@ public class ConstructorSiteDbHelper
                 if (m is not null)
                 {
                     m.Id = elem.Id;
+                    m.Name = elem.Name;
                     m.Address = elem.Address;
                     m.StartDate = elem.StartDate;
                     m.EndDate = elem.EndDate;

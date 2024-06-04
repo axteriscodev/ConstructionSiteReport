@@ -1,0 +1,34 @@
+﻿@using ConstructionSiteLibrary.Model;
+@inject ConstructorSitesRepository SiteRepository;
+
+
+@if (onLoading)
+{
+    <Loading/>
+}else
+{
+
+    <div class="mx-2 my-5">
+        <div class="my-5">
+            <div class="vstack divSearchBar">
+                <RadzenFormField Text="Ricerca cantiere" Variant="@GlobalVariables.ComponentVariant" class="searchBar">
+                    <Start>
+                        <RadzenIcon Icon="search" />
+                    </Start>
+                    <ChildContent>
+                        <RadzenTextBox ValueChanged="@(args => SearchChanged(args))"/>
+                    </ChildContent>
+                </RadzenFormField>
+            </div>
+        </div>
+        @foreach (var site in displayedSites)
+        {
+            <div class="m-2">
+                <CardConstructorSite Site="@site" />
+            </div>
+        }
+        <RadzenPager ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" HorizontalAlign="HorizontalAlign.Center" Count="count" PageSize="@pageSize" PageChanged="@PageChanged" />
+    </div>
+}
+
+
