@@ -57,6 +57,22 @@ public class DocumentsRepository(HttpManager httpManager, IndexedDBService index
         return Documents;
     }
 
+    /// <summary>
+    /// Metodo per richiedere i documenti di un determinato constructorSite
+    /// </summary>
+    /// <param name="siteId"></param>
+    /// <returns></returns>
+    public async Task<List<DocumentModel>> GetSiteDocuments(int siteId)
+    {
+        List<DocumentModel> docs = [];
+        var response = await _httpManager.SendHttpRequest("Document/SiteDocumentsList", siteId);
+        if (response.Code.Equals("0"))
+        {
+            docs = JsonSerializer.Deserialize<List<DocumentModel>>(response.Content.ToString() ?? "") ?? [];
+        }
+        return docs;
+    }
+
     public async Task<DocumentModel> GetDocumentById(int idDocument = TUTTI)
     {
         var document = new DocumentModel();

@@ -1,6 +1,5 @@
-﻿@using ConstructionSiteLibrary.Model;
-@inject ConstructorSitesRepository SiteRepository;
-
+﻿@using ConstructionSiteLibrary.Model
+@inject DocumentsRepository DocumentRepository
 
 @if (onLoading)
 {
@@ -20,14 +19,12 @@
                 </RadzenFormField>
             </div>
         </div>
-        @foreach (var site in displayedSites)
+        @foreach (var doc in displayedDocuments)
         {
             <div class="m-2">
-                <CardConstructorSite Site="@site" />
+                <CardDocument Document="@doc"/>
             </div>
         }
         <RadzenPager ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" HorizontalAlign="HorizontalAlign.Center" Count="count" PageSize="@pageSize" PageChanged="@PageChanged" />
     </div>
 }
-
-

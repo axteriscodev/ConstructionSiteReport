@@ -34,6 +34,29 @@ public class DocumentController : DefaultController
     }
 
     [LogAction]
+    [HttpPost()]
+    public AXT_WebResponse SiteDocumentsList([FromBody] int idSite)
+    {
+        var response = new AXT_WebResponse();
+        var stopwatch = StartTime();
+        ConfigureLog("", 0);
+
+        try
+        {
+            var db = GetDbConnection();
+            var list = DocumentDbHelper.SelectFromSite(db, idSite);
+            response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
+
+        }
+        catch (Exception ex)
+        {
+            response = ExceptionWebResponse(ex, "");
+        }
+        StopTime(stopwatch);
+        return response;
+    }
+
+    [LogAction]
     [HttpPost]
     public async Task<AXT_WebResponse> SaveDocument(DocumentModel newDocument)
     {

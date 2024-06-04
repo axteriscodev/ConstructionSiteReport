@@ -48,9 +48,12 @@ public static class MauiProgram
         //Componente fotocamera
         builder.Services.AddScoped<ICameraService, CameraService>();
         builder.Services.AddSingleton<IndexedDBService>();
-        ///Componente GPS
+        //Componente GPS
         builder.Services.AddScoped<ILocationService, LocationService>();
 
+        /* Servizi per la navigazione delle pagine */
+        builder.Services.AddScoped<NavigationService>();
+        builder.Services.AddScoped<InvokeJSRuntime>();
 
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();

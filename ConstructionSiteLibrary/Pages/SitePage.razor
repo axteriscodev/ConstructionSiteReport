@@ -1,0 +1,12 @@
+﻿
+@inject ConstructorSitesRepository SiteRepository
+
+
+@page "/site/{SiteId:int}"
+
+
+@code{
+
+    [Parameter]
+    public int SiteId { get; set; }
+}

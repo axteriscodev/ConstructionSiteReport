@@ -163,6 +163,44 @@ public class DocumentDbHelper
         return docs;
     }
 
+
+    public static List<DocumentModel> SelectFromSite(DB db, int siteId)
+    {
+        var docs = (from d in db.Documents
+                    join cs in db.ConstructorSites on d.IdConstructorSite equals cs.Id
+                    select new DocumentModel()
+                    {
+                        Id = d.Id,
+                        Title = d.Title,
+                        CreationDate = d.CreationDate ?? DateTime.Now,
+                        CompilationDate = d.CompilationDate,
+                        LastEditDate = d.LastEditDate,
+                        ConstructorSite = new()
+                        {
+                            Id = cs.Id,
+                            JobDescription = cs.JobDescription,
+                            StartDate = cs.StartDate,
+                            Address = cs.Address,
+                            Client = (from cl in db.Clients
+                                      where cl.Id == cs.IdClient
+                                      select new ClientModel()
+                                      {
+                                          Id = cl.Id,
+                                          Name = cl.Name
+                                      }).SingleOrDefault() ?? new(),
+                        },
+                        Client = (from cl in db.Clients
+                                  where cl.Id == d.IdClient
+                                  select new ClientModel()
+                                  {
+                                      Id = cl.Id,
+                                      Name = cl.Name
+                                  }).SingleOrDefault(),
+                    }).ToList();
+
+        return docs;
+    }
+
     public static async Task<int> Insert(DB db, DocumentModel document)
     {
         //valore restituito dalla funzione
@@ -250,7 +288,7 @@ public class DocumentDbHelper
                 }
             }
             //carico le note
-            foreach(var n in document.Notes)
+            foreach (var n in document.Notes)
             {
                 var nextNoteId = (db.Notes.Any() ? db.Attachments.Max(x => x.Id) : 0) + 1;
                 var note = new Note()
@@ -260,7 +298,7 @@ public class DocumentDbHelper
                     Text = n.Text,
                 };
                 //inserisco gli allegati della nota se presenti
-                foreach(var a in n.Attachments)
+                foreach (var a in n.Attachments)
                 {
                     Attachment attachment = new()
                     {
@@ -306,10 +344,10 @@ public class DocumentDbHelper
 
         try
         {
-            foreach(var document in documents)
+            foreach (var document in documents)
             {
                 var doc = db.Documents.Where(x => x.Id == document.Id).SingleOrDefault();
-                if(doc is not null)
+                if (doc is not null)
                 {
                     db.Documents.Remove(doc);
                     await Insert(db, document);

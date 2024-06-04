@@ -37,6 +37,10 @@ builder.Services.AddScoped<CompaniesRepository>();
 builder.Services.AddScoped<ICameraService, CameraService>();
 builder.Services.AddScoped<IndexedDBService>();
 
+/* Servizi per la navigazione delle pagine */
+builder.Services.AddScoped<NavigationService>();
+builder.Services.AddScoped<InvokeJSRuntime>();
+
 
 //componenti radzen
 builder.Services.AddRadzenComponents();

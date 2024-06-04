@@ -1,0 +1,10 @@
+﻿
+.searchBar, ::deep .searchBar {
+    width: 90% !important;
+}
+
+.divSearchBar {
+    align-content: center !important;
+    display: flex !important;
+    flex-wrap: wrap;
+}
