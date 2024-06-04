@@ -1,16 +1,17 @@
 ﻿using AXT_WebComunication.WebResponse;
 using Microsoft.AspNetCore.Mvc;
 using ServerHost.Services;
+using Shared.ApiRouting;
 using Shared.Documents;
 using TDatabase.Queries;
 
 namespace ServerHost.Controllers;
 
 [ApiController]
-[Route("[controller]/[action]")]
 public class ClientController : DefaultController
 {
     [LogAction]
+    [Route(ApiRouting.ClientsList)]
     [HttpPost]
     public AXT_WebResponse ClientsList()
     {
@@ -33,6 +34,7 @@ public class ClientController : DefaultController
     }
 
     [LogAction]
+    [Route(ApiRouting.SaveClient)]
     [HttpPost]
     public async Task<AXT_WebResponse> SaveClient(ClientModel newClient)
     {
@@ -56,6 +58,7 @@ public class ClientController : DefaultController
     }
 
     [LogAction]
+    [Route(ApiRouting.UpdateClients)]
     [HttpPost]
     public async Task<AXT_WebResponse> UpdateClients(List<ClientModel> clients)
     {
@@ -79,6 +82,7 @@ public class ClientController : DefaultController
     }
 
     [LogAction]
+    [Route(ApiRouting.HideClients)]
     [HttpPost]
     public async Task<AXT_WebResponse> HideClients(List<ClientModel> clients)
     {

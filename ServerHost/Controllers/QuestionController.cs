@@ -1,6 +1,7 @@
 ﻿using AXT_WebComunication.WebResponse;
 using Microsoft.AspNetCore.Mvc;
 using ServerHost.Services;
+using Shared.ApiRouting;
 using Shared.Templates;
 using TDatabase.Queries;
 
@@ -15,6 +16,7 @@ namespace ServerHost.Controllers
         #region Questions
 
         [LogAction]
+        [Route(ApiRouting.QuestionsList)]
         [HttpPost]
         public AXT_WebResponse QuestionsList()
         {
@@ -38,6 +40,7 @@ namespace ServerHost.Controllers
         }
 
         [LogAction]
+        [Route(ApiRouting.SaveQuestion)]
         [HttpPost]
         public async Task<AXT_WebResponse> SaveQuestion(TemplateQuestionModel newQuestion)
         {
@@ -61,6 +64,7 @@ namespace ServerHost.Controllers
         }
 
         [LogAction]
+        [Route(ApiRouting.UpdateQuestions)]
         [HttpPost]
         public async Task<AXT_WebResponse> UpdateQuestions(List<TemplateQuestionModel> questions)
         {
@@ -84,6 +88,7 @@ namespace ServerHost.Controllers
         }
 
         [LogAction]
+        [Route(ApiRouting.HideQuestions)]
         [HttpPost]
         public async Task<AXT_WebResponse> HideQuestions(List<TemplateQuestionModel> questions)
         {
@@ -112,6 +117,7 @@ namespace ServerHost.Controllers
         #region Choice
 
         [LogAction]
+        [Route(ApiRouting.ChoicesList)]
         [HttpPost]
         public AXT_WebResponse ChoicesList()
         {
@@ -135,6 +141,7 @@ namespace ServerHost.Controllers
         }
 
         [LogAction]
+        [Route(ApiRouting.SaveChoice)]
         [HttpPost]
         public async Task<AXT_WebResponse> SaveChoice(TemplateChoiceModel newChoice)
         {
@@ -158,6 +165,7 @@ namespace ServerHost.Controllers
         }
 
         [LogAction]
+        [Route(ApiRouting.UpdateChoices)]
         [HttpPost]
         public async Task<AXT_WebResponse> UpdateChoices(List<TemplateChoiceModel> choices)
         {
@@ -181,6 +189,7 @@ namespace ServerHost.Controllers
         }
 
         [LogAction]
+        [Route(ApiRouting.HideChoices)]
         [HttpPost]
         public async Task<AXT_WebResponse> HideChoices(List<TemplateChoiceModel> choices)
         {

@@ -1,6 +1,7 @@
 ﻿using AXT_WebComunication.WebResponse;
 using Microsoft.AspNetCore.Mvc;
 using ServerHost.Services;
+using Shared.ApiRouting;
 using Shared.Templates;
 using TDatabase.Queries;
 
@@ -11,6 +12,7 @@ namespace ServerHost.Controllers;
 public class TemplateController : DefaultController
 {
     [LogAction]
+    [Route(ApiRouting.TemplatesList)]
     [HttpPost()]
     public AXT_WebResponse TemplatesList([FromBody]int idTemplate)
     {
@@ -34,6 +36,7 @@ public class TemplateController : DefaultController
     }
 
     [LogAction]
+    [Route(ApiRouting.SaveTemplate)]
     [HttpPost]
     public async Task<AXT_WebResponse> SaveTemplate(TemplateModel newTemplate)
     {
@@ -56,30 +59,8 @@ public class TemplateController : DefaultController
         return response;
     }
 
-    // [LogAction]
-    // [HttpPost]
-    // public async Task<AXT_WebResponse> UpdateDocument(List<DocumentModel> documents)
-    // {
-    //     var response = new AXT_WebResponse();
-    //     var stopwatch = StartTime();
-    //     ConfigureLog("", 0);
-
-    //     try
-    //     {
-    //         var db = GetDbConnection();
-    //         var q = await DocumentDbHelper.Update(db, documents);
-    //         response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), q);
-
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         response = ExceptionWebResponse(ex, "");
-    //     }
-    //     StopTime(stopwatch);
-    //     return response;
-    // }
-
     [LogAction]
+    [Route(ApiRouting.HideTemplates)]
     [HttpPost]
     public async Task<AXT_WebResponse> HideTemplates(List<TemplateModel> templates)
     {

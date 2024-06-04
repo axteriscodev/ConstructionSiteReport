@@ -1,16 +1,17 @@
 ﻿using AXT_WebComunication.WebResponse;
 using Microsoft.AspNetCore.Mvc;
 using ServerHost.Services;
+using Shared.ApiRouting;
 using Shared.Documents;
 using TDatabase.Queries;
 
 namespace ServerHost.Controllers;
 
 [ApiController]
-[Route("[controller]/[action]")]
 public class ConstructorSiteController : DefaultController
 {
     [LogAction]
+    [Route(ApiRouting.ConstructorSitesList)]
     [HttpPost]
     public AXT_WebResponse ConstructorSitesList()
     {
@@ -33,6 +34,7 @@ public class ConstructorSiteController : DefaultController
     }
 
     [LogAction]
+    [Route(ApiRouting.SaveConstructorSite)]
     [HttpPost]
     public async Task<AXT_WebResponse> SaveConstructorSite(ConstructorSiteModel newContructorSite)
     {
@@ -56,6 +58,7 @@ public class ConstructorSiteController : DefaultController
     }
 
     [LogAction]
+    [Route(ApiRouting.UpdateConstructorSites)]
     [HttpPost]
     public async Task<AXT_WebResponse> UpdateConstructorSites(List<ConstructorSiteModel> constructorSites)
     {
@@ -79,6 +82,7 @@ public class ConstructorSiteController : DefaultController
     }
 
     [LogAction]
+    [Route(ApiRouting.HideConstructorSites)]
     [HttpPost]
     public async Task<AXT_WebResponse> HideConstructorSites(List<ConstructorSiteModel> constructorSites)
     {

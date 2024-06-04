@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using ConstructionSiteLibrary.Managers;
 using Shared;
+using Shared.ApiRouting;
 using Shared.Defaults;
 using Shared.Templates;
 
@@ -23,7 +24,7 @@ public class CategoriesRepository(HttpManager httpManager)
         {
             try
             {
-                var response = await _httpManager.SendHttpRequest("Category/CategoriesList", "");
+                var response = await _httpManager.SendHttpRequest(ApiRouting.CategoriesList, "");
                 if (response.Code.Equals("0"))
                 {
                     Categories = JsonSerializer.Deserialize<List<TemplateCategoryModel>>(response.Content.ToString() ?? "") ?? [];
@@ -40,7 +41,7 @@ public class CategoriesRepository(HttpManager httpManager)
 
     public async Task<bool> SaveCategory(TemplateCategoryModel category)
     {
-        var response = await _httpManager.SendHttpRequest("Category/SaveCategory", category);
+        var response = await _httpManager.SendHttpRequest(ApiRouting.SaveCategory, category);
 
         //NotificationService.Notify(response);
         if (response.Code.Equals("0"))
@@ -54,7 +55,7 @@ public class CategoriesRepository(HttpManager httpManager)
 
     public async Task<bool> UpdateCategories(List<TemplateCategoryModel> categories)
     {
-        var response = await _httpManager.SendHttpRequest("Category/UpdateCategories", categories);
+        var response = await _httpManager.SendHttpRequest(ApiRouting.UpdateCategories, categories);
         //NotificationService.Notify(response);
         if (response.Code.Equals("0"))
         {
@@ -68,7 +69,7 @@ public class CategoriesRepository(HttpManager httpManager)
     
     public async Task<bool> HideCategories(List<TemplateCategoryModel> categories)
     {
-        var response = await _httpManager.SendHttpRequest("Category/HideCategories", categories);
+        var response = await _httpManager.SendHttpRequest(ApiRouting.HideCategories, categories);
         //NotificationService.Notify(response);
         if (response.Code.Equals("0"))
         {
@@ -80,64 +81,5 @@ public class CategoriesRepository(HttpManager httpManager)
     }
 
     #endregion
-
-    #region Subjects
-
-    public async Task<List<SubjectModel>> GetSubjects()
-    {
-        if (Subjects.Count == 0)
-        {
-            var response = await _httpManager.SendHttpRequest("Category/SubjectsList", "");
-            if (response.Code.Equals("0"))
-            {
-                Subjects = JsonSerializer.Deserialize<List<SubjectModel>>(response.Content.ToString() ?? "") ?? [];
-            }
-        }
-
-        return Subjects;
-    }
-
-    public async Task<bool> SaveSubject(SubjectModel subject)
-    {
-        var response = await _httpManager.SendHttpRequest("Category/SaveSubject", subject);
-
-        //NotificationService.Notify(response);
-        if (response.Code.Equals("0"))
-        {
-            Subjects.Clear();
-            return true;
-        }
-
-        return false;
-    }
-
-    public async Task<bool> UpdateSubjects(List<SubjectModel> subjects)
-    {
-        var response = await _httpManager.SendHttpRequest("Category/UpdateSubjects", subjects);
-        //NotificationService.Notify(response);
-        if (response.Code.Equals("0"))
-        {
-            Subjects.Clear();
-            return true;
-        }
-
-        return false;
-    }
-
-    
-    public async Task<bool> HideSubjects(List<SubjectModel> subjects)
-    {
-        var response = await _httpManager.SendHttpRequest("Category/HideSubjects", subjects);
-        //NotificationService.Notify(response);
-        if (response.Code.Equals("0"))
-        {
-            Subjects.Clear();
-            return true;
-        }
-
-        return false;
-    }
-
-    #endregion 
 
 }

@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using ConstructionSiteLibrary.Managers;
+using Shared.ApiRouting;
 using Shared.Documents;
 
 namespace ConstructionSiteLibrary.Repositories;
@@ -14,7 +15,7 @@ public class ClientsRepository(HttpManager httpManager)
     {
         if (Clients.Count == 0)
         {
-            var response = await _httpManager.SendHttpRequest("Client/ClientsList", "");
+            var response = await _httpManager.SendHttpRequest(ApiRouting.ClientsList, "");
             if (response.Code.Equals("0"))
             {
                 Clients = JsonSerializer.Deserialize<List<ClientModel>>(response.Content.ToString() ?? "") ?? [];
@@ -26,7 +27,7 @@ public class ClientsRepository(HttpManager httpManager)
 
     public async Task<bool> SaveClient(ClientModel client)
     {
-        var response = await _httpManager.SendHttpRequest("Client/SaveClient", client);
+        var response = await _httpManager.SendHttpRequest(ApiRouting.SaveClient, client);
 
         //NotificationService.Notify(response);
         if (response.Code.Equals("0"))
@@ -40,7 +41,7 @@ public class ClientsRepository(HttpManager httpManager)
 
     public async Task<bool> UpdateClients(List<ClientModel> clients)
     {
-        var response = await _httpManager.SendHttpRequest("Client/UpdateClients", clients);
+        var response = await _httpManager.SendHttpRequest(ApiRouting.UpdateClients, clients);
         //NotificationService.Notify(response);
         if (response.Code.Equals("0"))
         {
@@ -54,7 +55,7 @@ public class ClientsRepository(HttpManager httpManager)
     
     public async Task<bool> HideClients(List<ClientModel> clients)
     {
-        var response = await _httpManager.SendHttpRequest("Client/HideClients", clients);
+        var response = await _httpManager.SendHttpRequest(ApiRouting.HideClients, clients);
         //NotificationService.Notify(response);
         if (response.Code.Equals("0"))
         {

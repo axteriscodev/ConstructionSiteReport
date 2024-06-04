@@ -1,16 +1,17 @@
 ﻿using AXT_WebComunication.WebResponse;
 using Microsoft.AspNetCore.Mvc;
 using ServerHost.Services;
+using Shared.ApiRouting;
 using Shared.Documents;
 using TDatabase.Queries;
 
 namespace ServerHost.Controllers;
 
 [ApiController]
-[Route("[controller]/[action]")]
 public class CompanyController : DefaultController
 {
     [LogAction]
+    [Route(ApiRouting.CompaniesList)]
     [HttpPost]
     public AXT_WebResponse CompaniesList()
     {
@@ -34,6 +35,7 @@ public class CompanyController : DefaultController
     }
 
     [LogAction]
+    [Route(ApiRouting.SaveCompany)]
     [HttpPost]
     public async Task<AXT_WebResponse> SaveCompany(CompanyModel newCompany)
     {
@@ -57,6 +59,7 @@ public class CompanyController : DefaultController
     }
 
     [LogAction]
+    [Route(ApiRouting.UpdateCompanies)]
     [HttpPost]
     public async Task<AXT_WebResponse> UpdateCompanies(List<CompanyModel> companies)
     {
@@ -80,6 +83,7 @@ public class CompanyController : DefaultController
     }
 
     [LogAction]
+    [Route(ApiRouting.HideCompanies)]
     [HttpPost]
     public async Task<AXT_WebResponse> HideCompanies(List<CompanyModel> companies)
     {

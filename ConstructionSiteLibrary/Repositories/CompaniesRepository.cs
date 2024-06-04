@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using ConstructionSiteLibrary.Managers;
+using Shared.ApiRouting;
 using Shared.Documents;
 
 namespace ConstructionSiteLibrary.Repositories;
@@ -14,7 +15,7 @@ public class CompaniesRepository(HttpManager httpManager)
     {
         if (Companies.Count == 0)
         {
-            var response = await _httpManager.SendHttpRequest("Company/CompaniesList", "");
+            var response = await _httpManager.SendHttpRequest(ApiRouting.CompaniesList, "");
             if (response.Code.Equals("0"))
             {
                 Companies = JsonSerializer.Deserialize<List<CompanyModel>>(response.Content.ToString() ?? "") ?? [];
@@ -26,7 +27,7 @@ public class CompaniesRepository(HttpManager httpManager)
 
     public async Task<bool> SaveCompany(CompanyModel company)
     {
-        var response = await _httpManager.SendHttpRequest("Company/SaveCompany", company);
+        var response = await _httpManager.SendHttpRequest(ApiRouting.SaveCompany, company);
 
         //NotificationService.Notify(response);
         if (response.Code.Equals("0"))
@@ -40,7 +41,7 @@ public class CompaniesRepository(HttpManager httpManager)
 
     public async Task<bool> UpdateCompanies(List<CompanyModel> companies)
     {
-        var response = await _httpManager.SendHttpRequest("Company/UpdateCompanies", companies);
+        var response = await _httpManager.SendHttpRequest(ApiRouting.UpdateCompanies, companies);
         //NotificationService.Notify(response);
         if (response.Code.Equals("0"))
         {
@@ -54,7 +55,7 @@ public class CompaniesRepository(HttpManager httpManager)
     
     public async Task<bool> HideCompanies(List<CompanyModel> companies)
     {
-        var response = await _httpManager.SendHttpRequest("Company/HideCompanies", companies);
+        var response = await _httpManager.SendHttpRequest(ApiRouting.HideCompanies, companies);
         //NotificationService.Notify(response);
         if (response.Code.Equals("0"))
         {
