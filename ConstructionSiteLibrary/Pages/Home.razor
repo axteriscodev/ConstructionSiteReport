@@ -1,7 +1,7 @@
 ﻿@using ConstructionSiteLibrary.Model
 @using ConstructionSiteLibrary.Interfaces
 @using ConstructionSiteLibrary.Components.ConstructorSites
-@inject ICameraService CameraService;
+@inject ICameraService CameraService
 
 
 @attribute [Route(PageRouting.HomePage)]
@@ -21,7 +21,7 @@
 </div> *@
 <RadzenText TextAlign="TextAlign.Center" TextStyle="TextStyle.H4" Text="I miei cantieri"/>
 <div class="my-3">
-    <CardListConstructorSite />
+    <ConstructorSiteView />
 </div>
 
 

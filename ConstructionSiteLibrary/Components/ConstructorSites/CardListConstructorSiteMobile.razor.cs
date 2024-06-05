@@ -8,7 +8,7 @@ using Shared.Documents;
 
 namespace ConstructionSiteLibrary.Components.ConstructorSites
 {
-    public partial class CardListConstructorSite
+    public partial class CardListConstructorSiteMobile
     {
         ScreenComponent? screenComponent;
 

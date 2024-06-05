@@ -1,6 +1,6 @@
 ﻿
 .round-border {
-    border-radius: 1.8rem !important;
+    border-radius: 1.2rem !important;
 }
 
 .text-bborder {
@@ -14,4 +14,9 @@
 .cardClass{
     max-width:800px;
 
+}
+
+/* CARDS */
+.cardColor1 {
+    background-color: var(--background-Card-color1) !important;
 }
