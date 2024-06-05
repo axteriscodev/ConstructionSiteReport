@@ -7,11 +7,33 @@ public partial class Company
 {
     public int Id { get; set; }
 
-    public string Name { get; set; } = null!;
+    public string? CompanyName { get; set; }
+
+    public string? SelfEmployedName { get; set; }
 
     public string? Address { get; set; }
 
-    public string Vatcode { get; set; } = null!;
+    public string? TaxId { get; set; }
+
+    public string? Vatcode { get; set; }
+
+    public string? Phone { get; set; }
+
+    public string? Email { get; set; }
+
+    public string? Pec { get; set; }
+
+    public string? ReaNumber { get; set; }
+
+    public string? WorkerWelfareFunds { get; set; }
+
+    public string? Ccnl { get; set; }
+
+    public string? InpsId { get; set; }
+
+    public string? InpsPat { get; set; }
+
+    public string? JobsDescriptions { get; set; }
 
     public bool Active { get; set; }
 
