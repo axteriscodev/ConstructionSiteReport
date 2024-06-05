@@ -11,7 +11,7 @@ public class ConstructorSiteModel
     public string Name { get; set; } = "";
 
     [JsonPropertyName("client")]
-    public ClientModel Client { get; set; } = new ClientModel();
+    public ClientModel? Client { get; set; }
 
     [JsonPropertyName("jobDescription")]
     public string JobDescription { get; set; } = "";

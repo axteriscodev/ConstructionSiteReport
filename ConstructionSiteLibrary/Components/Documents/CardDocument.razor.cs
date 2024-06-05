@@ -11,5 +11,10 @@ namespace ConstructionSiteLibrary.Components.Documents
         public DocumentModel Document { get; set; } = new();
 
 
+        private void OnDocumentClick()
+        {
+            Console.WriteLine("cliccato documento:" + Document.Id);
+        }
+
     }
 }

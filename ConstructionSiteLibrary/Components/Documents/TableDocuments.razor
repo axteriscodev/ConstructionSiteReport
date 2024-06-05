@@ -18,10 +18,10 @@ else
     <div class="mx-2 my-5">
         <div class="my-5">
             <div class="hstack">
-                    <RadzenText TextAlign="TextAlign.Center" TextStyle="TextStyle.DisplayH4" Text="@site.Name" />
-                    <div>
-                        <RadzenIcon Icon="settings" IconStyle="IconStyle.Primary" class="settingIcon" />
-                    </div>
+                <RadzenText TextAlign="TextAlign.Center" TextStyle="TextStyle.DisplayH4" Text="@site.Name" />
+                <div>
+                    <RadzenIcon Icon="settings" IconStyle="IconStyle.Primary" class="settingIcon" onclick="@(()=>OnSettingsClick())" />
+                </div>
             </div>
             <div class="row">
                 <div class="col-xl-4 EmptyColumn">

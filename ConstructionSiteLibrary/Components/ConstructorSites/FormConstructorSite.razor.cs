@@ -17,17 +17,40 @@ namespace ConstructionSiteLibrary.Components.ConstructorSites
         private bool onSaving = false;
         private bool onLoading = false;
 
+        protected override async Task OnInitializedAsync()
+        {
+            await base.OnInitializedAsync();
+        }
+
+        protected override async Task OnParametersSetAsync()
+        {
+            if(Site is not null)
+            {
+                form = new FormSite()
+                { 
+                    Id = Site.Id,
+                    Name = Site.Name,
+                    JobDescription = Site.JobDescription,
+                    Address = Site.Address,
+                    StartDate = Site.StartDate,
+                };
+            }
+
+            await base.OnParametersSetAsync();
+        }
 
         private async Task Save()
         {
             Site = new()
             {
+                Id = form.Id,
                 Name = form.Name!,
                 JobDescription = form.JobDescription ?? "",
                 Address = form.Address!,
                 StartDate = form.StartDate.HasValue ? form.StartDate.Value : DateTime.Today,
             };
-            var success = await SiteRepository.SaveContructorSite(Site);
+            var success = CreationMode ? await SiteRepository.SaveContructorSite(Site)
+                                       : await SiteRepository.UpdateContructorSites([Site]);
             if(success)
             {
                 await OnSaveComplete.InvokeAsync();
@@ -36,6 +59,7 @@ namespace ConstructionSiteLibrary.Components.ConstructorSites
 
         private class FormSite
         {
+            public int Id { get; set; }
             public string? Name { get; set; }
             public string? JobDescription { get; set; }
             public string? Address { get; set; }

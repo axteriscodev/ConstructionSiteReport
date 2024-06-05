@@ -4,6 +4,12 @@
     border-radius: 1.5rem !important;
 }
 
+    .documentCard:hover {
+        border: 1px solid var(--rz-primary);
+        box-shadow: 0 1rem 1.5rem rgba(0, 0, 0, .15) !important;
+        background-color: var(--background-Card-color2) !important;
+    }
+
 .documentTitle, ::deep .documentTitle {
     margin: 0 1rem;
     text-align:center;

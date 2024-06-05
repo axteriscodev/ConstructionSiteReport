@@ -8,6 +8,11 @@
     font-size: 3rem !important;
 }
 
+    .settingIcon:hover, ::deep .settingIcon:hover {
+        /*box-shadow: 0 1rem 1.5rem rgba(0, 0, 0, .15) !important;*/
+        color: var(--rz-primary-lighter) !important;
+    }
+
 .colSetting {
     justify-content: end;
     display: flex !important;

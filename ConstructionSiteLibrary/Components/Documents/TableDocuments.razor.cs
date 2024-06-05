@@ -17,7 +17,7 @@ namespace ConstructionSiteLibrary.Components.Documents
     {
 
         [Parameter]
-        public int SiteId {  get; set; }
+        public int SiteId { get; set; }
 
         ScreenComponent? screenComponent;
 
@@ -96,7 +96,29 @@ namespace ConstructionSiteLibrary.Components.Documents
                 { "OnSaveComplete", EventCallback.Factory.Create(this, Reload) },
                 { "CreationMode", true },
             };
-           // await DialogService.OpenAsync<FormConstructorSite>("Nuovo cantiere", parameters: param, options: newOptions);
+            // await DialogService.OpenAsync<FormConstructorSite>("Nuovo cantiere", parameters: param, options: newOptions);
+        }
+
+        private async Task OnSettingsClick()
+        {
+            Console.WriteLine("cliccato settings");
+            var width = screenComponent!.GetScreenSize().Width;
+
+            // creo uno style aggiuntivo da inviare al componente caricato con il popup come options
+            var additionalStyle = $"min-height:fit-content;height:fit-content;width:{width}px;max-width:800px";
+            var newOptions = new DialogOptions
+            {
+                Style = additionalStyle
+            };
+            //creo parametri da inviare al componente caricato con il popup
+            var param = new Dictionary<string, object>
+            {
+                //tra i parametri che invio al dialog creo un EventCallback da passare al componente
+                { "OnSaveComplete", EventCallback.Factory.Create(this, Reload) },
+                { "CreationMode", false },
+                { "Site", site },
+            };
+             await DialogService.OpenAsync<FormConstructorSite>("Cantiere", parameters: param, options: newOptions);
         }
 
         private async Task Reload()
