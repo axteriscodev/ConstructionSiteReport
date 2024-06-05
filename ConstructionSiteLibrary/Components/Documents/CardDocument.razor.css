@@ -1,11 +1,14 @@
-﻿.round-border {
+﻿
+.documentCard {
+    width: 240px;
     border-radius: 1.5rem !important;
 }
 
-.text-bborder {
-    margin-bottom: 0rem !important
+.documentTitle, ::deep .documentTitle {
+    margin: 0 1rem;
+    text-align:center;
 }
 
-.text-size {
-    font-size: 15px;
+.documentIcon, ::deep .documentIcon {
+    font-size: 15rem !important;
 }

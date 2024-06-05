@@ -34,6 +34,29 @@ public class ConstructorSiteController : DefaultController
     }
 
     [LogAction]
+    [Route(ApiRouting.ConstructorSiteInfo)]
+    [HttpPost]
+    public AXT_WebResponse ConstructorSiteInfo([FromBody] int idConstructorSite)
+    {
+        var response = new AXT_WebResponse();
+        var stopwatch = StartTime();
+        ConfigureLog("", 0);
+
+        try
+        {
+            var db = GetDbConnection();
+            var list = ConstructorSiteDbHelper.Select(db, idConstructorSite);
+            response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
+        }
+        catch (Exception ex)
+        {
+            response = ExceptionWebResponse(ex, "");
+        }
+        StopTime(stopwatch);
+        return response;
+    }
+
+    [LogAction]
     [Route(ApiRouting.SaveConstructorSite)]
     [HttpPost]
     public async Task<AXT_WebResponse> SaveConstructorSite(ConstructorSiteModel newContructorSite)

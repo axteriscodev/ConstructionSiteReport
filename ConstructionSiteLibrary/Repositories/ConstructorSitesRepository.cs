@@ -23,6 +23,19 @@ public class ConstructorSitesRepository(HttpManager httpManager)
         return ConstructorSites;
     }
 
+    public async Task<ConstructorSiteModel> GetConstructorSiteInfo(int idConstructorSite)
+    {
+        ConstructorSiteModel site = new();
+        var response = await _httpManager.SendHttpRequest(ApiRouting.ConstructorSitesList, idConstructorSite);
+        if (response.Code.Equals("0"))
+        {
+            var list = JsonSerializer.Deserialize<List<ConstructorSiteModel>>(response.Content.ToString() ?? "") ?? [];
+            site = list.FirstOrDefault() ?? new();
+        }
+
+        return site;
+    }
+
     public async Task<bool> SaveContructorSite(ConstructorSiteModel constructorSite)
     {
          var response = await _httpManager.SendHttpRequest(ApiRouting.SaveConstructorSite, constructorSite);

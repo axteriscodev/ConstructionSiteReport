@@ -5,7 +5,7 @@
 
 <h3>Domande</h3>
 
-<ScreenComponent MediumWith="800" OnScreenDimensionChanged="ScreenDimensionObserver" />
+<ScreenComponent SizeS="800" OnScreenDimensionChanged="ScreenDimensionObserver" />
 
 <DynamicComponent @ref=dynamicComponent Type=@selectedType/>
 
@@ -17,7 +17,7 @@
 
      private void ScreenDimensionObserver(ScreenDimension? dimension)
     {
-        if (dimension == ScreenDimension.Small)
+        if (dimension == ScreenDimension.S)
         {
             selectedType = typeof(TableQuestionMobile);
         }

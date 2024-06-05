@@ -1,7 +1,7 @@
 ﻿@using ConstructionSiteLibrary.Model
 @using ConstructionSiteLibrary.Components.ConstructorSites
 
-<ScreenComponent MediumWith="1024" OnScreenDimensionChanged="ScreenDimensionObserver" />
+<ScreenComponent SizeS="1024" OnScreenDimensionChanged="ScreenDimensionObserver" />
 <DynamicComponent @ref=dynamicComponent Type=@selectedType />
 
 @code
@@ -12,7 +12,7 @@
 
     private void ScreenDimensionObserver(ScreenDimension? dimension)
     {
-        if (dimension == ScreenDimension.Small)
+        if (dimension == ScreenDimension.S)
         {
             selectedType = typeof(CardListConstructorSiteMobile);
         }

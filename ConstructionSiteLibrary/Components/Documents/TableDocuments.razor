@@ -1,0 +1,64 @@
+﻿@using ConstructionSiteLibrary.Model;
+@using ConstructionSiteLibrary.Utility;
+
+@inject DocumentsRepository DocumentsRepository
+@inject ConstructorSitesRepository ConstructorSitesRepository
+@inject DialogService DialogService
+
+
+<ScreenComponent @ref="screenComponent" OnScreenDimensionChanged="@OnScreenDimensionChanged"
+                 SizeXL="1350" SizeL="1100" SizeM="820" />
+
+@if (onLoading)
+{
+    <Loading />
+}
+else
+{
+    <div class="mx-2 my-5">
+        <div class="my-5">
+            <div class="hstack">
+                    <RadzenText TextAlign="TextAlign.Center" TextStyle="TextStyle.DisplayH4" Text="@site.Name" />
+                    <div>
+                        <RadzenIcon Icon="settings" IconStyle="IconStyle.Primary" class="settingIcon" />
+                    </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-4 EmptyColumn">
+                </div>
+                <div class="divSearchBar">
+                    <RadzenFormField Text="Ricerca documento" Variant="@GlobalVariables.ComponentVariant" class="searchBar">
+                        <Start>
+                            <RadzenIcon Icon="search" />
+                        </Start>
+                        <ChildContent>
+                            <RadzenTextBox ValueChanged="@(args => SearchChanged(args))" />
+                        </ChildContent>
+                    </RadzenFormField>
+                </div>
+                <div class="col-4 buttonContainer">
+                    <RadzenButton class="buttonNewDocument" Icon="add" Text="Crea nuovo" Click="@OpenForm" />
+                </div>
+            </div>
+        </div>
+        <div class="divDocumentList">
+            @for (int i = 0; i < 15; i += documentColumn)
+            {
+                <div class="row mt-4">
+                    @for (int j = 0; j < documentColumn; j++)
+                    {
+                        <div class="col documentColumn">
+                            @if ((i + j) < 15)
+                            {
+                                <CardDocument />
+                            }
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+        <div class="mt-5">
+            <RadzenPager ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" HorizontalAlign="HorizontalAlign.Left" Count="count" PageSize="@pageSize" PageChanged="@PageChanged" />
+        </div>
+    </div>
+}

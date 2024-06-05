@@ -2,8 +2,10 @@
 {
     public enum ScreenDimension
     {
-        Big,
-        Medium,
-        Small
+        XL,
+        L,
+        M,
+        S,
+        XS,
     }
 }

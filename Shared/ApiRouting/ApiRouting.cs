@@ -82,6 +82,7 @@ namespace Shared.ApiRouting
         #region ConstructionSite routing
 
         public const string ConstructorSitesList = "ConstructorSitesList";
+        public const string ConstructorSiteInfo = "ConstructorSiteInfo";
         public const string SaveConstructorSite = "SaveConstructorSite";
         public const string UpdateConstructorSites = "UpdateConstructorSites";
         public const string HideConstructorSites = "HideConstructorSites";
