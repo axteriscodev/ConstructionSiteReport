@@ -20,7 +20,7 @@ public class ConstructorSiteModel
     public string Address { get; set; } = "";
 
     [JsonPropertyName("startDate")]
-    public DateTime StartDate { get; set; } = DateTime.Now;
+    public DateTime? StartDate { get; set; } = DateTime.Now;
 
     [JsonPropertyName("endDate")]
     public DateTime? EndDate { get; set; }

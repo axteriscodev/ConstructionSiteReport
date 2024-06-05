@@ -68,7 +68,7 @@ public partial class TableConstructorSite
 
     private async Task OpenForm()
     {
-        var width = screenComponent.ScreenSize.Width;
+        var width = screenComponent.GetScreenSize();
 
         // creo uno style aggiuntivo da inviare al componente caricato con il popup come options
         var additionalStyle = $"min-height:fit-content;height:fit-content;width:{width}px;max-width:600px";

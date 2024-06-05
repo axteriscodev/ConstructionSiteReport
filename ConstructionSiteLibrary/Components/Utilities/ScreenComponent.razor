@@ -98,6 +98,15 @@
         return dim;
     }
 
+    public ScreenSize GetScreenSize()
+    {
+        if (ScreenSize is null)
+        {
+            ScreenSize = ScreenManager.GetScreenSize() ?? new();
+        }
+        return ScreenSize;
+    }
+
     /// <summary>
     /// Metodo che fa scattare l'evento per comunicare a chi è in ascolto che la dimensione
     ///  dello schermo è cambiata

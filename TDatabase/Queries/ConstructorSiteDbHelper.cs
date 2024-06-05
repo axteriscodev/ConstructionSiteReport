@@ -47,7 +47,7 @@ public class ConstructorSiteDbHelper
                 Address = constructorSite.Address,
                 StartDate = constructorSite.StartDate,
                 EndDate = constructorSite.EndDate,
-                IdClient = constructorSite.Client.Id
+                IdClient = constructorSite.Client.Id > 0 ? constructorSite.Client.Id : null,
             };
             db.ConstructorSites.Add(newConstructorSite);
             await db.SaveChangesAsync();

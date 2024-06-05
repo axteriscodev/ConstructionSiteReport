@@ -1,5 +1,4 @@
 ﻿using Shared.Documents;
-using System.Reflection.Emit;
 using TDatabase.Database;
 using DB = TDatabase.Database.DbCsclDamicoV2Context;
 
@@ -122,7 +121,6 @@ public class DocumentDbHelper
                                       Id = cl.Id,
                                       Name = cl.Name
                                   }).SingleOrDefault(),
-
                         Companies = (from compDoc in db.CompanyDocuments
                                      from comp in db.Companies
                                      where compDoc.IdDocument == d.Id
@@ -130,7 +128,7 @@ public class DocumentDbHelper
                                      select new CompanyModel()
                                      {
                                          Id = comp.Id,
-                                         Name = comp.Name,
+                                         //Name = comp.Name,
                                          Address = comp.Address ?? "",
                                          VatCode = comp.Vatcode,
                                          Present = compDoc.Present

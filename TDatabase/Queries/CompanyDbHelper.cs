@@ -11,7 +11,7 @@ public class CompanyDbHelper
         return db.Companies.Where(x => x.Active == true).Select(c => new CompanyModel()
         {
             Id = c.Id,
-            Name = c.Name,
+            //Name = c.Name,
             Address = c.Address ?? "",
             VatCode = c.Vatcode,
         }).ToList();
@@ -26,7 +26,7 @@ public class CompanyDbHelper
             Company newCompany = new()
             {
                 Id = companyId,
-                Name = company.Name,
+                //Name = company.Name,
                 Address = company.Address,
                 Vatcode = company.VatCode,
             };
@@ -49,7 +49,7 @@ public class CompanyDbHelper
                 var c = dB.Companies.Where(x => x.Id == elem.Id).SingleOrDefault();
                 if (c is not null)
                 {
-                    c.Name = elem.Name;
+                    //c.Name = elem.Name;
                     c.Address = elem.Address;
                     c.Vatcode = elem.VatCode;
                     if (await dB.SaveChangesAsync() > 0)
