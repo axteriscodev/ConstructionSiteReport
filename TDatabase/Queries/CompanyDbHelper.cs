@@ -23,7 +23,8 @@ public class CompanyDbHelper
             WorkerWelfareFunds = c.WorkerWelfareFunds ?? "",
             Ccnl = c.Ccnl ?? "",
             InpsId = c.InpsId ?? "",
-            InpsPat = c.InpsPat ?? "",
+            InailId = c.InailId ?? "",
+            InailPat = c.InailPat ?? "",
             JobsDescriptions = c.JobsDescriptions ?? "",
         }).ToList();
     }
@@ -49,7 +50,8 @@ public class CompanyDbHelper
                 WorkerWelfareFunds = company.WorkerWelfareFunds ?? "",
                 Ccnl = company.Ccnl ?? "",
                 InpsId = company.InpsId ?? "",
-                InpsPat = company.InpsPat ?? "",
+                InailId = company.InailId ?? "",
+                InailPat = company.InailPat ?? "",
                 JobsDescriptions = company.JobsDescriptions ?? "",
                 Active = true,
             };
@@ -84,7 +86,8 @@ public class CompanyDbHelper
                     c.WorkerWelfareFunds = elem.WorkerWelfareFunds;
                     c.Ccnl = elem.Ccnl;
                     c.InpsId = elem.InpsId;
-                    c.InpsPat = elem.InpsPat;
+                    c.InailId = elem.InailId;
+                    c.InailPat = elem.InailPat;
                     c.JobsDescriptions = elem.JobsDescriptions;
                     if (await dB.SaveChangesAsync() > 0)
                     {

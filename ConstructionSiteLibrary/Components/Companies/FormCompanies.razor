@@ -1,0 +1,116 @@
+﻿@using Shared.Documents
+
+@inject CompaniesRepository CompaniesRepository
+
+
+
+<RadzenTemplateForm TItem="CompanyModel" Data=@Company Submit=@Save>
+    <p>
+        <RadzenFormField Text="Ragione sociale" Variant="@variant">
+            <ChildContent>
+                <RadzenTextBox Name="CompanyName" @bind-Value=@Company.CompanyName />
+            </ChildContent>
+        </RadzenFormField>
+    </p>
+    <p>
+        <RadzenFormField Text="Lavoratore autonomo" Variant="@variant">
+            <ChildContent>
+                <RadzenTextBox Name="SelfEmployedName" @bind-Value=@Company.SelfEmployedName />
+            </ChildContent>
+        </RadzenFormField>
+    </p>
+    <p>
+        <RadzenFormField Text="Sede legale" Variant="@variant">
+            <ChildContent>
+                <RadzenTextBox Name="Address" @bind-Value=@Company.Address />
+            </ChildContent>
+        </RadzenFormField>
+    </p>
+    <p>
+        <RadzenFormField Text="C.F." Variant="@variant">
+            <ChildContent>
+                <RadzenTextBox Name="TaxId" @bind-Value=@Company.TaxId />
+            </ChildContent>
+        </RadzenFormField>
+    </p>
+    <p>
+        <RadzenFormField Text="Partita IVA" Variant="@variant">
+            <ChildContent>
+                <RadzenTextBox Name="VatCode" @bind-Value=@Company.VatCode />
+            </ChildContent>
+        </RadzenFormField>
+    </p>
+    <p>
+        <RadzenFormField Text="Telefono" Variant="@variant">
+            <ChildContent>
+                <RadzenTextBox Name="Phone" @bind-Value=@Company.Phone />
+            </ChildContent>
+        </RadzenFormField>
+    </p>
+    <p>
+        <RadzenFormField Text="Email" Variant="@variant">
+            <ChildContent>
+                <RadzenTextBox Name="Email" @bind-Value=@Company.Email />
+            </ChildContent>
+        </RadzenFormField>
+    </p>
+    <p>
+        <RadzenFormField Text="PEC" Variant="@variant">
+            <ChildContent>
+                <RadzenTextBox Name="PEC" @bind-Value=@Company.Pec />
+            </ChildContent>
+        </RadzenFormField>
+    </p>
+    <p>
+        <RadzenFormField Text="N. REA" Variant="@variant">
+            <ChildContent>
+                <RadzenTextBox Name="NREA" @bind-Value=@Company.ReaNumber />
+            </ChildContent>
+        </RadzenFormField>
+    </p>
+    <p>
+        <RadzenFormField Text="Cassa Edile" Variant="@variant">
+            <ChildContent>
+                <RadzenTextBox Name="WorkerWelfareFunds" @bind-Value=@Company.WorkerWelfareFunds />
+            </ChildContent>
+        </RadzenFormField>
+    </p>
+    <p>
+        <RadzenFormField Text="CCNL applicato" Variant="@variant">
+            <ChildContent>
+                <RadzenTextBox Name="Ccnl" @bind-Value=@Company.Ccnl />
+            </ChildContent>
+        </RadzenFormField>
+    </p>
+    <p>
+        <RadzenFormField Text="Pos. INPS" Variant="@variant">
+            <ChildContent>
+                <RadzenTextBox Name="InpsId" @bind-Value=@Company.InpsId />
+            </ChildContent>
+        </RadzenFormField>
+    </p>
+    <p>
+        <RadzenFormField Text="Matr. INAIL" Variant="@variant">
+            <ChildContent>
+                <RadzenTextBox Name="InailId" @bind-Value=@Company.InailId />
+            </ChildContent>
+        </RadzenFormField>
+    </p>
+    <p>
+        <RadzenFormField Text="P.A.T. INAIL" Variant="@variant">
+            <ChildContent>
+                <RadzenTextBox Name="InailPat" @bind-Value=@Company.InailPat />
+            </ChildContent>
+        </RadzenFormField>
+    </p>
+    <p>
+        <RadzenFormField Text="Lavori previsti" Variant="@variant">
+            <ChildContent>
+                <RadzenTextBox Name="JobsDescriptions" @bind-Value=@Company.JobsDescriptions />
+            </ChildContent>
+        </RadzenFormField>
+    </p>
+
+
+    <RadzenButton ButtonType="ButtonType.Submit" Text="Salva" />
+</RadzenTemplateForm>

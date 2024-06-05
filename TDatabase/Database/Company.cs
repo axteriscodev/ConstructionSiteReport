@@ -31,7 +31,9 @@ public partial class Company
 
     public string? InpsId { get; set; }
 
-    public string? InpsPat { get; set; }
+    public string? InailId { get; set; }
+
+    public string? InailPat { get; set; }
 
     public string? JobsDescriptions { get; set; }
 

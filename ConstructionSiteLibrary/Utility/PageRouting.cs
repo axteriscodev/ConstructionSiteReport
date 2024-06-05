@@ -17,5 +17,6 @@ namespace ConstructionSiteLibrary.Utility
         public const string ChoicesPage= "/choices";
         public const string ConstructorSitePage = "/constructor-sites";
         public const string ClientsPage = "/clients";
+        public const string CompaniesPage = "/companies";
     }
 }

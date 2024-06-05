@@ -218,7 +218,7 @@ public partial class DbCsclDamicoV2Context : DbContext
 
         modelBuilder.Entity<Company>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3214EC2713A530A3");
+            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3214EC27A3DF9A04");
 
             entity.ToTable("COMPANY");
 
@@ -244,14 +244,18 @@ public partial class DbCsclDamicoV2Context : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("EMAIL");
+            entity.Property(e => e.InailId)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("INAIL_ID");
+            entity.Property(e => e.InailPat)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("INAIL_PAT");
             entity.Property(e => e.InpsId)
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("INPS_ID");
-            entity.Property(e => e.InpsPat)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("INPS_PAT");
             entity.Property(e => e.JobsDescriptions)
                 .IsUnicode(false)
                 .HasColumnName("JOBS_DESCRIPTIONS");
@@ -300,7 +304,7 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.CompanyConstructorSites)
                 .HasForeignKey(d => d.IdCompany)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__COMPANY_C__ID_CO__01142BA1");
+                .HasConstraintName("FK__COMPANY_C__ID_CO__07C12930");
 
             entity.HasOne(d => d.IdConstructorSiteNavigation).WithMany(p => p.CompanyConstructorSites)
                 .HasForeignKey(d => d.IdConstructorSite)
@@ -321,7 +325,7 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.CompanyDocuments)
                 .HasForeignKey(d => d.IdCompany)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__COMPANY_D__ID_CO__02084FDA");
+                .HasConstraintName("FK__COMPANY_D__ID_CO__08B54D69");
 
             entity.HasOne(d => d.IdDocumentNavigation).WithMany(p => p.CompanyDocuments)
                 .HasForeignKey(d => d.IdDocument)
@@ -563,7 +567,7 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.ReportedCompanies)
                 .HasForeignKey(d => d.IdCompany)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__REPORTED___ID_CO__02FC7413");
+                .HasConstraintName("FK__REPORTED___ID_CO__09A971A2");
 
             entity.HasOne(d => d.QuestionAnswered).WithMany(p => p.ReportedCompanies)
                 .HasForeignKey(d => new { d.IdCurrentChoice, d.IdQuestionChosen, d.IdDocument })

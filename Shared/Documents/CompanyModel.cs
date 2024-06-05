@@ -43,8 +43,11 @@ public class CompanyModel
     [JsonPropertyName("inpsId")]
     public string InpsId { get; set; } = "";
 
-    [JsonPropertyName("inpsPat")]
-    public string InpsPat { get; set; } = "";
+    [JsonPropertyName("inailId")]
+    public string InailId { get; set; } = "";
+
+    [JsonPropertyName("inailPat")]
+    public string InailPat { get; set; } = "";
 
     [JsonPropertyName("jobsDescriptions")]
     public string JobsDescriptions { get; set; } = "";
