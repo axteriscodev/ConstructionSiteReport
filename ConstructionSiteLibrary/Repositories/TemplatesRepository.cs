@@ -12,7 +12,8 @@ public class TemplatesRepository(HttpManager httpManager, IndexedDBService index
 
     #region Campi
 
-    private List<TemplateModel> Templates = [];
+    private List<TemplateModel> _templates = [];
+    private List<TemplateDescriptionModel> _templateDescriptions = [];
     private bool online = true;
     private const int TUTTI = 0;
     private readonly HttpManager _httpManager = httpManager;
@@ -36,8 +37,8 @@ public class TemplatesRepository(HttpManager httpManager, IndexedDBService index
                 var response = await _httpManager.SendHttpRequest("Template/TemplatesLIst", TUTTI);
                 if (response.Code.Equals("0"))
                 {
-                    Templates = JsonSerializer.Deserialize<List<TemplateModel>>(response.Content.ToString() ?? "") ?? [];
-                    _ = await _indexedDBService.Insert(IndexedDBTables.templates, Templates.Cast<object>().ToArray());
+                    _templates = JsonSerializer.Deserialize<List<TemplateModel>>(response.Content.ToString() ?? "") ?? [];
+                    _ = await _indexedDBService.Insert(IndexedDBTables.templates, _templates.Cast<object>().ToArray());
                 }
                 else if (response.Code.Equals("Ex8995BA25"))
                 {
@@ -47,12 +48,12 @@ public class TemplatesRepository(HttpManager httpManager, IndexedDBService index
                 if (!online)
                 {
                     var content = await _indexedDBService.ReadObjectStore(IndexedDBTables.templates);
-                    Templates = content is not null ? JsonSerializer.Deserialize<List<TemplateModel>>(content) ?? [] : [];
+                    _templates = content is not null ? JsonSerializer.Deserialize<List<TemplateModel>>(content) ?? [] : [];
                 }
             }
         }
         catch (Exception) { }
-        return Templates;
+        return _templates;
     }
 
      public async Task<TemplateModel> GetTemplateById(int idTemplate = TUTTI)
@@ -100,7 +101,7 @@ public class TemplatesRepository(HttpManager httpManager, IndexedDBService index
             var response = await _httpManager.SendHttpRequest("Template/SaveTemplate", template);
             if(response.Code.Equals("0"))
             {
-                Templates.Clear();
+                _templates.Clear();
                 result = true;
             }
         }
@@ -117,7 +118,7 @@ public class TemplatesRepository(HttpManager httpManager, IndexedDBService index
             var response = await _httpManager.SendHttpRequest("Template/HideTemplate", templates);
             if(response.Code.Equals("0"))
             {
-                Templates.Clear();
+                _templates.Clear();
                 result = true;
             }
         }
@@ -127,6 +128,40 @@ public class TemplatesRepository(HttpManager httpManager, IndexedDBService index
     }
 
     #endregion
+
+
+    public async Task<List<TemplateDescriptionModel>> GetTemplatesDescriptions()
+    {
+        try
+        {
+            if (!online)
+            {
+                await CheckIfOnline();
+            }
+
+            if (online)
+            {
+                var response = await _httpManager.SendHttpRequest("Template/TemplatesLIst", TUTTI); //TODO
+                if (response.Code.Equals("0"))
+                {
+                    _templateDescriptions = JsonSerializer.Deserialize<List<TemplateDescriptionModel>>(response.Content.ToString() ?? "") ?? [];
+                    _ = await _indexedDBService.Insert(IndexedDBTables.templates, _templateDescriptions.Cast<object>().ToArray());
+                }
+                else if (response.Code.Equals("Ex8995BA25"))
+                {
+                    online = false;
+                }
+
+                if (!online)
+                {
+                    var content = await _indexedDBService.ReadObjectStore(IndexedDBTables.templates);
+                    _templates = content is not null ? JsonSerializer.Deserialize<List<TemplateModel>>(content) ?? [] : [];
+                }
+            }
+        }
+        catch (Exception) { }
+        return _templateDescriptions;
+    }
 
     #region Metodi per effettuare la sincronizzazione con il server
 
@@ -140,9 +175,9 @@ public class TemplatesRepository(HttpManager httpManager, IndexedDBService index
                 var response = await _httpManager.SendHttpRequest("Template/TemplatesList", TUTTI);
                 if (response.Code.Equals("0"))
                 {
-                    Templates = JsonSerializer.Deserialize<List<TemplateModel>>(response.Content.ToString() ?? "") ?? [];
-                    var count = await _indexedDBService.Insert(IndexedDBTables.templates, Templates.Cast<object>().ToArray());
-                    result = count == Templates.Count;
+                    _templates = JsonSerializer.Deserialize<List<TemplateModel>>(response.Content.ToString() ?? "") ?? [];
+                    var count = await _indexedDBService.Insert(IndexedDBTables.templates, _templates.Cast<object>().ToArray());
+                    result = count == _templates.Count;
                 }
             }
             catch (Exception) { }

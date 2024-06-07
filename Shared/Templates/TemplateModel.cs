@@ -20,4 +20,7 @@ public class TemplateModel
 
     [JsonPropertyName("categories")]
     public List<TemplateCategoryModel> Categories { get; set; } = [];
+
+    [JsonPropertyName("description")]
+    public TemplateDescriptionModel Description { get; set; } = new();
 }
