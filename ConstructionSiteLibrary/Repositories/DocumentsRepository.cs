@@ -76,7 +76,7 @@ public class DocumentsRepository(HttpManager httpManager, IndexedDBService index
                 {
 
                     _meteoConditions = JsonSerializer.Deserialize<List<MeteoConditionModel>>(response.Content.ToString() ?? "") ?? [];
-                    _ = await _indexedDBService.Insert(IndexedDBTables.documents, _meteoConditions.Cast<object>().ToArray());
+                    _ = await _indexedDBService.Insert(IndexedDBTables.meteoConditions, _meteoConditions.Cast<object>().ToArray());
                 }
                 else if (response.Code.Equals("Ex8995BA25"))// problemi di connessione
                 {

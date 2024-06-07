@@ -32,6 +32,7 @@ namespace Shared.ApiRouting
         public const string TemplatesList = "TemplatesList";
         public const string SaveTemplate = "SaveTemplate";
         public const string HideTemplates = "HideTemplates";
+        public const string TemplatesDescriptionsList = "TemplatesDescriptionsList";
 
         #endregion
 
