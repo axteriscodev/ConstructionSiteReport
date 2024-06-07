@@ -48,4 +48,15 @@ public class DocumentModel
 
     [JsonPropertyName("notes")]
     public List<NoteModel> Notes { get; set; } = [];
+
+    [JsonPropertyName("cse")]
+    public string? CSE { get; set; }
+
+    [JsonPropertyName("draftedIn")]
+    public string? DraftedIn { get; set; }
+
+     [JsonPropertyName("completedIn")]
+    public string? CompletedIn { get; set; }
+
+
 }
