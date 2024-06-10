@@ -3,6 +3,7 @@ using ConstructionSiteLibrary.Repositories;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Shared.Defaults;
+using Shared.Templates;
 
 namespace ConstructionSiteLibrary.Components.Choices;
 
@@ -34,24 +35,30 @@ public partial class FormChoice
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        Setup();
+      
     }
 
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+        if(!CreationMode && Object is not null)
+        {
+            Setup();
+        }
+    }
     /// <summary>
     /// Metodo che inizializza le impostazioni iniziali del componente sia in caso di creazione 
     /// che in modifica
     /// </summary>
     private void Setup()
     {
-        if (!CreationMode && Object is not null)
+        var choice = (TemplateChoiceModel)Object!;
+        form = new FormChoiceData()
         {
-            form = new FormChoiceData()
-            {
-                Id = ((ChoiceModel)Object).Id,
-                Tag = ((ChoiceModel)Object).Tag,
-                Value = ((ChoiceModel)Object).Value,
-            };
-        }
+            Id = choice.Id,
+            Tag = choice.Tag,
+            Value = choice.Value,
+        };
     }
 
     private async Task Save()
