@@ -11,5 +11,7 @@ public partial class TemplateDescription
 
     public string? Description { get; set; }
 
+    public bool Active { get; set; }
+
     public virtual ICollection<Template> Templates { get; set; } = new List<Template>();
 }

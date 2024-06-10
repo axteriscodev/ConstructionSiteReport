@@ -18,11 +18,13 @@ public class TemplateDbHelper
         }
 
         var docs = (from t in templateSelect
+                    join desc in db.TemplateDescriptions on t.IdDescription equals desc.Id
                     where t.Active == true
                     select new TemplateModel()
                     {
                         IdTemplate = t.Id,
                         TitleTemplate = t.Title,
+                        Description = new() { Id = desc.Id, Title = desc.Title, Description = desc.Description ?? "" },
                         Note = t.Note ?? "",
                         CreationDate = t.Date,
                         Categories = (from r in (from qc in db.QuestionChosens
@@ -85,6 +87,12 @@ public class TemplateDbHelper
                 Date = template.CreationDate,
                 Active = true,
             };
+
+            // se ho associato una descrizione allora lo salvo nel db
+            if(template.Description.Id > 0)
+            {
+                newTemplate.IdDescription = template.Description.Id;
+            }
 
             db.Templates.Add(newTemplate);
 

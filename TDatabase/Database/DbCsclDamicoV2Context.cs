@@ -682,6 +682,7 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("ID");
+            entity.Property(e => e.Active).HasColumnName("ACTIVE");
             entity.Property(e => e.Description)
                 .IsUnicode(false)
                 .HasColumnName("DESCRIPTION");
