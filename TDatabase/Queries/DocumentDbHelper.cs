@@ -24,11 +24,16 @@ public class DocumentDbHelper
                         CreationDate = d.CreationDate ?? DateTime.Now,
                         CompilationDate = d.CompilationDate,
                         LastEditDate = d.LastEditDate ?? DateTime.Now,
-                        MeteoCondition = (from m in db.MeteoConditions where d.IdMeteo == m.Id
-                                        select new MeteoConditionModel() {
-                                            Id = m.Id,
-                                            Description = m.Description,
-                                        }).SingleOrDefault(),
+                        CSE = d.Cse,
+                        DraftedIn = d.DraftedIn,
+                        CompletedIn = d.CompletedIn,
+                        MeteoCondition = (from m in db.MeteoConditions
+                                          where d.IdMeteo == m.Id
+                                          select new MeteoConditionModel()
+                                          {
+                                              Id = m.Id,
+                                              Description = m.Description,
+                                          }).SingleOrDefault(),
                         Categories = (from r in (from qc in db.QuestionChosens
                                                  from q in db.Questions
                                                  where qc.Id == d.Id
@@ -225,6 +230,10 @@ public class DocumentDbHelper
                 CompilationDate = document.CompilationDate,
                 Title = document.Title,
                 ReadOnly = document.ReadOnly,
+                Cse = document.CSE,
+                DraftedIn = document.DraftedIn,
+                CompletedIn = document.CompletedIn,
+                IdMeteo = document.MeteoCondition.Id,
             };
 
             db.Documents.Add(newDocument);
@@ -396,11 +405,11 @@ public class DocumentDbHelper
         var meteoConditions = db.MeteoConditions.AsQueryable();
 
         var meteoConditionsList = (from m in meteoConditions
-                                    select new MeteoConditionModel()
-                                    {
-                                        Id = m.Id,
-                                        Description = m.Description,
-                                    }).ToList();
+                                   select new MeteoConditionModel()
+                                   {
+                                       Id = m.Id,
+                                       Description = m.Description,
+                                   }).ToList();
 
         return meteoConditionsList;
     }
