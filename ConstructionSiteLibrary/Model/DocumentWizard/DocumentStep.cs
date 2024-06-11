@@ -9,7 +9,7 @@ namespace ConstructionSiteLibrary.Model.DocumentWizard
     public enum DocumentStep
     {
         ChoiceTemplate,
-        Desctiption,
+        Description,
         Companies,
         Save
     }

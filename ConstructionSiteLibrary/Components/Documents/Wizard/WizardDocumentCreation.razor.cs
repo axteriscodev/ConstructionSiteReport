@@ -1,5 +1,6 @@
 ﻿using ConstructionSiteLibrary.Model.DocumentWizard;
 using Radzen.Blazor;
+using Shared.Documents;
 using Shared.Templates;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace ConstructionSiteLibrary.Components.Documents.Wizard
     {
 
         private TemplateModel? _selectedTemplate;
+        private DocumentModel _document = new();
 
         private RadzenSteps? _stepsComponent;
 
@@ -23,7 +25,23 @@ namespace ConstructionSiteLibrary.Components.Documents.Wizard
 
         private void Forward(DocumentStepArgs args)
         {
+
+            switch (args.Step)
+            {
+                case DocumentStep.ChoiceTemplate:
+                    _selectedTemplate = args.Object as TemplateModel;
+                    break;
+                case DocumentStep.Description:
+                    if(args.Object is not null)
+                    {
+                        _document = (args.Object as DocumentModel)!;
+                    }
+                    break;
+                default:
+                    break;
+            }
             _stepsComponent?.NextStep();
+
         }
 
 

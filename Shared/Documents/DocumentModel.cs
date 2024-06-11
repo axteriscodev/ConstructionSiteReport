@@ -16,6 +16,9 @@ public class DocumentModel
     [JsonPropertyName("title")]
     public string Title { get; set; } = "";
 
+    [JsonPropertyName("description")]
+    public string Description { get; set; } = "";
+
     [JsonPropertyName("creationDate")]
     public DateTime? CreationDate { get; set; }
 

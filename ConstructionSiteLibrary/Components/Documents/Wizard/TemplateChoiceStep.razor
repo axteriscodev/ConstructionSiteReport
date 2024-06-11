@@ -10,17 +10,29 @@
     }
     else
     {
-        <RadzenFormField Text="Scelta template <span style='color:red'> (obbligatorio)</span>" Variant="@GlobalVariables.ComponentVariant">
-            <ChildContent>
-                <RadzenDropDown Name="TemplateChoice" @bind-Value="@SelectedTemplate" Data="@templates" />
-            </ChildContent>
-            <Helper>
-                <RadzenRequiredValidator Component="TemplateChoice" Popup=false Text="La scelta di un template è obbligatoria" />
-            </Helper>
-        </RadzenFormField>
-        <div class="row">
-            <RadzenButton Icon="arrow_forward" Text="Avanti" Click="@Forward" />
+        <RadzenTemplateForm TItem="TemplateModel" Data="@SelectedTemplate" Submit="@Forward">
+        <div class="card shadow mb-3 divCard">
+            <RadzenText TextStyle="TextStyle.Body1" class="mb-2">
+                Seleziona il template da cui partire per la creazione del nuovo documento
+            </RadzenText>
+            <RadzenFormField Text="Scelta template <span style='color:red'> (obbligatorio)</span>" Variant="@GlobalVariables.ComponentVariant" class="selectTemplate">
+                <ChildContent>
+                    <RadzenDropDown TValue="TemplateModel" Name="TemplateChoice" @bind-Value="@SelectedTemplate" Data="@templates" TextProperty="NameTemplate"
+                                    AllowClear="true" />
+                </ChildContent>
+                <Helper>
+                    <RadzenRequiredValidator Component="TemplateChoice" Popup=false Text="La scelta di un template è obbligatoria" />
+                </Helper>
+            </RadzenFormField>
         </div>
+        <div class="row">
+            <div class="col">
+            </div>
+            <div class="col divForward">
+                <RadzenButton ButtonType="ButtonType.Submit" Icon="arrow_forward" Text="Avanti" class="buttonForward"/>
+            </div>
+        </div>
+        </RadzenTemplateForm>
     }
 </div>
 
@@ -34,6 +46,7 @@
 
     private List<TemplateModel> templates = [];
     private bool onloading = false;
+    private bool forwardDisabled = true;
 
 
 
@@ -45,24 +58,36 @@
         onloading = false;
     }
 
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+        CanForward();
+    }
+
     public async Task LoadData()
     {
         templates = await TemplateRepository.GetTemplates();
     }
 
+    public void ChangedSelectedTemplate(object args)
+    {
+        CanForward();
+    }
+
+    public void CanForward()
+    {
+        forwardDisabled = SelectedTemplate is null;
+    }
 
     public void Forward()
     {
-        if (SelectedTemplate is not null)
-        {
-            DocumentStepArgs args = new()
+        DocumentStepArgs args = new()
             {
                 Object = SelectedTemplate,
                 Step = DocumentStep.ChoiceTemplate
             };
 
-            OnForward.InvokeAsync(args);
-        }
+        OnForward.InvokeAsync(args);
     }
 
 }

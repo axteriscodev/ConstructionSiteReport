@@ -1,0 +1,19 @@
+﻿
+
+.divCard{
+    padding:1rem;
+}
+
+.selectTemplate, ::deep .selectTemplate {
+    max-width: 500px;
+    margin-bottom: 2rem;
+}
+
+.divForward {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.buttonForward, ::deep .buttonForward {
+    width: 120px;
+}
