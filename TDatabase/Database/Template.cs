@@ -9,6 +9,8 @@ public partial class Template
 
     public int? IdDescription { get; set; }
 
+    public string Name { get; set; } = null!;
+
     public string Title { get; set; } = null!;
 
     public DateTime Date { get; set; }

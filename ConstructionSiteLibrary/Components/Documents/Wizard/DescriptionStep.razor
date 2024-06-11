@@ -12,7 +12,7 @@
     {
         <RadzenFormField Text="Scelta template <span style='color:red'> (obbligatorio)</span>" Variant="@GlobalVariables.ComponentVariant">
             <ChildContent>
-                <RadzenDropDown Name="TemplateChoice" @bind-Value="@SelectedTemplate" Data="@templates" />
+                <RadzenDropDown Name="TemplateChoice" @bind-Value="@SelectedTemplate" Data="@templates" TextProperty=""/>
             </ChildContent>
             <Helper>
                 <RadzenRequiredValidator Component="TemplateChoice" Popup=false Text="La scelta di un template è obbligatoria" />

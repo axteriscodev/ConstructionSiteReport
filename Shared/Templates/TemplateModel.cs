@@ -9,6 +9,9 @@ public class TemplateModel
     [JsonPropertyName("idTemplate")]
     public int IdTemplate { get; set; }
 
+    [JsonPropertyName("nameTemplate")]
+    public string NameTemplate { get; set; } = "";
+
     [JsonPropertyName("titleTemplate")]
     public string TitleTemplate { get; set; } = "";
 

@@ -22,6 +22,7 @@ public class TemplateDbHelper
                     select new TemplateModel()
                     {
                         IdTemplate = t.Id,
+                        NameTemplate = t.Name, 
                         TitleTemplate = t.Title,
                         Description = (from d in db.TemplateDescriptions
                                        where d.Id == t.IdDescription
@@ -88,6 +89,7 @@ public class TemplateDbHelper
             Template newTemplate = new()
             {
                 Id = nextId,
+                Name = template.NameTemplate,
                 Title = template.TitleTemplate,
                 Note = template.Note,
                 Date = template.CreationDate,
