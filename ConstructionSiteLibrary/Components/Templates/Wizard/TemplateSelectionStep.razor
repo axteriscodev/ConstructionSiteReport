@@ -1,0 +1,11 @@
+﻿
+
+<ScreenComponent @ref="screenComponent" />
+@if (initialLoading)
+{
+    <Loading />
+}
+else
+{
+    <RadzenDropDown @bind-Value=@CurrentSelection Data=@Templates TextProperty="TitleTemplate" AllowClear=true Placeholder="-"/>
+}

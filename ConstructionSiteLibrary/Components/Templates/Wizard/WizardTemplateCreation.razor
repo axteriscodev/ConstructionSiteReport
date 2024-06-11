@@ -1,0 +1,20 @@
+﻿@using ConstructionSiteLibrary.Repositories
+
+@inject TemplatesRepository TemplatesRepository
+
+<ScreenComponent @ref="screenComponent" />
+@if (initialLoading)
+{
+    <Loading />
+}
+else
+{
+    <RadzenSteps>
+        <Steps>
+            <RadzenStepsItem>
+                <TemplateSelectionStep />
+            </RadzenStepsItem>
+        </Steps>
+    </RadzenSteps>
+}
+
