@@ -16,6 +16,11 @@ public partial class TemplateQuestionsSelectionStep
 
     private List<IdCategoryAndQuestions> groups = [];
 
+    [Parameter]
+    public EventCallback<TemplateStepArgs> OnForward { get; set; }
+    [Parameter]
+    public EventCallback OnBack { get; set; }
+
     private string title = "";
 
 
@@ -299,6 +304,22 @@ public partial class TemplateQuestionsSelectionStep
         {
             //lista[i].Order = i + 1;
         }
+    }
+
+    public void Forward()
+    {
+        TemplateStepArgs args = new()
+        {
+            // Object = Document,
+            // Step = DocumentStep.Description
+        };
+
+        OnForward.InvokeAsync(args);
+    }
+
+    public void Back()
+    {
+        OnBack.InvokeAsync();
     }
 
     #endregion

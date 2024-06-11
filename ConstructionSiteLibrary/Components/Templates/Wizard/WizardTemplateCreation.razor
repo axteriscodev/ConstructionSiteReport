@@ -10,19 +10,19 @@
 }
 else
 {
-    <RadzenSteps>
+    <RadzenSteps @ref="_stepsComponent" ShowStepsButtons="false">
         <Steps>
             <RadzenStepsItem>
                 <TemplateSelectionStep />
             </RadzenStepsItem>
             <RadzenStepsItem>
-                <TemplateDescriptionSelectionStep />
+                <TemplateDescriptionSelectionStep OnBack="@Back" />
             </RadzenStepsItem>
             <RadzenStepsItem>
-                <TemplateQuestionsSelectionStep />
+                <TemplateQuestionsSelectionStep OnBack="@Back"/>
             </RadzenStepsItem>
             <RadzenStepsItem>
-                <TemplateNameStep />
+                <TemplateNameStep OnBack="@Back" />
             </RadzenStepsItem>
         </Steps>
     </RadzenSteps>

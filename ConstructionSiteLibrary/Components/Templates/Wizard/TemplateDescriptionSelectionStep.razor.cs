@@ -1,4 +1,5 @@
 ﻿using ConstructionSiteLibrary.Components.Utilities;
+using Microsoft.AspNetCore.Components;
 using Shared.Templates;
 
 namespace ConstructionSiteLibrary.Components.Templates.Wizard;
@@ -8,6 +9,11 @@ public partial class TemplateDescriptionSelectionStep
     List<TemplateDescriptionModel> TemplatesDescriptions = [];
 
     TemplateDescriptionModel? CurrentSelection;
+
+    [Parameter]
+    public EventCallback<TemplateStepArgs> OnForward { get; set; }
+    [Parameter]
+    public EventCallback OnBack { get; set; }
 
     /// <summary>
     /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
@@ -27,5 +33,22 @@ public partial class TemplateDescriptionSelectionStep
     private async Task LoadData()
     {
         TemplatesDescriptions = await TemplatesRepository.GetTemplatesDescriptions();
+    }
+
+
+    public void Forward()
+    {
+        TemplateStepArgs args = new()
+        {
+            // Object = Document,
+            // Step = DocumentStep.Description
+        };
+
+        OnForward.InvokeAsync(args);
+    }
+
+    public void Back()
+    {
+        OnBack.InvokeAsync();
     }
 }

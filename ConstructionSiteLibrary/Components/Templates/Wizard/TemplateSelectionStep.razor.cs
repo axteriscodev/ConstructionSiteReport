@@ -1,5 +1,5 @@
 ﻿using ConstructionSiteLibrary.Components.Utilities;
-
+using Microsoft.AspNetCore.Components;
 using Shared.Templates;
 
 namespace ConstructionSiteLibrary.Components.Templates.Wizard;
@@ -15,6 +15,10 @@ public partial class TemplateSelectionStep
     /// </summary>
     private bool initialLoading;
 
+    [Parameter]
+    public EventCallback<TemplateStepArgs> OnForward { get; set; }
+    
+
     ScreenComponent screenComponent;
 
     protected override async Task OnInitializedAsync()
@@ -28,6 +32,17 @@ public partial class TemplateSelectionStep
     private async Task LoadData()
     {
         Templates = await TemplatesRepository.GetTemplates();
+    }
+
+    public void Forward()
+    {
+        TemplateStepArgs args = new()
+            {
+                // Object = SelectedTemplate,
+                // Step = DocumentStep.ChoiceTemplate
+            };
+
+        OnForward.InvokeAsync(args);
     }
 
 }
