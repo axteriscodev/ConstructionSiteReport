@@ -3,16 +3,16 @@
 
 
 <div>
-    <RadzenSteps @ref=_stepsComponent>
+    <RadzenSteps @ref="_stepsComponent" ShowStepsButtons="false">
         <Steps>
             <RadzenStepsItem Text="Step1">
                 <TemplateChoiceStep SelectedTemplate="@_selectedTemplate" OnForward="@(args=>Forward(args))" />
             </RadzenStepsItem>
             <RadzenStepsItem Text="Step2">
-                <DescriptionStep SelectedTemplate="@_selectedTemplate" OnBack="@Back" OnForward="@(args=>Forward(args))"/>
+                <DescriptionStep SelectedTemplate="@_selectedTemplate" Document="@_document" OnBack="@Back" OnForward="@(args=>Forward(args))"/>
             </RadzenStepsItem>
             <RadzenStepsItem Text="Step3">
-                <p>Step3</p>
+                <CompaniesStep SelectedCompanies="@_document.Companies" OnBack="@Back" OnForward="@(args=>Forward(args))" />
             </RadzenStepsItem>
             <RadzenStepsItem Text="Step4">
                 <p>Step4</p>

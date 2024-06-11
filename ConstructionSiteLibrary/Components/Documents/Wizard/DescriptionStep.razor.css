@@ -1,0 +1,18 @@
+﻿
+
+.divCard {
+    padding: 1rem;
+}
+
+.divForward {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.formField, ::deep .formField {
+    max-width: 500px;
+}
+
+.buttonForward, ::deep .buttonForward {
+    width: 120px;
+}

@@ -1,0 +1,32 @@
+﻿@using Shared.Templates
+@using Shared.Documents
+
+<div>
+    @if (onloading)
+    {
+        <Loading />
+    }
+    else
+    {
+        <div class="card shadow mb-3 divCard">
+            <div class="vstack">
+                <RadzenText><strong>@Document.Title</strong> </RadzenText>
+                <RadzenText><strong>Descrizione: </strong> @Document.Description</RadzenText>
+            </div>
+        </div>
+    }
+</div>
+
+
+
+@code{
+
+    [Parameter]
+    public DocumentModel? Document{ get; set; }
+
+    private bool onloading = false;
+
+
+
+
+}
