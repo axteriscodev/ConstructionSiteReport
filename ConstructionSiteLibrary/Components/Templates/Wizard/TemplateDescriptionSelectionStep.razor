@@ -24,7 +24,7 @@ else
             <RadzenButton ButtonType="ButtonType.Submit" Icon="arrow_forward" Text="Avanti" class="buttonForward" />
         </div>
     </div>
-    </RadzenTemplateForm>
+</RadzenTemplateForm>
 
 }
 
@@ -35,7 +35,7 @@ else
     TemplateDescriptionModel? CurrentSelection;
 
     [Parameter]
-    TemplateModel CurrentTemplate;
+    required public TemplateModel CurrentTemplate { get; set; }
 
     [Parameter]
     public EventCallback<TemplateStepArgs> OnForward { get; set; }
@@ -61,7 +61,7 @@ else
     {
         TemplatesDescriptions = await TemplatesRepository.GetTemplatesDescriptions();
 
-        if(CurrentTemplate.IdTemplate != 0)
+        if (CurrentTemplate.IdTemplate != 0)
         {
             CurrentSelection = CurrentTemplate.Description;
         }

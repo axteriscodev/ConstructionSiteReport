@@ -1,4 +1,5 @@
 ﻿using ConstructionSiteLibrary.Components.Utilities;
+using ConstructionSiteLibrary.Model.TemplateWizard;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
@@ -15,6 +16,9 @@ public partial class TemplateQuestionsSelectionStep
     //private IEnumerable<int> selected = [1,3,6];
 
     private List<IdCategoryAndQuestions> groups = [];
+
+    [Parameter]
+    required public TemplateModel CurrentTemplate { get; set; }
 
     [Parameter]
     public EventCallback<TemplateStepArgs> OnForward { get; set; }
@@ -57,8 +61,6 @@ public partial class TemplateQuestionsSelectionStep
     [Parameter]
     public string Param { get; set; } = "";
 
-    [Parameter]
-    public TemplateModel? SelectedTemplate { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -71,12 +73,11 @@ public partial class TemplateQuestionsSelectionStep
 
     protected override async Task OnParametersSetAsync()
     {
-        if (SelectedTemplate is not null)
-        {
+        
             initialLoading = true;
-            await LoadData(SelectedTemplate);
+            await LoadData(CurrentTemplate);
             initialLoading = false;
-        }
+        
     }
 
     private void InitData()
@@ -148,7 +149,7 @@ public partial class TemplateQuestionsSelectionStep
         await grid!.Reload();
     }
 
-    private async Task CreateForm()
+    private void Forward()
     {
         onSaving = true;
         List<TemplateCategoryModel> templateCategories = [];
@@ -173,11 +174,15 @@ public partial class TemplateQuestionsSelectionStep
             }
         }
 
-        var document = new TemplateModel()
+        CurrentTemplate.Categories = templateCategories;
+
+        TemplateStepArgs args = new()
         {
-            TitleTemplate = title,
-            Categories = templateCategories,
+            Object = CurrentTemplate,
+            Step = TemplateStep.Questions,
         };
+
+        OnForward.InvokeAsync(args);
 
         //await TemplatesRepository.SaveDocument(document);
         onSaving = false;
@@ -306,16 +311,6 @@ public partial class TemplateQuestionsSelectionStep
         }
     }
 
-    public void Forward()
-    {
-        TemplateStepArgs args = new()
-        {
-            // Object = Document,
-            // Step = DocumentStep.Description
-        };
-
-        OnForward.InvokeAsync(args);
-    }
 
     public void Back()
     {

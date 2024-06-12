@@ -20,7 +20,7 @@ else
                 <TemplateDescriptionSelectionStep  CurrentTemplate="@_template" OnBack="@Back" OnForward="@(args=>Forward(args))" />
             </RadzenStepsItem>
             <RadzenStepsItem>
-                <TemplateQuestionsSelectionStep OnBack="@Back" OnForward="@(args=>Forward(args))" />
+                <TemplateQuestionsSelectionStep CurrentTemplate="@_template" OnBack="@Back" OnForward="@(args=>Forward(args))" />
             </RadzenStepsItem>
             <RadzenStepsItem>
                 <TemplateNameStep OnBack="@Back" />

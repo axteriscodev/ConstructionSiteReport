@@ -48,7 +48,7 @@ public partial class WizardTemplateCreation
             case TemplateStep.Questions:
                 if (args.Object is not null)
                 {
-
+                    _template = (args.Object as TemplateModel)!;
                 }
                 break;
             case TemplateStep.Title:
