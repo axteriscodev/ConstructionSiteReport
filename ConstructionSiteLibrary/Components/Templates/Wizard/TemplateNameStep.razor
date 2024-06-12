@@ -1,5 +1,7 @@
 ﻿@using Shared.Templates
 
+@inject TemplatesRepository TemplatesRepository
+
 <ScreenComponent @ref="screenComponent" />
 @if (initialLoading)
 {
@@ -7,7 +9,10 @@
 }
 else
 {
-     <RadzenFormField Text="Nome <span style='color:red'> (obbligatorio)</span>" Variant="@variant" class="my-4 formFieldTitolo">
+    <RadzenTemplateForm TItem="string" Data="@Title" Submit="@SaveTemplate">
+    <div class="card shadow mb-3 divCard">
+        <RadzenFormField Text="Nome <span style='color:red'> (obbligatorio)</span>" Variant="@variant"
+            class="my-4 formFieldTitolo">
             <ChildContent>
                 <RadzenTextBox Name="Nome" @bind-Value="@Title" />
             </ChildContent>
@@ -15,15 +20,22 @@ else
                 <RadzenRequiredValidator Component="Nome" Popup=false Text="Il titolo è obbligatorio" />
             </Helper>
         </RadzenFormField>
+    </div>
 
-        <RadzenButton Icon="add" Text="Salva" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
-                      Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>SaveTemplate())"
-                      IsBusy="@onSaving" BusyText="Salvataggio in corso" />
+    <div class="row">
+        <div class="col">
+            <RadzenButton Icon="arrow_back" Text="Indietro" Click="@Back" />
+        </div>
+        <div class="col divForward">
+            <RadzenButton ButtonType="ButtonType.Submit" Icon="arrow_forward" Text="Avanti" class="buttonForward" />
+        </div>
+    </div>
+</RadzenTemplateForm>
 }
 
 @code
 {
-     /// <summary>
+    /// <summary>
     /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
     /// </summary>
     private bool initialLoading;
@@ -41,11 +53,19 @@ else
     [Parameter]
     required public TemplateModel CurrentTemplate { get; set; }
 
+    [Parameter]
+    public EventCallback OnBack { get; set; }
+
 
     public async Task SaveTemplate()
     {
         CurrentTemplate.NameTemplate = Title;
 
         await TemplatesRepository.SaveTemplate(CurrentTemplate);
+    }
+
+    public void Back()
+    {
+        OnBack.InvokeAsync();
     }
 }
