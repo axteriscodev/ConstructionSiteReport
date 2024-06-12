@@ -10,9 +10,8 @@ public partial class WizardTemplateCreation
 {
 
 
-    private TemplateModel? _selectedTemplate;
+    private TemplateModel? _template;
 
-    private TemplateModel newTemplate = new();
 
     /// <summary>
     /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
@@ -37,7 +36,7 @@ public partial class WizardTemplateCreation
                 case TemplateStep.TemplateSelection:
                     if(args.Object is not null)
                     {
-                        newTemplate = (args.Object as TemplateModel)!;
+                        _template = (args.Object as TemplateModel)!;
                     }
                     //_selectedTemplate = args.Object as TemplateModel;
                     break;

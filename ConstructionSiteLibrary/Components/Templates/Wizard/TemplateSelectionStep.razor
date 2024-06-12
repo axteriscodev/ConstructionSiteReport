@@ -1,4 +1,6 @@
-﻿@using ConstructionSiteLibrary.Repositories
+﻿@using ConstructionSiteLibrary.Model.TemplateWizard
+@using ConstructionSiteLibrary.Repositories
+@using Shared.Templates
 
 @inject TemplatesRepository TemplatesRepository
 
@@ -12,4 +14,46 @@ else
     <RadzenText>Clicca "Successivo" per creare un nuovo template o selezionane uno da usare come base</RadzenText>
     <RadzenDropDown @bind-Value=@CurrentSelection Data=@Templates TextProperty="TitleTemplate" AllowClear=true
         Placeholder="-" />
+}
+
+@code
+{
+    List<TemplateModel> Templates = [];
+
+    TemplateModel? CurrentSelection;
+
+    /// <summary>
+    /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
+    /// </summary>
+    private bool initialLoading;
+
+    [Parameter]
+    public EventCallback<TemplateStepArgs> OnForward { get; set; }
+
+
+    ScreenComponent screenComponent;
+
+    protected override async Task OnInitializedAsync()
+    {
+        initialLoading = true;
+        await base.OnInitializedAsync();
+        await LoadData();
+        initialLoading = false;
+    }
+
+    private async Task LoadData()
+    {
+        Templates = await TemplatesRepository.GetTemplates();
+    }
+
+    public void Forward()
+    {
+        TemplateStepArgs args = new()
+        {
+            Object = CurrentSelection != null ? CurrentSelection : new TemplateModel(),
+            Step = TemplateStep.TemplateSelection
+        };
+
+        OnForward.InvokeAsync(args);
+    }
 }
