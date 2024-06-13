@@ -1,6 +1,7 @@
 ﻿@using Shared.Templates
 
 @inject TemplatesRepository TemplatesRepository
+@inject NavigationService NavigationService
 
 <ScreenComponent @ref="screenComponent" />
 @if (initialLoading)
@@ -28,7 +29,8 @@ else
             <RadzenButton Icon="arrow_back" Text="Indietro" Click="@Back" />
         </div>
         <div class="col divForward">
-            <RadzenButton Click="@SaveTemplate" Icon="save" Text="Salva" class="buttonForward" />
+            <RadzenButton Click="@SaveTemplate" Icon="save" Text="Salva" class="buttonForward" IsBusy=@onSaving
+                BusyText="Salvataggio in corso" />
         </div>
     </div>
 </RadzenTemplateForm>
@@ -60,10 +62,16 @@ else
 
     public async Task SaveTemplate()
     {
+        onSaving = true;
+
         CurrentTemplate.NameTemplate = Title;
         CurrentTemplate.TitleTemplate = Title;
 
         await TemplatesRepository.SaveTemplate(CurrentTemplate);
+
+        onSaving = false;
+
+        NavigationService.ChangePage(PageRouting.TemplateWizardPage);
     }
 
     public void Back()
