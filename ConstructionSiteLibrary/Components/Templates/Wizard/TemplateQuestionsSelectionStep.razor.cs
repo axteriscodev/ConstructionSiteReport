@@ -73,11 +73,11 @@ public partial class TemplateQuestionsSelectionStep
 
     // protected override async Task OnParametersSetAsync()
     // {
-        
+
     //         initialLoading = true;
     //         await LoadData(CurrentTemplate);
     //         initialLoading = false;
-        
+
     // }
 
     private void InitData()
@@ -118,6 +118,13 @@ public partial class TemplateQuestionsSelectionStep
 
 
             }
+            else
+            {
+                foreach (var question in category.Questions)
+                {
+                    templateSelectedId.Add(question.Id);
+                }
+            }
 
             bool? groupState = null;
 
@@ -132,11 +139,7 @@ public partial class TemplateQuestionsSelectionStep
 
             //OrderElements(category.Questions.Cast<DocumentQuestionModel>());
             groups.Add(new() { Id = category.Id, Order = category.Order, Text = category.Text, State = groupState, Questions = category.Questions, SelectedQuestionIds = templateSelectedId });
-        
-            if(selectedTemplate.IdTemplate == 0)
-            {
-                InitData(); //il template non ha preset, li metto tutti selezionati
-            }
+
         }
 
 
