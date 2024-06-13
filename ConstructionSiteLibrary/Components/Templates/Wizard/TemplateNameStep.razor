@@ -11,8 +11,9 @@ else
 {
     <RadzenTemplateForm TItem="string" Data="@Title" Submit="@SaveTemplate">
     <div class="card shadow mb-3 divCard">
+        <RadzenText>Inserisci un nome per il template</RadzenText>
         <RadzenFormField Text="Nome <span style='color:red'> (obbligatorio)</span>" Variant="@variant"
-            class="my-4 formFieldTitolo">
+            class="formFieldTitolo">
             <ChildContent>
                 <RadzenTextBox Name="Nome" @bind-Value="@Title" />
             </ChildContent>
@@ -27,7 +28,7 @@ else
             <RadzenButton Icon="arrow_back" Text="Indietro" Click="@Back" />
         </div>
         <div class="col divForward">
-            <RadzenButton ButtonType="ButtonType.Submit" Icon="arrow_forward" Text="Avanti" class="buttonForward" />
+            <RadzenButton Click="@SaveTemplate" Icon="save" Text="Salva" class="buttonForward" />
         </div>
     </div>
 </RadzenTemplateForm>
