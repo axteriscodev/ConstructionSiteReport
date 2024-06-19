@@ -11,27 +11,65 @@
     else
     {
         <RadzenTemplateForm TItem="TemplateModel" Data="@SelectedTemplate" Submit="@Forward">
-        <div class="card shadow mb-3 divCard">
-            <RadzenText TextStyle="TextStyle.Body1" class="mb-2">
-                Seleziona il template da cui partire per la creazione del nuovo documento
-            </RadzenText>
-            <RadzenFormField Text="Scelta template <span style='color:red'> (obbligatorio)</span>" Variant="@GlobalVariables.ComponentVariant" class="selectTemplate">
-                <ChildContent>
-                    <RadzenDropDown TValue="TemplateModel" Name="TemplateChoice" @bind-Value="@SelectedTemplate" Data="@templates" TextProperty="NameTemplate"
-                                    AllowClear="true" />
-                </ChildContent>
-                <Helper>
-                    <RadzenRequiredValidator Component="TemplateChoice" Popup=false Text="La scelta di un template è obbligatoria" />
-                </Helper>
-            </RadzenFormField>
-        </div>
-        <div class="row">
-            <div class="col">
+            <div class="card shadow mb-3 divCard">
+                <RadzenText TextStyle="TextStyle.Body1" class="mb-2">
+                    Seleziona il template da cui partire per la creazione del nuovo documento
+                </RadzenText>
+                <RadzenFormField Text="Scelta template <span style='color:red'> (obbligatorio)</span>"
+                    Variant="@GlobalVariables.ComponentVariant" class="selectTemplate">
+                    <ChildContent>
+                        <RadzenDropDown TValue="TemplateModel" Name="TemplateChoice" @bind-Value="@SelectedTemplate"
+                            Data="@templates" TextProperty="NameTemplate" AllowClear="true" />
+                    </ChildContent>
+                    <Helper>
+                        <RadzenRequiredValidator Component="TemplateChoice" Popup=false
+                            Text="La scelta di un template è obbligatoria" />
+                    </Helper>
+                </RadzenFormField>
+
+                <RadzenFieldset Text="Riepilogo" class="selezioneDomande mt-3">
+                    @foreach (var g in groups)
+                    {
+                        <div class="m-2 p-2 pt-3">
+                            <RadzenRow class="bordoInferiore" Style="justify-content:space-between !important;">
+                                <RadzenColumn Size="11" Style="display:flex">
+
+                                    <RadzenText TextStyle="TextStyle.DisplayH6" Style="margin-left:1rem;">
+                                        <strong>@CategoryText(g)</strong>
+                                    </RadzenText>
+                                </RadzenColumn>
+                                <RadzenColumn Size="1" Style="display:flex;justify-content:end;">
+                                    <RadzenButton Icon="@AccordionIcon(g)" Variant="Variant.Text"
+                                        Click="@(()=>ShowQuestions(g))" />
+                                </RadzenColumn>
+                            </RadzenRow>
+                        </div>
+                        @if (g.ShowQuestion)
+                        {
+                            <div style="margin-bottom:2rem;">
+                                <SortableList Id="sortable" GroupNumber="@g.Id" Items="@g.Questions" OnGroupUpdate="@OrderList"
+                                    Context="item">
+                                    <SortableItemTemplate>
+                                        <div class="card shadow margineQuestionario p-2 pt-3 bordoDomanda">
+                                            <RadzenRow Style="flex-wrap:nowrap !important">
+                                                <RadzenText>@QuestionText(g, item.Text, item.Order)</RadzenText>
+                                            </RadzenRow>
+                                        </div>
+                                    </SortableItemTemplate>
+                                </SortableList>
+                            </div>
+                        }
+                    }
+
+                </RadzenFieldset>
             </div>
-            <div class="col divForward">
-                <RadzenButton ButtonType="ButtonType.Submit" Icon="arrow_forward" Text="Avanti" class="buttonForward"/>
+            <div class="row">
+                <div class="col">
+                </div>
+                <div class="col divForward">
+                    <RadzenButton ButtonType="ButtonType.Submit" Icon="arrow_forward" Text="Avanti" class="buttonForward" />
+                </div>
             </div>
-        </div>
         </RadzenTemplateForm>
     }
 </div>
@@ -45,6 +83,9 @@
     public TemplateModel? SelectedTemplate { get; set; }
 
     private List<TemplateModel> templates = [];
+
+    private List<IdCategoryAndQuestions> groups = [];
+
     private bool onloading = false;
     private bool forwardDisabled = true;
 
@@ -88,6 +129,62 @@
             };
 
         OnForward.InvokeAsync(args);
+    }
+
+    private static string CategoryText(IdCategoryAndQuestions group)
+    {
+        return group.Order + ". " + group.Text;
+    }
+
+    private static string QuestionText(IdCategoryAndQuestions group, string questionText, int order)
+    {
+        return group.Order + "." + order + " " + questionText;
+    }
+
+    private void ShowQuestions(IdCategoryAndQuestions group)
+    {
+        group.ShowQuestion = !group.ShowQuestion;
+    }
+
+    private string AccordionIcon(IdCategoryAndQuestions group)
+    {
+        return group.ShowQuestion ? "remove" : "add";
+    }
+
+    private void OrderList((int oldIndex, int newIndex, int groupNumber) indici)
+    {
+        // spezzo la tupla
+        var (oldIndex, newIndex, groupNumber) = indici;
+
+        var items = groups.Where(x => x.Id == groupNumber).SingleOrDefault().Questions;
+        var itemToMove = items[oldIndex];
+        items.RemoveAt(oldIndex);
+
+        if (newIndex < items.Count)
+        {
+            items.Insert(newIndex, itemToMove);
+        }
+        else
+        {
+            items.Add(itemToMove);
+        }
+
+        //OrderElements(items);
+        StateHasChanged();
+    }
+
+
+    class IdCategoryAndQuestions
+    {
+        public int Id { get; set; }
+
+        public string Text { get; set; } = "";
+
+        public int Order { get; set; }
+
+        public bool ShowQuestion = true;
+
+        public List<TemplateQuestionModel> Questions { get; set; } = [];
     }
 
 }

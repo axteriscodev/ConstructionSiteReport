@@ -15,7 +15,7 @@ public partial class TemplateQuestionsSelectionStep
 
     //private IEnumerable<int> selected = [1,3,6];
 
-    private List<IdCategoryAndQuestions> groups = [];
+    private List<CategoryQuestionsGroup> groups = [];
 
     [Parameter]
     required public TemplateModel CurrentTemplate { get; set; }
@@ -198,22 +198,22 @@ public partial class TemplateQuestionsSelectionStep
 
     #region Visualizzazione
 
-    private static string CategoryText(IdCategoryAndQuestions group)
+    private static string CategoryText(CategoryQuestionsGroup group)
     {
         return group.Order + ". " + group.Text;
     }
 
-    private static string QuestionText(IdCategoryAndQuestions group, string questionText, int order)
+    private static string QuestionText(CategoryQuestionsGroup group, string questionText, int order)
     {
         return group.Order + "." + order + " " + questionText;
     }
 
-    private void ShowQuestions(IdCategoryAndQuestions group)
+    private void ShowQuestions(CategoryQuestionsGroup group)
     {
         group.ShowQuestion = !group.ShowQuestion;
     }
 
-    private string AccordionIcon(IdCategoryAndQuestions group)
+    private string AccordionIcon(CategoryQuestionsGroup group)
     {
         return group.ShowQuestion ? "remove" : "add";
     }
@@ -222,7 +222,7 @@ public partial class TemplateQuestionsSelectionStep
 
     #region Selezione categorie e domande 
 
-    private async Task<bool> ChangeCheckBoxCategory(bool? value, IdCategoryAndQuestions group)
+    private async Task<bool> ChangeCheckBoxCategory(bool? value, CategoryQuestionsGroup group)
     {
         value ??= true;
         if (value.Value)
@@ -240,12 +240,12 @@ public partial class TemplateQuestionsSelectionStep
         return false;
     }
 
-    private bool ValoreCheckBoxQuestion(int id, IdCategoryAndQuestions group)
+    private bool ValoreCheckBoxQuestion(int id, CategoryQuestionsGroup group)
     {
         return group.SelectedQuestionIds.Contains(id);
     }
 
-    private async Task<bool> ChangeCheckBoxQuestion(bool value, int id, IdCategoryAndQuestions group)
+    private async Task<bool> ChangeCheckBoxQuestion(bool value, int id, CategoryQuestionsGroup group)
     {
         if (value)
         {
@@ -327,18 +327,4 @@ public partial class TemplateQuestionsSelectionStep
 
     #endregion
 
-    #region Classe interna 
-
-    class IdCategoryAndQuestions
-    {
-        public int Id { get; set; }
-        public int Order { get; set; }
-        public string Text { get; set; } = "";
-        public bool? State { get; set; } = false;
-        public bool ShowQuestion = true;
-        public List<int> SelectedQuestionIds { get; set; } = [];
-        public List<TemplateQuestionModel> Questions { get; set; } = [];
-    }
-
-    #endregion
 }
