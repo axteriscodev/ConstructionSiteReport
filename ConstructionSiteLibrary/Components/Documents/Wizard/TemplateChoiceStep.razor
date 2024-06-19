@@ -19,7 +19,7 @@
                     Variant="@GlobalVariables.ComponentVariant" class="selectTemplate">
                     <ChildContent>
                         <RadzenDropDown TValue="TemplateModel" Name="TemplateChoice" @bind-Value="@SelectedTemplate"
-                            Data="@templates" TextProperty="NameTemplate" AllowClear="true" />
+                            Data="@templates" Change="@OnTemplateSelected" TextProperty="NameTemplate" AllowClear="true" />
                     </ChildContent>
                     <Helper>
                         <RadzenRequiredValidator Component="TemplateChoice" Popup=false
@@ -84,7 +84,7 @@
 
     private List<TemplateModel> templates = [];
 
-    private List<IdCategoryAndQuestions> groups = [];
+    private List<CategoryQuestionsGroup> groups = [];
 
     private bool onloading = false;
     private bool forwardDisabled = true;
@@ -102,7 +102,22 @@
     protected override async Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
+
+
+
         CanForward();
+    }
+
+    public void OnTemplateSelected()
+    {
+        groups = [];
+
+        foreach (var category in SelectedTemplate!.Categories)
+        {
+            //OrderElements(category.Questions.Cast<DocumentQuestionModel>());
+            groups.Add(new() { Id = category.Id, Text = category.Text, Order = category.Order, Questions = category.Questions });
+        }
+
     }
 
     public async Task LoadData()
@@ -131,22 +146,22 @@
         OnForward.InvokeAsync(args);
     }
 
-    private static string CategoryText(IdCategoryAndQuestions group)
+    private static string CategoryText(CategoryQuestionsGroup group)
     {
         return group.Order + ". " + group.Text;
     }
 
-    private static string QuestionText(IdCategoryAndQuestions group, string questionText, int order)
+    private static string QuestionText(CategoryQuestionsGroup group, string questionText, int order)
     {
         return group.Order + "." + order + " " + questionText;
     }
 
-    private void ShowQuestions(IdCategoryAndQuestions group)
+    private void ShowQuestions(CategoryQuestionsGroup group)
     {
         group.ShowQuestion = !group.ShowQuestion;
     }
 
-    private string AccordionIcon(IdCategoryAndQuestions group)
+    private string AccordionIcon(CategoryQuestionsGroup group)
     {
         return group.ShowQuestion ? "remove" : "add";
     }
@@ -173,18 +188,5 @@
         StateHasChanged();
     }
 
-
-    class IdCategoryAndQuestions
-    {
-        public int Id { get; set; }
-
-        public string Text { get; set; } = "";
-
-        public int Order { get; set; }
-
-        public bool ShowQuestion = true;
-
-        public List<TemplateQuestionModel> Questions { get; set; } = [];
-    }
 
 }
