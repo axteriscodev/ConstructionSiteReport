@@ -81,4 +81,28 @@ public class TemplateController : DefaultController
         StopTime(stopwatch);
         return response;
     }
+
+    [LogAction]
+    [Route(ApiRouting.TemplatesDescriptionsList)]
+    [HttpPost]
+    public AXT_WebResponse TemplateDescitpionsList([FromBody]int idTemplate)
+    {
+        var response = new AXT_WebResponse();
+        var stopwatch = StartTime();
+        ConfigureLog("", 0);
+
+        try
+        {
+            var db = GetDbConnection();
+            var q = TemplateDescriptionDbHelper.Select(db, idTemplate);
+            response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), q);
+
+        }
+        catch (Exception ex)
+        {
+            response = ExceptionWebResponse(ex, "");
+        }
+        StopTime(stopwatch);
+        return response;
+    }
 }

@@ -1,0 +1,31 @@
+﻿@using ConstructionSiteLibrary.Model.TemplateWizard
+@using ConstructionSiteLibrary.Repositories
+
+
+@inject TemplatesRepository TemplatesRepository
+
+<ScreenComponent @ref="screenComponent" />
+@if (initialLoading)
+{
+    <Loading />
+}
+else
+{
+    <RadzenSteps @ref="_stepsComponent" ShowStepsButtons="false">
+        <Steps>
+            <RadzenStepsItem>
+                <TemplateSelectionStep OnForward="@(args=>Forward(args))" />
+            </RadzenStepsItem>
+            <RadzenStepsItem>
+                <TemplateDescriptionSelectionStep  CurrentTemplate="@_template" OnBack="@Back" OnForward="@(args=>Forward(args))" />
+            </RadzenStepsItem>
+            <RadzenStepsItem>
+                <TemplateQuestionsSelectionStep CurrentTemplate="@_template" OnBack="@Back" OnForward="@(args=>Forward(args))" />
+            </RadzenStepsItem>
+            <RadzenStepsItem>
+                <TemplateNameStep CurrentTemplate="@_template" OnBack="@Back" />
+            </RadzenStepsItem>
+        </Steps>
+    </RadzenSteps>
+}
+

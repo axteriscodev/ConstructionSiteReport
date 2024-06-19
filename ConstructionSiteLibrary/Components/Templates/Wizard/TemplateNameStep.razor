@@ -1,0 +1,193 @@
+﻿@using Shared.Templates
+
+@inject TemplatesRepository TemplatesRepository
+@inject NavigationService NavigationService
+
+<ScreenComponent @ref="screenComponent" />
+@if (initialLoading)
+{
+    <Loading />
+}
+else
+{
+    <RadzenTemplateForm TItem="string" Data="@Title" Submit="@SaveTemplate">
+    <div class="card shadow mb-3 divCard">
+        <RadzenText>Inserisci un nome per il template</RadzenText>
+        <RadzenFormField Text="Nome <span style='color:red'> (obbligatorio)</span>" Variant="@variant"
+            class="formFieldTitolo">
+            <ChildContent>
+                <RadzenTextBox Name="Nome" @bind-Value="@Title" />
+            </ChildContent>
+            <Helper>
+                <RadzenRequiredValidator Component="Nome" Popup=false Text="Il titolo è obbligatorio" />
+            </Helper>
+        </RadzenFormField>
+
+        <RadzenFieldset Text="Riepilogo" class="selezioneDomande mt-3">
+        @foreach (var g in groups)
+            {
+                <div class="m-2 p-2 pt-3">
+                    <RadzenRow class="bordoInferiore" Style="justify-content:space-between !important;">
+                        <RadzenColumn Size="11" Style="display:flex">
+                        
+                            <RadzenText TextStyle="TextStyle.DisplayH6" Style="margin-left:1rem;">
+                                <strong>@CategoryText(g)</strong></RadzenText>
+                        </RadzenColumn>
+                        <RadzenColumn Size="1" Style="display:flex;justify-content:end;">
+                            <RadzenButton Icon="@AccordionIcon(g)" Variant="Variant.Text" Click="@(()=>ShowQuestions(g))" />
+                        </RadzenColumn>
+                    </RadzenRow>
+                </div>
+                @if (g.ShowQuestion)
+                {
+                    <div style="margin-bottom:2rem;">
+                        <SortableList Id="sortable" GroupNumber="@g.Id" Items="@g.Questions" OnGroupUpdate="@OrderList"
+                            Context="item">
+                            <SortableItemTemplate>
+                                <div class="card shadow margineQuestionario p-2 pt-3 bordoDomanda">
+                                    <RadzenRow Style="flex-wrap:nowrap !important">
+                                        <RadzenText>@QuestionText(g, item.Text, item.Order)</RadzenText>
+                                    </RadzenRow>
+                                </div>
+                            </SortableItemTemplate>
+                        </SortableList>
+                    </div>
+                }
+            }
+
+        </RadzenFieldset>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <RadzenButton Icon="arrow_back" Text="Indietro" Click="@Back" />
+        </div>
+        <div class="col divForward">
+            <RadzenButton Click="@SaveTemplate" Icon="save" Text="Salva" class="buttonForward" IsBusy=@onSaving
+                BusyText="Salvataggio in corso" />
+        </div>
+    </div>
+</RadzenTemplateForm>
+}
+
+@code
+{
+    /// <summary>
+    /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
+    /// </summary>
+    private bool initialLoading;
+
+    private bool onSaving = false;
+
+    private List<IdCategoryAndQuestions> groups = [];
+
+    /// <summary>
+    /// il design degli elementi della form
+    /// </summary>
+    readonly Variant variant = Variant.Outlined;
+    ScreenComponent screenComponent;
+
+    string Title = "";
+
+    [Parameter]
+    required public TemplateModel CurrentTemplate { get; set; }
+
+    [Parameter]
+    public EventCallback OnBack { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        initialLoading = true;
+        await base.OnInitializedAsync();
+        LoadData();
+        //InitData();
+        initialLoading = false;
+    }
+
+    private void LoadData()
+    {
+        groups = [];
+
+        foreach (var category in CurrentTemplate.Categories)
+        {
+            //OrderElements(category.Questions.Cast<DocumentQuestionModel>());
+            groups.Add(new() { Id = category.Id, Text = category.Text, Order = category.Order, Questions = category.Questions });
+        }
+    }
+
+    private static string CategoryText(IdCategoryAndQuestions group)
+    {
+        return group.Order + ". " + group.Text;
+    }
+
+    private static string QuestionText(IdCategoryAndQuestions group, string questionText, int order)
+    {
+        return group.Order + "." + order + " " + questionText;
+    }
+
+    private void ShowQuestions(IdCategoryAndQuestions group)
+    {
+        group.ShowQuestion = !group.ShowQuestion;
+    }
+
+    private string AccordionIcon(IdCategoryAndQuestions group)
+    {
+        return group.ShowQuestion ? "remove" : "add";
+    }
+
+    private void OrderList((int oldIndex, int newIndex, int groupNumber) indici)
+    {
+        // spezzo la tupla
+        var (oldIndex, newIndex, groupNumber) = indici;
+
+        var items = groups.Where(x => x.Id == groupNumber).SingleOrDefault().Questions;
+        var itemToMove = items[oldIndex];
+        items.RemoveAt(oldIndex);
+
+        if (newIndex < items.Count)
+        {
+            items.Insert(newIndex, itemToMove);
+        }
+        else
+        {
+            items.Add(itemToMove);
+        }
+
+        //OrderElements(items);
+        StateHasChanged();
+    }
+
+
+
+    public async Task SaveTemplate()
+    {
+        onSaving = true;
+
+        CurrentTemplate.NameTemplate = Title;
+        CurrentTemplate.TitleTemplate = Title;
+
+        await TemplatesRepository.SaveTemplate(CurrentTemplate);
+
+        onSaving = false;
+
+        NavigationService.ChangePage(PageRouting.TemplateWizardPage);
+    }
+
+    public void Back()
+    {
+        OnBack.InvokeAsync();
+    }
+
+    class IdCategoryAndQuestions
+    {
+        public int Id { get; set; }
+
+        public string Text { get; set; } = "";
+
+        public int Order { get; set; }
+
+        public bool ShowQuestion = true;
+
+        public List<TemplateQuestionModel> Questions { get; set; } = [];
+    }
+}

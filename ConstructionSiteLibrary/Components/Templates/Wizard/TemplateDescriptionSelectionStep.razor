@@ -1,0 +1,91 @@
+﻿@using ConstructionSiteLibrary.Model.TemplateWizard
+@using ConstructionSiteLibrary.Repositories
+@using Shared.Templates
+
+@inject TemplatesRepository TemplatesRepository
+
+<ScreenComponent @ref="screenComponent" />
+@if (initialLoading)
+{
+    <Loading />
+}
+else
+{
+    <RadzenTemplateForm TItem="TemplateDescriptionModel" Data="@CurrentSelection" Submit="@Forward">
+    <div class="card shadow mb-3 divCard">
+        <RadzenText>Seleziona una descrizione</RadzenText>
+        <RadzenDropDown @bind-Value=@CurrentSelection Data=@TemplatesDescriptions TextProperty="Description" />
+    </div>
+    <div class="row">
+        <div class="col">
+            <RadzenButton Icon="arrow_back" Text="Indietro" Click="@Back" />
+        </div>
+        <div class="col divForward">
+            <RadzenButton ButtonType="ButtonType.Submit" Icon="arrow_forward" Text="Avanti" class="buttonForward" />
+        </div>
+    </div>
+</RadzenTemplateForm>
+
+}
+
+@code
+{
+    List<TemplateDescriptionModel> TemplatesDescriptions = [];
+
+    TemplateDescriptionModel? CurrentSelection;
+
+    [Parameter]
+    required public TemplateModel CurrentTemplate { get; set; }
+
+    [Parameter]
+    public EventCallback<TemplateStepArgs> OnForward { get; set; }
+        
+    [Parameter]
+    public EventCallback OnBack { get; set; }
+
+    /// <summary>
+    /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
+    /// </summary>
+    private bool initialLoading;
+
+    ScreenComponent screenComponent;
+
+    protected override async Task OnInitializedAsync()
+    {
+        initialLoading = true;
+        await base.OnInitializedAsync();
+        await LoadData();
+        initialLoading = false;
+    }
+
+    private async Task LoadData()
+    {
+        TemplatesDescriptions = await TemplatesRepository.GetTemplatesDescriptions();
+
+        if (CurrentTemplate.IdTemplate != 0 && CurrentTemplate.Description.Id != 0)
+        {
+            CurrentSelection = CurrentTemplate.Description;
+        }
+        else
+        {
+            CurrentSelection = TemplatesDescriptions.First();
+        }
+    }
+
+
+    public void Forward()
+    {
+        TemplateStepArgs args = new()
+            {
+                Object = CurrentSelection,
+                Step = TemplateStep.Description
+            };
+
+        OnForward.InvokeAsync(args);
+    }
+
+    public void Back()
+    {
+        OnBack.InvokeAsync();
+    }
+}
