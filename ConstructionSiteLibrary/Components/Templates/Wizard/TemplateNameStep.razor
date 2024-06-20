@@ -1,4 +1,5 @@
 ﻿@using Shared.Templates
+@using ConstructionSiteLibrary.Model
 
 @inject TemplatesRepository TemplatesRepository
 @inject NavigationService NavigationService
@@ -135,18 +136,16 @@ else
         return group.ShowQuestion ? "remove" : "add";
     }
 
-    private void OrderList((int oldIndex, int newIndex, int groupNumber) indici)
+    private void OrderList(ChangeObjectIndex indice)
     {
-        // spezzo la tupla
-        var (oldIndex, newIndex, groupNumber) = indici;
 
-        var items = groups.Where(x => x.Id == groupNumber).SingleOrDefault().Questions;
-        var itemToMove = items[oldIndex];
-        items.RemoveAt(oldIndex);
+        var items = groups.Where(x => x.Id == indice.GroupNumber).SingleOrDefault().Questions;
+        var itemToMove = items[indice.OldIndex];
+        items.RemoveAt(indice.OldIndex);
 
-        if (newIndex < items.Count)
+        if (indice.NewIndex < items.Count)
         {
-            items.Insert(newIndex, itemToMove);
+            items.Insert(indice.NewIndex, itemToMove);
         }
         else
         {

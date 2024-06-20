@@ -1,5 +1,6 @@
 ﻿@using Shared.Templates
 @using ConstructionSiteLibrary.Model.DocumentWizard
+@using ConstructionSiteLibrary.Model
 @inject TemplatesRepository TemplateRepository
 
 
@@ -60,7 +61,6 @@
                             </div>
                         }
                     }
-
                 </RadzenFieldset>
             </div>
             <div class="row">
@@ -117,7 +117,6 @@
             //OrderElements(category.Questions.Cast<DocumentQuestionModel>());
             groups.Add(new() { Id = category.Id, Text = category.Text, Order = category.Order, Questions = category.Questions });
         }
-
     }
 
     public async Task LoadData()
@@ -166,18 +165,16 @@
         return group.ShowQuestion ? "remove" : "add";
     }
 
-    private void OrderList((int oldIndex, int newIndex, int groupNumber) indici)
+    private void OrderList(ChangeObjectIndex indici)
     {
-        // spezzo la tupla
-        var (oldIndex, newIndex, groupNumber) = indici;
 
-        var items = groups.Where(x => x.Id == groupNumber).SingleOrDefault().Questions;
-        var itemToMove = items[oldIndex];
-        items.RemoveAt(oldIndex);
+        var items = groups.Where(x => x.Id == indici.GroupNumber).SingleOrDefault().Questions;
+        var itemToMove = items[indici.OldIndex];
+        items.RemoveAt(indici.OldIndex);
 
-        if (newIndex < items.Count)
+        if (indici.NewIndex < items.Count)
         {
-            items.Insert(newIndex, itemToMove);
+            items.Insert(indici.NewIndex, itemToMove);
         }
         else
         {

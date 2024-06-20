@@ -1,4 +1,5 @@
 ﻿using ConstructionSiteLibrary.Components.Utilities;
+using ConstructionSiteLibrary.Model;
 using ConstructionSiteLibrary.Model.TemplateWizard;
 using Microsoft.AspNetCore.Components;
 using Radzen;
@@ -289,18 +290,15 @@ public partial class TemplateQuestionsSelectionStep
         }
     }
 
-    private void OrderList((int oldIndex, int newIndex, int groupNumber) indici)
+    private void OrderList(ChangeObjectIndex indice)
     {
-        // spezzo la tupla
-        var (oldIndex, newIndex, groupNumber) = indici;
+        var items = groups.Where(x => x.Id == indice.GroupNumber).SingleOrDefault().Questions;
+        var itemToMove = items[indice.OldIndex];
+        items.RemoveAt(indice.OldIndex);
 
-        var items = groups.Where(x => x.Id == groupNumber).SingleOrDefault().Questions;
-        var itemToMove = items[oldIndex];
-        items.RemoveAt(oldIndex);
-
-        if (newIndex < items.Count)
+        if (indice.NewIndex < items.Count)
         {
-            items.Insert(newIndex, itemToMove);
+            items.Insert(indice.NewIndex, itemToMove);
         }
         else
         {

@@ -1,4 +1,5 @@
-﻿using ConstructionSiteLibrary.Repositories;
+﻿using ConstructionSiteLibrary.Model;
+using ConstructionSiteLibrary.Repositories;
 using Microsoft.AspNetCore.Components;
 using Shared.Defaults;
 using Shared.Templates;
@@ -16,18 +17,16 @@ namespace ConstructionSiteLibrary.Components.Categories
         private bool onSaving = false;
 
 
-        private void OrderList((int oldIndex, int newIndex) indici)
+        private void OrderList(ChangeObjectIndex indici)
         {
-            // spezzo la tupla
-            var (oldIndex, newIndex) = indici;
 
             var items = Categories;
-            var itemToMove = items[oldIndex];
-            items.RemoveAt(oldIndex);
+            var itemToMove = items[indici.OldIndex];
+            items.RemoveAt(indici.OldIndex);
 
-            if (newIndex < items.Count)
+            if (indici.NewIndex < items.Count)
             {
-                items.Insert(newIndex, itemToMove);
+                items.Insert(indici.NewIndex, itemToMove);
             }
             else
             {
