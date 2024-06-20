@@ -1,0 +1,44 @@
+.bordoInferiore, ::deep .bordoInferiore {
+    border-bottom: 1px solid !important;
+}
+
+.formFieldTitolo, ::deep .formFieldTitolo {
+    width: 100%;
+    padding: 0rem 1rem;
+}
+
+.margineQuestionario {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+
+.selezioneDomande, ::deep .selezioneDomande {
+    font-weight: 400;
+    margin: 0rem 1rem;
+}
+
+
+.bordoDomanda {
+    margin-left: 3rem !important;
+}
+
+@media(max-width: 768px) {
+
+    .bordoDomanda {
+        margin-left: 0.2rem !important;
+    }
+
+    .margineQuestionario {
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+        margin-left: 0rem;
+        margin-right: 0rem;
+    }
+
+    .selezioneDomande, ::deep .selezioneDomande {
+        font-weight: 400;
+        margin: 0rem 0.3rem;
+    }
+}

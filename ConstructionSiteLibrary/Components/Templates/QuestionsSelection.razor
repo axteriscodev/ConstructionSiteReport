@@ -27,7 +27,7 @@
                 </div>
                 @if (g.ShowQuestion)
                 {
-                    <div style="margin-bottom:2rem;">
+                    <div style="margin-bottom:1rem;">
                         <SortableList Id="sortable" GroupNumber="@g.Id" Items="@g.Questions" OnGroupUpdate="@OrderList"
                             Context="item">
                             <SortableItemTemplate>

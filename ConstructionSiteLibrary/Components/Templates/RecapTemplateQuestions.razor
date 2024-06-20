@@ -18,9 +18,9 @@
         {
             @foreach (var q in g.Questions)
             {
-                <div style="margin-bottom:2rem;">
+                <div style="margin-bottom:1rem;">
 
-                    <div class="card shadow margineQuestionario p-2 pt-3 bordoDomanda">
+                    <div class="margineQuestionario p-2 pt-3 bordoDomanda">
                         <RadzenRow Style="flex-wrap:nowrap !important">
                             <RadzenText>@QuestionText(g, q.Text, q.Order)</RadzenText>
                         </RadzenRow>

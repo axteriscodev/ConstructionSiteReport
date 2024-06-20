@@ -17,6 +17,12 @@ public partial class RecapTemplateQuestions
     {
         onloading = true;
         await base.OnInitializedAsync();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        onloading = true;
+        await base.OnParametersSetAsync();
         LoadData();
         onloading = false;
     }
@@ -29,7 +35,7 @@ public partial class RecapTemplateQuestions
         {
             foreach (var category in SelectedTemplate!.Categories)
             {
-                //OrderElements(category.Questions.Cast<DocumentQuestionModel>());
+                OrderElements(category.Questions);
                 groups.Add(new() { Id = category.Id, Text = category.Text, Order = category.Order, Questions = category.Questions });
             }
         }
@@ -38,16 +44,13 @@ public partial class RecapTemplateQuestions
     }
 
 
-    // public void OnTemplateSelected()
-    // {
-    //     groups = [];
-
-    //     foreach (var category in SelectedTemplate!.Categories)
-    //     {
-    //         //OrderElements(category.Questions.Cast<DocumentQuestionModel>());
-    //         groups.Add(new() { Id = category.Id, Text = category.Text, Order = category.Order, Questions = category.Questions });
-    //     }
-    // }
+    private static void OrderElements(List<TemplateQuestionModel> lista)
+    {
+        for (int i = 0; i < lista.Count; i++)
+        {
+            lista[i].Order = i + 1;
+        }
+    }
 
     private static string CategoryText(CategoryQuestionsGroup group)
     {

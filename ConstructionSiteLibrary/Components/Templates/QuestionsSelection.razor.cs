@@ -103,8 +103,6 @@ public partial class QuestionsSelection
                         templateSelectedId.Add(question.Id);
                     }
                 }
-
-
             }
             else
             {
@@ -125,7 +123,7 @@ public partial class QuestionsSelection
                 groupState = true;
             }
 
-            //OrderElements(category.Questions.Cast<DocumentQuestionModel>());
+            OrderElements(category.Questions);
             groups.Add(new() { Id = category.Id, Order = category.Order, Text = category.Text, State = groupState, Questions = category.Questions, SelectedQuestionIds = templateSelectedId });
 
         }
@@ -154,6 +152,7 @@ public partial class QuestionsSelection
                 {
                     Id = group.Id,
                     Text = group.Text,
+                    Order = group.Order,
                 };
 
                 foreach (var selectedQuestionId in group.SelectedQuestionIds)
@@ -248,18 +247,16 @@ public partial class QuestionsSelection
     #region Ordinamento domande 
 
 
-    private void OrderCategories((int oldIndex, int newIndex) indici)
+    private void OrderCategories(ChangeObjectIndex indici)
     {
-        // spezzo la tupla
-        var (oldIndex, newIndex) = indici;
 
         var items = groups;
-        var itemToMove = items[oldIndex];
-        items.RemoveAt(oldIndex);
+        var itemToMove = items[indici.OldIndex];
+        items.RemoveAt(indici.OldIndex);
 
-        if (newIndex < items.Count)
+        if (indici.NewIndex < items.Count)
         {
-            items.Insert(newIndex, itemToMove);
+            items.Insert(indici.NewIndex, itemToMove);
         }
         else
         {
@@ -287,15 +284,15 @@ public partial class QuestionsSelection
             items.Add(itemToMove);
         }
 
-        //OrderElements(items);
+        OrderElements(items);
         StateHasChanged();
     }
 
-    private static void OrderElements(List<DocumentQuestionModel> lista)
+    private static void OrderElements(List<TemplateQuestionModel> lista)
     {
         for (int i = 0; i < lista.Count; i++)
         {
-            //lista[i].Order = i + 1;
+            lista[i].Order = i + 1;
         }
     }
 
