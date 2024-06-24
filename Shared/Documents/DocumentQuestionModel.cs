@@ -11,6 +11,9 @@ public class DocumentQuestionModel : IQuestion
     [JsonPropertyName("text")]
     public string Text { get; set; } = "";
 
+    [JsonPropertyName("order")]
+    public int Order { get; set; }  
+
     [JsonPropertyName("choices")]
     public List<DocumentChoiceModel> Choices { get; set; } = [];
 

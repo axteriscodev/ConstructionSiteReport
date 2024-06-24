@@ -56,11 +56,12 @@ public class DocumentDbHelper
                                                        && qc.IdTemplate == tc.Id
                                                        && q.Id == qc.IdQuestion
                                                        && q.IdCategory == c.Id
+                                                       orderby qc.Order
                                                        select new DocumentQuestionModel()
                                                        {
                                                            Id = qc.IdQuestion,
                                                            Text = q.Text,
-                                                           //Order = qc.Order,
+                                                           Order = qc.Order,
                                                            Note = qc.Note ?? "",
                                                            CurrentChoices = (
                                                                             from qa in db.QuestionAnswereds
