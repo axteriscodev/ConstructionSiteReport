@@ -12,27 +12,29 @@
 else
 {
     <RadzenTemplateForm TItem="FormData" Data="@Data" Submit="@Forward">
-    <div class="card shadow mb-3 divCard">
-        <RadzenText>Clicca "Successivo" per creare un nuovo template o selezionane uno da usare come base</RadzenText>
-        <RadzenDropDown @bind-Value=@Data.SelectedTemplate Data=@Templates TextProperty="TitleTemplate" AllowClear=true
-            Placeholder="-" />
-    </div>
-
-
-    @if(Data.SelectedTemplate is not null)
-    {
-        <RecapTemplateQuestions SelectedTemplate="@Data.SelectedTemplate" />
-    }
-
-    <div class="row">
-        <div class="col">
+        <div class="card shadow mb-3 divCard">
+            <RadzenText>Clicca "Successivo" per creare un nuovo template o selezionane uno da usare come base</RadzenText>
+            <RadzenDropDown @bind-Value=@Data.SelectedTemplate Data=@Templates TextProperty="TitleTemplate" AllowClear=true
+                            Placeholder="-" />
         </div>
-        <div class="col divForward">
-            <RadzenButton ButtonType="ButtonType.Submit" Icon="arrow_forward" Text="Avanti" class="buttonForward" />
-        </div>
-    </div>
 
-</RadzenTemplateForm>
+
+        @if (Data.SelectedTemplate is not null)
+        {
+            <div class="mb-3">
+                <RecapTemplateQuestions SelectedTemplate="@Data.SelectedTemplate" />
+            </div>
+        }
+
+        <div class="row">
+            <div class="col">
+            </div>
+            <div class="col divForward">
+                <RadzenButton ButtonType="ButtonType.Submit" Icon="arrow_forward" Text="Avanti" class="buttonForward" />
+            </div>
+        </div>
+
+    </RadzenTemplateForm>
 }
 
 @code

@@ -20,7 +20,7 @@ else
                 <RadzenTextBox Name="Nome" @bind-Value="@Title" />
             </ChildContent>
             <Helper>
-                <RadzenRequiredValidator Component="Nome" Popup=false Text="Il titolo è obbligatorio" />
+                <RadzenRequiredValidator @ref="@validator" Component="Nome" Popup=false Text="Il titolo è obbligatorio"  />
             </Helper>
         </RadzenFormField>
 
@@ -35,7 +35,7 @@ else
         </div>
         <div class="col divForward">
             <RadzenButton Click="@SaveTemplate" Icon="save" Text="Salva" class="buttonForward" IsBusy=@onSaving
-                BusyText="Salvataggio in corso" />
+                              BusyText="Salva" />
         </div>
     </div>
 </RadzenTemplateForm>
@@ -56,10 +56,11 @@ else
     /// il design degli elementi della form
     /// </summary>
     readonly Variant variant = Variant.Outlined;
-    
-    ScreenComponent screenComponent;
 
-    string Title = "";
+    ScreenComponent screenComponent;
+    RadzenRequiredValidator validator;
+
+    string? Title;
 
     [Parameter]
     required public TemplateModel CurrentTemplate { get; set; }
@@ -76,19 +77,26 @@ else
         initialLoading = false;
     }
 
-    
+
     public async Task SaveTemplate()
     {
-        onSaving = true;
+        if (Title is not null && !string.IsNullOrEmpty(Title.Trim()))
+        {
+            onSaving = true;
 
-        CurrentTemplate.NameTemplate = Title;
-        CurrentTemplate.TitleTemplate = Title;
+            CurrentTemplate.NameTemplate = Title;
+            CurrentTemplate.TitleTemplate = Title;
 
-        await TemplatesRepository.SaveTemplate(CurrentTemplate);
+            await TemplatesRepository.SaveTemplate(CurrentTemplate);
 
-        onSaving = false;
+            onSaving = false;
 
-        NavigationService.ChangePage(PageRouting.TemplatePage);
+            NavigationService.ChangePage(PageRouting.TemplatePage);
+        }
+        else
+        {
+            Title = null;
+        }
     }
 
     public void Back()
