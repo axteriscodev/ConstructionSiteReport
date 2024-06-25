@@ -43,6 +43,8 @@ namespace ConstructionSiteLibrary.Components.Documents.Wizard
                         _document.Companies = (args.Object as List<CompanyModel>)!;
                     }
                     break;
+                case DocumentStep.Save:
+                    break;
                 default:
                     break;
             }

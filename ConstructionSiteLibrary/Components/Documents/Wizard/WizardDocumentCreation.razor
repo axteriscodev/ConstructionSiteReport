@@ -15,7 +15,7 @@
                 <CompaniesStep SelectedCompanies="@_document.Companies" OnBack="@Back" OnForward="@(args=>Forward(args))" />
             </RadzenStepsItem>
             <RadzenStepsItem Text="Step4">
-                <p>Step4</p>
+                <SummaryStep Document= "@_document" SelectedTemplate="@_selectedTemplate" OnBack="@Back"/>
             </RadzenStepsItem>
         </Steps>
     </RadzenSteps>
