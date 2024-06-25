@@ -11,7 +11,7 @@ namespace ServerHost.Controllers;
 public class DocumentController : DefaultController
 {
     [LogAction]
-    [Route(ApiRouting.SiteDocumentsList)]
+    [Route(ApiRouting.DocumentsList)]
     [HttpPost()]
     public AXT_WebResponse DocumentsList([FromBody]int idDocument)
     {

@@ -1,6 +1,6 @@
-﻿
+﻿@inject NavigationService Navigation
 
 <div class="card shadow documentCard" onclick="@(()=>OnDocumentClick())">
     <RadzenIcon Icon="description" IconStyle="IconStyle.Primary" class="documentIcon" />
-    <RadzenText Text="Nomedelfilechedeveesserelungoetuttoattaccato" TextStyle="TextStyle.Subtitle1" class="documentTitle" />
+    <RadzenText Text="@Document.Title" TextStyle="TextStyle.Subtitle1" class="documentTitle" />
 </div>

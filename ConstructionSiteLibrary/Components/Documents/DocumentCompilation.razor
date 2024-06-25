@@ -17,9 +17,9 @@ else
     <h2>@Param</h2>
 
     <div class="marginComponent marginDivComponent">
-        <div class="pb-3 pt-3">
+        @* <div class="pb-3 pt-3">
             Seleziona questionario: <RadzenDropDown @bind-Value=@CurrentSelection Data=@DocumentsList Change="@(() => OnDocumentSelected())" Style="width: 100%; max-width: 100px;" Name="DropDownDocumentValue" />
-        </div>
+        </div> *@
         <div class="shadow rounded documento">
             <RadzenRow class="titoloDocumento">
                 <RadzenText TextStyle="TextStyle.DisplayH4"><strong>@documentModel.Title</strong></RadzenText>
@@ -42,10 +42,10 @@ else
                     {
                         @foreach (var question in visual.Category.Questions)
                         {
-                            @* <div class="margineDomande bordoDomanda">
+                            <div class="margineDomande bordoDomanda">
                                 <RadzenText>@QuestionText(visual.Category, question.Text, question.Order)</RadzenText>
-                                <RadzenDropDown @bind-Value=@question.CurrentChoice Data=@question.Choices TextProperty="Value" Style="width: 100%; max-width: 400px;" Name="DropDownBindValue" />
-                            </div> *@
+                                @* <RadzenDropDown @bind-Value=@question.CurrentChoice Data=@question.Choices TextProperty="Value" Style="width: 100%; max-width: 400px;" Name="DropDownBindValue" /> *@
+                            </div>
                         }
                     }
                 }
