@@ -86,9 +86,9 @@ public partial class DocumentCompilation
         }
     }
 
-    private void OnChange(object value, int index, List<DocumentChoiceModel?> list)
+    private void OnChange( List<DocumentChoiceModel?> list)
     {
-        Console.WriteLine($"OnChange! {index} | {list.Count} | {value}");
+        Console.WriteLine($"OnChange!");
     }
 
     private async Task SaveForm()

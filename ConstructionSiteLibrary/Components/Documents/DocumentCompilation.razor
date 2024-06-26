@@ -45,9 +45,9 @@ else
                         {
                             <div class="margineDomande bordoDomanda">
                                 <RadzenText>@QuestionText(visual.Category, question.Text, question.Order)</RadzenText>
-                                @for(int i = 0; i < question.CurrentChoices.Count; i++)
+                                @foreach(var answer in question.CurrentChoices)
                                 {
-                                    <RadzenDropDown @bind-Value="@question.CurrentChoices[i].Id" Data=@question.Choices TValue="int" TextProperty="Value" ValueProperty="Id" Style="width: 100%; max-width: 400px;" Name="DropDownBindValue" />
+                                    <RadzenDropDown Change="@(() => OnChange(question.CurrentChoices))" @bind-Value="question.CurrentChoices[question.CurrentChoices.IndexOf(answer)].Id" Data=@question.Choices TValue="int" TextProperty="Value" ValueProperty="Id" Style="width: 100%; max-width: 400px;" Name="DropDownBindValue" />
                                 }
                                 
                             </div>
