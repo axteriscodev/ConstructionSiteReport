@@ -81,7 +81,7 @@ namespace ConstructionSiteLibrary.Components.Documents
 
         private void CreaNuovo()
         {
-            NavigationService.ChangePage(PageRouting.DocumentCreationPage);
+            NavigationService.ChangePage(PageRouting.DocumentCreationPage + SiteId);
         }
 
         private async Task OnSettingsClick()

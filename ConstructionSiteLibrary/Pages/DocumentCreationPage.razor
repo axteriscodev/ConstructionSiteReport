@@ -1,7 +1,13 @@
 ﻿@using ConstructionSiteLibrary.Components.Documents.Wizard
-@attribute [Route(PageRouting.DocumentCreationPage)]
+@attribute [Route(PageRouting.DocumentCreationPage + "{SiteId:int}")]
 
 
 <div>
-    <WizardDocumentCreation/>
+    <WizardDocumentCreation SiteId="@SiteId" />
 </div>
+
+@code
+{
+    [Parameter]
+    public int SiteId { get; set; }
+}

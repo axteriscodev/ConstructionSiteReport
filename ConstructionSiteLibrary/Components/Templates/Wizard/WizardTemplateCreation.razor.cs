@@ -1,5 +1,6 @@
 ﻿using ConstructionSiteLibrary.Components.Utilities;
 using ConstructionSiteLibrary.Model.TemplateWizard;
+using Microsoft.AspNetCore.Components;
 using Radzen.Blazor;
 using Shared.Templates;
 
@@ -21,6 +22,9 @@ public partial class WizardTemplateCreation
     ScreenComponent screenComponent;
 
     private RadzenSteps? _stepsComponent;
+
+    [Parameter]
+    public int SiteId { get; set; }
 
 
     private void Back()
