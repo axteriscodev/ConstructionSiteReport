@@ -33,7 +33,7 @@
                 <RadzenButton Icon="arrow_back" Text="Indietro" Click="@Back" />
             </div>
             <div class="col divForward">
-                <RadzenButton Click="@SaveDocument" Icon="arrow_forward" Text="Avanti" class="buttonForward" />
+                <RadzenButton Click="@SaveDocument" Icon="save" Text="Salva" IsBusy="@onSaving" class="buttonForward"  />
             </div>
         </div>
     }
