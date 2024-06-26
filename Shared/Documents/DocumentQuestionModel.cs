@@ -18,7 +18,7 @@ public class DocumentQuestionModel : IQuestion
     public List<DocumentChoiceModel> Choices { get; set; } = [];
 
     [JsonPropertyName("currentChoice")]
-    public List<DocumentChoiceModel> CurrentChoices { get; set; } = [];
+    public List<DocumentChoiceModel?> CurrentChoices { get; set; } = [];
 
     [JsonPropertyName("attachments")]
     public List<AttachmentModel> Attachments { get; set; } = [];

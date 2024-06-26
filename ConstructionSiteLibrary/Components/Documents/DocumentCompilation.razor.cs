@@ -78,7 +78,17 @@ public partial class DocumentCompilation
         foreach (var cat in documentModel.Categories)
         {
             visualCategories.Add(new() { Category = cat });
+
+            foreach(var question in cat.Questions)
+            {
+                InitCurrentChoicesList(question.CurrentChoices);
+            }
         }
+    }
+
+    private void OnChange(object value, int index, List<DocumentChoiceModel?> list)
+    {
+        Console.WriteLine($"OnChange! {index} | {list.Count} | {value}");
     }
 
     private async Task SaveForm()
@@ -138,6 +148,14 @@ public partial class DocumentCompilation
     private static string AccordionIcon(VisualCategory cat)
     {
         return cat.ShowQuestion ? "remove" : "add";
+    }
+
+    private void InitCurrentChoicesList(List<DocumentChoiceModel?> list)
+    {
+        if(list.Count == 0) 
+        {
+            list.Add(new());
+        }
     }
 
     #endregion
