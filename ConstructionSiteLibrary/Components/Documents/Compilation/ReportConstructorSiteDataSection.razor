@@ -20,7 +20,22 @@ else
         @* TODO condizioni meteo*@
         
         <RadzenText><strong>DATI, CANTIERE, FIGURE RESPONSABILI, PROGETTISTI, RIUNIONI</strong></RadzenText>
-
+        <RadzenRow>
+            <RadzenText>Committente: <strong>@Document.Client.Name</strong></RadzenText>
+            <RadzenText>Lavori di: <strong>@Document.ConstructorSite.JobDescription</strong></RadzenText>
+        </RadzenRow>
+        <RadzenRow>
+            <RadzenText>Indirizzo cantiere: @Document.ConstructorSite.Address</RadzenText>
+            <RadzenText>Inizio lavori: @Document.ConstructorSite.StartDate</RadzenText>
+        </RadzenRow>
+        <RadzenRow>
+            <RadzenRow>Notifica preliminare inizio cantiere del: @Document.ConstructorSite.PreliminaryNotificationStartDate</RadzenRow>
+            <RadzenRow>Id. SICO: @Document.ConstructorSite.IdSico</RadzenRow>
+        </RadzenRow>
+         <RadzenRow>
+            <RadzenRow>Notifica preliminare in corso: @Document.ConstructorSite.PreliminaryNotificationInProgress</RadzenRow>
+            <RadzenRow>Id. SICO: @Document.ConstructorSite.IdSicoInProgress </RadzenRow>
+        </RadzenRow>
 
         </div>
     </div>
