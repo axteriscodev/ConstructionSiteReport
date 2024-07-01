@@ -1,0 +1,58 @@
+﻿@using Shared.Documents;
+
+@if (onLoading)
+{
+    <Loading />
+}
+else
+{
+    <div class="card shadow mb-8 divCard">
+    <div class="vstack p-8">
+        <RadzenText TextAlign="TextAlign.Center"><strong>IMPRESE PRESENTI: FIGURE RESPONSABILI, PERSONALE, FORMALE,
+                ATTREZZATURA</strong></RadzenText>
+        @foreach (var company in Companies)
+            {
+                <RadzenRow>
+                    <RadzenText>Impresa Esecutrice</RadzenText>
+                    <RadzenCheckBox Value="@company.Present" Name="Presente"/>
+                    <RadzenLabel Text="Presente" Component="Presente" />
+                </RadzenRow>
+                <RadzenRow>
+                    <RadzenText>Ragione Sociale: <strong>@company.CompanyName</strong></RadzenText>
+                    <RadzenText>Sede legale: @company.Address</RadzenText>
+                </RadzenRow>
+                <RadzenRow>
+                    <RadzenText>Lavori previsti: @company.JobsDescriptions</RadzenText>
+                    <RadzenText>P. Iva: @company.VatCode</RadzenText>
+                </RadzenRow>
+
+            }
+        </div>
+    </div>
+}
+
+
+@code {
+
+    [Parameter]
+    public List<CompanyModel> Companies { get; set; } = [];
+
+    private bool onLoading = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        onLoading = true;
+        await base.OnInitializedAsync();
+        await LoadData();
+        onLoading = false;
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+    }
+
+    private async Task LoadData()
+    {
+    }
+}
