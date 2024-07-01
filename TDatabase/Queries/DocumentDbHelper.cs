@@ -114,9 +114,9 @@ public class DocumentDbHelper
                                            select new ConstructorSiteModel()
                                            {
                                                Id = cs.Id,
-                                               JobDescription = cs.JobDescription??"",
+                                               JobDescription = cs.JobDescription ?? "",
                                                StartDate = cs.StartDate ?? DateTime.Now,
-                                               Address = cs.Address ??"",
+                                               Address = cs.Address ?? "",
                                                Client = (from cl in db.Clients
                                                          where cl.Id == cs.IdClient
                                                          select new ClientModel()
@@ -124,7 +124,7 @@ public class DocumentDbHelper
                                                              Id = cl.Id,
                                                              Name = cl.Name
                                                          }).SingleOrDefault() ?? new(),
-                                           }).SingleOrDefault()?? new(),
+                                           }).SingleOrDefault() ?? new(),
                         Client = (from cl in db.Clients
                                   where cl.Id == d.IdClient
                                   select new ClientModel()
@@ -177,7 +177,7 @@ public class DocumentDbHelper
     public static List<DocumentModel> SelectFromSite(DB db, int siteId)
     {
         var docs = (from d in db.Documents
-                    where d.IdConstructorSite == siteId    
+                    where d.IdConstructorSite == siteId
                     join cs in db.ConstructorSites on d.IdConstructorSite equals cs.Id
                     select new DocumentModel()
                     {
@@ -406,6 +406,7 @@ public class DocumentDbHelper
         var meteoConditions = db.MeteoConditions.AsQueryable();
 
         var meteoConditionsList = (from m in meteoConditions
+                                   orderby m.Id
                                    select new MeteoConditionModel()
                                    {
                                        Id = m.Id,
