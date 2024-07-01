@@ -1,0 +1,78 @@
+﻿@using Shared.Documents;
+@using Radzen.Blazor;
+
+@inject DocumentsRepository DocumentsRepository;
+
+@if (onLoading)
+{
+    <Loading />
+}
+else
+{
+    <div class="card shadow mb-8 divCard">
+    <div class="vstack p-8">
+        <RadzenText TextAlign="TextAlign.Center"><strong>VERBALE DI COORDINAMENTO IN CANTIERE DEL C.S.E./ AGGIORNAMENTO
+                P.S.C.</strong> </RadzenText>
+        <RadzenText>@Document.Description</RadzenText>
+        <RadzenRow Gap="8px">
+            <RadzenText>Il C.S.E.: <strong>@Document.CSE</strong></RadzenText>
+            <RadzenText>Data sopralluogo <strong>@Document.CompilationDate</strong></RadzenText>
+        </RadzenRow>
+        <RadzenRow>
+            <RadzenText>Condizioni meteo:</RadzenText>
+            <RadzenRadioButtonList Data="@meteoConditions" TValue="MeteoConditionModel" Value="@Document.MeteoCondition"
+                TextProperty="Description" />
+        </RadzenRow>
+
+        <RadzenText TextAlign="TextAlign.Center"><strong>DATI, CANTIERE, FIGURE RESPONSABILI, PROGETTISTI,
+                RIUNIONI</strong></RadzenText>
+        <RadzenRow>
+            <RadzenText>Committente: <strong>@Document.Client?.Name</strong></RadzenText>
+            <RadzenText>Lavori di: <strong>@Document.ConstructorSite.JobDescription</strong></RadzenText>
+        </RadzenRow>
+        <RadzenRow>
+            <RadzenText>Indirizzo cantiere: @Document.ConstructorSite.Address</RadzenText>
+            <RadzenText>Inizio lavori: @Document.ConstructorSite.StartDate</RadzenText>
+        </RadzenRow>
+        <RadzenRow>
+            <RadzenRow>Notifica preliminare inizio cantiere del:
+                @Document.ConstructorSite.PreliminaryNotificationStartDate</RadzenRow>
+            <RadzenRow>Id. SICO: @Document.ConstructorSite.IdSico</RadzenRow>
+        </RadzenRow>
+        <RadzenRow>
+            <RadzenRow>Notifica preliminare in corso: @Document.ConstructorSite.PreliminaryNotificationInProgress
+            </RadzenRow>
+            <RadzenRow>Id. SICO: @Document.ConstructorSite.IdSicoInProgress </RadzenRow>
+        </RadzenRow>
+
+    </div>
+</div>
+}
+
+@code {
+
+    [Parameter]
+    public DocumentModel Document { get; set; } = new();
+
+    private List<MeteoConditionModel> meteoConditions = [];
+
+    private bool onLoading = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        onLoading = true;
+        await base.OnInitializedAsync();
+        await LoadData();
+        onLoading = false;
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+    }
+
+    private async Task LoadData()
+    {
+        meteoConditions = await DocumentsRepository.GetMeteoConditions();
+    }
+}

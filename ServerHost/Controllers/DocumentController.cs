@@ -130,4 +130,28 @@ public class DocumentController : DefaultController
         return response;
     }
 
+    [LogAction]
+    [Route(ApiRouting.MeteoConditionsList)]
+    [HttpPost]
+    public AXT_WebResponse MeteoConditionsList()
+    {
+        var response = new AXT_WebResponse();
+        var stopwatch = StartTime();
+        ConfigureLog("" , 0);
+
+        try
+        {
+            var db = GetDbConnection();
+            var q = DocumentDbHelper.SelectMeteo(db);
+            response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), q);
+        }
+        catch(Exception ex)
+        {
+            response = ExceptionWebResponse(ex, "");
+        }
+
+        StopTime(stopwatch);
+        return response;
+    }
+
 }
