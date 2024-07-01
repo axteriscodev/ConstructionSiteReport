@@ -1,0 +1,43 @@
+﻿@using Shared.Documents
+
+@inject DocumentsRepository DocumentsRepository
+
+
+@if (onLoading)
+{
+    <Loading />
+}
+else
+{
+    
+}
+
+
+
+@code {
+
+
+    [Parameter]
+    public int DocumentId { get; set; }
+
+    private DocumentModel document = new();
+    private bool onLoading = false;
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        onLoading = true;
+        await base.OnInitializedAsync();
+        await LoadData();
+        onLoading = false;
+    }
+
+
+    private async Task LoadData()
+    {
+        document = await DocumentsRepository.GetDocumentById(DocumentId);
+    }
+
+
+}

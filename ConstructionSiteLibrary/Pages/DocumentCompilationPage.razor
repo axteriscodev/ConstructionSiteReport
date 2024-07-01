@@ -1,10 +1,10 @@
-﻿@using ConstructionSiteLibrary.Components.Documents;
+﻿@using ConstructionSiteLibrary.Components.Documents.Compilation;
 
 @attribute [Route(PageRouting.DocumentCompilationPage + "{DocumentId:int}")]
 
 <h3>Compilazione Documenti</h3>
 
-<DocumentCompilation CurrentSelection=@DocumentId/>
+<DocumentCompilation DocumentId="@DocumentId"/>
 
 @code
 {

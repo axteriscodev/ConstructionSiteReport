@@ -1,8 +1,9 @@
 ﻿@using ConstructionSiteLibrary.Repositories
 @using Shared;
+@using Shared.Documents;
 @using ConstructionSiteLibrary.Interfaces
-@inject ICameraService CameraService
 
+@inject ICameraService CameraService
 @inject DocumentsRepository DocumentsRepository
 @inject DialogService DialogService
 
@@ -44,7 +45,11 @@ else
                         {
                             <div class="margineDomande bordoDomanda">
                                 <RadzenText>@QuestionText(visual.Category, question.Text, question.Order)</RadzenText>
-                                @* <RadzenDropDown @bind-Value=@question.CurrentChoice Data=@question.Choices TextProperty="Value" Style="width: 100%; max-width: 400px;" Name="DropDownBindValue" /> *@
+                                @foreach(var answer in question.CurrentChoices)
+                                {
+                                    <RadzenDropDown Change="@(() => OnChange(question.CurrentChoices))" @bind-Value="question.CurrentChoices[question.CurrentChoices.IndexOf(answer)].Id" Data=@question.Choices TValue="int" TextProperty="Value" ValueProperty="Id" Style="width: 100%; max-width: 400px;" Name="DropDownBindValue" />
+                                }
+                                
                             </div>
                         }
                     }
