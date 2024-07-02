@@ -37,11 +37,11 @@
 @code {
 
     [Parameter]
-    public EventCallback<ChoiceReportedCompanies> OnCompaniesSelected { get; set; }
+    public EventCallback OnCompaniesSelected { get; set; }
     [Parameter]
     public List<CompanyModel> Companies { get; set; } = [];
     [Parameter]
-    public ChoiceReportedCompanies ChoiceReportedCompanies { get; set; } = new();
+    public DocumentChoiceModel Choice { get; set; } = new();
 
 
     private List<SelectebleCompany> selectebleCompanies { get; set; } = [];
@@ -57,7 +57,7 @@
     {
         foreach (var comp in Companies)
         {
-            var selected = ChoiceReportedCompanies.ReportedCompanyIds.Where(x => x == comp.Id).Any();
+            var selected = Choice.ReportedCompanyIds.Where(x => x == comp.Id).Any();
             selectebleCompanies.Add(new() { Selected = selected, Company = comp });
         }
     }
@@ -67,17 +67,17 @@
         company.Selected = selected;
         if (selected)
         {
-            ChoiceReportedCompanies.ReportedCompanyIds.Add(company.Company.Id);
+            Choice.ReportedCompanyIds.Add(company.Company.Id);
         }
         else
         {
-            ChoiceReportedCompanies.ReportedCompanyIds.Remove(company.Company.Id);
+            Choice.ReportedCompanyIds.Remove(company.Company.Id);
         }
     }
 
     private void Save()
     {
-        OnCompaniesSelected.InvokeAsync(ChoiceReportedCompanies);
+        OnCompaniesSelected.InvokeAsync();
     }
 
     private class SelectebleCompany

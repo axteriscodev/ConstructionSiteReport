@@ -33,7 +33,7 @@
                         <div class="hstack">
                             <div>
                                 <RadzenDropDown Value="@answer" Data=@question.Choices TValue="DocumentChoiceModel" TextProperty="Value" class="selectChoice"
-                                                Change="@(args => SelectedAnswer(args, question))" />
+                                                Change="@(args => SelectedAnswer(args, question, question.CurrentChoices.IndexOf(answer)))" />
                             </div>
                             @if (ShowDeleteChoiceButton(answer, question))
                             {
@@ -51,7 +51,7 @@
                             }
                         </div>
                         <div>
-                            <RadzenText TextStyle="TextStyle.Body1" onclick="@{()=>OpenCompanyListDialog(answer,question)}">@ReportedCompany(answer)</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Body1" onclick="@{()=>OpenCompanyListDialog(answer)}">@ReportedCompany(answer)</RadzenText>
                         </div>
 
                     }
@@ -104,7 +104,7 @@
 
     #region GestioneRisposte
 
-    private static void InitCurrentChoicesList(DocumentQuestionModel question)
+    private void InitCurrentChoicesList(DocumentQuestionModel question)
     {
         if (question.CurrentChoices.Count == 0)
         {
@@ -112,15 +112,16 @@
         }
     }
 
-    private static void AddAnswer(DocumentQuestionModel question)
+    private void AddAnswer(DocumentQuestionModel question)
     {
         var index = question.CurrentChoices.Count;
         question.CurrentChoices.Add(new(){ChoiceIndex = index});
     }
 
-    private static void RemoveAnswer(DocumentQuestionModel question, DocumentChoiceModel choice)
+    private void RemoveAnswer(DocumentQuestionModel question, DocumentChoiceModel choice)
     {
         question.CurrentChoices.Remove(choice);
+        StateHasChanged();
     }
 
 
@@ -143,24 +144,24 @@
         return message;
     }
 
-    private async Task SelectedAnswer(object args, DocumentQuestionModel question)
+    private async Task SelectedAnswer(object args, DocumentQuestionModel question, int index)
     {
-        var choice = args as DocumentChoiceModel;
-        if (choice is not null)
+        var cTemp = args as DocumentChoiceModel;
+        if (cTemp is not null)
         {
-            question.CurrentChoices[choice.ChoiceIndex] = choice;
-            RemoveReportedCompany(choice, question);
-            if (choice.Reportable)
+            cTemp.ChoiceIndex = index;
+            var answer = cTemp.Clone();
+            question.CurrentChoices[index] = answer;
+
+            if (answer.Reportable)
             {
-                await OpenCompanyListDialog(choice, question);
+                await OpenCompanyListDialog(answer);
+            }
+            else
+            {
+                answer.ReportedCompanyIds = [];
             }
         }
-    }
-
-    private void RemoveReportedCompany(DocumentChoiceModel choice, DocumentQuestionModel question)
-    {
-        choice.ReportedCompanyIds = [];
-        question.CurrentChoices[choice.ChoiceIndex].ReportedCompanyIds = [];
     }
 
     #endregion
@@ -181,22 +182,16 @@
         var param = new Dictionary<string, object>
             {
                 //tra i parametri che invio al dialog creo un EventCallback da passare al componente
-                { "OnQuestionNoteChanged", EventCallback.Factory.Create<DocumentQuestionModel>(this, QuestionNotesChanged) },
+                { "OnQuestionNoteChanged", EventCallback.Factory.Create(this, QuestionNotesChanged) },
                 { "Question", question},
 
             };
         await DialogService.OpenAsync<FormQuestionNotes>("Scrivi note", parameters: param, options: newOptions);
     }
 
-    private async Task OpenCompanyListDialog(DocumentChoiceModel choice, DocumentQuestionModel question)
+    private async Task OpenCompanyListDialog(DocumentChoiceModel choice)
     {
         var width = screenComponent.GetScreenSize();
-        ChoiceReportedCompanies choiceReportedCompanies = new()
-            {
-                ReportedCompanyIds = choice.ReportedCompanyIds,
-                QuestionId = question.Id,
-                ChoiceNumber = choice.ChoiceIndex
-            };
 
         // creo uno style aggiuntivo da inviare al componente caricato con il popup come options
         var additionalStyle = $"min-height:fit-content;height:fit-content;width:{width}px;max-width:600px";
@@ -208,8 +203,8 @@
         var param = new Dictionary<string, object>
             {
                 //tra i parametri che invio al dialog creo un EventCallback da passare al componente
-                { "OnCompaniesSelected", EventCallback.Factory.Create<ChoiceReportedCompanies>(this, SelectedCompanies) },
-                {"ChoiceReportedCompanies", choiceReportedCompanies},
+                { "OnCompaniesSelected", EventCallback.Factory.Create(this, SelectedCompanies) },
+                {"Choice", choice},
                 { "Companies", Companies},
 
             };
@@ -217,37 +212,14 @@
     }
 
 
-    private void SelectedCompanies(ChoiceReportedCompanies choiceReportedCompanies)
+    private void SelectedCompanies()
     {
-        foreach (var cat in visualCategories)
-        {
-            foreach (var q in cat.Category.Questions)
-            {
-                if (q.Id == choiceReportedCompanies.QuestionId)
-                {
-                    q.CurrentChoices[choiceReportedCompanies.ChoiceNumber].ReportedCompanyIds = choiceReportedCompanies.ReportedCompanyIds;
-                    break;
-                }
-            }
-        }
-
         DialogService.Close();
         StateHasChanged();
     }
 
-    private void QuestionNotesChanged(DocumentQuestionModel question)
+    private void QuestionNotesChanged()
     {
-        foreach(var cat in visualCategories)
-        {
-            foreach(var q in cat.Category.Questions)
-            {
-                if(q.Id == question.Id)
-                {
-                    q.Note = question.Note;
-                    break;
-                }
-            }
-        }
         StateHasChanged();
         DialogService.Close();
     }
