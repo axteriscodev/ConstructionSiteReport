@@ -108,7 +108,7 @@ namespace ConstructionSiteLibrary.Components.Documents
 
         private void Back()
         {
-            NavigationService.Back();
+            NavigationService.ChangePage(PageRouting.HomePage);
         }
         private async Task Reload()
         {
