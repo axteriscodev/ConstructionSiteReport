@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using Shared.Defaults;
 using Shared.Templates;
 
 namespace Shared.Documents;
@@ -14,5 +15,21 @@ public class DocumentChoiceModel : TemplateChoiceModel
     [JsonPropertyName("choiceIndex")]
     public int ChoiceIndex {  get; set; }
 
+
+    public DocumentChoiceModel Clone()
+    {
+        DocumentChoiceModel clone = new()
+        {
+            Id = Id,
+            Tag = Tag,
+            Value = Value,
+            Color = Color,
+            Reportable = Reportable,
+            ReportedCompanyIds = [],
+            ChoiceIndex = ChoiceIndex
+        };
+        ReportedCompanyIds.AddRange(this.ReportedCompanyIds);
+        return clone;
+    }
 
 }

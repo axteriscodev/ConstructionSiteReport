@@ -12,7 +12,7 @@
 @code {
 
     [Parameter]
-    public EventCallback<DocumentQuestionModel> OnQuestionNoteChanged{ get; set; }
+    public EventCallback OnQuestionNoteChanged{ get; set; }
 
     [Parameter]
     public DocumentQuestionModel Question { get; set; } = new();
@@ -37,6 +37,6 @@
     private void Save()
     {
         Question.Note = notes;
-        OnQuestionNoteChanged.InvokeAsync(Question);
+        OnQuestionNoteChanged.InvokeAsync();
     }
 }
