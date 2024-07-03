@@ -1,23 +1,34 @@
-﻿@using Shared.Documents;
+﻿@using ConstructionSiteLibrary.Model
+@using Shared.Documents;
 
+@inject DialogService DialogService
+
+<ScreenComponent @ref="screenComponent" />
 @if (onLoading)
 {
     <Loading />
 }
 else
 {
-    <div class="vstack p-8">
-        @foreach(var reportedCompany in CompaniesQuestionsReported)
+    <div class="vstack p-3">
+    @foreach (var reportedCompany in CompaniesQuestionsReported)
         {
-            <RadzenText>Per: <strong>@reportedCompany.Company.CompanyName</strong></RadzenText>
-            <SignatureComponent />
-            <RadzenText>Quesiti contestati</RadzenText>
-            <RadzenRow>
-            @foreach(var questionIds in reportedCompany.ReportedQuestions)
-            {
-                <RadzenText>@questionIds.MarkByOrder()</RadzenText>
-            }
-            </RadzenRow>
+            @*if (reportedCompany.ReportedQuestions.Any())
+            {*@
+                <RadzenText>Per: <strong>@reportedCompany.Company.CompanyName</strong></RadzenText>
+                @if (string.IsNullOrEmpty(reportedCompany.Sign))
+                {
+                    <image src="@reportedCompany.Sign" />
+                }
+                <RadzenButton Text="Firma" Click="@(() => OpenSignaturePad(reportedCompany))" />
+                <RadzenText>Quesiti contestati</RadzenText>
+                <RadzenRow>
+                    @foreach (var questionIds in reportedCompany.ReportedQuestions)
+                    {
+                        <RadzenText>@questionIds.MarkByOrder()</RadzenText>
+                    }
+                </RadzenRow>
+           @* } *@
         }
     </div>
 }
@@ -32,6 +43,15 @@ else
 
     private bool onLoading = false;
 
+    ScreenComponent screenComponent;
+
+    protected override async Task OnInitializedAsync()
+    {
+        onLoading = true;
+        await base.OnInitializedAsync();
+        LoadData();
+        onLoading = false;
+    }
 
     private void LoadData()
     {
@@ -65,12 +85,41 @@ else
         }
     }
 
+    private async Task OpenSignaturePad(CompanyQuestionsReported cqr)
+    {
+        var width = screenComponent.ScreenSize.Width;
+
+        // creo uno style aggiuntivo da inviare al componente caricato con il popup come options
+        var additionalStyle = $"min-height:fit-content;height:fit-content;width:{width}px;max-width:600px";
+        var newOptions = new DialogOptions
+            {
+                Style = additionalStyle
+            };
+        //creo parametri da inviare al componente caricato con il popup
+        var param = new Dictionary<string, object>
+{
+//tra i parametri che invio al dialog creo un EventCallback da passare al componente
+{ "OnSavedSignature", EventCallback.Factory.Create<Signature>(this, ShowSignature) },
+{ "ExtraObject" , cqr },
+};
+        await DialogService.OpenAsync<SignatureComponent>("Firma", parameters: param, options: newOptions);
+
+    }
+
+    private void ShowSignature(Signature signature)
+    {
+        var curretCompany = signature.ExtraObject as CompanyQuestionsReported;
+
+        curretCompany!.Sign = signature.Image;
+    }
 
     class CompanyQuestionsReported
     {
         public CompanyModel Company = new();
 
         public List<CateogoryQuestionIds> ReportedQuestions = [];
+
+        public string Sign = "";
 
 
     }

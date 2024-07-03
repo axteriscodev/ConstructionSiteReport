@@ -15,6 +15,9 @@ namespace ConstructionSiteLibrary.Components.Utilities
         public bool DebugImage { get; set; } = false;
         [Parameter]
         public EventCallback<Signature> OnSavedSignature { get; set; }
+        [Parameter]
+        public object? ExtraObject { get; set; }
+
         private string canvasId = "canvasFirma";
         private bool onSaving = false;
         private Signature signature = new();
@@ -40,6 +43,7 @@ namespace ConstructionSiteLibrary.Components.Utilities
             if (await IsCanvasBlank())
             {
                 signature = await module!.InvokeAsync<Signature>("SaveCanvas", canvasId);
+                signature.ExtraObject = ExtraObject;
                 StateHasChanged();
                 await OnSavedSignature.InvokeAsync(signature);
             }
