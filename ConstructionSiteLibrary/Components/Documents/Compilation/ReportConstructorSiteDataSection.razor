@@ -12,74 +12,80 @@ else
     <div class="">
         <div class="vstack px-4">
             @* INTRO DOCUMENTO *@
-            <div class="border my-4 paddingSezione">
+            <div class=" my-4">
                 <div class="row SectionTitleDiv">
-                    <RadzenText TextAlign="TextAlign.Center" class="SectionTitle"><strong>@Document.Title</strong> </RadzenText>
+                    <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" class="SectionTitle"><strong>@Document.Title</strong> </RadzenText>
                 </div>
-                <div class="row my-2 borderBottom">
-                    <RadzenText>@Document.Description</RadzenText>
-                </div>
-                <div class=" row my-2">
-                    <div class="col">
-                        <RadzenText>Il C.S.E.: <strong>@Document.CSE</strong></RadzenText>
+                <div class="border my-4 paddingSezione">
+                    <div class="row my-2">
+                        <RadzenText>@Document.Description</RadzenText>
                     </div>
-                    <div class="col">
-                        <div class="row">
-                            <div class="col">
-                                <RadzenText>Data sopralluogo: <strong>@StampaData()</strong></RadzenText>
-                            </div>
-                            <div class="col">
-                                <RadzenText>Ora: <strong>@StampaOra()</strong></RadzenText>
+                </div>
+                <div class="border my-4 paddingSezione">
+                    <div class=" row my-2">
+                        <div class="col">
+                            <RadzenText>Il C.S.E.: <strong>@Document.CSE</strong></RadzenText>
+                        </div>
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <RadzenText>Data sopralluogo: <strong>@StampaData()</strong></RadzenText>
+                                </div>
+                                <div class="col">
+                                    <RadzenText>Ora: <strong>@StampaOra()</strong></RadzenText>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <RadzenRow class="my-2">
+                        <RadzenText>Condizioni meteo:</RadzenText>
+                        <RadzenRadioButtonList Data="@meteoConditions" TValue="MeteoConditionModel" Value="@Document.MeteoCondition"
+                                               TextProperty="Description" />
+                    </RadzenRow>
                 </div>
-                <RadzenRow class="my-2">
-                    <RadzenText>Condizioni meteo:</RadzenText>
-                    <RadzenRadioButtonList Data="@meteoConditions" TValue="MeteoConditionModel" Value="@Document.MeteoCondition"
-                                           TextProperty="Description" />
-                </RadzenRow>
             </div>
 
             @* DATI CANTIERE *@
-            <div class="border my-4 paddingSezione">
+            <div class="my-4 ">
                 <div class="row SectionTitleDiv">
-                    <RadzenText TextAlign="TextAlign.Center" class="SectionTitle">
+                    <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" class="SectionTitle">
                         <strong>
                             DATI, CANTIERE, FIGURE RESPONSABILI, PROGETTISTI,RIUNIONI
                         </strong>
                     </RadzenText>
                 </div>
-                <div class="row my-2">
-                    <div class="col">
-                        <RadzenText>Committente: <strong>@Document.Client?.Name</strong></RadzenText>
+                <div class="border my-4 paddingSezione">
+                    <div class="row my-2">
+                        <div class="col">
+                            <RadzenText>Committente: <strong>@Document.Client?.Name</strong></RadzenText>
+                        </div>
+                        <div class="col">
+                            <RadzenText>Lavori di: <strong>@Document.ConstructorSite.JobDescription</strong></RadzenText>
+                        </div>
                     </div>
-                    <div class="col">
-                        <RadzenText>Lavori di: <strong>@Document.ConstructorSite.JobDescription</strong></RadzenText>
+                    <div class="row my-2">
+                        <div class="col">
+                            <RadzenText>Indirizzo cantiere: @Document.ConstructorSite.Address</RadzenText>
+                        </div>
+                        <div class="col">
+                            <RadzenText>Inizio lavori: @Document.ConstructorSite.StartDate</RadzenText>
+                        </div>
                     </div>
-                </div>
-                <div class="row my-2">
-                    <div class="col">
-                        <RadzenText>Indirizzo cantiere: @Document.ConstructorSite.Address</RadzenText>
+                    <div class="row my-2">
+                        <div class="col">
+                            <RadzenText>Notifica preliminare inizio cantiere del:@Document.ConstructorSite.PreliminaryNotificationStartDate</RadzenText>
+                        </div>
+                        <div class="col">
+                            <RadzenText>Id. SICO: @Document.ConstructorSite.IdSico</RadzenText>
+                        </div>
                     </div>
-                    <div class="col">
-                        <RadzenText>Inizio lavori: @Document.ConstructorSite.StartDate</RadzenText>
-                    </div>
-                </div>
-                <div class="row my-2">
-                    <div class="col">
-                        <RadzenText>Notifica preliminare inizio cantiere del:@Document.ConstructorSite.PreliminaryNotificationStartDate</RadzenText>
-                    </div>
-                    <div class="col">
-                        <RadzenText>Id. SICO: @Document.ConstructorSite.IdSico</RadzenText>
-                    </div>
-                </div>
-                <div class="row my-2">
-                    <div class="col">
-                        <RadzenText> Notifica preliminare in corso: @Document.ConstructorSite.PreliminaryNotificationInProgress</RadzenText>
-                    </div>
-                    <div class="col">
-                        <RadzenText>Id. SICO: @Document.ConstructorSite.IdSicoInProgress</RadzenText>
+                    <div class="row my-2">
+                        <div class="col">
+                            <RadzenText> Notifica preliminare in corso: @Document.ConstructorSite.PreliminaryNotificationInProgress</RadzenText>
+                        </div>
+                        <div class="col">
+                            <RadzenText>Id. SICO: @Document.ConstructorSite.IdSicoInProgress</RadzenText>
+                        </div>
                     </div>
                 </div>
             </div>

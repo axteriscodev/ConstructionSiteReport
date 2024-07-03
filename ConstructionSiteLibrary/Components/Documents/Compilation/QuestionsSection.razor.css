@@ -4,7 +4,7 @@
 
 .margineDomande {
     margin-top: 0.5rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     margin-left: 0.5rem;
     margin-right: 0.5rem;
 }
@@ -15,7 +15,7 @@
 }
 
 .bordoDomanda {
-    margin-left: 3rem !important;
+    margin-left: 0.5rem !important;
 }
 
 .questionario, ::deep .questionario {
@@ -34,6 +34,34 @@
 .selectChoice, ::deep .selectChoice{
     width:400px;
 }
+
+
+/* */
+
+.SectionTitleDiv, ::deep .SectionTitleDiv {
+    border: solid 1px black;
+    padding: 0.5rem;
+    background-color: #ebebeb;
+
+}
+
+.SectionTitle, ::deep .SectionTitle {
+    margin: 0px;
+}
+
+.spaceBetween, ::deep .spaceBetween {
+    justify-content: space-between !important;
+}
+
+.borderBottom, ::deep .borderBottom {
+    border-bottom: solid 1px #dee2e6;
+}
+
+.paddingSezione, ::deep .paddingSezione {
+    padding: 0rem 0.7rem 0.7rem 0.7rem;
+}
+
+
 
 @media(max-width: 768px) {
 
