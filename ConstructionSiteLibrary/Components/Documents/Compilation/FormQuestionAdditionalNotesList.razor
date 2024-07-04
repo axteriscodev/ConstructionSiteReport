@@ -11,20 +11,16 @@
             </RadzenText>
         </div>
         <div class="border my-4">
-            @foreach (string elem in NoteList)
+            @foreach (var elem in NoteList)
             {
-                <RadzenRow JustifyContent="@justifyContent" AlignItems="@alignItems" Gap="@gap"
-                    class="rz-border-info-light">
-                    <RadzenColumn Size="2"
-                        class="rz-background-color-info-lighter rz-color-on-info-lighter rz-text-align-center rz-p-2">
-                        <RadzenText TextStyle="TextStyle.H3">@elem</RadzenText>
+                <RadzenRow JustifyContent="@justifyContent" AlignItems="@alignItems" Gap="0">
+                    <RadzenColumn Size="1" class="rz-text-align-center rz-p-2">
+                        <RadzenText TextStyle="TextStyle.H4">@NotePointList[NoteList.IndexOf(elem)]</RadzenText>
                     </RadzenColumn>
-                    <RadzenColumn Size="2"
-                        class="rz-background-color-danger-lighter rz-color-on-danger-lighter rz-text-align-center rz-p-2"
-                        style="height: 180px;">
+                    <RadzenColumn>
                         <div class="p-4">
                             <RadzenTextArea Rows="3" Style="width:100%" Value="@elem" />
-                            <div class="row justify-content-center">
+                            <div>
                             </div>
                         </div>
                     </RadzenColumn>
@@ -36,18 +32,17 @@
 
 
 @code {
-    AlignItems alignItems = AlignItems.Normal;
-    JustifyContent justifyContent = JustifyContent.Normal;
-    string gap = "1rem";
-
+    AlignItems alignItems = AlignItems.Center;
+    JustifyContent justifyContent = JustifyContent.Center;
 
     [Parameter]
     public EventCallback OnQuestionNoteChanged { get; set; }
 
     [Parameter]
-    public DocumentModel Document { get; set; } = new();
 
+    public DocumentModel Document { get; set; } = new();
     private List<string> NoteList { get; set; } = [];
+    private List<string> NotePointList { get; set; } = [];
     protected override async Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
@@ -57,6 +52,7 @@
     private void LoadData()
     {
         NoteList = [];
+        NotePointList = [];
 
         ///Da caricare per ogni question
         if (Document is not null)
@@ -65,9 +61,10 @@
             {
                 foreach (var question in cat.Questions)
                 {
-                    if (!string.IsNullOrEmpty(question.Note))
+                    if (!string.IsNullOrEmpty(question.Note.Trim()))
                     {
                         NoteList.Add(question.Note);
+                        NotePointList.Add(cat.Order.ToString() + "." + question.Order.ToString());
                     }
                 }
             }

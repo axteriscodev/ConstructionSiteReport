@@ -27,3 +27,9 @@
     display: flex;
     margin-right: 1rem;
 }
+
+.noteRow, ::deep .noteRow{
+
+
+    
+}
