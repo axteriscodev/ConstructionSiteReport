@@ -22,6 +22,7 @@ public class DocumentDbHelper
                     {
                         Id = d.Id,
                         Title = d.Title,
+                        Description = d.Description ?? "",
                         CreationDate = d.CreationDate ?? DateTime.Now,
                         CompilationDate = d.CompilationDate,
                         LastEditDate = d.LastEditDate ?? DateTime.Now,
@@ -183,15 +184,16 @@ public class DocumentDbHelper
                     {
                         Id = d.Id,
                         Title = d.Title,
+                        Description = d.Description ?? "",
                         CreationDate = d.CreationDate ?? DateTime.Now,
                         CompilationDate = d.CompilationDate,
                         LastEditDate = d.LastEditDate,
                         ConstructorSite = new()
                         {
                             Id = cs.Id,
-                            JobDescription = cs.JobDescription,
+                            JobDescription = cs.JobDescription ?? "",
                             StartDate = cs.StartDate ?? DateTime.Now,
-                            Address = cs.Address,
+                            Address = cs.Address ?? "",
                             Client = (from cl in db.Clients
                                       where cl.Id == cs.IdClient
                                       select new ClientModel()
@@ -230,6 +232,7 @@ public class DocumentDbHelper
                 LastEditDate = document.LastEditDate,
                 CompilationDate = document.CompilationDate,
                 Title = document.Title,
+                Description = document.Description,
                 ReadOnly = document.ReadOnly,
                 Cse = document.CSE,
                 DraftedIn = document.DraftedIn,
