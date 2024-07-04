@@ -11,12 +11,12 @@
 else
 {
     <div class="vstack p-3">
-    @foreach (var reportedCompany in CompaniesQuestionsReported)
+        @foreach (var reportedCompany in CompaniesQuestionsReported)
         {
-            if (reportedCompany.ReportedQuestions.Any())
-            {
+@*             if (reportedCompany.ReportedQuestions.Any())
+            { *@
                 <RadzenText>Per: <strong>@reportedCompany.Company.CompanyName</strong></RadzenText>
-                @if (string.IsNullOrEmpty(reportedCompany.Sign))
+                @if (!string.IsNullOrEmpty(reportedCompany.Sign))
                 {
                     <image src="@reportedCompany.Sign" />
                 }
@@ -28,9 +28,10 @@ else
                         <RadzenText>@questionIds.MarkByOrder()</RadzenText>
                     }
                 </RadzenRow>
-           } 
+@*             } *@
         }
     </div>
+
 }
 
 
@@ -43,7 +44,9 @@ else
 
     private bool onLoading = false;
 
-    ScreenComponent screenComponent;
+    private ScreenComponent screenComponent;
+
+    private Modale modal { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -95,29 +98,38 @@ else
     private async Task OpenSignaturePad(CompanyQuestionsReported cqr)
     {
         var width = screenComponent.ScreenSize.Width;
+        var height = screenComponent.ScreenSize.Height;
+        var canvasHeight = height - 200;
+        var canvasWidth = width - 40;
+        Console.WriteLine("Height: " + height);
 
         // creo uno style aggiuntivo da inviare al componente caricato con il popup come options
-        var additionalStyle = $"min-height:fit-content;height:fit-content;width:{width}px;max-width:600px";
+        var additionalStyle = $"height:{height};width:{width}px; position:static !important";
         var newOptions = new DialogOptions
             {
                 Style = additionalStyle
             };
         //creo parametri da inviare al componente caricato con il popup
         var param = new Dictionary<string, object>
-{
-//tra i parametri che invio al dialog creo un EventCallback da passare al componente
-{ "OnSavedSignature", EventCallback.Factory.Create<Signature>(this, ShowSignature) },
-{ "ExtraObject" , cqr },
-};
+        {
+            //tra i parametri che invio al dialog creo un EventCallback da passare al componente
+            { "OnSavedSignature", EventCallback.Factory.Create<Signature>(this, ShowSignature) },
+            { "ExtraObject" , cqr },
+            { "CanvasHeight" , canvasHeight },
+            { "CanvasWidth" , canvasWidth },
+        };
         await DialogService.OpenAsync<SignatureComponent>("Firma", parameters: param, options: newOptions);
 
     }
 
+
     private void ShowSignature(Signature signature)
     {
+        DialogService.Close();
         var curretCompany = signature.ExtraObject as CompanyQuestionsReported;
 
         curretCompany!.Sign = signature.Image;
+        StateHasChanged();
     }
 
     class CompanyQuestionsReported

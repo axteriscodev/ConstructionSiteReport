@@ -1,0 +1,45 @@
+﻿@using Microsoft.JSInterop
+
+@inject IJSRuntime JS
+
+
+<div id="commentPictureModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                Header
+            </div>
+
+            <div class="modal-body">
+                <canvas id="commentCanvas" style="border: solid" height="600" width="500">
+                </canvas>
+            </div>
+
+            <div class="modal-footer">
+                Footer
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    private string modalDisplay = "none;";
+    private string modalClass = "";
+    private bool showBackdrop = false;
+
+    public void Open()
+    {
+        modalDisplay = "block;";
+        modalClass = "show";
+        showBackdrop = true;
+    }
+
+    public void Close()
+    {
+        modalDisplay = "none";
+        modalClass = "";
+        showBackdrop = false;
+    }
+}

@@ -8,9 +8,9 @@ namespace ConstructionSiteLibrary.Components.Utilities
     public partial class SignatureComponent
     {
         [Parameter]
-        public int CanvasHeight { get; set; } = 200;
+        public int CanvasHeight { get; set; } = 800;
         [Parameter]
-        public int CanvasWidth { get; set; } = 300;
+        public int CanvasWidth { get; set; } = 1200;
         [Parameter]
         public bool DebugImage { get; set; } = false;
         [Parameter]
