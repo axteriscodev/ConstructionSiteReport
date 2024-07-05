@@ -38,11 +38,18 @@
 
 /* */
 
+
+
 .SectionTitleDiv, ::deep .SectionTitleDiv {
     border: solid 1px black;
     padding: 0.5rem;
     background-color: #ebebeb;
+    margin: 0rem;
+}
 
+.documentSection {
+    padding-right: 1.5rem !important;
+    padding-left: 1.5rem !important;
 }
 
 .SectionTitle, ::deep .SectionTitle {
@@ -59,8 +66,24 @@
 
 .paddingSezione, ::deep .paddingSezione {
     padding: 0rem 0.7rem 0.7rem 0.7rem;
+    margin-top: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
 }
 
+
+.marginYResponsive {
+    margin-top: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+}
+
+.marginYResponsive2 {
+    margin-top: 1.5rem !important;
+}
+
+.marginXResponsive {
+    margin-left: 1.5rem !important;
+    margin-right: 1.5rem !important;
+}
 
 
 @media(max-width: 768px) {
@@ -71,7 +94,14 @@
     }
 
     .bordoDomanda {
-        margin-left: 0.2rem !important;
+        margin-left: 0rem!important;
+    }
+
+    .margineDomande {
+        margin-top: 0.5rem;
+        margin-bottom: 1rem;
+        margin-left: 0rem;
+        margin-right: 0rem;
     }
 
     .questionario, ::deep .questionario {
@@ -80,6 +110,47 @@
     }
 
     .selectChoice, ::deep .selectChoice {
-        width: 280px;
+        width: 300px;
+    }
+
+    .SectionTitleDiv {
+        border: solid 1px black;
+        padding: 0.5rem;
+        background-color: #ebebeb;
+        margin: 0;
+    }
+
+    .documentSection {
+        padding-right: 0.5rem !important;
+        padding-left: 0.5rem !important;
+    }
+
+    .paddingSezione, ::deep .paddingSezione {
+        padding: 0rem 0rem 0rem 0rem;
+        margin-top: 0.5rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    .marginYResponsive {
+        margin-top: 0.5rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    .marginYResponsive2 {
+        margin-top: 0.5rem !important;
+    }
+
+    .marginXResponsive {
+        margin-left: 0rem !important;
+        margin-right: 0rem !important;
+        margin-top: 0.5rem;
+    }
+
+    .margineDomande {
+        margin-top: 0.5rem;
+        margin-bottom: 1rem;
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+        padding:0.5rem;
     }
 }

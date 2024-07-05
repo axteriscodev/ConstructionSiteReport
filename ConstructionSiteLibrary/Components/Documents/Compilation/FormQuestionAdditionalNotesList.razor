@@ -1,8 +1,11 @@
 ﻿@using Shared.Documents
-@* NOTE AGGIUNTIVE *@
-<div class="vstack px-4">
 
-    <div class="my-4 ">
+
+
+@* NOTE AGGIUNTIVE *@
+<div class="vstack documentSection">
+
+    <div class="marginYResponsive2 ">
         <div class="row SectionTitleDiv">
             <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" class="SectionTitle">
                 <strong>
@@ -10,15 +13,15 @@
                 </strong>
             </RadzenText>
         </div>
-        <div class="border my-4">
+        <div class="marginYResponsive">
             @foreach (var elem in NoteList)
             {
                 <RadzenRow JustifyContent="@justifyContent" AlignItems="@alignItems" Gap="0">
-                    <RadzenColumn Size="1" class="rz-text-align-center rz-p-2">
-                        <RadzenText TextStyle="TextStyle.H4">@NotePointList[NoteList.IndexOf(elem)]</RadzenText>
-                    </RadzenColumn>
+                    <RadzenColumn Size="1" class="rz-text-align-center paddingYResponsive">
+                            <RadzenText TextStyle="TextStyle.H6">@NotePointList[NoteList.IndexOf(elem)]</RadzenText>
+                        </RadzenColumn>
                     <RadzenColumn>
-                        <div class="p-4">
+                        <div class="paddingYResponsive">
                             <RadzenTextArea Rows="3" Style="width:100%" Value="@elem" />
                             <div>
                             </div>
@@ -32,7 +35,7 @@
 
 
 @code {
-    AlignItems alignItems = AlignItems.Center;
+    AlignItems alignItems = AlignItems.Start;
     JustifyContent justifyContent = JustifyContent.Center;
 
     [Parameter]

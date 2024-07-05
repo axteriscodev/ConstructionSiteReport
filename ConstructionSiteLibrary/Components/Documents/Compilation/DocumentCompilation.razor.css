@@ -1,0 +1,14 @@
+﻿
+
+.DocumentCard{
+    padding:1rem;
+    margin:3rem;
+}
+
+@media(max-width: 1200px) {
+
+    .DocumentCard {
+        padding: 0rem;
+        margin: 0rem;
+    }
+}

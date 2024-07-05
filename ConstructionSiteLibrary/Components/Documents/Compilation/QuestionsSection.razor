@@ -6,11 +6,12 @@
 <ScreenComponent @ref="screenComponent" />
 
 @* Questionario *@
-<div>
+<div class="vstack documentSection">
     @foreach (var visual in visualCategories)
     {
-        <div class="categoria pt-3">
-            <RadzenRow class="SectionTitleDiv" Style="justify-content:space-between !important;">
+        <div class="marginYResponsive2">
+            <div class="SectionTitleDiv">
+            <RadzenRow Style="justify-content:space-between !important;">
                 <RadzenColumn Size="1" Style="display:flex">
                     <RadzenText TextStyle="TextStyle.DisplayH6" Style="margin-left:1rem;margin-top:0.5rem;"><strong>@CategoryNumber(visual.Category)</strong></RadzenText>
                 </RadzenColumn>
@@ -22,11 +23,11 @@
                 </RadzenColumn>
             </RadzenRow>
         </div>
-        if (visual.ShowQuestion)
+        @if (visual.ShowQuestion)
         {
             @foreach (var question in visual.Category.Questions)
             {
-                <div class="border categoria mx-4">
+                    <div class="border paddingSezione">
                 <div class="margineDomande bordoDomanda">
                     <div class="hstack ">
                         <RadzenButton Icon="photo_camera" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Text" class="buttonPhoto" />
@@ -66,6 +67,7 @@
                 </div>
             }
         }
+        </div>
     }
 </div>
 
