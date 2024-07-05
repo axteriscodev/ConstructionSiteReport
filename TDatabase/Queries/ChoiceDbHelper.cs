@@ -22,10 +22,10 @@ namespace TDatabase.Queries
 
         public static async Task<int> Insert(DB db, TemplateChoiceModel choice)
         {
-            var choiseId = 0;
+            var choiceId = 0;
             try
             {
-                var nextId = (db.Choices.Any() ? db.Choices.Max(x=>x.Id) : 0) + 1;
+                var nextId = (db.Choices.Any() ? db.Choices.Max(x => x.Id) : 0) + 1;
                 Choice newChoice = new()
                 {
                     Id = nextId,
@@ -36,10 +36,11 @@ namespace TDatabase.Queries
                 };
                 db.Choices.Add(newChoice);
                 await db.SaveChangesAsync();
-                choiseId = nextId;
-            }catch (Exception) { }
+                choiceId = nextId;
+            }
+            catch (Exception) { }
 
-            return choiseId;
+            return choiceId;
         }
 
         public static async Task<List<int>> Update(DB db, List<TemplateChoiceModel> choices)
@@ -47,7 +48,7 @@ namespace TDatabase.Queries
             List<int> modified = [];
             try
             {
-                foreach(var elem in choices)
+                foreach (var elem in choices)
                 {
                     var c = db.Choices.Where(x => x.Id == elem.Id).SingleOrDefault();
                     if (c is not null)
@@ -55,7 +56,7 @@ namespace TDatabase.Queries
                         c.Value = elem.Value;
                         c.Tag = elem.Tag;
                         c.Reportable = elem.Reportable;
-                        if( await db.SaveChangesAsync() > 0)
+                        if (await db.SaveChangesAsync() > 0)
                         {
                             modified.Add(elem.Id);
                         }

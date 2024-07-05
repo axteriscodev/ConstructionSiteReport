@@ -1,0 +1,22 @@
+﻿@using ConstructionSiteLibrary.Model.DocumentWizard
+
+@inject ConstructorSitesRepository ConstructorSitesRepository
+
+<div>
+    <RadzenSteps @ref="_stepsComponent" ShowStepsButtons="false">
+        <Steps>
+            <RadzenStepsItem Text="Step1">
+                <TemplateChoiceStep SelectedTemplate="@_selectedTemplate" OnForward="@(args=>Forward(args))" />
+            </RadzenStepsItem>
+            <RadzenStepsItem Text="Step2">
+                <DescriptionStep SelectedTemplate="@_selectedTemplate" Document="@_document" OnBack="@Back" OnForward="@(args=>Forward(args))"/>
+            </RadzenStepsItem>
+            <RadzenStepsItem Text="Step3">
+                <CompaniesStep SelectedCompanies="@_document.Companies" OnBack="@Back" OnForward="@(args=>Forward(args))" />
+            </RadzenStepsItem>
+            <RadzenStepsItem Text="Step4">
+                <SummaryStep Document= "@_document" SelectedTemplate="@_selectedTemplate" OnBack="@Back"/>
+            </RadzenStepsItem>
+        </Steps>
+    </RadzenSteps>
+</div>

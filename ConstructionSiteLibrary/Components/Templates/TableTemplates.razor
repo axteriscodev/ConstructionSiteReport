@@ -2,6 +2,7 @@
 @using Shared
 @using Shared.Templates
 
+@inject NavigationService NavigationService
 @inject TemplatesRepository TemplatesRepository
 @inject DialogService DialogService
 
@@ -12,14 +13,15 @@
 }
 else
 {
+
     <h2>@Param</h2>
 
     @* La tabella dei template *@
     <div class="marginComponent">
-        <RadzenFieldset Text="Template" class="shadow rounded" Style="font-weight:400;">
-            @* <RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
-                          Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenNewForm())" />
-            <RadzenButton Icon="sort" Text="Ordina" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
+        <RadzenFieldset class="shadow rounded" Style="font-weight:400;">
+            <RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
+                          Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenWizard())" />
+            @* <RadzenButton Icon="sort" Text="Ordina" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
                           Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenOrderForm())" /> *@
             <RadzenDataGrid @ref="grid" GridLines="@DataGridGridLines.Both" IsLoading=@isLoading Count="@count" PageSize="@pageSize" Data="@templates" TItem="TemplateModel"
                             AllowColumnResize="true" AllowAlternatingRows="true" ColumnWidth="200px" AllowFiltering="true" FilterMode="FilterMode.Simple"

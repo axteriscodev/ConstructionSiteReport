@@ -12,4 +12,8 @@ public partial class CompanyNote
     public string? Note { get; set; }
 
     public bool Active { get; set; }
+
+    public virtual Company IdCompanyNavigation { get; set; } = null!;
+
+    public virtual Note IdNoteNavigation { get; set; } = null!;
 }

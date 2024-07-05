@@ -1,51 +1,55 @@
-﻿@using ConstructionSiteLibrary.Repositories
-@using Shared;
-@using Shared.Documents;
+﻿@using ConstructionSiteLibrary.Model;
+@using ConstructionSiteLibrary.Utility;
 
+@inject ConstructorSitesRepository SiteRepository
 @inject DialogService DialogService
-@inject ConstructorSitesRepository ConstructorSitesRepository
+
 
 <ScreenComponent @ref="screenComponent" />
-@if (initialLoading)
+
+@if (onLoading)
 {
     <Loading />
 }
 else
 {
-    <h2>@Param</h2>
-
-    @* La tabella dei Cantieri *@
-    <div class="marginComponent">
-
-        <RadzenFieldset Text="Cantieri" class="shadow rounded" Style="font-weight:400;">
-            @*<RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
-                          Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenNewForm())" />
-            <RadzenButton Icon="sort" Text="Ordina" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
-                          Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenOrderForm())" />*@
-            <RadzenDataGrid @ref="grid" GridLines="@DataGridGridLines.Both" IsLoading=@isLoading Count="@count" PageSize="@pageSize" Data="@constructorSites" TItem="ConstructorSiteModel"
-                            AllowColumnResize="true" AllowAlternatingRows="true" ColumnWidth="200px" AllowFiltering="true" FilterMode="FilterMode.Simple"
-                            AllowSorting="true" AllowPaging="true" ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" PagerHorizontalAlign="HorizontalAlign.Left">
-
-                <Columns>
-                    <RadzenDataGridColumn TItem="ConstructorSiteModel" Property="JobDescription" Title="Descrizione" Width="40px" />
-                    <RadzenDataGridColumn TItem="ConstructorSiteModel" Property="Client.Name" Title="Cliente" Width="40px" />
-                    <RadzenDataGridColumn TItem="ConstructorSiteModel" Property="Address" Title="Indirizzo" Width="120px" />
-                    <RadzenDataGridColumn TItem="ConstructorSiteModel" Property="StartDate" Title="Data inizio" Width="60px" />
-                    <RadzenDataGridColumn TItem="ConstructorSiteModel" Title="Azioni" Width="60px" Sortable="false">
-                        <Template Context="data">
-                            <RadzenRow JustifyContent="JustifyContent.SpaceAround">
-                                @* Mostro i bottoni solo se ho i permessi di modifica *@
-                                @*<RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Filled" Size="ButtonSize.Large"
-                                              Click="@(()=>OpenUpdateForm(data))" class="buttonEdit" Style="width: 45%;" />
-                                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Light" Variant="Variant.Filled" Size="ButtonSize.Large"
-                                              Click="@(()=>Hide(data))" class="buttonDelete" Style="width: 45%;" />*@
-                            </RadzenRow>
-                        </Template>
-                    </RadzenDataGridColumn>
-                </Columns>
-            </RadzenDataGrid>
-        </RadzenFieldset>
+    <div class="mx-2 my-5">
+        <div class="my-5">
+            <div class="row">
+                <div class="col-xl-4 EmptyColumn"></div>
+                <div class="divSearchBar">
+                    <RadzenFormField Text="Ricerca cantiere" Variant="@GlobalVariables.ComponentVariant" class="searchBar">
+                        <Start>
+                            <RadzenIcon Icon="search" />
+                        </Start>
+                        <ChildContent>
+                            <RadzenTextBox ValueChanged="@(args => SearchChanged(args))" />
+                        </ChildContent>
+                    </RadzenFormField>
+                </div>
+                <div class="col-4 buttonContainer">
+                    <RadzenButton class="buttonNewSite" Icon="add" Text="Crea nuovo" Click="@OpenForm" />
+                </div>
+            </div>
+        </div>
+        <div>
+            @for (int i = 0; i < displayedSites.Count; i+=2)
+            {
+                <div class="row mt-4">
+                    <div class="col">
+                        <CardConstructorSite Site="@displayedSites[i]" />
+                    </div>
+                    <div class="col">
+                        @if((i+1) < displayedSites.Count)
+                        {
+                            <CardConstructorSite Site="@displayedSites[i+1]" />
+                        }
+                    </div>
+                </div> 
+            }
+        </div>
+        <div class="mt-5">
+            <RadzenPager ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" HorizontalAlign="HorizontalAlign.Left" Count="count" PageSize="@pageSize" PageChanged="@PageChanged" />
+        </div>
     </div>
-
-
 }

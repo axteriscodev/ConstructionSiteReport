@@ -1,0 +1,86 @@
+﻿@using ConstructionSiteLibrary.Model.TemplateWizard
+@using ConstructionSiteLibrary.Repositories
+@using Shared.Templates
+
+@inject TemplatesRepository TemplatesRepository
+
+<ScreenComponent @ref="screenComponent" />
+@if (initialLoading)
+{
+    <Loading />
+}
+else
+{
+    <RadzenTemplateForm TItem="FormData" Data="@Data" Submit="@Forward">
+        <div class="card shadow mb-3 divCard">
+            <RadzenText>Clicca "Successivo" per creare un nuovo template o selezionane uno da usare come base</RadzenText>
+            <RadzenDropDown @bind-Value=@Data.SelectedTemplate Data=@Templates TextProperty="TitleTemplate" AllowClear=true
+                            Placeholder="-" />
+        </div>
+
+
+        @if (Data.SelectedTemplate is not null)
+        {
+            <div class="mb-3">
+                <RecapTemplateQuestions SelectedTemplate="@Data.SelectedTemplate" />
+            </div>
+        }
+
+        <div class="row">
+            <div class="col">
+            </div>
+            <div class="col divForward">
+                <RadzenButton ButtonType="ButtonType.Submit" Icon="arrow_forward" Text="Avanti" class="buttonForward" />
+            </div>
+        </div>
+
+    </RadzenTemplateForm>
+}
+
+@code
+{
+    List<TemplateModel> Templates = [];
+
+    FormData Data = new();
+
+
+    /// <summary>
+    /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
+    /// </summary>
+    private bool initialLoading;
+
+    [Parameter]
+    public EventCallback<TemplateStepArgs> OnForward { get; set; }
+
+
+    ScreenComponent screenComponent;
+
+    protected override async Task OnInitializedAsync()
+    {
+        initialLoading = true;
+        await base.OnInitializedAsync();
+        await LoadData();
+        initialLoading = false;
+    }
+
+    private async Task LoadData()
+    {
+        Templates = await TemplatesRepository.GetTemplates();
+    }
+
+    public void Forward()
+    {
+        TemplateStepArgs args = new()
+            {
+                Object = Data.SelectedTemplate != null ? Data.SelectedTemplate : new TemplateModel(),
+                Step = TemplateStep.TemplateSelection
+            };
+
+        OnForward.InvokeAsync(args);
+    }
+
+    class FormData
+    {
+        public TemplateModel? SelectedTemplate;
+    }
+}

@@ -13,6 +13,8 @@ public partial class Question
 
     public bool Active { get; set; }
 
+    public virtual ICollection<AttachmentQuestion> AttachmentQuestions { get; set; } = new List<AttachmentQuestion>();
+
     public virtual Category IdCategoryNavigation { get; set; } = null!;
 
     public virtual ICollection<QuestionChoice> QuestionChoices { get; set; } = new List<QuestionChoice>();

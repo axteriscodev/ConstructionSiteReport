@@ -12,7 +12,8 @@ public class DocumentsRepository(HttpManager httpManager, IndexedDBService index
 
     #region Campi
 
-    private List<DocumentModel> Documents = [];
+    private List<DocumentModel> _documents = [];
+    private List<MeteoConditionModel> _meteoConditions = [];
     private bool online = true;
     private const int TUTTI = 0;
     private readonly HttpManager _httpManager = httpManager;
@@ -38,8 +39,8 @@ public class DocumentsRepository(HttpManager httpManager, IndexedDBService index
                 if (response.Code.Equals("0"))
                 {
 
-                    Documents = JsonSerializer.Deserialize<List<DocumentModel>>(response.Content.ToString() ?? "") ?? [];
-                    _ = await _indexedDBService.Insert(IndexedDBTables.documents, Documents.Cast<object>().ToArray());
+                    _documents = JsonSerializer.Deserialize<List<DocumentModel>>(response.Content.ToString() ?? "") ?? [];
+                    _ = await _indexedDBService.Insert(IndexedDBTables.documents, _documents.Cast<object>().ToArray());
                 }
                 else if (response.Code.Equals("Ex8995BA25"))// problemi di connessione
                 {
@@ -50,12 +51,48 @@ public class DocumentsRepository(HttpManager httpManager, IndexedDBService index
             if(!online)
             {
                 var content = await _indexedDBService.ReadObjectStore(IndexedDBTables.documents);
-                Documents = content is not null ? JsonSerializer.Deserialize<List<DocumentModel>>(content) ?? [] : [];
+                _documents = content is not null ? JsonSerializer.Deserialize<List<DocumentModel>>(content) ?? [] : [];
             }
 
         }
         catch (Exception) { }
-        return Documents;
+        return _documents;
+    }
+
+    public async Task<List<MeteoConditionModel>> GetMeteoConditions()
+    {
+        try
+        {
+            //se non sono online controllo di essere ritornato online
+            if (!online)
+            {
+                await CheckIfOnline();
+            }
+            //se sono online
+            if (online)
+            {
+                var response = await _httpManager.SendHttpRequest(ApiRouting.MeteoConditionsList, TUTTI);
+                if (response.Code.Equals("0"))
+                {
+
+                    _meteoConditions = JsonSerializer.Deserialize<List<MeteoConditionModel>>(response.Content.ToString() ?? "") ?? [];
+                    _ = await _indexedDBService.Insert(IndexedDBTables.meteoConditions, _meteoConditions.Cast<object>().ToArray());
+                }
+                else if (response.Code.Equals("Ex8995BA25"))// problemi di connessione
+                {
+                    online = false;
+                }
+            } 
+            //altrimenti cerco in locale
+            if(!online)
+            {
+                var content = await _indexedDBService.ReadObjectStore(IndexedDBTables.meteoConditions);
+                _meteoConditions = content is not null ? JsonSerializer.Deserialize<List<MeteoConditionModel>>(content) ?? [] : [];
+            }
+
+        }
+        catch (Exception) { }
+        return _meteoConditions;
     }
 
     /// <summary>
@@ -125,7 +162,7 @@ public class DocumentsRepository(HttpManager httpManager, IndexedDBService index
                 var response = await _httpManager.SendHttpRequest(ApiRouting.UpdateDocument, documents);
                 if (response.Code.Equals("0"))
                 {
-                    Documents.Clear();
+                    _documents.Clear();
                     result = true;
                 }
                 else if (response.Code.Equals("Ex8995BA25"))// problemi di connessione
@@ -137,7 +174,7 @@ public class DocumentsRepository(HttpManager httpManager, IndexedDBService index
             {
                 SetOfflineChange(documents);
                 var content = await _indexedDBService.Insert(IndexedDBTables.documents, documents.Cast<object>().ToArray());
-                Documents.Clear();
+                _documents.Clear();
                 result = true;
             }
         }
@@ -158,7 +195,7 @@ public class DocumentsRepository(HttpManager httpManager, IndexedDBService index
             var response = await _httpManager.SendHttpRequest(ApiRouting.SaveDocument, document);
             if (response.Code.Equals("0"))
             {
-                Documents.Clear();
+                _documents.Clear();
                 result = true;
             }
         }
@@ -176,7 +213,7 @@ public class DocumentsRepository(HttpManager httpManager, IndexedDBService index
             var response = await _httpManager.SendHttpRequest(ApiRouting.HideDocuments, documents);
             if (response.Code.Equals("0"))
             {
-                Documents.Clear();
+                _documents.Clear();
                 result = true;
             }
         }
@@ -199,10 +236,10 @@ public class DocumentsRepository(HttpManager httpManager, IndexedDBService index
                 var response = await _httpManager.SendHttpRequest(ApiRouting.DocumentsList, TUTTI);
                 if (response.Code.Equals("0"))
                 {
-                    Documents = JsonSerializer.Deserialize<List<DocumentModel>>(response.Content.ToString() ?? "") ?? [];
+                    _documents = JsonSerializer.Deserialize<List<DocumentModel>>(response.Content.ToString() ?? "") ?? [];
                     //carico i documenti del db locale
-                    var count = await _indexedDBService.Insert(IndexedDBTables.documents, Documents.Cast<object>().ToArray());
-                    result = count == Documents.Count;
+                    var count = await _indexedDBService.Insert(IndexedDBTables.documents, _documents.Cast<object>().ToArray());
+                    result = count == _documents.Count;
                 }
             }
             catch (Exception) { }

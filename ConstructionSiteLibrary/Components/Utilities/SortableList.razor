@@ -1,6 +1,7 @@
 ﻿@using System.Collections.Generic
 @using System.Diagnostics.CodeAnalysis
 @using Microsoft.JSInterop
+@using ConstructionSiteLibrary.Model
 
 @inject IJSRuntime JS
 
@@ -27,16 +28,16 @@
     public int GroupNumber { get; set; } = 0;
 
     [Parameter]
-    public EventCallback<(int oldIndex, int newIndex)> OnUpdate { get; set; }
+    public EventCallback<ChangeObjectIndex> OnUpdate { get; set; }
 
     [Parameter]
-    public EventCallback<(int oldIndex, int newIndex, int groupNumber)> OnGroupUpdate { get; set; }
+    public EventCallback<ChangeObjectIndex> OnGroupUpdate { get; set; }
 
     [Parameter]
-    public EventCallback<(int oldIndex, int newIndex)> OnRemove { get; set; }
+    public EventCallback<ChangeObjectIndex> OnRemove { get; set; }
 
     [Parameter]
-    public EventCallback<(int oldIndex, int newIndex, int groupNumber)> OnGroupRemove { get; set; }
+    public EventCallback<ChangeObjectIndex> OnGroupRemove { get; set; }
 
     [Parameter]
     public string Id { get; set; } = Guid.NewGuid().ToString();
@@ -85,11 +86,11 @@
     {
         if(GroupNumber > 0)
         {
-            OnGroupUpdate.InvokeAsync((oldIndex, newIndex, GroupNumber));
+            OnGroupUpdate.InvokeAsync(new(oldIndex, newIndex, GroupNumber));
         }
         else
         {
-            OnUpdate.InvokeAsync((oldIndex, newIndex));
+            OnUpdate.InvokeAsync(new(oldIndex, newIndex));
         }
     }
 
@@ -97,7 +98,7 @@
     public void OnRemoveJS(int oldIndex, int newIndex)
     {
         // remove the item from the list
-        OnRemove.InvokeAsync((oldIndex, newIndex));
+        OnRemove.InvokeAsync(new(oldIndex, newIndex));
     }
 
     public void Dispose() => selfReference?.Dispose();

@@ -1,0 +1,72 @@
+﻿@using Shared.Documents
+
+@inject ConstructorSitesRepository SiteRepository
+@inject CompaniesRepository CompaniesRepository
+@inject ClientsRepository ClientsRepository
+
+@if (onLoading)
+{
+    <Loading />
+}
+else
+{
+    <div class="">
+        <RadzenTemplateForm TItem="FormSite" Data=@form Submit=@Save>
+            <RadzenStack class="px-2">
+                <RadzenFormField Text="Nome <span style='color:red'> (obbligatorio)</span>" Variant="@GlobalVariables.ComponentVariant">
+                    <ChildContent>
+                        <RadzenTextBox Name="Nome" @bind-Value="@form.Name"/>
+                    </ChildContent>
+                    <Helper>
+                        <RadzenRequiredValidator Component="Nome" Popup=false Text="Il campo Nome è obbligatorio" />
+                    </Helper>
+                </RadzenFormField>
+                <RadzenFormField Text="Descrizione" Variant="@GlobalVariables.ComponentVariant">
+                    <ChildContent>
+                        <RadzenTextArea Name="Nome" @bind-Value="@form.JobDescription" Rows="3" />
+                    </ChildContent>
+                </RadzenFormField>
+                <RadzenFormField Text="Indirizzo <span style='color:red'> (obbligatorio)</span>" Variant="@GlobalVariables.ComponentVariant">
+                    <ChildContent>
+                        <RadzenTextBox Name="Indirizzo" @bind-Value="@form.Address" />
+                    </ChildContent>
+                    <Helper>
+                        <RadzenRequiredValidator Component="Indirizzo" Popup=false Text="Il campo Indirizzo è obbligatorio" />
+                    </Helper>
+                </RadzenFormField>
+                <RadzenFormField Text="Data inizio cantiere <span style='color:red'> (obbligatorio)</span>" Variant="@GlobalVariables.ComponentVariant">
+                    <ChildContent>
+                        <RadzenDatePicker @bind-Value="@form.StartDate" DateFormat="dd/MM/yyyy" ShowTime="false" />
+                    </ChildContent>
+                    <Helper>
+                        <RadzenRequiredValidator Component="Indirizzo" Popup=false Text="Il campo Indirizzo è obbligatorio" />
+                    </Helper>
+                </RadzenFormField>
+                <RadzenFormField Text="Cliente" Variant="@GlobalVariables.ComponentVariant">
+                    <ChildContent>
+                        <RadzenDropDownDataGrid Data="@clients" @bind-Value="@form.Client" TextProperty="Name"
+                                                AllowFiltering="true" AllowColumnResize="true" AllowSorting="true" Name="Cliente">
+                            <Columns>
+                                <RadzenDropDownDataGridColumn Property="Id" Title="N." Width="40px" />
+                                <RadzenDropDownDataGridColumn Property="Name" Title="Nome" Width="200px" />
+                            </Columns>
+                        </RadzenDropDownDataGrid>
+                    </ChildContent>
+                </RadzenFormField>
+                <RadzenFormField Text="Aziende" Variant="@GlobalVariables.ComponentVariant">
+                    <ChildContent>
+                        <RadzenDropDownDataGrid Data="@companies" @bind-Value="@form.Companies" TextProperty="CompanyName" Multiple="true"
+                                                AllowFiltering="true" AllowColumnResize="true" AllowSorting="true" Name="companies">
+                            <Columns>
+                                <RadzenDropDownDataGridColumn Property="Id" Title="N." Width="40px" />
+                                <RadzenDropDownDataGridColumn Property="CompanyName" Title="Nome" Width="200px" />
+                            </Columns>
+                        </RadzenDropDownDataGrid>
+                    </ChildContent>
+                </RadzenFormField>
+                <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Salva" class="buttonSalva" IsBusy=@onSaving
+                              BusyText="Salvataggio in corso" />
+            </RadzenStack>
+        </RadzenTemplateForm>
+    </div>
+}

@@ -1,0 +1,210 @@
+﻿@using ConstructionSiteLibrary.Model
+@using Shared.Documents;
+
+@inject DialogService DialogService
+
+<ScreenComponent @ref="screenComponent" />
+@if (onLoading)
+{
+    <Loading />
+}
+else
+{
+    <div class="vstack documentSection">
+        <div class="marginYResponsive2">
+            <div class="row SectionTitleDiv">
+                <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center"><strong>FIRME</strong></RadzenText>
+            </div>
+            <div class="paddingDescrizione marginYResponsive border">
+                <RadzenText Style="text-decoration:underline">Le firme di presa visione e accettazione di seguito fanno riferimento alle prescrizioni riportate nel verbale, riferite all'impresa di appartenenza e relativi subappaltatori.</RadzenText>
+            </div>
+            <div class="hstack">
+                <RadzenLabel Text="Data:" Component="Data" Style="margin-right: 8px; vertical-align: middle;" />
+                <RadzenDatePicker Value="@Document.SignDate" TValue="DateTime?" DateFormat="dd/MM/yyyy" Style="max-width:200px;" />
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div style="margin-bottom:2rem;">
+                    </div>
+                    <div class="paddingDescrizione border my-2">
+                        <RadzenText>Il C.S.E: <strong>@Document.CSE</strong></RadzenText>
+                        @if (Document.CseSignature is not null)
+                        {
+                            <div class="col-12 p-2 border">
+                            <img src="@Document.CseSignature.Sign" width="@Document.CseSignature.Width" height="@Document.CseSignature.Height" style="width:100%; height:100%" />
+                            </div>
+                        } else
+                        {
+                           <RadzenText Text="_______________________"/>
+                        }
+                        <RadzenButton Text="Firma" Click="@(() => OpenSignaturePad(null))" class="mt-2" />
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-1">
+                        <RadzenText Style="text-decoration:underline">Per presa visione e accettazione</RadzenText>
+                    </div>
+                    @foreach (var reportedCompany in CompaniesQuestionsReported)
+                    {
+                        if (reportedCompany.ReportedQuestions.Any())
+                        {
+                            <div class="paddingDescrizione border my-2">
+                                <RadzenText>Per: <strong>@reportedCompany.Company.CompanyName</strong></RadzenText>
+                                @if (reportedCompany.Sign is not null)
+                                {
+                                    <div class="col-12 p-2 border">
+                                        <img src="@reportedCompany.Sign.Image" width="@reportedCompany.Sign.Width" height="@reportedCompany.Sign.Height" style="width:100%; height:100%" />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <RadzenText Text="_______________________" />
+                                }
+                                <RadzenButton Text="Firma" Click="@(() => OpenSignaturePad(reportedCompany))" class="mt-2" />
+                                <div class="hstack mt-2">
+                                    <RadzenText TextStyle="TextStyle.Caption" class="mb-0">Quesiti contestati:</RadzenText>
+                                    @foreach (var questionIds in reportedCompany.ReportedQuestions)
+                                    {
+                                        <RadzenButton Variant="Variant.Text" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Info">@questionIds.MarkByOrder()</RadzenButton>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@code {
+
+    [Parameter]
+    public DocumentModel Document { get; set; } = new();
+
+    private List<CompanyQuestionsReported> CompaniesQuestionsReported = [];
+
+    private bool onLoading = false;
+
+    private ScreenComponent screenComponent;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        onLoading = true;
+        await base.OnInitializedAsync();
+
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+        LoadData();
+        onLoading = false;
+    }
+
+    private void LoadData()
+    {
+        CompaniesQuestionsReported = [];
+
+        CompaniesQuestionsReported = Document.Companies.Select(x => new CompanyQuestionsReported() { Company = x, }).ToList();
+
+        foreach (var category in Document.Categories)
+        {
+            foreach (var question in category.Questions)
+            {
+                foreach (var currentChoice in question.CurrentChoices)
+                {
+                    foreach (var companyId in currentChoice.ReportedCompanyIds)
+                    {
+                        var reportedCompany = CompaniesQuestionsReported.Where(x => x.Company.Id == companyId).First();
+                        reportedCompany.ReportedQuestions.Add(new CateogoryQuestionIds()
+                            {
+                                CategoryId = category.Id,
+                                CategoryOrder = category.Order,
+                                QuestionId = question.Id,
+                                QuestionOrder = question.Order,
+                            });
+                    }
+                }
+            }
+        }
+    }
+
+    private async Task OpenSignaturePad(object? obj)
+    {
+        var width = screenComponent.ScreenSize.Width;
+        var height = screenComponent.ScreenSize.Height;
+        var canvasHeight = 300;
+        var canvasWidth = width - 60;
+        Console.WriteLine("Height: " + height);
+
+        // creo uno style aggiuntivo da inviare al componente caricato con il popup come options
+        var additionalStyle = $"height:fit-content;width:{width}px;position:static !important";
+        var newOptions = new DialogOptions
+            {
+                Style = additionalStyle
+            };
+        //creo parametri da inviare al componente caricato con il popup
+        var param = new Dictionary<string, object>
+        {
+            //tra i parametri che invio al dialog creo un EventCallback da passare al componente
+            { "OnSavedSignature", EventCallback.Factory.Create<Signature>(this, ShowSignature) },
+            { "ExtraObject" , obj },
+            { "CanvasHeight" , canvasHeight },
+            { "CanvasWidth" , canvasWidth },
+        };
+        await DialogService.OpenAsync<SignatureComponent>("Firma", parameters: param, options: newOptions);
+
+    }
+
+
+    private void ShowSignature(Signature signature)
+    {
+        DialogService.Close();
+        var curretCompany = signature.ExtraObject as CompanyQuestionsReported;
+        if (curretCompany is CompanyQuestionsReported)
+        {
+            curretCompany.Sign = signature;
+        }
+        else
+        {
+            Document.CseSignature = new();
+            Document.CseSignature.Sign = signature.Image;
+            Document.CseSignature.Width = signature.Width;
+            Document.CseSignature.Height = signature.Height;
+        }
+        StateHasChanged();
+    }
+
+    class CompanyQuestionsReported
+    {
+        public CompanyModel Company = new();
+
+        public List<CateogoryQuestionIds> ReportedQuestions = [];
+
+        public Signature? Sign;
+
+
+    }
+
+    class CateogoryQuestionIds
+    {
+        public int CategoryId;
+        public int CategoryOrder;
+        public int QuestionId;
+        public int QuestionOrder;
+
+        public string MarkById()
+        {
+            return $"{CategoryId}.{QuestionId}";
+        }
+
+        public string MarkByOrder()
+        {
+            return $"{CategoryOrder}.{QuestionOrder}";
+        }
+    }
+
+}

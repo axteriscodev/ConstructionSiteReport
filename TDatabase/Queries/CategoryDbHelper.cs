@@ -19,6 +19,7 @@ namespace TDatabase.Queries
                              select new TemplateQuestionModel()
                              {
                                  Id = q.Id,
+                                 IdCategory = q.IdCategory,
                                  Text = q.Text,                                  
                              }).ToList()
             }).OrderBy(x => x.Order).ToList();

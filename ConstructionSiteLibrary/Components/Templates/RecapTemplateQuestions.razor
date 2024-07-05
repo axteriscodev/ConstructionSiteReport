@@ -1,0 +1,33 @@
+﻿<RadzenFieldset Text="Riepilogo" class="selezioneDomande mt-3">
+    @foreach (var g in groups)
+    {
+        <div class="m-2 p-2 pt-3">
+            <RadzenRow class="bordoInferiore" Style="justify-content:space-between !important;">
+                <RadzenColumn Size="11" Style="display:flex">
+
+                    <RadzenText TextStyle="TextStyle.DisplayH6" Style="margin-left:1rem;">
+                        <strong>@CategoryText(g)</strong>
+                    </RadzenText>
+                </RadzenColumn>
+                <RadzenColumn Size="1" Style="display:flex;justify-content:end;">
+                    <RadzenButton Icon="@AccordionIcon(g)" Variant="Variant.Text" Click="@(()=>ShowQuestions(g))" />
+                </RadzenColumn>
+            </RadzenRow>
+        </div>
+        @if (g.ShowQuestion)
+        {
+            @foreach (var q in g.Questions)
+            {
+                <div style="margin-bottom:0rem;">
+
+                    <div class="margineQuestionario p-2 bordoDomanda">
+                        <RadzenRow Style="flex-wrap:nowrap !important">
+                            <RadzenText>@QuestionText(g, q.Text, q.Order)</RadzenText>
+                        </RadzenRow>
+                    </div>
+
+                </div>
+            }
+        }
+    }
+</RadzenFieldset>

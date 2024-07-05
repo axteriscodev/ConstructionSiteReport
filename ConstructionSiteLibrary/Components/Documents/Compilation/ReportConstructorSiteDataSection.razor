@@ -1,0 +1,137 @@
+﻿@using Shared.Documents;
+@using Radzen.Blazor;
+
+@inject DocumentsRepository DocumentsRepository;
+
+@if (onLoading)
+{
+    <Loading />
+}
+else
+{
+    <div class="">
+        <div class="vstack documentSection">
+            @* INTRO DOCUMENTO *@
+            <div class="marginYResponsive2">
+                <div class="row SectionTitleDiv">
+                    <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" class="SectionTitle"><strong>@Document.Title</strong> </RadzenText>
+                </div>
+                <div class="border paddingSezione">
+                    <div class="row my-2">
+                        <RadzenText>@Document.Description</RadzenText>
+                    </div>
+                </div>
+                <div class="border paddingSezione">
+                    <div class=" row my-2">
+                        <div class="col">
+                            <RadzenText>Il C.S.E.: <strong>@Document.CSE</strong></RadzenText>
+                        </div>
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <RadzenText>Data sopralluogo: <strong>@StampaData()</strong></RadzenText>
+                                </div>
+                                <div class="col">
+                                    <RadzenText>Ora: <strong>@StampaOra()</strong></RadzenText>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <RadzenRow class="my-2">
+                        <RadzenText>Condizioni meteo:</RadzenText>
+                        <RadzenRadioButtonList Data="@meteoConditions" TValue="MeteoConditionModel" Value="@Document.MeteoCondition"
+                                               TextProperty="Description" />
+                    </RadzenRow>
+                </div>
+            </div>
+
+            @* DATI CANTIERE *@
+            <div class="marginYResponsive2">
+                <div class="row SectionTitleDiv">
+                    <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" class="SectionTitle">
+                        <strong>
+                            DATI, CANTIERE, FIGURE RESPONSABILI, PROGETTISTI,RIUNIONI
+                        </strong>
+                    </RadzenText>
+                </div>
+                <div class="border my-4 paddingSezione">
+                    <div class="row my-2">
+                        <div class="col">
+                            <RadzenText>Committente: <strong>@Document.Client?.Name</strong></RadzenText>
+                        </div>
+                        <div class="col">
+                            <RadzenText>Lavori di: <strong>@Document.ConstructorSite.JobDescription</strong></RadzenText>
+                        </div>
+                    </div>
+                    <div class="row my-2">
+                        <div class="col">
+                            <RadzenText>Indirizzo cantiere: @Document.ConstructorSite.Address</RadzenText>
+                        </div>
+                        <div class="col">
+                            <RadzenText>Inizio lavori: @Document.ConstructorSite.StartDate</RadzenText>
+                        </div>
+                    </div>
+                    <div class="row my-2">
+                        <div class="col">
+                            <RadzenText>Notifica preliminare inizio cantiere del:@Document.ConstructorSite.PreliminaryNotificationStartDate</RadzenText>
+                        </div>
+                        <div class="col">
+                            <RadzenText>Id. SICO: @Document.ConstructorSite.IdSico</RadzenText>
+                        </div>
+                    </div>
+                    <div class="row my-2">
+                        <div class="col">
+                            <RadzenText> Notifica preliminare in corso: @Document.ConstructorSite.PreliminaryNotificationInProgress</RadzenText>
+                        </div>
+                        <div class="col">
+                            <RadzenText>Id. SICO: @Document.ConstructorSite.IdSicoInProgress</RadzenText>
+                        </div>
+                    </div>
+                </div>
+                     
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public DocumentModel Document { get; set; } = new();
+
+    private List<MeteoConditionModel> meteoConditions = [];
+
+    private bool onLoading = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        onLoading = true;
+        await base.OnInitializedAsync();
+        await LoadData();
+        onLoading = false;
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+    }
+
+    private async Task LoadData()
+    {
+        meteoConditions = await DocumentsRepository.GetMeteoConditions();
+    }
+
+    #region Visualizzazione
+
+    public string StampaData()
+    {
+        return Document.CompilationDate.HasValue ? Document.CompilationDate.Value.ToString("dd/MM/yyyy") : "";
+    }
+
+    public string StampaOra()
+    {
+        return Document.CompilationDate.HasValue ? Document.CompilationDate.Value.ToString("HH:mm") : "";
+    }
+
+    #endregion
+}

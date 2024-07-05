@@ -17,7 +17,7 @@ namespace ConstructionSiteLibrary.Components.ConstructorSites
 
         private void OnClick()
         {
-            Navigation.ChangePage(PageRouting.SitePage + Site.Id);
+            Navigation.ChangePage(PageRouting.ConstructorSitePage + Site.Id);
         }
     }
 }

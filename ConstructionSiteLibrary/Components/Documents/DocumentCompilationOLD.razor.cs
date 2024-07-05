@@ -9,10 +9,10 @@ using Shared.Documents;
 
 namespace ConstructionSiteLibrary.Components.Documents;
 
-public partial class DocumentCompilation
+public partial class DocumentCompilationOLD
 {
 
-    private DocumentModel documentModel = new();
+    public DocumentModel documentModel = new();
 
     /// <summary>
     /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
@@ -20,50 +20,57 @@ public partial class DocumentCompilation
     private bool initialLoading;
     private bool onSaving = false;
 
-    private int CurrentSelection;
     private string ImgFirma = "";
     private List<string> ImgAllegati = [];
     private ScreenComponent? screenComponent;
     private ScreenSize? canvasSize = new() { Width = 600, Height = 150 };
 
-    IEnumerable<int> DocumentsList = [];
+    //IEnumerable<int> DocumentsList = [];
     List<VisualCategory> visualCategories = [];
 
     [Parameter]
     public string Param { get; set; } = "";
 
+    [Parameter]
+    public int CurrentSelection { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         initialLoading = true;
         await base.OnInitializedAsync();
-        //await LoadData();
+        await LoadData();
         initialLoading = false;
     }
 
-    // private async Task LoadData()
-    // {
-    //     List<DocumentModel> docLists = await DocumentsRepository.GetDocuments();
-
-    //     if (docLists.Count != 0)
-    //     {
-    //         DocumentsList = docLists.Select(x => x.Id);
-    //         if(CurrentSelection == 0)
-    //         {
-    //             CurrentSelection = docLists.First().Id;
-    //         }
-
-    //         documentModel = docLists.Where(x => x.Id == CurrentSelection).FirstOrDefault() ?? new();
-    //         CreateVisualCategories();
-    //     }
-    // }
-
-    private async Task OnDocumentSelected()
+    private async Task LoadData()
     {
+        // List<DocumentModel> docLists = await DocumentsRepository.GetDocuments();
+
+        // if (docLists.Count != 0)
+        // {
+        //     DocumentsList = docLists.Select(x => x.Id);
+        //     if(CurrentSelection == 0)
+        //     {
+        //         CurrentSelection = docLists.First().Id;
+        //     }
+
+        //     documentModel = docLists.Where(x => x.Id == CurrentSelection).FirstOrDefault() ?? new();
+        //     CreateVisualCategories();
+        // }
+
         documentModel = await DocumentsRepository.GetDocumentById(CurrentSelection);
         CreateVisualCategories();
         ImgFirma = "";
         ImgAllegati = [];
     }
+
+    // private async Task OnDocumentSelected()
+    // {
+    //     documentModel = await DocumentsRepository.GetDocumentById(CurrentSelection);
+    //     CreateVisualCategories();
+    //     ImgFirma = "";
+    //     ImgAllegati = [];
+    // }
 
     private void CreateVisualCategories()
     {
@@ -71,15 +78,25 @@ public partial class DocumentCompilation
         foreach (var cat in documentModel.Categories)
         {
             visualCategories.Add(new() { Category = cat });
+
+            foreach(var question in cat.Questions)
+            {
+                InitCurrentChoicesList(question.CurrentChoices);
+            }
         }
+    }
+
+    private void OnChange( List<DocumentChoiceModel?> list)
+    {
+        Console.WriteLine($"OnChange!");
     }
 
     private async Task SaveForm()
     {
         onSaving = true;
         //documentModel.LastModified = DateTime.Now;
-       await DocumentsRepository.UpdateDocuments([documentModel]);
-       //await LoadData();
+        await DocumentsRepository.UpdateDocuments([documentModel]);
+        //await LoadData();
         onSaving = false;
     }
 
@@ -89,15 +106,15 @@ public partial class DocumentCompilation
         ImgFirma = signature.Image;
         StateHasChanged();
     }
-    
+
     private void ScreenSizeObservable(ScreenSize? size)
     {
-        if(size is not null)
+        if (size is not null)
         {
-            if(size.Width < canvasSize.Width)
+            if (size.Width < canvasSize.Width)
             {
                 Console.WriteLine("cv - " + canvasSize.Width);
-                canvasSize.Width = size.Width -60;
+                canvasSize.Width = size.Width - 60;
                 Console.WriteLine("cv new - " + canvasSize.Width);
                 StateHasChanged();
             }
@@ -131,6 +148,14 @@ public partial class DocumentCompilation
     private static string AccordionIcon(VisualCategory cat)
     {
         return cat.ShowQuestion ? "remove" : "add";
+    }
+
+    private void InitCurrentChoicesList(List<DocumentChoiceModel?> list)
+    {
+        if(list.Count == 0) 
+        {
+            list.Add(new());
+        }
     }
 
     #endregion

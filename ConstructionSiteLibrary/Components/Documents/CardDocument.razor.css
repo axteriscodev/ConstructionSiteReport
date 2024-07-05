@@ -1,11 +1,20 @@
-﻿.round-border {
+﻿
+.documentCard {
+    width: 240px;
     border-radius: 1.5rem !important;
 }
 
-.text-bborder {
-    margin-bottom: 0rem !important
+    .documentCard:hover {
+        border: 1px solid var(--rz-primary);
+        box-shadow: 0 1rem 1.5rem rgba(0, 0, 0, .15) !important;
+        background-color: var(--background-Card-color2) !important;
+    }
+
+.documentTitle, ::deep .documentTitle {
+    margin: 1rem 1rem;
+    text-align:center;
 }
 
-.text-size {
-    font-size: 15px;
+.documentIcon, ::deep .documentIcon {
+    font-size: 15rem !important;
 }

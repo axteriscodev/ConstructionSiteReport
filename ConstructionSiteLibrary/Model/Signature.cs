@@ -11,5 +11,6 @@ namespace ConstructionSiteLibrary.Model
         public string Image { get; set; } = "";
         public int Width { get; set; }
         public int Height { get; set; }
+        public object? ExtraObject { get; set; }
     }
 }

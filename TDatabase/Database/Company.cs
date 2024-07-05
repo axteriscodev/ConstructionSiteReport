@@ -43,5 +43,7 @@ public partial class Company
 
     public virtual ICollection<CompanyDocument> CompanyDocuments { get; set; } = new List<CompanyDocument>();
 
+    public virtual ICollection<CompanyNote> CompanyNotes { get; set; } = new List<CompanyNote>();
+
     public virtual ICollection<ReportedCompany> ReportedCompanies { get; set; } = new List<ReportedCompany>();
 }

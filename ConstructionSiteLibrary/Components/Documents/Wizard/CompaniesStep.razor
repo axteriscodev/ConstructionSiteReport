@@ -1,0 +1,57 @@
+﻿@using Shared.Documents
+@using ConstructionSiteLibrary.Model.DocumentWizard
+@inject CompaniesRepository CompaniesRepository
+
+<div>
+    @if (onloading)
+    {
+        <Loading />
+    }
+    else
+    {
+        <div class="card shadow mb-3 divCard">
+            <RadzenText TextStyle="TextStyle.Body1" class="mb-2">
+                Seleziona le aziende che dovranno essere presenti nel documento
+            </RadzenText>
+            <RadzenFormField Text="Aziende" Variant="@GlobalVariables.ComponentVariant" class="formField">
+                <ChildContent>
+                    <RadzenDropDown @ref="@companiesDropDown" TValue="CompanyModel" Name="Companies" Data="@companies" TextProperty="CompanyName"
+                                    AllowClear="true" Change="@OnSelectedCompany" />
+                </ChildContent>
+            </RadzenFormField>
+            @foreach (var comp in SelectedCompanies)
+            {
+                <div class="card shadow m-3 divCard">
+                    <div class="row">
+                        <div class="col colComp1">
+                            <RadzenFormField Text="Nome" Variant="@GlobalVariables.ComponentVariant" class="formField">
+                                <ChildContent>
+                                    <RadzenTextBox Name="companyName" @bind-Value="@comp.CompanyName" Disabled="true" class="textCompanyName" />
+                                </ChildContent>
+                            </RadzenFormField>
+                            <RadzenFormField Text="descrizione attività" Variant="@GlobalVariables.ComponentVariant" class="formField">
+                                <ChildContent>
+                                    <RadzenTextArea Name="activity" @bind-Value="@comp.JobsDescriptions" Rows="4" />
+                                </ChildContent>
+                            </RadzenFormField>
+                        </div>
+                        <div class="col colComp2">
+                            <RadzenButton Icon="cancel" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Text" Click="@(()=>RemoveSelectedCompany(comp))" />
+                        </div>
+                    </div>
+
+                </div>
+            }
+        </div>
+        <div class="row">
+            <div class="col">
+                <RadzenButton Icon="arrow_back" Text="Indietro" Click="@Back" />
+            </div>
+            <div class="col divForward">
+                <RadzenButton Click="@Forward" Icon="arrow_forward" Text="Avanti" class="buttonForward" />
+            </div>
+        </div>
+    }
+</div>
+
+

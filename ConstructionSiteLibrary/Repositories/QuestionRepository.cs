@@ -87,7 +87,7 @@ public class QuestionRepository(HttpManager httpManager)
         return Choices;
     }
 
-    public async Task<bool> SaveChoice(ChoiceModel choice)
+    public async Task<bool> SaveChoice(TemplateChoiceModel choice)
     {
         var response = await _httpManager.SendHttpRequest(ApiRouting.SaveChoice, choice);
 
@@ -101,7 +101,7 @@ public class QuestionRepository(HttpManager httpManager)
         return false;
     }
 
-    public async Task<bool> UpdateChoices(List<ChoiceModel> choices)
+    public async Task<bool> UpdateChoices(List<TemplateChoiceModel> choices)
     {
         var response = await _httpManager.SendHttpRequest(ApiRouting.UpdateChoices, choices);
         //NotificationService.Notify(response);

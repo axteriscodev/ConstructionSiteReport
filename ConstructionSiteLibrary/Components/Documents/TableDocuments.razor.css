@@ -1,0 +1,101 @@
+﻿
+.siteTitle{
+    justify-content:center;
+    margin-bottom:2rem;
+}
+.searchBar, ::deep .searchBar {
+    width: 80% !important;
+}
+
+.settingIcon, ::deep .settingIcon {
+    font-size: 3rem !important;
+}
+
+    .settingIcon:hover, ::deep .settingIcon:hover {
+        /*box-shadow: 0 1rem 1.5rem rgba(0, 0, 0, .15) !important;*/
+        color: var(--rz-primary-lighter) !important;
+    }
+
+.colSetting {
+    justify-content: end;
+    display: flex !important;
+    flex-wrap: wrap;
+}
+
+.divDocumentList{
+/*    height:800px;
+    overflow-y:scroll;*/
+}
+
+.divSearchBar {
+    flex: 0 0 auto;
+    width: 450px;
+    justify-content: center;
+    display: flex !important;
+    flex-wrap: wrap;
+}
+
+.buttonBack, ::deep .buttonBack {
+    width: 10%;
+    min-width: 140px;
+    height: 50px;
+    border-radius: 1.2rem !important;
+    margin-left: 1rem;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: end;
+}
+
+.buttonNewDocument, ::deep .buttonNewDocument {
+    /*width: 50%;*/
+    width: 180px;
+    min-width: 180px;
+    height: 50px;
+    border-radius: 1.2rem !important;
+    margin-right: 1rem;
+}
+
+.textNewSite, ::deep .textNewSite {
+    color: white;
+    margin-top: 0.6rem;
+}
+
+
+.colUtility {
+    flex: 0 0 auto;
+    width: 33.33333333%;
+}
+
+.documentColumn {
+    display: flex;
+    justify-content: center;
+}
+
+@media(max-width: 1400px) {
+
+    .divSearchBar {
+        flex: 0 0 auto;
+        /*width: 66.66666667%;*/
+        display: flex !important;
+        flex-wrap: wrap;
+        /*justify-content: start;*/
+    }
+
+    .searchBar, ::deep .searchBar {
+        width: 80% !important;
+    }
+
+    .buttonNewDocument, ::deep .buttonNewDocument {
+        /*width: 80%;*/
+        width: 180px;
+        height: 50px;
+        border-radius: 1.2rem !important;
+        margin-right: 1rem;
+    }
+
+    .EmptyColumn {
+        display: none;
+    }
+}

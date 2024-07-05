@@ -1,5 +1,5 @@
 ﻿using ConstructionSiteLibrary.Components.Utilities;
-
+using ConstructionSiteLibrary.Utility;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Radzen;
@@ -81,6 +81,12 @@ public partial class TableTemplates
             }
         }
     }
+
+    private void OpenWizard()
+    {
+        NavigationService.ChangePage(PageRouting.TemplateWizardPage);
+    }
+
 
     private void OnTemplateSelected(TemplateModel selectedTemplate)
     {

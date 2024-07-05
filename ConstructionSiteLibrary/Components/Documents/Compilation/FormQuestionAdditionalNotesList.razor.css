@@ -1,0 +1,90 @@
+﻿
+
+
+.SectionTitleDiv {
+    border: solid 1px black;
+    padding: 0.5rem;
+    background-color: #ebebeb;
+    margin: 0rem;
+}
+
+.documentSection {
+    padding-right: 1.5rem !important;
+    padding-left: 1.5rem !important;
+}
+
+.SectionTitle, ::deep .SectionTitle {
+    margin: 0px;
+}
+
+.spaceBetween, ::deep .spaceBetween {
+    justify-content: space-between !important;
+}
+
+.borderBottom, ::deep .borderBottom {
+    border-bottom: solid 1px #dee2e6;
+}
+
+.paddingSezione, ::deep .paddingSezione {
+    padding: 0rem 0.7rem 0.7rem 0.7rem;
+}
+
+.impresaEsecutrice {
+    justify-content: flex-end;
+    display: flex;
+    margin-right: 1rem;
+}
+
+.marginYResponsive {
+    margin-top: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+}
+
+.marginYResponsive2 {
+    margin-top: 1.5rem !important;
+}
+
+.paddingYResponsive, ::deep .paddingYResponsive {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+@media(max-width: 768px) {
+
+    .SectionTitleDiv {
+        border: solid 1px black;
+        padding: 0.5rem;
+        background-color: #ebebeb;
+        margin: 0;
+    }
+
+    .documentSection {
+        padding-right: 0.5rem !important;
+        padding-left: 0.5rem !important;
+    }
+
+    .paddingSezione, ::deep .paddingSezione {
+        padding: 0rem 0.7rem 0.7rem 0.7rem;
+        margin-top: 0.5rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    .marginYResponsive {
+        margin-top: 0.5rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    .marginYResponsive2 {
+        margin-top: 0.5rem !important;
+    }
+
+    .paddingYResponsive, ::deep .paddingYResponsive {
+        padding-top: 0.1rem;
+        padding-bottom: 0.1rem;
+    }
+
+    .documentSection {
+        padding-right: 0.5rem !important;
+        padding-left: 0.5rem !important;
+    }
+}

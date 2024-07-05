@@ -41,6 +41,8 @@ public partial class DbCsclDamicoV2Context : DbContext
 
     public virtual DbSet<Document> Documents { get; set; }
 
+    public virtual DbSet<MeteoCondition> MeteoConditions { get; set; }
+
     public virtual DbSet<Note> Notes { get; set; }
 
     public virtual DbSet<Question> Questions { get; set; }
@@ -55,9 +57,9 @@ public partial class DbCsclDamicoV2Context : DbContext
 
     public virtual DbSet<Template> Templates { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=v00rca2-vm.sphostserver.com\\axterisco2019;Initial Catalog=DB_CSCL_DAMICO_V2;User ID=sa;password=AdmP@ss2003;TrustServerCertificate=True");
+    public virtual DbSet<TemplateDescription> TemplateDescriptions { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -89,12 +91,11 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.HasOne(d => d.IdDocumentNavigation).WithMany(p => p.Attachments)
                 .HasForeignKey(d => d.IdDocument)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__ATTACHMEN__ID_DO__76969D2E");
+                .HasConstraintName("FK__ATTACHMEN__ID_DO__236943A5");
 
             entity.HasOne(d => d.IdTypeNavigation).WithMany(p => p.Attachments)
                 .HasForeignKey(d => d.IdType)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__ATTACHMEN__ID_TY__75A278F5");
+                .HasConstraintName("FK__ATTACHMEN__ID_TY__41EDCAC5");
         });
 
         modelBuilder.Entity<AttachmentNote>(entity =>
@@ -111,6 +112,15 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.Property(e => e.Name)
                 .IsUnicode(false)
                 .HasColumnName("NAME");
+
+            entity.HasOne(d => d.IdAttachmentNavigation).WithMany(p => p.AttachmentNotes)
+                .HasForeignKey(d => d.IdAttachment)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__ATTACHMEN__ID_AT__40058253");
+
+            entity.HasOne(d => d.IdNoteNavigation).WithMany(p => p.AttachmentNotes)
+                .HasForeignKey(d => d.IdNote)
+                .HasConstraintName("FK__ATTACHMEN__ID_NO__40F9A68C");
         });
 
         modelBuilder.Entity<AttachmentQuestion>(entity =>
@@ -127,6 +137,15 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.Property(e => e.Location)
                 .IsUnicode(false)
                 .HasColumnName("LOCATION");
+
+            entity.HasOne(d => d.IdAttachmentNavigation).WithMany(p => p.AttachmentQuestions)
+                .HasForeignKey(d => d.IdAttachment)
+                .HasConstraintName("FK__ATTACHMEN__ID_AT__43D61337");
+
+            entity.HasOne(d => d.IdQuestionNavigation).WithMany(p => p.AttachmentQuestions)
+                .HasForeignKey(d => d.IdQuestion)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__ATTACHMEN__ID_QU__42E1EEFE");
         });
 
         modelBuilder.Entity<AttachmentType>(entity =>
@@ -291,12 +310,15 @@ public partial class DbCsclDamicoV2Context : DbContext
 
         modelBuilder.Entity<CompanyConstructorSite>(entity =>
         {
-            entity.HasKey(e => new { e.IdCompany, e.IdConstructorSite }).HasName("PK__COMPANY___D64E0105822D5E16");
+            entity.HasKey(e => new { e.IdCompany, e.IdConstructorSite }).HasName("PK__tmp_ms_x__D64E010511BEACFE");
 
             entity.ToTable("COMPANY_CONSTRUCTOR_SITE");
 
             entity.Property(e => e.IdCompany).HasColumnName("ID_COMPANY");
             entity.Property(e => e.IdConstructorSite).HasColumnName("ID_CONSTRUCTOR_SITE");
+            entity.Property(e => e.JobsDescription)
+                .IsUnicode(false)
+                .HasColumnName("JOBS_DESCRIPTION");
             entity.Property(e => e.Note)
                 .IsUnicode(false)
                 .HasColumnName("NOTE");
@@ -304,12 +326,12 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.CompanyConstructorSites)
                 .HasForeignKey(d => d.IdCompany)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__COMPANY_C__ID_CO__07C12930");
+                .HasConstraintName("FK__COMPANY_C__ID_CO__31B762FC");
 
             entity.HasOne(d => d.IdConstructorSiteNavigation).WithMany(p => p.CompanyConstructorSites)
                 .HasForeignKey(d => d.IdConstructorSite)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__COMPANY_C__ID_CO__7C4F7684");
+                .HasConstraintName("FK__COMPANY_C__ID_CO__395884C4");
         });
 
         modelBuilder.Entity<CompanyDocument>(entity =>
@@ -329,8 +351,7 @@ public partial class DbCsclDamicoV2Context : DbContext
 
             entity.HasOne(d => d.IdDocumentNavigation).WithMany(p => p.CompanyDocuments)
                 .HasForeignKey(d => d.IdDocument)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__COMPANY_D__ID_DO__5629CD9C");
+                .HasConstraintName("FK__COMPANY_D__ID_DO__44CA3770");
         });
 
         modelBuilder.Entity<CompanyNote>(entity =>
@@ -347,15 +368,24 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.Property(e => e.Note)
                 .IsUnicode(false)
                 .HasColumnName("NOTE");
+
+            entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.CompanyNotes)
+                .HasForeignKey(d => d.IdCompany)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__COMPANY_N__ID_CO__3F115E1A");
+
+            entity.HasOne(d => d.IdNoteNavigation).WithMany(p => p.CompanyNotes)
+                .HasForeignKey(d => d.IdNote)
+                .HasConstraintName("FK__COMPANY_N__ID_NO__3E1D39E1");
         });
 
         modelBuilder.Entity<ConstructorSite>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3214EC27A1378A76");
+            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3214EC271C384673");
 
             entity.ToTable("CONSTRUCTOR_SITE");
 
-            entity.HasIndex(e => e.Name, "UQ__tmp_ms_x__D9C1FA00A87E579B").IsUnique();
+            entity.HasIndex(e => e.Name, "UQ__tmp_ms_x__D9C1FA0006672FF6").IsUnique();
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
@@ -367,10 +397,24 @@ public partial class DbCsclDamicoV2Context : DbContext
                 .HasMaxLength(200)
                 .IsUnicode(false)
                 .HasColumnName("ADDRESS");
+            entity.Property(e => e.Cse)
+                .IsUnicode(false)
+                .HasColumnName("CSE");
+            entity.Property(e => e.Dl)
+                .IsUnicode(false)
+                .HasColumnName("DL");
             entity.Property(e => e.EndDate)
                 .HasColumnType("datetime")
                 .HasColumnName("END_DATE");
             entity.Property(e => e.IdClient).HasColumnName("ID_CLIENT");
+            entity.Property(e => e.IdSico)
+                .HasMaxLength(30)
+                .IsUnicode(false)
+                .HasColumnName("ID_SICO");
+            entity.Property(e => e.IdSicoInProgress)
+                .HasMaxLength(30)
+                .IsUnicode(false)
+                .HasColumnName("ID_SICO_IN_PROGRESS");
             entity.Property(e => e.JobDescription)
                 .IsUnicode(false)
                 .HasColumnName("JOB_DESCRIPTION");
@@ -378,18 +422,30 @@ public partial class DbCsclDamicoV2Context : DbContext
                 .HasMaxLength(200)
                 .IsUnicode(false)
                 .HasColumnName("NAME");
+            entity.Property(e => e.Note)
+                .IsUnicode(false)
+                .HasColumnName("NOTE");
+            entity.Property(e => e.PreliminaryNotificationInProgress)
+                .HasColumnType("datetime")
+                .HasColumnName("PRELIMINARY_NOTIFICATION_IN_PROGRESS");
+            entity.Property(e => e.PreliminaryNotificationStart)
+                .HasColumnType("datetime")
+                .HasColumnName("PRELIMINARY_NOTIFICATION_START");
+            entity.Property(e => e.Rl)
+                .IsUnicode(false)
+                .HasColumnName("RL");
             entity.Property(e => e.StartDate)
                 .HasColumnType("datetime")
                 .HasColumnName("START_DATE");
 
             entity.HasOne(d => d.IdClientNavigation).WithMany(p => p.ConstructorSites)
                 .HasForeignKey(d => d.IdClient)
-                .HasConstraintName("FK__CONSTRUCT__ID_CL__03F0984C");
+                .HasConstraintName("FK__CONSTRUCT__ID_CL__3864608B");
         });
 
         modelBuilder.Entity<Document>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__DOCUMENT__3214EC2755929FAF");
+            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3214EC273047651A");
 
             entity.ToTable("DOCUMENT");
 
@@ -399,11 +455,24 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.Property(e => e.CompilationDate)
                 .HasColumnType("datetime")
                 .HasColumnName("COMPILATION_DATE");
+            entity.Property(e => e.CompletedIn)
+                .IsUnicode(false)
+                .HasColumnName("COMPLETED_IN");
             entity.Property(e => e.CreationDate)
                 .HasColumnType("datetime")
                 .HasColumnName("CREATION_DATE");
+            entity.Property(e => e.Cse)
+                .IsUnicode(false)
+                .HasColumnName("CSE");
+            entity.Property(e => e.Description)
+                .IsUnicode(false)
+                .HasColumnName("DESCRIPTION");
+            entity.Property(e => e.DraftedIn)
+                .IsUnicode(false)
+                .HasColumnName("DRAFTED_IN");
             entity.Property(e => e.IdClient).HasColumnName("ID_CLIENT");
             entity.Property(e => e.IdConstructorSite).HasColumnName("ID_CONSTRUCTOR_SITE");
+            entity.Property(e => e.IdMeteo).HasColumnName("ID_METEO");
             entity.Property(e => e.IdTemplate).HasColumnName("ID_TEMPLATE");
             entity.Property(e => e.LastEditDate)
                 .HasColumnType("datetime")
@@ -415,15 +484,41 @@ public partial class DbCsclDamicoV2Context : DbContext
 
             entity.HasOne(d => d.IdClientNavigation).WithMany(p => p.Documents)
                 .HasForeignKey(d => d.IdClient)
-                .HasConstraintName("FK__DOCUMENT__ID_CLI__5165187F");
+                .HasConstraintName("FK__DOCUMENT__ID_CLI__245D67DE");
 
             entity.HasOne(d => d.IdConstructorSiteNavigation).WithMany(p => p.Documents)
                 .HasForeignKey(d => d.IdConstructorSite)
-                .HasConstraintName("FK__DOCUMENT__ID_CON__7D439ABD");
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__DOCUMENT__ID_CON__37703C52");
+
+            entity.HasOne(d => d.IdMeteoNavigation).WithMany(p => p.Documents)
+                .HasForeignKey(d => d.IdMeteo)
+                .HasConstraintName("FK__DOCUMENT__ID_MET__2739D489");
 
             entity.HasOne(d => d.IdTemplateNavigation).WithMany(p => p.Documents)
                 .HasForeignKey(d => d.IdTemplate)
-                .HasConstraintName("FK__DOCUMENT__ID_TEM__52593CB8");
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__DOCUMENT__ID_TEM__4C6B5938");
+        });
+
+        modelBuilder.Entity<MeteoCondition>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__METEO_CO__3214EC27A0D6F8CC");
+
+            entity.ToTable("METEO_CONDITION");
+
+            entity.HasIndex(e => e.Description, "UQ__METEO_CO__4193D92E6216CE25").IsUnique();
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("ID");
+            entity.Property(e => e.Description)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("DESCRIPTION");
+            entity.Property(e => e.Note)
+                .IsUnicode(false)
+                .HasColumnName("NOTE");
         });
 
         modelBuilder.Entity<Note>(entity =>
@@ -445,8 +540,7 @@ public partial class DbCsclDamicoV2Context : DbContext
 
             entity.HasOne(d => d.IdDocumentNavigation).WithMany(p => p.Notes)
                 .HasForeignKey(d => d.IdDocument)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__NOTE__ID_DOCUMEN__71D1E811");
+                .HasConstraintName("FK__NOTE__ID_DOCUMEN__3D2915A8");
         });
 
         modelBuilder.Entity<Question>(entity =>
@@ -492,8 +586,7 @@ public partial class DbCsclDamicoV2Context : DbContext
 
             entity.HasOne(d => d.IdDocumentNavigation).WithMany(p => p.QuestionAnswereds)
                 .HasForeignKey(d => d.IdDocument)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__QUESTION___ID_DO__6A30C649");
+                .HasConstraintName("FK__QUESTION___ID_DO__3B40CD36");
 
             entity.HasOne(d => d.IdQuestionChosenNavigation).WithMany(p => p.QuestionAnswereds)
                 .HasForeignKey(d => d.IdQuestionChosen)
@@ -547,7 +640,7 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.HasOne(d => d.IdTemplateNavigation).WithMany(p => p.QuestionChosens)
                 .HasForeignKey(d => d.IdTemplate)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__QUESTION___ID_TE__6477ECF3");
+                .HasConstraintName("FK__QUESTION___ID_TE__4E53A1AA");
         });
 
         modelBuilder.Entity<ReportedCompany>(entity =>
@@ -571,13 +664,12 @@ public partial class DbCsclDamicoV2Context : DbContext
 
             entity.HasOne(d => d.QuestionAnswered).WithMany(p => p.ReportedCompanies)
                 .HasForeignKey(d => new { d.IdCurrentChoice, d.IdQuestionChosen, d.IdDocument })
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__REPORTED_COMPANY__6E01572D");
+                .HasConstraintName("FK__REPORTED_COMPANY__3C34F16F");
         });
 
         modelBuilder.Entity<Template>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__TEMPLATE__3214EC27A44F2DEB");
+            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3214EC2743AEB1A2");
 
             entity.ToTable("TEMPLATE");
 
@@ -590,9 +682,36 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.Property(e => e.Date)
                 .HasColumnType("datetime")
                 .HasColumnName("DATE");
+            entity.Property(e => e.IdDescription).HasColumnName("ID_DESCRIPTION");
+            entity.Property(e => e.Name)
+                .IsUnicode(false)
+                .HasDefaultValue("")
+                .HasColumnName("NAME");
             entity.Property(e => e.Note)
                 .IsUnicode(false)
                 .HasColumnName("NOTE");
+            entity.Property(e => e.Title)
+                .IsUnicode(false)
+                .HasColumnName("TITLE");
+
+            entity.HasOne(d => d.IdDescriptionNavigation).WithMany(p => p.Templates)
+                .HasForeignKey(d => d.IdDescription)
+                .HasConstraintName("FK__TEMPLATE__ID_DES__4D5F7D71");
+        });
+
+        modelBuilder.Entity<TemplateDescription>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__TEMPLATE__3214EC27756F307B");
+
+            entity.ToTable("TEMPLATE_DESCRIPTION");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("ID");
+            entity.Property(e => e.Active).HasColumnName("ACTIVE");
+            entity.Property(e => e.Description)
+                .IsUnicode(false)
+                .HasColumnName("DESCRIPTION");
             entity.Property(e => e.Title)
                 .IsUnicode(false)
                 .HasColumnName("TITLE");

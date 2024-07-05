@@ -61,7 +61,7 @@ namespace ConstructionSiteLibrary.Services
         /// se non ho pagina indietro torna stringa vuota
         /// </summary>
         /// <returns></returns>
-        public void TornaIndietro()
+        public void Back()
         {
             var pagina = _pageHistory.PreviousPage();
             if (!pagina.Equals(""))

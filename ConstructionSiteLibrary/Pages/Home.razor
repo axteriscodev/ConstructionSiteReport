@@ -1,26 +1,27 @@
 ﻿@using ConstructionSiteLibrary.Model
 @using ConstructionSiteLibrary.Interfaces
 @using ConstructionSiteLibrary.Components.ConstructorSites
-@inject ICameraService CameraService;
+@inject ICameraService CameraService
 
 
 @attribute [Route(PageRouting.HomePage)]
 
 
 <ScreenComponent OnScreenSizeChanged="@ScreenSizeChanged" OnScreenDimensionChanged="@ScreenDimensionChanged" />
-<PageTitle>Construction Site Report</PageTitle>
+<PageTitle>I miei cantieri</PageTitle>
+@* <PageTitle>Construction Site Report</PageTitle>
 
-<h1>Construction Site Report</h1>
+
 <p style="margin-top:2rem;font-size: large;">
     Benvenuto nella tua app per la gestione di documenti della sicurezza!<br />
     Qui puoi creare, personalizzare e compilare i documenti in base alle tue necessità e a quelle del cliente.
-</p>
+</p> *@
 @* <div>
     <OnlineSyncComponent />
 </div> *@
-
+<RadzenText TextAlign="TextAlign.Center" TextStyle="TextStyle.H4" Text="I miei cantieri"/>
 <div class="my-3">
-    <CardListConstructorSite />
+    <ConstructorSiteView />
 </div>
 
 

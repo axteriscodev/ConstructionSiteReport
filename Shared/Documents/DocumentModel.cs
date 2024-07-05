@@ -10,8 +10,14 @@ public class DocumentModel
     [JsonPropertyName("idTemplate")]
     public int IdTemplate { get; set; }
 
+    [JsonPropertyName("meteoCondition")]
+    public MeteoConditionModel? MeteoCondition { get; set; }
+
     [JsonPropertyName("title")]
     public string Title { get; set; } = "";
+
+    [JsonPropertyName("description")]
+    public string Description { get; set; } = "";
 
     [JsonPropertyName("creationDate")]
     public DateTime? CreationDate { get; set; }
@@ -21,6 +27,9 @@ public class DocumentModel
 
     [JsonPropertyName("lastEditDate")]
     public DateTime? LastEditDate { get; set; }
+
+    [JsonPropertyName("signDate")]
+    public DateTime? SignDate { get; set; }
 
     [JsonPropertyName("readonly")]
     public bool ReadOnly { get; set; }
@@ -32,7 +41,7 @@ public class DocumentModel
     public ClientModel? Client { get; set; }
 
     [JsonPropertyName("constructorSite")]
-    public ConstructorSiteModel? ConstructorSite { get; set; }
+    public ConstructorSiteModel ConstructorSite { get; set; } = new();
 
     [JsonPropertyName("categories")]
     public List<DocumentCategoryModel> Categories { get; set; } = [];
@@ -41,11 +50,25 @@ public class DocumentModel
     public List<CompanyModel> Companies { get; set; } = [];
 
     [JsonPropertyName("signatures")]
-    public List<SignatureModel> Signature { get; set; } = [];
+    public List<SignatureModel> Signatures { get; set; } = [];
+
+    [JsonPropertyName("cseSign")]
+    public SignatureModel? CseSignature { get; set; }
 
     [JsonPropertyName("attachments")]
     public List<AttachmentModel> Attachments { get; set; } = [];
 
     [JsonPropertyName("notes")]
     public List<NoteModel> Notes { get; set; } = [];
+
+    [JsonPropertyName("cse")]
+    public string? CSE { get; set; }
+
+    [JsonPropertyName("draftedIn")]
+    public string? DraftedIn { get; set; }
+
+     [JsonPropertyName("completedIn")]
+    public string? CompletedIn { get; set; }
+
+
 }

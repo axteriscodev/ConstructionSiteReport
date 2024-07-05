@@ -6,10 +6,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="wwwroot\css\rootDefault.css" />
-  </ItemGroup>
-
 
   <ItemGroup>
     <SupportedPlatform Include="browser" />
@@ -17,8 +13,8 @@
 
   <ItemGroup>
     <PackageReference Include="AXT_WebComunication" Version="1.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.3" />
-    <PackageReference Include="Radzen.Blazor" Version="4.31.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.6" />
+    <PackageReference Include="Radzen.Blazor" Version="4.32.4" />
   </ItemGroup>
 
   <ItemGroup>

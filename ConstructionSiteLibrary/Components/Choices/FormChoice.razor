@@ -12,8 +12,7 @@
                     <RadzenTextBox Name="Tag" @bind-Value="@form.Tag" />
                 </ChildContent>
                 <Helper>
-                    <RadzenRequiredValidator Component="Tag"
-                    Popup=false Text="Il campo Tag è obbligatorio" />
+                    <RadzenRequiredValidator Component="Tag" Popup=false Text="Il campo Tag è obbligatorio" />
                 </Helper>
             </RadzenFormField>
 
@@ -22,10 +21,14 @@
                     <RadzenTextBox Name="Value" @bind-Value="@form.Value" />
                 </ChildContent>
                 <Helper>
-                    <RadzenRequiredValidator Component="Value"
-                    Popup=false Text="Il campo Valore è obbligatorio" />
+                    <RadzenRequiredValidator Component="Value" Popup=false Text="Il campo Valore è obbligatorio" />
                 </Helper>
             </RadzenFormField>
+
+            <div class="rz-text-align-left">
+                <RadzenLabel Text="Da segnalare" Component="ReportableFlag" Style="margin-right: 8px; vertical-align: middle;" />
+                <RadzenCheckBox @bind-Value=@form.Reportable Name="ReportableFlag" />
+            </div>
 
             <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Salva" class="buttonSalva" IsBusy=@onSaving
                 BusyText="Salvataggio in corso" />

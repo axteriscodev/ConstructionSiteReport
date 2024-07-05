@@ -15,16 +15,27 @@
 
     [Parameter]
     public EventCallback<ScreenSize?> OnScreenSizeChanged { get; set; }
+
+    /// <summary>
+    /// Valore minimo della larghezza dello schermo per considerarlo small
+    /// </summary>
+    [Parameter]
+    public int SizeS { get; set; } = 600;
     /// <summary>
     /// Valore minimo della larghezza dello schermo per considerarlo medium
     /// </summary>
     [Parameter]
-    public int MediumWith { get; set; } = 800;
+    public int SizeM { get; set; } = 800;
     /// <summary>
-    /// Valore minimo della larghezza dello schermo per considerarlo big
+    /// Valore minimo della larghezza dello schermo per considerarlo Large
     /// </summary>
     [Parameter]
-    public int BigWith { get; set; } = 1200;
+    public int SizeL { get; set; } = 1100;
+    /// <summary>
+    /// Valore minimo della larghezza dello schermo per considerarlo XL
+    /// </summary>
+    [Parameter]
+    public int SizeXL { get; set; } = 1400;
 
     /// <summary>
     /// La dimensione attuale dello schermo
@@ -82,20 +93,39 @@
         ScreenDimension? dim = null;
         if(size is not null)
         {
-            if (size.Width < MediumWith)
+
+            if(size.Width >= SizeXL)
             {
-                dim = Model.ScreenDimension.Small;
+                dim = Model.ScreenDimension.XL;
+            } 
+            else if (size.Width >= SizeL)
+            {
+                dim = Model.ScreenDimension.L;
             }
-            else if (size.Width < BigWith)
+            else if (size.Width >= SizeM)
             {
-                dim = Model.ScreenDimension.Medium;
+                dim = Model.ScreenDimension.M;
+            }
+            else if (size.Width >= SizeS)
+            {
+                dim = Model.ScreenDimension.S;
             }
             else
             {
-                dim = Model.ScreenDimension.Big;
+                dim = Model.ScreenDimension.XS;
             }
+
         }
         return dim;
+    }
+
+    public ScreenSize GetScreenSize()
+    {
+        if (ScreenSize is null)
+        {
+            ScreenSize = ScreenManager.GetScreenSize() ?? new();
+        }
+        return ScreenSize;
     }
 
     /// <summary>

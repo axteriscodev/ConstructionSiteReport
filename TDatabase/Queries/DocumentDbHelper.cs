@@ -1,4 +1,5 @@
-﻿using Shared.Documents;
+﻿using Microsoft.EntityFrameworkCore.Query.Internal;
+using Shared.Documents;
 using System.Reflection.Emit;
 using TDatabase.Database;
 using DB = TDatabase.Database.DbCsclDamicoV2Context;
@@ -21,22 +22,31 @@ public class DocumentDbHelper
                     {
                         Id = d.Id,
                         Title = d.Title,
+                        Description = d.Description ?? "",
                         CreationDate = d.CreationDate ?? DateTime.Now,
                         CompilationDate = d.CompilationDate,
                         LastEditDate = d.LastEditDate ?? DateTime.Now,
+                        CSE = d.Cse,
+                        DraftedIn = d.DraftedIn,
+                        CompletedIn = d.CompletedIn,
+                        MeteoCondition = (from m in db.MeteoConditions
+                                          where d.IdMeteo == m.Id
+                                          select new MeteoConditionModel()
+                                          {
+                                              Id = m.Id,
+                                              Description = m.Description,
+                                          }).SingleOrDefault(),
                         Categories = (from r in (from qc in db.QuestionChosens
-                                                 from q in db.Questions
-                                                 where qc.Id == d.Id
-                                                 && q.Id == qc.IdQuestion
-                                                 group q by q.IdCategory into q2
-                                                 select new { q2.First().IdCategory })
+                                                 where qc.IdTemplate == d.IdTemplate
+                                                 join q in db.Questions on qc.IdQuestion equals q.Id
+                                                 select new { q.IdCategory }).Distinct()
 
                                       from c in db.Categories
                                       where c.Id == r.IdCategory
                                       orderby c.Order
                                       select new DocumentCategoryModel()
                                       {
-                                          Id = c.Id,
+                                          Id = r.IdCategory,
                                           Text = c.Text,
                                           Order = c.Order,
                                           Questions = (from tc in db.Templates
@@ -46,11 +56,12 @@ public class DocumentDbHelper
                                                        && qc.IdTemplate == tc.Id
                                                        && q.Id == qc.IdQuestion
                                                        && q.IdCategory == c.Id
+                                                       orderby qc.Order
                                                        select new DocumentQuestionModel()
                                                        {
                                                            Id = qc.IdQuestion,
                                                            Text = q.Text,
-                                                           //Order = qc.Order,
+                                                           Order = qc.Order,
                                                            Note = qc.Note ?? "",
                                                            CurrentChoices = (
                                                                             from qa in db.QuestionAnswereds
@@ -104,9 +115,9 @@ public class DocumentDbHelper
                                            select new ConstructorSiteModel()
                                            {
                                                Id = cs.Id,
-                                               JobDescription = cs.JobDescription,
+                                               JobDescription = cs.JobDescription ?? "",
                                                StartDate = cs.StartDate ?? DateTime.Now,
-                                               Address = cs.Address,
+                                               Address = cs.Address ?? "",
                                                Client = (from cl in db.Clients
                                                          where cl.Id == cs.IdClient
                                                          select new ClientModel()
@@ -114,7 +125,7 @@ public class DocumentDbHelper
                                                              Id = cl.Id,
                                                              Name = cl.Name
                                                          }).SingleOrDefault() ?? new(),
-                                           }).SingleOrDefault(),
+                                           }).SingleOrDefault() ?? new(),
                         Client = (from cl in db.Clients
                                   where cl.Id == d.IdClient
                                   select new ClientModel()
@@ -167,20 +178,22 @@ public class DocumentDbHelper
     public static List<DocumentModel> SelectFromSite(DB db, int siteId)
     {
         var docs = (from d in db.Documents
+                    where d.IdConstructorSite == siteId
                     join cs in db.ConstructorSites on d.IdConstructorSite equals cs.Id
                     select new DocumentModel()
                     {
                         Id = d.Id,
                         Title = d.Title,
+                        Description = d.Description ?? "",
                         CreationDate = d.CreationDate ?? DateTime.Now,
                         CompilationDate = d.CompilationDate,
                         LastEditDate = d.LastEditDate,
                         ConstructorSite = new()
                         {
                             Id = cs.Id,
-                            JobDescription = cs.JobDescription,
+                            JobDescription = cs.JobDescription ?? "",
                             StartDate = cs.StartDate ?? DateTime.Now,
-                            Address = cs.Address,
+                            Address = cs.Address ?? "",
                             Client = (from cl in db.Clients
                                       where cl.Id == cs.IdClient
                                       select new ClientModel()
@@ -212,14 +225,19 @@ public class DocumentDbHelper
             Document newDocument = new()
             {
                 Id = nextId,
-                IdConstructorSite = document.ConstructorSite?.Id,
-                IdClient = document.Client?.Id,
+                IdConstructorSite = document.ConstructorSite.Id,
+                IdClient = document.Client?.Id > 0 ? document.Client?.Id : null,
                 IdTemplate = document.IdTemplate,
                 CreationDate = document.CreationDate,
                 LastEditDate = document.LastEditDate,
                 CompilationDate = document.CompilationDate,
                 Title = document.Title,
+                Description = document.Description,
                 ReadOnly = document.ReadOnly,
+                Cse = document.CSE,
+                DraftedIn = document.DraftedIn,
+                CompletedIn = document.CompletedIn,
+                IdMeteo = document.MeteoCondition?.Id,
             };
 
             db.Documents.Add(newDocument);
@@ -230,7 +248,7 @@ public class DocumentDbHelper
                 CompanyDocument cd = new()
                 {
                     IdCompany = companyDoc.Id,
-                    IdDocument = document.Id,
+                    IdDocument = nextId,
                     Present = companyDoc.Present ?? false,
                 };
 
@@ -248,7 +266,7 @@ public class DocumentDbHelper
                     {
                         QuestionAnswered qc = new()
                         {
-                            IdDocument = document.Id,
+                            IdDocument = nextId,
                             IdCurrentChoice = cc.Id,
                             IdQuestionChosen = q.Id
                         };
@@ -259,7 +277,7 @@ public class DocumentDbHelper
                             ReportedCompany rc = new()
                             {
                                 IdCompany = rci,
-                                IdDocument = document.Id,
+                                IdDocument = nextId,
                                 IdCurrentChoice = cc.Id,
                                 IdQuestionChosen = q.Id
                             };
@@ -272,7 +290,7 @@ public class DocumentDbHelper
                         Attachment attachment = new()
                         {
                             Id = nextAttachId,
-                            IdDocument = document.Id,
+                            IdDocument = nextId,
                             DateTime = attach.Date,
                         };
                         db.Attachments.Add(attachment);
@@ -294,7 +312,7 @@ public class DocumentDbHelper
                 var note = new Note()
                 {
                     Id = nextNoteId,
-                    IdDocument = document.Id,
+                    IdDocument = nextId,
                     Text = n.Text,
                 };
                 //inserisco gli allegati della nota se presenti
@@ -303,7 +321,7 @@ public class DocumentDbHelper
                     Attachment attachment = new()
                     {
                         Id = nextAttachId,
-                        IdDocument = document.Id,
+                        IdDocument = nextId,
                         DateTime = a.Date,
                     };
                     db.Attachments.Add(attachment);
@@ -384,6 +402,21 @@ public class DocumentDbHelper
         catch (Exception) { }
 
         return hiddenItems;
+    }
+
+    public static List<MeteoConditionModel> SelectMeteo(DB db, int idMeteo = 0)
+    {
+        var meteoConditions = db.MeteoConditions.AsQueryable();
+
+        var meteoConditionsList = (from m in meteoConditions
+                                   orderby m.Id
+                                   select new MeteoConditionModel()
+                                   {
+                                       Id = m.Id,
+                                       Description = m.Description,
+                                   }).ToList();
+
+        return meteoConditionsList;
     }
 
     private static bool CheckLastEdit(DateTime? oldEdit, DateTime newEdit)

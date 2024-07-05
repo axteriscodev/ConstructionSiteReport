@@ -83,11 +83,19 @@ main {
     }
 }
 
+@media (max-width: 1200px) {
+
+    .articlePadding {
+        padding-right: 0.5rem !important;
+        padding-left: 0.5rem !important;
+    }
+}
+
 @media (max-width: 768px) {
 
     .articlePadding{
-        padding-right:0.6rem !important;
-        padding-left:0.6rem !important;
+        padding-right:0.2rem !important;
+        padding-left:0.2rem !important;
     }
 
     ::deep .rz-dialog:not(.rz-dialog-confirm):not(.rz-dialog-alert) {

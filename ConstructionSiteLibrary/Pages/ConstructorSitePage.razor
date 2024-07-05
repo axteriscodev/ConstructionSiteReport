@@ -1,11 +1,11 @@
 ﻿@using ConstructionSiteLibrary.Components.Documents
 @inject ConstructorSitesRepository SiteRepository
 
-@attribute [Route(PageRouting.SitePage + "{SiteId:int}")]
+@attribute [Route(PageRouting.ConstructorSitePage + "{SiteId:int}")]
 
 
 
-<CardListDocuments  SiteId="SiteId"/>
+<TableDocuments SiteId="@SiteId"/>
 
 
 @code{

@@ -12,4 +12,8 @@ public partial class AttachmentQuestion
     public string? Description { get; set; }
 
     public string? Location { get; set; }
+
+    public virtual Attachment IdAttachmentNavigation { get; set; } = null!;
+
+    public virtual Question IdQuestionNavigation { get; set; } = null!;
 }

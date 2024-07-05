@@ -1,10 +1,6 @@
 ﻿using ConstructionSiteLibrary.Components.Utilities;
-using ConstructionSiteLibrary.Interfaces;
 using ConstructionSiteLibrary.Model;
-using ConstructionSiteLibrary.Repositories;
-using Microsoft.AspNetCore.Components.Routing;
-using Shared.Documents;
-using System.Drawing;
+
 
 namespace ConstructionSiteLibrary.Pages
 {

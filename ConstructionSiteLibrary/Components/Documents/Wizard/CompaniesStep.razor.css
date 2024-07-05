@@ -1,0 +1,34 @@
+﻿
+
+.textCompanyName, ::deep .textCompanyName{
+    color:black !important;
+}
+
+.divCard {
+    padding: 1rem;
+}
+
+.divForward {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.formField, ::deep .formField {
+    max-width: 500px;
+}
+
+.buttonForward, ::deep .buttonForward {
+    width: 120px;
+}
+
+.colComp1 {
+    display: flex;
+    flex-direction: column;
+}
+
+.colComp2 {
+    display: flex;
+    justify-content: flex-end;
+    align-content: flex-start;
+    flex-wrap: wrap;
+}

@@ -11,7 +11,7 @@ public partial class Choice
 
     public string Tag { get; set; } = null!;
 
-    public string Color { get; set; } = null!;
+    public string Color { get; set; } = "black";
 
     public bool Reportable { get; set; }
 

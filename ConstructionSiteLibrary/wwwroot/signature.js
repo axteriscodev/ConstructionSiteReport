@@ -1,23 +1,37 @@
 ﻿
+
+
+
+
 /**
  * Metodo che inizializza il canvas in 2d e binda gli eventi del mouse
  * e del touch su di esso per disegnare
  * @param {any} canvasId
  */
-export function loadCanvas(canvasId) {
+export function loadCanvas(canvasId, dialogId) {
 
     console.log("dentro load canvas");
+    console.log("id= " + dialogId);
+
     let canvas = document.getElementById(canvasId);
     let context = canvas.getContext('2d');
     let isIdle = true;
     function drawstart(event) {
         context.beginPath();
-        context.moveTo(event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
+        var rect = canvas.getBoundingClientRect();
+        context.moveTo(event.clientX - rect.left, event.clientY - rect.top);
+        console.log("moveTo x: " + (event.clientX - rect.left));
+        console.log("moveTo y: " + (event.pageY - (event.clientY - rect.top)));
         isIdle = false;
     }
+
     function drawmove(event) {
         if (isIdle) return;
-        context.lineTo(event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
+        var rect = canvas.getBoundingClientRect();
+        context.lineTo(event.clientX - rect.left, event.clientY - rect.top);
+        console.log("moveTo x: " + (event.clientX - rect.left));
+        console.log("moveTo y: " + (event.pageY - (event.clientY - rect.top)));
+
         context.stroke();
     }
     function drawend(event) {

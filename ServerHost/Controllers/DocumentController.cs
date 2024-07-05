@@ -11,7 +11,7 @@ namespace ServerHost.Controllers;
 public class DocumentController : DefaultController
 {
     [LogAction]
-    [Route(ApiRouting.SiteDocumentsList)]
+    [Route(ApiRouting.DocumentsList)]
     [HttpPost()]
     public AXT_WebResponse DocumentsList([FromBody]int idDocument)
     {
@@ -126,6 +126,30 @@ public class DocumentController : DefaultController
         {
             response = ExceptionWebResponse(ex, "");
         }
+        StopTime(stopwatch);
+        return response;
+    }
+
+    [LogAction]
+    [Route(ApiRouting.MeteoConditionsList)]
+    [HttpPost]
+    public AXT_WebResponse MeteoConditionsList()
+    {
+        var response = new AXT_WebResponse();
+        var stopwatch = StartTime();
+        ConfigureLog("" , 0);
+
+        try
+        {
+            var db = GetDbConnection();
+            var q = DocumentDbHelper.SelectMeteo(db);
+            response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), q);
+        }
+        catch(Exception ex)
+        {
+            response = ExceptionWebResponse(ex, "");
+        }
+
         StopTime(stopwatch);
         return response;
     }

@@ -1,0 +1,76 @@
+﻿@using Shared.Templates
+@using Shared.Documents
+@using ConstructionSiteLibrary.Components.Templates;
+
+@inject DocumentsRepository DocumentsRepository
+@inject NavigationService NavigationService
+
+<div>
+    @if (onloading)
+    {
+        <Loading />
+    }
+    else
+    {
+        <div class="card shadow mb-3 divCard">
+            <div class="vstack">
+                <RadzenText><strong>@Document.Title</strong> </RadzenText>
+                <RadzenText><strong>Descrizione: </strong> @Document.Description</RadzenText>
+                <RadzenText><strong>CSE: </strong> @Document.CSE</RadzenText>
+                <RadzenText>Aziende presenti:</RadzenText>
+                @foreach (var company in Document.Companies)
+                {
+                    <RadzenText>@company.CompanyName</RadzenText>
+                }
+
+                <RecapTemplateQuestions SelectedTemplate="@SelectedTemplate" />
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <RadzenButton Icon="arrow_back" Text="Indietro" Click="@Back" />
+            </div>
+            <div class="col divForward">
+                <RadzenButton Click="@SaveDocument" Icon="save" Text="Salva" IsBusy="@onSaving" class="buttonForward"  />
+            </div>
+        </div>
+    }
+</div>
+
+
+
+@code {
+
+    [Parameter]
+    public DocumentModel? Document { get; set; }
+
+    [Parameter]
+    public TemplateModel SelectedTemplate { get; set; } = new();
+
+    [Parameter]
+    public EventCallback OnBack { get; set; }
+
+    private bool onloading = false;
+
+    private bool onSaving = false;
+
+    public async Task SaveDocument()
+    {
+        onSaving = true;
+
+        await DocumentsRepository.SaveDocument(Document);
+
+        onSaving = false;
+
+        NavigationService.ChangePage(PageRouting.ConstructorSitePage + Document.ConstructorSite.Id);
+
+    }
+
+    public void Back()
+    {
+        OnBack.InvokeAsync();
+    }
+
+}

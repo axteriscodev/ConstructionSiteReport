@@ -1,0 +1,112 @@
+﻿@using Shared.Templates
+@using Shared.Documents
+@using ConstructionSiteLibrary.Model.DocumentWizard
+@inject TemplatesRepository TemplateRepository
+
+
+<div>
+    @if (onloading)
+    {
+        <Loading />
+    }
+    else
+    {
+        <RadzenTemplateForm TItem="DocumentModel" Data="@Document" Submit="@Forward">
+            <div class="card shadow mb-3 divCard">
+                <div class="vstack">
+                    <RadzenFormField Text="Titolo <span style='color:red'> (obbligatorio)</span>" Variant="@GlobalVariables.ComponentVariant" class="formField">
+                        <ChildContent>
+                            <RadzenTextBox Name="title" @bind-Value="@Document.Title" />
+                        </ChildContent>
+                        <Helper>
+                            <RadzenRequiredValidator Component="title" Popup=false Text="Il campo titolo è obbligatorio" />
+                        </Helper>
+                    </RadzenFormField>
+                    <RadzenFormField Text="Descrizione" Variant="@GlobalVariables.ComponentVariant" class="formField">
+                        <ChildContent>
+                            <RadzenTextArea Name="description" @bind-Value="@Document.Description" Rows="4" />
+                        </ChildContent>
+                    </RadzenFormField>
+                    <RadzenFormField Text="CSE" Variant="@GlobalVariables.ComponentVariant" class="formField">
+                        <ChildContent>
+                            <RadzenTextBox Name="cse" @bind-Value="@Document.CSE" />
+                        </ChildContent>
+                    </RadzenFormField>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <RadzenButton Icon="arrow_back" Text="Indietro" Click="@Back" />
+                </div>
+                <div class="col divForward">
+                    <RadzenButton ButtonType="ButtonType.Submit" Icon="arrow_forward" Text="Avanti" class="buttonForward" />
+                </div>
+            </div>
+        </RadzenTemplateForm>
+    }
+</div>
+
+
+
+@code {
+    [Parameter]
+    public EventCallback<DocumentStepArgs> OnForward { get; set; }
+    [Parameter]
+    public EventCallback OnBack { get; set; }
+    [Parameter]
+    public TemplateModel? SelectedTemplate { get; set; }
+    [Parameter]
+    public DocumentModel? Document { get; set; }
+
+    private FormDescription form = new();
+    private bool onloading = false;
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        onloading = true;
+        await base.OnInitializedAsync();
+        onloading = false;
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+        if(Document is not null)
+        {
+            form.Titolo = Document.Title;
+            form.Descrizione = Document.Description;
+        }
+        if (SelectedTemplate is not null && string.IsNullOrEmpty(form.Titolo) && string.IsNullOrEmpty(form.Descrizione))
+        {
+            Document.Title = SelectedTemplate.Description.Title;
+            Document.Description = SelectedTemplate.Description.Description;
+        }
+    }
+
+
+    public void Forward()
+    {
+        DocumentStepArgs args = new()
+            {
+                Object = Document,
+                Step = DocumentStep.Description
+            };
+
+        OnForward.InvokeAsync(args);
+    }
+
+    public void Back()
+    {
+        OnBack.InvokeAsync();
+    }
+
+    private class FormDescription
+    {
+        public string Titolo { get; set; } = "";
+        public string Descrizione { get; set; } = "";
+        public string Cse { get; set; } = "";
+    }
+
+}

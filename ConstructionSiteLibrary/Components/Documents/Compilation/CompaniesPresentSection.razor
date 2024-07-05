@@ -1,0 +1,77 @@
+﻿@using Shared.Documents;
+
+@if (onLoading)
+{
+    <Loading />
+}
+else
+{
+    <div>
+        <div class="vstack documentSection">
+            <div class="marginYResponsive2">
+                <div class="row SectionTitleDiv">
+                    <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center"><strong>IMPRESE PRESENTI: FIGURE RESPONSABILI, PERSONALE, FORMALE,ATTREZZATURA</strong></RadzenText>
+                </div>
+
+                @foreach (var company in Companies)
+                {
+                    <div class="border marginYResponsive paddingSezione">
+                    <div class=" row my-2 borderBottom">
+                        <div class="col ">
+                            <RadzenText>Impresa Esecutrice</RadzenText>
+                        </div>
+                        <div class="col impresaEsecutrice">
+                            <RadzenRow>
+                                <RadzenLabel Text="Presente" Component="Presente" />
+                                <RadzenCheckBox Value="@company.Present" Name="Presente" />
+                            </RadzenRow>
+                        </div>
+                    </div>
+                    <div class="row my-2">
+                        <div class="col">
+                            <RadzenText>Ragione Sociale: <strong>@company.CompanyName</strong></RadzenText>
+                        </div>
+                        <div class="col">
+                            <RadzenText>Sede legale: @company.Address</RadzenText>
+                        </div>
+                    </div>
+                    <div class="row my-2">
+                        <div class="col">
+                            <RadzenText>Lavori previsti: @company.JobsDescriptions</RadzenText>
+                        </div>
+                        <div class="col">
+                            <RadzenText>P. Iva: @company.VatCode</RadzenText>
+                        </div>
+                    </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+
+@code {
+
+    [Parameter]
+    public List<CompanyModel> Companies { get; set; } = [];
+
+    private bool onLoading = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        onLoading = true;
+        await base.OnInitializedAsync();
+        await LoadData();
+        onLoading = false;
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+    }
+
+    private async Task LoadData()
+    {
+    }
+}

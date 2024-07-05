@@ -22,7 +22,16 @@ public class TemplateDbHelper
                     select new TemplateModel()
                     {
                         IdTemplate = t.Id,
+                        NameTemplate = t.Name, 
                         TitleTemplate = t.Title,
+                        Description = (from d in db.TemplateDescriptions
+                                       where d.Id == t.IdDescription
+                                       select new TemplateDescriptionModel()
+                                       {
+                                           Id = d.Id,
+                                           Title = d.Title,
+                                           Description = d.Description ?? ""
+                                       }).SingleOrDefault() ?? new(),
                         Note = t.Note ?? "",
                         CreationDate = t.Date,
                         Categories = (from r in (from qc in db.QuestionChosens
@@ -80,11 +89,18 @@ public class TemplateDbHelper
             Template newTemplate = new()
             {
                 Id = nextId,
+                Name = template.NameTemplate,
                 Title = template.TitleTemplate,
                 Note = template.Note,
                 Date = template.CreationDate,
                 Active = true,
             };
+
+            // se ho associato una descrizione allora lo salvo nel db
+            if(template.Description.Id > 0)
+            {
+                newTemplate.IdDescription = template.Description.Id;
+            }
 
             db.Templates.Add(newTemplate);
 

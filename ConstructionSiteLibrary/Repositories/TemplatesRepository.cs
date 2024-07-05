@@ -3,6 +3,7 @@ using System.Text.Json;
 using ConstructionSiteLibrary.Managers;
 using ConstructionSiteLibrary.Model;
 using ConstructionSiteLibrary.Services;
+using Shared.ApiRouting;
 using Shared.Templates;
 
 namespace ConstructionSiteLibrary.Repositories;
@@ -12,7 +13,8 @@ public class TemplatesRepository(HttpManager httpManager, IndexedDBService index
 
     #region Campi
 
-    private List<TemplateModel> Templates = [];
+    private List<TemplateModel> _templates = [];
+    private List<TemplateDescriptionModel> _templateDescriptions = [];
     private bool online = true;
     private const int TUTTI = 0;
     private readonly HttpManager _httpManager = httpManager;
@@ -33,11 +35,11 @@ public class TemplatesRepository(HttpManager httpManager, IndexedDBService index
 
             if (online)
             {
-                var response = await _httpManager.SendHttpRequest("Template/TemplatesLIst", TUTTI);
+                var response = await _httpManager.SendHttpRequest(ApiRouting.TemplatesList, TUTTI);
                 if (response.Code.Equals("0"))
                 {
-                    Templates = JsonSerializer.Deserialize<List<TemplateModel>>(response.Content.ToString() ?? "") ?? [];
-                    _ = await _indexedDBService.Insert(IndexedDBTables.templates, Templates.Cast<object>().ToArray());
+                    _templates = JsonSerializer.Deserialize<List<TemplateModel>>(response.Content.ToString() ?? "") ?? [];
+                    _ = await _indexedDBService.Insert(IndexedDBTables.templates, _templates.Cast<object>().ToArray());
                 }
                 else if (response.Code.Equals("Ex8995BA25"))
                 {
@@ -47,12 +49,12 @@ public class TemplatesRepository(HttpManager httpManager, IndexedDBService index
                 if (!online)
                 {
                     var content = await _indexedDBService.ReadObjectStore(IndexedDBTables.templates);
-                    Templates = content is not null ? JsonSerializer.Deserialize<List<TemplateModel>>(content) ?? [] : [];
+                    _templates = content is not null ? JsonSerializer.Deserialize<List<TemplateModel>>(content) ?? [] : [];
                 }
             }
         }
         catch (Exception) { }
-        return Templates;
+        return _templates;
     }
 
      public async Task<TemplateModel> GetTemplateById(int idTemplate = TUTTI)
@@ -66,7 +68,7 @@ public class TemplatesRepository(HttpManager httpManager, IndexedDBService index
             }
             if(online)
             {
-                var response = await _httpManager.SendHttpRequest("Template/TemplatesList", idTemplate);
+                var response = await _httpManager.SendHttpRequest(ApiRouting.TemplatesList, idTemplate);
                 if(response.Code.Equals("0"))
                 {
                     var templates = JsonSerializer.Deserialize<List<TemplateModel>>(response.Content.ToString() ?? "") ?? [];
@@ -92,15 +94,15 @@ public class TemplatesRepository(HttpManager httpManager, IndexedDBService index
 
     #region Metodi per la creazione e cancellazione (NO OFFLINE)
 
-    public async Task<bool> SaveDocument(TemplateModel template)
+    public async Task<bool> SaveTemplate(TemplateModel template)
     {
         var result = false;
         try
         {
-            var response = await _httpManager.SendHttpRequest("Template/SaveTemplate", template);
+            var response = await _httpManager.SendHttpRequest(ApiRouting.SaveTemplate, template);
             if(response.Code.Equals("0"))
             {
-                Templates.Clear();
+                _templates.Clear();
                 result = true;
             }
         }
@@ -114,10 +116,10 @@ public class TemplatesRepository(HttpManager httpManager, IndexedDBService index
         var result = false;
         try
         {
-            var response = await _httpManager.SendHttpRequest("Template/HideTemplate", templates);
+            var response = await _httpManager.SendHttpRequest(ApiRouting.HideTemplates, templates);
             if(response.Code.Equals("0"))
             {
-                Templates.Clear();
+                _templates.Clear();
                 result = true;
             }
         }
@@ -128,6 +130,40 @@ public class TemplatesRepository(HttpManager httpManager, IndexedDBService index
 
     #endregion
 
+
+    public async Task<List<TemplateDescriptionModel>> GetTemplatesDescriptions()
+    {
+        try
+        {
+            if (!online)
+            {
+                await CheckIfOnline();
+            }
+
+            if (online)
+            {
+                var response = await _httpManager.SendHttpRequest(ApiRouting.TemplatesDescriptionsList, TUTTI); //TODO
+                if (response.Code.Equals("0"))
+                {
+                    _templateDescriptions = JsonSerializer.Deserialize<List<TemplateDescriptionModel>>(response.Content.ToString() ?? "") ?? [];
+                    _ = await _indexedDBService.Insert(IndexedDBTables.templateDescriptions, _templateDescriptions.Cast<object>().ToArray());
+                }
+                else if (response.Code.Equals("Ex8995BA25"))
+                {
+                    online = false;
+                }
+
+                if (!online)
+                {
+                    var content = await _indexedDBService.ReadObjectStore(IndexedDBTables.templateDescriptions);
+                    _templates = content is not null ? JsonSerializer.Deserialize<List<TemplateModel>>(content) ?? [] : [];
+                }
+            }
+        }
+        catch (Exception) { }
+        return _templateDescriptions;
+    }
+
     #region Metodi per effettuare la sincronizzazione con il server
 
     public async Task<bool> DownloadTemplates()
@@ -137,12 +173,12 @@ public class TemplatesRepository(HttpManager httpManager, IndexedDBService index
         {
             try
             {
-                var response = await _httpManager.SendHttpRequest("Template/TemplatesList", TUTTI);
+                var response = await _httpManager.SendHttpRequest(ApiRouting.TemplatesList, TUTTI);
                 if (response.Code.Equals("0"))
                 {
-                    Templates = JsonSerializer.Deserialize<List<TemplateModel>>(response.Content.ToString() ?? "") ?? [];
-                    var count = await _indexedDBService.Insert(IndexedDBTables.templates, Templates.Cast<object>().ToArray());
-                    result = count == Templates.Count;
+                    _templates = JsonSerializer.Deserialize<List<TemplateModel>>(response.Content.ToString() ?? "") ?? [];
+                    var count = await _indexedDBService.Insert(IndexedDBTables.templates, _templates.Cast<object>().ToArray());
+                    result = count == _templates.Count;
                 }
             }
             catch (Exception) { }
@@ -165,7 +201,7 @@ public class TemplatesRepository(HttpManager httpManager, IndexedDBService index
                 {
                     //TODO i template possono solo essere creati, la save prende in ingresso un valore alla volta
                     //dobbiamo decidere come muoverci
-                    var response = await _httpManager.SendHttpRequest("Template/SaveTemplate", modifiedTemplates);
+                    var response = await _httpManager.SendHttpRequest(ApiRouting.SaveTemplate, modifiedTemplates);
                     result = response.Code.Equals("0");
                 }
             }
@@ -184,7 +220,7 @@ public class TemplatesRepository(HttpManager httpManager, IndexedDBService index
 
     private async Task CheckIfOnline()
     {
-        var response = await _httpManager.SendHttpRequest("Fuctionality/Check", "");
+        var response = await _httpManager.SendHttpRequest(ApiRouting.CheckOnline, "");
         if (response.Code.Equals("0"))
         {
             online = true;

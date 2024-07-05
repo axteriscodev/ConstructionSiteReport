@@ -1,12 +1,27 @@
 ﻿
 .round-border {
-    border-radius: 1.5rem !important;
+    border-radius: 1.2rem !important;
 }
 
 .text-bborder {
-    margin-bottom:0rem !important
+    margin-bottom: 0rem !important
 }
 
 .text-size {
-    font-size:15px;
+    font-size: 15px;
+}
+
+.cardClass {
+    max-width: 800px;
+}
+
+    .cardClass:hover {
+        border: 1px solid var(--rz-primary);
+        box-shadow: 0 1rem 1.5rem rgba(0, 0, 0, .15) !important;
+        background-color: var(--background-Card-color2) !important;
+    }
+
+/* CARDS */
+.cardColor1 {
+    background-color: var(--background-Card-color1) !important;
 }

@@ -2,13 +2,13 @@
 @using Microsoft.AspNetCore.Components.Routing;
 @inject NavigationService Navigation
 
-<ScreenComponent MediumWith="641" OnScreenDimensionChanged="ScreenDimensionObserver" />
+<ScreenComponent SizeS="641" OnScreenDimensionChanged="ScreenDimensionObserver" />
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <span class="oi oi-monitor" style="color:white;" aria-hidden="true"></span>
         @if (!@IconMenuActive)
         {
-            <a class="navbar-brand" href="" onclick="@(()=>OnLinkClick(PageRouting.HomePage))">Construction Site Report</a>
+            <p class="navbar-brand">Construction Site Report</p>
         }
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
@@ -18,30 +18,21 @@
 
 <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
     <nav class="flex-column">
-@*         <div class="nav-item px-3">
-            <NavLink class="nav-link" style="padding: .5rem .9rem!important;" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill @biClassRules" aria-hidden="true"></span>
+         <div class="nav-item px-3">
+            <NavLink class="nav-link navItem-size" style="padding: .5rem .9rem!important;" href="@PageRouting.HomePage" Match="NavLinkMatch.All">
+                <span class="bi bi-house-door @biClassRules" aria-hidden="true"></span>
                 @if (!@IconMenuActive)
                 {
-                    <label>Home</label>
-                }
-            </NavLink>
-        </div> *@
-        <div class="nav-item px-3">
-            <NavLink class="nav-link navItem-size" href="@PageRouting.DocumentCompilationPage">
-                <span class="bi bi-check2-square" aria-hidden="true"></span>
-                @if (!@IconMenuActive)
-                {
-                    <label>Documenti</label>
+                    <label>Cantieri</label>
                 }
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link navItem-size" href="@PageRouting.TemplateCreationPage">
+            <NavLink class="nav-link navItem-size" href="@PageRouting.TemplatePage">
                 <span class="bi bi-plus-square @biClassRules" aria-hidden="true"></span>
                 @if (!@IconMenuActive)
                 {
-                    <label>Creazione</label>
+                    <label>Template</label>
                 }
             </NavLink>
         </div>
@@ -69,15 +60,6 @@
                 @if (!@IconMenuActive)
                 {
                     <label>Scelte</label>
-                }
-            </NavLink>
-        </div>
-         <div class="nav-item px-3">
-            <NavLink class="nav-link navItem-size" href="@PageRouting.ConstructorSitePage">
-                <span class="bi bi-building-fill @biClassRules" aria-hidden="true"></span>
-                @if (!@IconMenuActive)
-                {
-                    <label>Cantieri</label>
                 }
             </NavLink>
         </div>
@@ -156,7 +138,7 @@
 
     private async Task ScreenDimensionObserver(ScreenDimension? dimension)
     {
-        if (dimension == ScreenDimension.Small)
+        if (dimension == ScreenDimension.S)
         {
             IconMenuActive = false;
             biClassRules = "";

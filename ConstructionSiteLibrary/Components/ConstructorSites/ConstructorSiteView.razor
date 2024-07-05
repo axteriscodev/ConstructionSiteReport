@@ -1,0 +1,26 @@
+﻿@using ConstructionSiteLibrary.Model
+@using ConstructionSiteLibrary.Components.ConstructorSites
+
+<ScreenComponent SizeS="1024" OnScreenDimensionChanged="ScreenDimensionObserver" />
+<DynamicComponent @ref=dynamicComponent Type=@selectedType />
+
+@code
+{
+
+    private DynamicComponent? dynamicComponent;
+    private Type selectedType = typeof(TableConstructorSite);
+
+    private void ScreenDimensionObserver(ScreenDimension? dimension)
+    {
+        if (dimension == ScreenDimension.S || dimension == ScreenDimension.XS)
+        {
+            selectedType = typeof(CardListConstructorSiteMobile);
+        }
+        else
+        {
+            selectedType = typeof(TableConstructorSite);
+        }
+
+        StateHasChanged();
+    }
+}

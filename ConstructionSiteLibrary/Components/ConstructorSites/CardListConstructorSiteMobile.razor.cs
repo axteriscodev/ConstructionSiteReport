@@ -1,23 +1,22 @@
-﻿using ConstructionSiteLibrary.Utility;
+﻿using ConstructionSiteLibrary.Components.Questions;
+using ConstructionSiteLibrary.Components.Utilities;
+using ConstructionSiteLibrary.Utility;
+using Microsoft.AspNetCore.Components;
 using Radzen;
 using Shared.Documents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace ConstructionSiteLibrary.Components.ConstructorSites
 {
-    public partial class CardListConstructorSite
+    public partial class CardListConstructorSiteMobile
     {
+        ScreenComponent? screenComponent;
 
-        
         private List<ConstructorSiteModel> sites = [];
         private List<ConstructorSiteModel> displayedSites = [];
         private bool onLoading = false;
         private string search = "";
-        private string pagingSummaryFormat = "";
+        private string pagingSummaryFormat = "Pagina {0} di {1} (Totale {2} cantieri)";
         private int count = 0;
         private int pageSize = GlobalVariables.PageSize;
         private int pageIndex = 0;
@@ -66,6 +65,31 @@ namespace ConstructionSiteLibrary.Components.ConstructorSites
             displayedSites = displayedSites.Skip(skip).Take(pageSize).ToList();
         }
 
+        private async Task OpenForm()
+        {
+            var width = screenComponent.ScreenSize.Width;
 
+            // creo uno style aggiuntivo da inviare al componente caricato con il popup come options
+            var additionalStyle = $"min-height:fit-content;height:fit-content;width:{width}px;max-width:600px";
+            var newOptions = new DialogOptions
+            {
+                Style = additionalStyle
+            };
+            //creo parametri da inviare al componente caricato con il popup
+            var param = new Dictionary<string, object>
+            {
+                //tra i parametri che invio al dialog creo un EventCallback da passare al componente
+                { "OnSaveComplete", EventCallback.Factory.Create(this, Reload) },
+                { "CreationMode", true },
+            };
+            await DialogService.OpenAsync<FormConstructorSite>("Nuovo cantiere", parameters: param, options: newOptions);
+        }
+
+        private async Task Reload()
+        {
+            DialogService.Close();
+            await LoadData();
+            StateHasChanged();
+        }
     }
 }

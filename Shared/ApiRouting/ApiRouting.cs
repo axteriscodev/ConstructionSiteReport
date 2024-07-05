@@ -23,6 +23,7 @@ namespace Shared.ApiRouting
         public const string SaveDocument = "SaveDocument";
         public const string UpdateDocument = "UpdateDocument";
         public const string HideDocuments = "HideDocuments";
+        public const string MeteoConditionsList = "MeteoConditionsList";
 
         #endregion
 
@@ -31,6 +32,7 @@ namespace Shared.ApiRouting
         public const string TemplatesList = "TemplatesList";
         public const string SaveTemplate = "SaveTemplate";
         public const string HideTemplates = "HideTemplates";
+        public const string TemplatesDescriptionsList = "TemplatesDescriptionsList";
 
         #endregion
 
@@ -82,6 +84,7 @@ namespace Shared.ApiRouting
         #region ConstructionSite routing
 
         public const string ConstructorSitesList = "ConstructorSitesList";
+        public const string ConstructorSiteInfo = "ConstructorSiteInfo";
         public const string SaveConstructorSite = "SaveConstructorSite";
         public const string UpdateConstructorSites = "UpdateConstructorSites";
         public const string HideConstructorSites = "HideConstructorSites";

@@ -1,0 +1,76 @@
+﻿@using Shared.Documents
+
+
+
+@* NOTE AGGIUNTIVE *@
+<div class="vstack documentSection">
+
+    <div class="marginYResponsive2 ">
+        <div class="row SectionTitleDiv">
+            <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" class="SectionTitle">
+                <strong>
+                    ULTERIORI PRECISAZIONI ED EVENTUALI PRESCRIZIONI
+                </strong>
+            </RadzenText>
+        </div>
+        <div class="marginYResponsive">
+            @foreach (var elem in NoteList)
+            {
+                <RadzenRow JustifyContent="@justifyContent" AlignItems="@alignItems" Gap="0">
+                    <RadzenColumn Size="1" class="rz-text-align-center paddingYResponsive">
+                            <RadzenText TextStyle="TextStyle.H6">@NotePointList[NoteList.IndexOf(elem)]</RadzenText>
+                        </RadzenColumn>
+                    <RadzenColumn>
+                        <div class="paddingYResponsive">
+                            <RadzenTextArea Rows="3" Style="width:100%" Value="@elem" />
+                            <div>
+                            </div>
+                        </div>
+                    </RadzenColumn>
+                </RadzenRow>
+            }
+        </div>
+    </div>
+</div>
+
+
+@code {
+    AlignItems alignItems = AlignItems.Start;
+    JustifyContent justifyContent = JustifyContent.Center;
+
+    [Parameter]
+    public EventCallback OnQuestionNoteChanged { get; set; }
+
+    [Parameter]
+
+    public DocumentModel Document { get; set; } = new();
+    private List<string> NoteList { get; set; } = [];
+    private List<string> NotePointList { get; set; } = [];
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+        LoadData();
+    }
+
+    private void LoadData()
+    {
+        NoteList = [];
+        NotePointList = [];
+
+        ///Da caricare per ogni question
+        if (Document is not null)
+        {
+            foreach (var cat in Document.Categories)
+            {
+                foreach (var question in cat.Questions)
+                {
+                    if (!string.IsNullOrEmpty(question.Note.Trim()))
+                    {
+                        NoteList.Add(question.Note);
+                        NotePointList.Add(cat.Order.ToString() + "." + question.Order.ToString());
+                    }
+                }
+            }
+        }
+    }
+}

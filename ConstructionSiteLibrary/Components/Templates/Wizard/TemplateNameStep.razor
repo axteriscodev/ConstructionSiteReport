@@ -1,0 +1,107 @@
+﻿@using Shared.Templates
+@using ConstructionSiteLibrary.Model
+
+@inject TemplatesRepository TemplatesRepository
+@inject NavigationService NavigationService
+
+<ScreenComponent @ref="screenComponent" />
+@if (initialLoading)
+{
+    <Loading />
+}
+else
+{
+    <RadzenTemplateForm TItem="string" Data="@Title" Submit="@SaveTemplate">
+    <div class="card shadow mb-3 divCard">
+        <RadzenText>Inserisci un nome per il template</RadzenText>
+        <RadzenFormField Text="Nome <span style='color:red'> (obbligatorio)</span>" Variant="@variant"
+            class="formFieldTitolo">
+            <ChildContent>
+                <RadzenTextBox Name="Nome" @bind-Value="@Title" />
+            </ChildContent>
+            <Helper>
+                <RadzenRequiredValidator @ref="@validator" Component="Nome" Popup=false Text="Il titolo è obbligatorio"  />
+            </Helper>
+        </RadzenFormField>
+
+        <RecapTemplateQuestions SelectedTemplate="@CurrentTemplate" />
+
+  
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <RadzenButton Icon="arrow_back" Text="Indietro" Click="@Back" />
+        </div>
+        <div class="col divForward">
+            <RadzenButton Click="@SaveTemplate" Icon="save" Text="Salva" class="buttonForward" IsBusy=@onSaving
+                              BusyText="Salva" />
+        </div>
+    </div>
+</RadzenTemplateForm>
+}
+
+@code
+{
+    /// <summary>
+    /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
+    /// </summary>
+    private bool initialLoading;
+
+    private bool onSaving = false;
+
+    private List<CategoryQuestionsGroup> groups = [];
+
+    /// <summary>
+    /// il design degli elementi della form
+    /// </summary>
+    readonly Variant variant = Variant.Outlined;
+
+    ScreenComponent screenComponent;
+    RadzenRequiredValidator validator;
+
+    string? Title;
+
+    [Parameter]
+    required public TemplateModel CurrentTemplate { get; set; }
+
+    [Parameter]
+    public EventCallback OnBack { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        initialLoading = true;
+        await base.OnInitializedAsync();
+        //LoadData();
+        //InitData();
+        initialLoading = false;
+    }
+
+
+    public async Task SaveTemplate()
+    {
+        if (Title is not null && !string.IsNullOrEmpty(Title.Trim()))
+        {
+            onSaving = true;
+
+            CurrentTemplate.NameTemplate = Title;
+            CurrentTemplate.TitleTemplate = Title;
+
+            await TemplatesRepository.SaveTemplate(CurrentTemplate);
+
+            onSaving = false;
+
+            NavigationService.ChangePage(PageRouting.TemplatePage);
+        }
+        else
+        {
+            Title = null;
+        }
+    }
+
+    public void Back()
+    {
+        OnBack.InvokeAsync();
+    }
+
+}

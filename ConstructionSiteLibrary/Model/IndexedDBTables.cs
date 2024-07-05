@@ -13,5 +13,7 @@ namespace ConstructionSiteLibrary.Model
         documents,
         questions,
         templates,
+        templateDescriptions,
+        meteoConditions,
     }
 }

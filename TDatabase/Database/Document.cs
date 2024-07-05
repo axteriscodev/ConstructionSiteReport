@@ -7,13 +7,23 @@ public partial class Document
 {
     public int Id { get; set; }
 
-    public int? IdConstructorSite { get; set; }
+    public int IdConstructorSite { get; set; }
 
     public int? IdClient { get; set; }
 
-    public int? IdTemplate { get; set; }
+    public int IdTemplate { get; set; }
+
+    public int? IdMeteo { get; set; }
 
     public string Title { get; set; } = null!;
+
+    public string? Description { get; set; }
+
+    public string? Cse { get; set; }
+
+    public string? DraftedIn { get; set; }
+
+    public string? CompletedIn { get; set; }
 
     public DateTime? CompilationDate { get; set; }
 
@@ -29,9 +39,11 @@ public partial class Document
 
     public virtual Client? IdClientNavigation { get; set; }
 
-    public virtual ConstructorSite? IdConstructorSiteNavigation { get; set; }
+    public virtual ConstructorSite IdConstructorSiteNavigation { get; set; } = null!;
 
-    public virtual Template? IdTemplateNavigation { get; set; }
+    public virtual MeteoCondition? IdMeteoNavigation { get; set; }
+
+    public virtual Template IdTemplateNavigation { get; set; } = null!;
 
     public virtual ICollection<Note> Notes { get; set; } = new List<Note>();
 
