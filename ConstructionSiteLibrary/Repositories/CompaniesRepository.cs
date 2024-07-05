@@ -25,6 +25,11 @@ public class CompaniesRepository(HttpManager httpManager)
         return Companies;
     }
 
+    public async Task<CompanyModel> GetCompanyById(int companyId)
+    {
+        
+    }
+
     public async Task<bool> SaveCompany(CompanyModel company)
     {
         var response = await _httpManager.SendHttpRequest(ApiRouting.SaveCompany, company);

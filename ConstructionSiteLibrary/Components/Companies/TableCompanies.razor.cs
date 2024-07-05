@@ -2,6 +2,7 @@
 using ConstructionSiteLibrary.Components.Utilities;
 using Radzen.Blazor;
 using Shared.Documents;
+using ConstructionSiteLibrary.Utility;
 
 namespace ConstructionSiteLibrary.Components.Companies;
 
@@ -38,6 +39,11 @@ public partial class TableCompanies
     {
         companies = await CompaniesRepository.GetCompanies();
         count = companies.Count;
+    }
+
+    private void OpenAddCompanyPage()
+    {
+        Navigation.ChangePage(PageRouting.AddCompanyPage);
     }
 
     private async Task ReloadTable()

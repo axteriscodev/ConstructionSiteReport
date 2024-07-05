@@ -9,10 +9,28 @@ public partial class FormCompanies
     [Parameter]
     public CompanyModel Company { get; set; } = new();
 
+    [Parameter]
+    public int CompanyId { get; set; }
+
     /// <summary>
     /// il design degli elementi della form
     /// </summary>
     readonly Variant variant = Variant.Outlined;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+        if(CompanyId != 0)
+        {
+            Setup(); 
+        }
+       
+    }
+
+    private async Task Setup()
+    {
+        
+    }
 
 
     private async Task Save()

@@ -6,9 +6,16 @@ namespace TDatabase.Queries;
 
 public class CompanyDbHelper
 {
-    public static List<CompanyModel> Select(DB db)
+    public static List<CompanyModel> Select(DB db, int companyId = 0)
     {
-        return db.Companies.Where(x => x.Active == true).Select(c => new CompanyModel()
+        var companySelect = db.Companies.AsQueryable();
+
+        if(companyId > 0)
+        {
+            companySelect = companySelect.Where(x => x.Id == companyId);
+        }
+
+        return companySelect.Where(x => x.Active == true).Select(c => new CompanyModel()
         {
             Id = c.Id,
             CompanyName = c.CompanyName ?? "",

@@ -4,6 +4,7 @@
 
 @inject CompaniesRepository CompaniesRepository
 @inject DialogService DialogService
+@inject NavigationService Navigation
 
 <ScreenComponent @ref="screenComponent" />
 
@@ -20,7 +21,7 @@ else
 
         <RadzenFieldset class="shadow rounded" Style="font-weight:400;">
             <RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
-                          Style="margin-bottom:2rem;margin-top:1rem;"  />
+                          Click="@(() => OpenAddCompanyPage())" Style="margin-bottom:2rem;margin-top:1rem;"  />
             <RadzenButton Icon="sort" Text="Ordina" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
                           Style="margin-bottom:2rem;margin-top:1rem;"  />
             <RadzenDataGrid @ref="grid" GridLines="@DataGridGridLines.Both" IsLoading=@isLoading Count="@count" PageSize="@pageSize" Data="@companies" TItem="CompanyModel"
