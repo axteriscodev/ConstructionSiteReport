@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "C#: ServerHost [Default Configuration]",
-            "type": "dotnet",
+            "name": ".NET MAUI",
+            "type": "maui",
             "request": "launch",
-            "projectPath": "${workspaceFolder}/ServerHost/ServerHost.csproj"
-        }
+            "preLaunchTask": "maui: Build"
+        },
     ]
 }
