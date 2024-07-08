@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using ConstructionSiteLibrary.Utility;
+using Microsoft.AspNetCore.Components;
 using Radzen;
 using Shared.Documents;
 
@@ -22,14 +23,14 @@ public partial class FormCompanies
         await base.OnParametersSetAsync();
         if(CompanyId != 0)
         {
-            Setup(); 
+            await Setup(); 
         }
        
     }
 
     private async Task Setup()
     {
-        
+        Company = await CompaniesRepository.GetCompanyById(CompanyId);
     }
 
 
@@ -47,7 +48,14 @@ public partial class FormCompanies
             list.Add(Company);
             response = await CompaniesRepository.UpdateCompanies(list);
         }
+
+        if (response)
+        {
+            NavigationService.ChangePage(PageRouting.CompaniesPage);
+        }
     }
+
+
 
     
 }

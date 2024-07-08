@@ -3,6 +3,7 @@ using ConstructionSiteLibrary.Components.Utilities;
 using Radzen.Blazor;
 using Shared.Documents;
 using ConstructionSiteLibrary.Utility;
+using Radzen;
 
 namespace ConstructionSiteLibrary.Components.Companies;
 
@@ -46,8 +47,29 @@ public partial class TableCompanies
         Navigation.ChangePage(PageRouting.AddCompanyPage);
     }
 
+    private void OpenUpdateCompany(CompanyModel company)
+    {
+        Navigation.ChangePage(PageRouting.AddCompanyPage + company.Id);
+    }
+    
+    private async Task Hide(CompanyModel company)
+    {
+        var titolo = "Elimina Azienda";
+        var text = "Vuoi eliminare l'azienda selezionata?";
+        var confirmationResult = await DialogService.Confirm(text, titolo, new ConfirmOptions{OkButtonText = "Sì", CancelButtonText = "No"});
+        if(confirmationResult == true)
+        {
+            var response = await CompaniesRepository.HideCompanies([company]);
+            if(response)
+            {
+                await ReloadTable();
+            }
+        }
+    }
+
     private async Task ReloadTable()
     {
+        DialogService.Close();
         await LoadData();
         await grid.Reload();
     }

@@ -37,10 +37,10 @@ else
                         <Template Context="data">
                             <RadzenRow JustifyContent="JustifyContent.SpaceAround">
                                 @* Mostro i bottoni solo se ho i permessi di modifica *@
-                                <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Filled" Size="ButtonSize.Large"
-                                               class="buttonEdit" Style="width: 45%;" />
-                                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Light" Variant="Variant.Filled" Size="ButtonSize.Large"
-                                               class="buttonDelete" Style="width: 45%;" />
+                                <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Info" Variant="Variant.Filled" Size="ButtonSize.Large"
+                                               Click="@(() => OpenUpdateCompany(data))" class="buttonEdit" Style="width: 40%;" />
+                                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Filled" Size="ButtonSize.Large"
+                                               Click="@(() => Hide(data))" class="buttonDelete" Style="width: 40%;" />
                             </RadzenRow>
                         </Template>
                     </RadzenDataGridColumn>
