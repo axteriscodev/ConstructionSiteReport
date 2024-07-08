@@ -1,0 +1,23 @@
+﻿@using ConstructionSiteLibrary.Repositories;
+
+@inject ClientsRepository ClientsRepository
+
+
+<div class="">
+    <RadzenTemplateForm TItem="FormClientData" Data=@form Submit=@Save>
+        <RadzenStack class="px-2">
+            <RadzenFormField Text="Nome <span style='color:red'> (obbligatorio)</span>" Variant="@variant">
+                <ChildContent>
+                    <RadzenTextBox Name="nome" @bind-Value="@form.Name" />
+                </ChildContent>
+                <Helper>
+                    <RadzenRequiredValidator Component="nome" Popup=false
+                                             Text="Il campo nome è obbligatorio" />
+                </Helper>
+            </RadzenFormField>
+           
+            <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Salva" class="buttonSalva" IsBusy=@onSaving
+                          BusyText="Salvataggio in corso" />
+        </RadzenStack>
+    </RadzenTemplateForm>
+</div>
