@@ -15,7 +15,7 @@ public class CompaniesRepository(HttpManager httpManager)
     {
         if (Companies.Count == 0)
         {
-            var response = await _httpManager.SendHttpRequest(ApiRouting.CompaniesList, "");
+            var response = await _httpManager.SendHttpRequest(ApiRouting.CompaniesList, 0);
             if (response.Code.Equals("0"))
             {
                 Companies = JsonSerializer.Deserialize<List<CompanyModel>>(response.Content.ToString() ?? "") ?? [];
@@ -23,6 +23,20 @@ public class CompaniesRepository(HttpManager httpManager)
         }
 
         return Companies;
+    }
+
+    public async Task<CompanyModel> GetCompanyById(int companyId)
+    {
+        CompanyModel selectedCompany = new();
+       var  response = await _httpManager.SendHttpRequest(ApiRouting.CompaniesList, companyId);
+       if (response.Code.Equals("0"))
+       {
+            var companies = JsonSerializer.Deserialize<List<CompanyModel>>(response.Content.ToString() ?? "") ?? []; 
+
+            selectedCompany = companies.FirstOrDefault() ?? new();
+       }
+
+       return selectedCompany;
     }
 
     public async Task<bool> SaveCompany(CompanyModel company)

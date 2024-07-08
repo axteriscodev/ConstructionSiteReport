@@ -1,0 +1,12 @@
+﻿@using ConstructionSiteLibrary.Components.Companies;
+
+@attribute [Route(PageRouting.AddCompanyPage + "{CompanyId:int?}")]
+
+<FormCompanies CompanyId="@CompanyId" />
+
+@code {
+
+    [Parameter]
+    public int CompanyId { get; set; }
+
+}

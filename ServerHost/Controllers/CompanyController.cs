@@ -13,7 +13,7 @@ public class CompanyController : DefaultController
     [LogAction]
     [Route(ApiRouting.CompaniesList)]
     [HttpPost]
-    public AXT_WebResponse CompaniesList()
+    public AXT_WebResponse CompaniesList([FromBody]int idCompany)
     {
         var response = new AXT_WebResponse();
         var stopwatch = StartTime();
@@ -22,7 +22,7 @@ public class CompanyController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var list = CompanyDbHelper.Select(db);
+            var list = CompanyDbHelper.Select(db, idCompany);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
         }

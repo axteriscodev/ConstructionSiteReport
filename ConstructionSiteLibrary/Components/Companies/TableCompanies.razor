@@ -1,0 +1,53 @@
+﻿@using ConstructionSiteLibrary.Repositories
+@using Shared
+@using Shared.Documents
+
+@inject CompaniesRepository CompaniesRepository
+@inject DialogService DialogService
+@inject NavigationService Navigation
+
+<ScreenComponent @ref="screenComponent" />
+
+@if (initialLoading)
+{
+    <Loading />
+}
+else
+{
+    <h2>@Param</h2>
+
+    @* La tabella delle Categorie *@
+    <div class="marginComponent">
+
+        <RadzenFieldset class="shadow rounded" Style="font-weight:400;">
+            <RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
+                          Click="@(() => OpenAddCompanyPage())" Style="margin-bottom:2rem;margin-top:1rem;"  />
+            <RadzenButton Icon="sort" Text="Ordina" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
+                          Style="margin-bottom:2rem;margin-top:1rem;"  />
+            <RadzenDataGrid @ref="grid" GridLines="@DataGridGridLines.Both" IsLoading=@isLoading Count="@count" PageSize="@pageSize" Data="@companies" TItem="CompanyModel"
+                            AllowColumnResize="true" AllowAlternatingRows="true" ColumnWidth="200px" AllowFiltering="true" FilterMode="FilterMode.Simple"
+                            AllowSorting="true" AllowPaging="true" ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" PagerHorizontalAlign="HorizontalAlign.Left">
+
+                <Columns>
+                    <RadzenDataGridColumn TItem="CompanyModel" Property="CompanyName" Title="Nome" Width="60px" />
+                    <RadzenDataGridColumn TItem="CompanyModel" Property="Address" Title="Indirizzo" Width="120px" />
+                    <RadzenDataGridColumn TItem="CompanyModel" Property="Phone" Title="Telefono" Width="60px" />
+                    <RadzenDataGridColumn TItem="CompanyModel" Property="Email" Title="Email" Width="60px" />
+                    <RadzenDataGridColumn TItem="CompanyModel" Title="Azioni" Width="60px" Sortable="false">
+                        <Template Context="data">
+                            <RadzenRow JustifyContent="JustifyContent.SpaceAround">
+                                @* Mostro i bottoni solo se ho i permessi di modifica *@
+                                <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Info" Variant="Variant.Filled" Size="ButtonSize.Large"
+                                               Click="@(() => OpenUpdateCompany(data))" class="buttonEdit" Style="width: 40%;" />
+                                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Filled" Size="ButtonSize.Large"
+                                               Click="@(() => Hide(data))" class="buttonDelete" Style="width: 40%;" />
+                            </RadzenRow>
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
+        </RadzenFieldset>
+    </div>
+
+
+}
