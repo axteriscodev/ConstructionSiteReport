@@ -49,7 +49,7 @@ public partial class FormClient
             form = new FormClientData()
             {
                 Id = ((ClientModel)Object).Id,
-                Nome = ((ClientModel)Object).Name,
+                Name = ((ClientModel)Object).Name,
             };
         }
 
@@ -67,11 +67,11 @@ public partial class FormClient
         bool response;
         if (Object is null)
         {
-            response = await ClientsRepository.SaveClient(new ClientModel { Name = form.Nome ?? "" });
+            response = await ClientsRepository.SaveClient(new ClientModel { Name = form.Name ?? "" });
         }
         else
         {
-            response = await ClientsRepository.UpdateClients([new ClientModel() { Id = form.Id, Name = form.Nome ?? "" }]);
+            response = await ClientsRepository.UpdateClients([new ClientModel() { Id = form.Id, Name = form.Name ?? "" }]);
         }
 
         //NotificationService.Notify(response);
@@ -85,6 +85,6 @@ public partial class FormClient
     private class FormClientData
     {
         public int Id { get; set; }
-        public string Nome { get; set; } = "";
+        public string Name { get; set; } = "";
     }
 }
