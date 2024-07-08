@@ -5,10 +5,7 @@
 @using Microsoft.AspNetCore.Components;
 @using Radzen;
 @using Radzen.Blazor;
-@using Shared.Documents;
 @inject DialogService DialogService
-
-@* <ScreenComponent @ref="screenComponent" /> *@
 
 @* NOTE AGGIUNTIVE *@
 <div class="vstack px-4">
@@ -21,24 +18,18 @@
             </RadzenText>
         </div>
         <div class="border my-4">
-                          <RadzenTextArea Placeholder="Enter here..."
-                          class="w-100" aria-label="TextArea with placeholder"
-                          />
-            @* @foreach (var elem in NoteList)
+            @foreach (var nota in Document.Notes)
             {
-            <RadzenRow JustifyContent="@justifyContent" AlignItems="@alignItems" Gap="0">
-            <RadzenColumn Size="1" class="rz-text-align-center rz-p-2">
-            <RadzenText TextStyle="TextStyle.H4">@NotePointList[NoteList.IndexOf(elem)]</RadzenText>
-            </RadzenColumn>
-            <RadzenColumn>
-            <div class="p-4">
-            <RadzenTextArea Rows="3" Style="width:100%" Value="@elem" />
-            <div>
-            </div>
-            </div>
-            </RadzenColumn>
-            </RadzenRow>
-            } *@
+                <RadzenColumn class="rz-text-align-center rz-border-info-light rz-p-8" Gap="1rem">
+                    <RadzenTextArea Placeholder="Enter here..." class="w-100" Value="@nota.Text" />
+                    <div class="row align-content-center">
+                        <RadzenButton Text="Assegna azienda alla nota" Variant="Variant.Text"
+                            Click="@(()=>OpenCompanyListDialog(nota))" />
+                    </div>
+                </RadzenColumn>
+            }
+
+            <RadzenButton Text="Aggiungi note" Variant="Variant.Text" Click="@AddNewNote" />
         </div>
     </div>
 </div>
@@ -46,47 +37,27 @@
 
 @code {
     [Parameter]
-    public EventCallback OnDocumentNoteChanged { get; set; }
+    public EventCallback OnCompaniesSelected { get; set; }
 
     [Parameter]
     public DocumentModel Document { get; set; } = new();
 
-    [Parameter]
-    public int DocumentId { get; set; } = new();
-
-    private List<string> NoteList { get; set; } = [];
-    private List<string> NotePointList { get; set; } = [];
-    @* ScreenComponent? screenComponent; *@
     protected override async Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
     }
 
-    private void LoadData()
-    {
-        NoteList = [];
-        NotePointList = [];
 
-        ///Da caricare per ogni question
-        if (Document is not null)
-        {
-            foreach (var cat in Document.Categories)
-            {
-                foreach (var question in cat.Questions)
-                {
-                    if (!string.IsNullOrEmpty(question.Note.Trim()))
-                    {
-                        NoteList.Add(question.Note);
-                        NotePointList.Add(cat.Order.ToString() + "." + question.Order.ToString());
-                    }
-                }
-            }
-        }
+    private void AddNewNote()
+    {
+        Document.Notes.Add(new NoteModel());
+
     }
 
-
-    private async Task OpenNoteDialog()
+    private async Task OpenCompanyListDialog(NoteModel nota)
     {
+        var Comps = Document.Companies;
+
         // creo uno style aggiuntivo da inviare al componente caricato con il popup come options
         var additionalStyle = $"min-height:fit-content;height:fit-content;max-width:600px";
         var newOptions = new DialogOptions
@@ -95,19 +66,19 @@
             };
         //creo parametri da inviare al componente caricato con il popup
         var param = new Dictionary<string, object>
-{
-//tra i parametri che invio al dialog creo un EventCallback da passare al componente
-{ "OnDocumentNoteChanged", EventCallback.Factory.Create(this, DocumentNotesChanged) },
-    @* { "Question", question}, *@
-
-};
-        await DialogService.OpenAsync<FormQuestionNote>("Scrivi note", parameters: param, options: newOptions);
+        {
+            //tra i parametri che invio al dialog creo un EventCallback da passare al componente
+            { "OnCompaniesSelected", EventCallback.Factory.Create(this, SelectedCompanies) },
+            { "Nota", nota },
+            { "Companies", Comps },
+        };
+        await DialogService.OpenAsync<FormSelectCompanyDocumentNote>("Seleziona aziende", parameters: param, options: newOptions);
     }
 
-    private async Task DocumentNotesChanged()
+    private void SelectedCompanies()
     {
-        StateHasChanged();
         DialogService.Close();
-        @* await NoteUpdated(); *@
+        StateHasChanged();
     }
+
 }

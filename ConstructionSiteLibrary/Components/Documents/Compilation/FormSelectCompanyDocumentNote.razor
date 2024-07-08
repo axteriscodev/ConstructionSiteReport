@@ -1,0 +1,91 @@
+﻿@using Shared.Documents
+@using ConstructionSiteLibrary.Model.DocumentCompilation
+
+<div>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr class="borderBottomHeader">
+                <th scope="col" class="" style="width:80px;">
+                    <span class="">Selezione</span>
+                </th>
+                <th scope="col" class="" style="width:130px;">
+                    <span class="">Azienda</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var company in selectebleCompanies)
+            {
+                <tr>
+                    <td>
+                        <RadzenCheckBox Value="company.Selected" TValue="bool"
+                            Change="@(select => SelectedChanged(select, company))" />
+                    </td>
+                    <td>
+                        <RadzenText>@company.Company.CompanyName</RadzenText>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="row">
+        <RadzenButton Icon="save" Text="Salva" Click="@Save" />
+    </div>
+</div>
+
+
+
+@code {
+
+    [Parameter]
+    public EventCallback OnCompaniesSelected { get; set; }
+    [Parameter]
+    public List<CompanyModel> Companies { get; set; } = [];
+    [Parameter]
+    public NoteModel Nota { get; set; } = new();
+
+
+    private List<SelectebleCompany> selectebleCompanies { get; set; } = [];
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+        CreateSelectebleCompanies();
+    }
+
+
+    private void CreateSelectebleCompanies()
+    {
+        foreach (var comp in Companies)
+        {
+            var selected = Nota.CompanyListIds.Where(x => x == comp.Id).Any();
+            selectebleCompanies.Add(new() { Selected = selected, Company = comp });
+        }
+    }
+
+    private void SelectedChanged(bool selected, SelectebleCompany company)
+    {
+        company.Selected = selected;
+        if (selected)
+        {
+            var aa = selected;
+            Nota.CompanyListIds.Add(company.Company.Id);
+        }
+        else
+        {
+            Nota.CompanyListIds.Remove(company.Company.Id);
+        }
+    }
+
+    private void Save()
+    {
+        OnCompaniesSelected.InvokeAsync();
+    }
+
+    private class SelectebleCompany
+    {
+        public bool Selected { get; set; }
+        public CompanyModel Company { get; set; } = new();
+    }
+
+}
