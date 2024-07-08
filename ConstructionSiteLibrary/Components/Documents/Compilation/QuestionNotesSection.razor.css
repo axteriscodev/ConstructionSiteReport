@@ -1,24 +1,26 @@
-﻿
-
-.SectionTitleDiv {
+﻿.SectionTitleDiv {
     border: solid 1px black;
     padding: 0.5rem;
     background-color: #ebebeb;
 }
 
-.SectionTitle, ::deep .SectionTitle {
+.SectionTitle,
+::deep .SectionTitle {
     margin: 0px;
 }
 
-.spaceBetween, ::deep .spaceBetween {
+.spaceBetween,
+::deep .spaceBetween {
     justify-content: space-between !important;
 }
 
-.borderBottom, ::deep .borderBottom {
+.borderBottom,
+::deep .borderBottom {
     border-bottom: solid 1px #dee2e6;
 }
 
-.paddingSezione, ::deep .paddingSezione {
+.paddingSezione,
+::deep .paddingSezione {
     padding: 0rem 0.7rem 0.7rem 0.7rem;
 }
 
@@ -28,8 +30,5 @@
     margin-right: 1rem;
 }
 
-.noteRow, ::deep .noteRow{
-
-
-    
-}
+.noteRow,
+::deep .noteRow {}

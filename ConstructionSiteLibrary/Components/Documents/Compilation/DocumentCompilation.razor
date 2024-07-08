@@ -8,11 +8,13 @@
 else
 {
     <div class="card shadow p-3 m-5">
-        <ReportConstructorSiteDataSection Document="@document" />
-        <CompaniesPresentSection Companies="@document.Companies" />
-        <QuestionsSection Categories="document.Categories" Companies="document.Companies" OnNoteUpdated="@QuestionNoteUpdated" />
-	    <FormQuestionAdditionalNotesList Document="@document" />
-    </div>
+    <ReportConstructorSiteDataSection Document="@document" />
+    <CompaniesPresentSection Companies="@document.Companies" />
+    <QuestionsSection Categories="document.Categories" Companies="document.Companies"
+        OnNoteUpdated="@QuestionNoteUpdated" />
+    <QuestionNoteSection Document="@document" />
+    <DocumentNoteSection Document="@document" DocumentId="@DocumentId" />
+</div>
 }
 
 @code {
@@ -33,7 +35,8 @@ else
         document = await DocumentsRepository.GetDocumentById(DocumentId);
     }
 
-    private void QuestionNoteUpdated(){
+    private void QuestionNoteUpdated()
+    {
         StateHasChanged();
     }
 }

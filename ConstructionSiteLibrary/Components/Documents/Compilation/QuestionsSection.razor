@@ -12,13 +12,18 @@
         <div class="categoria pt-3">
             <RadzenRow class="SectionTitleDiv" Style="justify-content:space-between !important;">
                 <RadzenColumn Size="1" Style="display:flex">
-                    <RadzenText TextStyle="TextStyle.DisplayH6" Style="margin-left:1rem;margin-top:0.5rem;"><strong>@CategoryNumber(visual.Category)</strong></RadzenText>
+                    <RadzenText TextStyle="TextStyle.DisplayH6" Style="margin-left:1rem;margin-top:0.5rem;">
+                        <strong>@CategoryNumber(visual.Category)</strong>
+                    </RadzenText>
                 </RadzenColumn>
                 <RadzenColumn Size="10" Style="display:flex;justify-content: center;">
-                    <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" Style="margin-left:1rem;margin-top:0.5rem;"><strong>@CategoryText(visual.Category)</strong></RadzenText>
+                    <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center"
+                        Style="margin-left:1rem;margin-top:0.5rem;"><strong>@CategoryText(visual.Category)</strong>
+                    </RadzenText>
                 </RadzenColumn>
                 <RadzenColumn Size="1" Style="display:flex;justify-content:end;">
-                    <RadzenButton Icon="@AccordionIcon(visual)" Variant="Variant.Text" Click="@(()=>ShowQuestions(visual))" />
+                    <RadzenButton Icon="@AccordionIcon(visual)" Variant="Variant.Text"
+                        Click="@(()=>ShowQuestions(visual))" />
                 </RadzenColumn>
             </RadzenRow>
         </div>
@@ -27,41 +32,47 @@
             @foreach (var question in visual.Category.Questions)
             {
                 <div class="border categoria mx-4">
-                <div class="margineDomande bordoDomanda">
-                    <div class="hstack ">
-                        <RadzenButton Icon="photo_camera" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Text" class="buttonPhoto" />
-                        <RadzenText>@QuestionText(visual.Category, question.Text, question.Order)</RadzenText>
-                    </div>
-                    @foreach (var answer in question.CurrentChoices)
-                    {
-                        <div class="hstack">
-                            <div>
-                                <RadzenDropDown Value="@answer" Data=@question.Choices TValue="DocumentChoiceModel" TextProperty="Value" class="selectChoice"
-                                                Change="@(args => SelectedAnswer(args, question, question.CurrentChoices.IndexOf(answer)))" />
+                    <div class="margineDomande bordoDomanda">
+                        <div class="hstack ">
+                            <RadzenButton Icon="photo_camera" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Text"
+                                class="buttonPhoto" />
+                            <RadzenText>@QuestionText(visual.Category, question.Text, question.Order)</RadzenText>
+                        </div>
+                        @foreach (var answer in question.CurrentChoices)
+                        {
+                            <div class="hstack">
+                                <div>
+                                    <RadzenDropDown Value="@answer" Data=@question.Choices TValue="DocumentChoiceModel"
+                                        TextProperty="Value" class="selectChoice"
+                                        Change="@(args => SelectedAnswer(args, question, question.CurrentChoices.IndexOf(answer)))" />
+                                </div>
+                                @if (ShowDeleteChoiceButton(answer, question))
+                                {
+                                    <div>
+                                        <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Text"
+                                            class="buttonChoice" Click="@(()=>RemoveAnswer(question, answer))" />
+                                    </div>
+                                }
+                                @if (ShowAddChoiceButton(answer, question))
+                                {
+                                    <div>
+                                        <RadzenButton Icon="add" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Text"
+                                            class="buttonChoice" Click="@(()=>AddAnswer(question))" />
+                                    </div>
+                                }
                             </div>
-                            @if (ShowDeleteChoiceButton(answer, question))
-                            {
-                                <div>
-                                    <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Text" class="buttonChoice"
-                                                  Click="@(()=>RemoveAnswer(question, answer))" />
-                                </div>
-                            }
-                            @if (ShowAddChoiceButton(answer, question))
-                            {
-                                <div>
-                                    <RadzenButton Icon="add" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Text" class="buttonChoice"
-                                                  Click="@(()=>AddAnswer(question))" />
-                                </div>
-                            }
-                        </div>
-                        <div>
-                            <RadzenText TextStyle="TextStyle.Body1" onclick="@{()=>OpenCompanyListDialog(answer)}">@ReportedCompany(answer)</RadzenText>
-                        </div>
+                            <div>
+                                <RadzenText TextStyle="TextStyle.Body1" onclick="@{
+                    ()=>OpenCompanyListDialog(answer)
+}">
+                                    @ReportedCompany(answer)</RadzenText>
+                            </div>
 
-                    }
-                    <div class="row align-content-center">
-                        <RadzenButton Text="Aggiungi note" Variant="Variant.Text" Click="@(()=>OpenNoteDialog(question))" Style="width: 170px;" />
-                    </div>
+                        }
+                        <div class="row align-content-center">
+                            <RadzenButton Text="Aggiungi note" Variant="Variant.Text" Click="@(()=>OpenNoteDialog(question))"
+                                Style="width: 170px;" />
+                        </div>
                     </div>
                 </div>
             }
@@ -77,7 +88,7 @@
     [Parameter]
     public List<CompanyModel> Companies { get; set; } = [];
     [Parameter]
-    public EventCallback OnNoteUpdated {get; set;}
+    public EventCallback OnNoteUpdated { get; set; }
 
     private List<VisualCategory> visualCategories { get; set; } = [];
 
@@ -91,8 +102,9 @@
         CreateVisualCategories();
     }
 
-    private async Task NoteUpdated(){
-            await OnNoteUpdated!.InvokeAsync();
+    private async Task NoteUpdated()
+    {
+        await OnNoteUpdated!.InvokeAsync();
     }
 
     private void CreateVisualCategories()
@@ -125,7 +137,7 @@
     private void AddAnswer(DocumentQuestionModel question)
     {
         var index = question.CurrentChoices.Count;
-        question.CurrentChoices.Add(new(){ChoiceIndex = index});
+        question.CurrentChoices.Add(new() { ChoiceIndex = index });
     }
 
     private void RemoveAnswer(DocumentQuestionModel question, DocumentChoiceModel choice)
@@ -190,13 +202,13 @@
             };
         //creo parametri da inviare al componente caricato con il popup
         var param = new Dictionary<string, object>
-            {
-                //tra i parametri che invio al dialog creo un EventCallback da passare al componente
-                { "OnQuestionNoteChanged", EventCallback.Factory.Create(this, QuestionNotesChanged) },
-                { "Question", question},
+{
+//tra i parametri che invio al dialog creo un EventCallback da passare al componente
+{ "OnQuestionNoteChanged", EventCallback.Factory.Create(this, QuestionNotesChanged) },
+{ "Question", question},
 
-            };
-        await DialogService.OpenAsync<FormQuestionNotes>("Scrivi note", parameters: param, options: newOptions);
+};
+        await DialogService.OpenAsync<FormQuestionNote>("Scrivi note", parameters: param, options: newOptions);
     }
 
     private async Task OpenCompanyListDialog(DocumentChoiceModel choice)
@@ -211,13 +223,13 @@
             };
         //creo parametri da inviare al componente caricato con il popup
         var param = new Dictionary<string, object>
-            {
-                //tra i parametri che invio al dialog creo un EventCallback da passare al componente
-                { "OnCompaniesSelected", EventCallback.Factory.Create(this, SelectedCompanies) },
-                {"Choice", choice},
-                { "Companies", Companies},
+{
+//tra i parametri che invio al dialog creo un EventCallback da passare al componente
+{ "OnCompaniesSelected", EventCallback.Factory.Create(this, SelectedCompanies) },
+{"Choice", choice},
+{ "Companies", Companies},
 
-            };
+};
         await DialogService.OpenAsync<FormSelectCompany>("Seleziona aziende", parameters: param, options: newOptions);
     }
 
@@ -228,18 +240,18 @@
         StateHasChanged();
     }
 
-    private void QuestionNotesChanged()
+    private async Task QuestionNotesChanged()
     {
         StateHasChanged();
         DialogService.Close();
-        NoteUpdated();
+        await NoteUpdated();
     }
 
     #endregion
 
     #region Visualizzazione
 
-        private static string CategoryNumber(DocumentCategoryModel cat)
+    private static string CategoryNumber(DocumentCategoryModel cat)
     {
         return cat.Order + ".";
     }

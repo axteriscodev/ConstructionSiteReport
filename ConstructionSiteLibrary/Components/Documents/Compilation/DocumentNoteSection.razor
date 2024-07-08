@@ -1,0 +1,113 @@
+﻿@using Shared.Documents
+@using ConstructionSiteLibrary.Components.Utilities;
+@using ConstructionSiteLibrary.Repositories;
+@using ConstructionSiteLibrary.Utility;
+@using Microsoft.AspNetCore.Components;
+@using Radzen;
+@using Radzen.Blazor;
+@using Shared.Documents;
+@inject DialogService DialogService
+
+@* <ScreenComponent @ref="screenComponent" /> *@
+
+@* NOTE AGGIUNTIVE *@
+<div class="vstack px-4">
+    <div class="my-4 ">
+        <div class="row SectionTitleDiv">
+            <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" class="SectionTitle">
+                <strong>
+                    NOTE AGGIUNTIVE
+                </strong>
+            </RadzenText>
+        </div>
+        <div class="border my-4">
+                          <RadzenTextArea Placeholder="Enter here..."
+                          class="w-100" aria-label="TextArea with placeholder"
+                          />
+            @* @foreach (var elem in NoteList)
+            {
+            <RadzenRow JustifyContent="@justifyContent" AlignItems="@alignItems" Gap="0">
+            <RadzenColumn Size="1" class="rz-text-align-center rz-p-2">
+            <RadzenText TextStyle="TextStyle.H4">@NotePointList[NoteList.IndexOf(elem)]</RadzenText>
+            </RadzenColumn>
+            <RadzenColumn>
+            <div class="p-4">
+            <RadzenTextArea Rows="3" Style="width:100%" Value="@elem" />
+            <div>
+            </div>
+            </div>
+            </RadzenColumn>
+            </RadzenRow>
+            } *@
+        </div>
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public EventCallback OnDocumentNoteChanged { get; set; }
+
+    [Parameter]
+    public DocumentModel Document { get; set; } = new();
+
+    [Parameter]
+    public int DocumentId { get; set; } = new();
+
+    private List<string> NoteList { get; set; } = [];
+    private List<string> NotePointList { get; set; } = [];
+    @* ScreenComponent? screenComponent; *@
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+    }
+
+    private void LoadData()
+    {
+        NoteList = [];
+        NotePointList = [];
+
+        ///Da caricare per ogni question
+        if (Document is not null)
+        {
+            foreach (var cat in Document.Categories)
+            {
+                foreach (var question in cat.Questions)
+                {
+                    if (!string.IsNullOrEmpty(question.Note.Trim()))
+                    {
+                        NoteList.Add(question.Note);
+                        NotePointList.Add(cat.Order.ToString() + "." + question.Order.ToString());
+                    }
+                }
+            }
+        }
+    }
+
+
+    private async Task OpenNoteDialog()
+    {
+        // creo uno style aggiuntivo da inviare al componente caricato con il popup come options
+        var additionalStyle = $"min-height:fit-content;height:fit-content;max-width:600px";
+        var newOptions = new DialogOptions
+            {
+                Style = additionalStyle
+            };
+        //creo parametri da inviare al componente caricato con il popup
+        var param = new Dictionary<string, object>
+{
+//tra i parametri che invio al dialog creo un EventCallback da passare al componente
+{ "OnDocumentNoteChanged", EventCallback.Factory.Create(this, DocumentNotesChanged) },
+    @* { "Question", question}, *@
+
+};
+        await DialogService.OpenAsync<FormQuestionNote>("Scrivi note", parameters: param, options: newOptions);
+    }
+
+    private async Task DocumentNotesChanged()
+    {
+        StateHasChanged();
+        DialogService.Close();
+        @* await NoteUpdated(); *@
+    }
+}
