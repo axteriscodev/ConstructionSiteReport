@@ -41,6 +41,7 @@ namespace ConstructionSiteLibrary.Services
             OnDbSupportValidated.Invoke(dbSupport);
         }
 
+        /*Metodo per aprire il database*/
         public async Task<bool> OpenDB()
         {
             bool result = false;

@@ -6,20 +6,67 @@
  */
 export async function generaPDFDocumento2(filename) {
 
-    const content = document.getElementById('stampaPDF');
-    const opt = {
-        margin: 10,
-        filename: filename,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
+    const doc = new jspdf.jsPDF({
+        orientation: 'p',
+        unit: 'pt',
+        format: 'a4',
+
+    });
+
+    const content = document.getElementById('printPDF').innerHTML;
+    console.log("content: " + content.offsetHeight);
+    const elements = document.querySelectorAll('.pdfElement');
+    let yPosition = 15;
+    let xPosition = 12;
+    let pageCount = 0;
+    let currentSize = 0;
+    let pageHeight = doc.internal.pageSize.getHeight();
+    let pages = [];
+    console.log("ph= " + pageHeight);
+
+    let tempDiv = document.createElement('div');
+    pages.push(tempDiv);
+    elements.forEach((elem, index) => {
+        let altezza = elem.offsetHeight + currentSize;
+        console.log(" currentSize= " + currentSize + " offsetHeight= " + elem.offsetHeight);
+        console.log(" pagina " + pageCount + " altezza= " + altezza);
+        if (altezza < 1024) {
+            console.log("dentro if, pagina " + pageCount);
+            pages[pageCount].innerHTML += elem.innerHTML;
+            currentSize = altezza;
+        } else {
+            pageCount++;
+            tempDiv = document.createElement('div');
+            pages.push(tempDiv);
+            pages[pageCount].innerHTML += elem.innerHTML;
+            currentSize = elem.offsetHeight;
+            console.log("dentro else, pagina " + pageCount);
+        }
+    });
+
+    for (let i = 0; i < pages.length; i++) {
+        await doc.html(pages[i], {
+            callback: function (doc) {
+                return doc;
+            },
+            x: xPosition,
+            y: yPosition + pageHeight * (i),
+            width: 570,
+            windowWidth: 900,
+            //autoPaging: 'text'
+        });
+    }
+
+
     return new Promise((resolve, reject) => {
-        html2pdf().from(content).set(opt).save();
+        doc.save(filename);
         resolve();
     });
 
 }
+
+/**/
+
 
 /**
  * Metodo usato per creare il PDF della scheda strumento

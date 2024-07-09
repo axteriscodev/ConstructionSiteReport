@@ -11,62 +11,62 @@
     {
         <div class="marginYResponsive2">
             <div class="SectionTitleDiv">
-            <RadzenRow Style="justify-content:space-between !important;">
-                <RadzenColumn Size="1" Style="display:flex">
-                    <RadzenText TextStyle="TextStyle.DisplayH6" Style="margin-left:1rem;margin-top:0.5rem;"><strong>@CategoryNumber(visual.Category)</strong></RadzenText>
-                </RadzenColumn>
-                <RadzenColumn Size="10" Style="display:flex;justify-content: center;">
-                    <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" Style="margin-left:1rem;margin-top:0.5rem;"><strong>@CategoryText(visual.Category)</strong></RadzenText>
-                </RadzenColumn>
-                <RadzenColumn Size="1" Style="display:flex;justify-content:end;">
-                    <RadzenButton Icon="@AccordionIcon(visual)" Variant="Variant.Text" Click="@(()=>ShowQuestions(visual))" />
-                </RadzenColumn>
-            </RadzenRow>
-        </div>
-        @if (visual.ShowQuestion)
-        {
-            @foreach (var question in visual.Category.Questions)
+                <RadzenRow Style="justify-content:space-between !important;">
+                    <RadzenColumn Size="1" Style="display:flex">
+                        <RadzenText TextStyle="TextStyle.DisplayH6" Style="margin-left:1rem;margin-top:0.5rem;"><strong>@CategoryNumber(visual.Category)</strong></RadzenText>
+                    </RadzenColumn>
+                    <RadzenColumn Size="10" Style="display:flex;justify-content: center;">
+                        <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" Style="margin-left:1rem;margin-top:0.5rem;"><strong>@CategoryText(visual.Category)</strong></RadzenText>
+                    </RadzenColumn>
+                    <RadzenColumn Size="1" Style="display:flex;justify-content:end;">
+                        <RadzenButton Icon="@AccordionIcon(visual)" Variant="Variant.Text" Click="@(()=>ShowQuestions(visual))" />
+                    </RadzenColumn>
+                </RadzenRow>
+            </div>
+            @if (visual.ShowQuestion)
             {
+                @foreach (var question in visual.Category.Questions)
+                {
                     <div class="border paddingSezione">
-                <div class="margineDomande bordoDomanda">
-                    <div class="hstack ">
-                        <RadzenButton Icon="photo_camera" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Text" class="buttonPhoto" />
-                        <RadzenText>@QuestionText(visual.Category, question.Text, question.Order)</RadzenText>
-                    </div>
-                    @foreach (var answer in question.CurrentChoices)
-                    {
-                        <div class="hstack">
-                            <div>
-                                <RadzenDropDown Value="@answer" Data=@question.Choices TValue="DocumentChoiceModel" TextProperty="Value" class="selectChoice"
-                                                Change="@(args => SelectedAnswer(args, question, question.CurrentChoices.IndexOf(answer)))" />
+                        <div class="margineDomande bordoDomanda">
+                            <div class="hstack ">
+                                <RadzenButton Icon="photo_camera" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Text" class="buttonPhoto" />
+                                <RadzenText>@QuestionText(visual.Category, question.Text, question.Order)</RadzenText>
                             </div>
-                            @if (ShowDeleteChoiceButton(answer, question))
+                            @foreach (var answer in question.CurrentChoices)
                             {
-                                <div>
-                                    <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Text" class="buttonChoice"
-                                                  Click="@(()=>RemoveAnswer(question, answer))" />
+                                <div class="hstack">
+                                    <div>
+                                        <RadzenDropDown Value="@answer" Data=@question.Choices TValue="DocumentChoiceModel" TextProperty="Value" class="selectChoice"
+                                                        Change="@(args => SelectedAnswer(args, question, question.CurrentChoices.IndexOf(answer)))" />
+                                    </div>
+                                    @if (ShowDeleteChoiceButton(answer, question))
+                                    {
+                                        <div>
+                                            <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Text" class="buttonChoice"
+                                                          Click="@(()=>RemoveAnswer(question, answer))" />
+                                        </div>
+                                    }
+                                    @if (ShowAddChoiceButton(answer, question))
+                                    {
+                                        <div>
+                                            <RadzenButton Icon="add" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Text" class="buttonChoice"
+                                                          Click="@(()=>AddAnswer(question))" />
+                                        </div>
+                                    }
                                 </div>
-                            }
-                            @if (ShowAddChoiceButton(answer, question))
-                            {
                                 <div>
-                                    <RadzenButton Icon="add" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Text" class="buttonChoice"
-                                                  Click="@(()=>AddAnswer(question))" />
+                                    <RadzenText TextStyle="TextStyle.Body1" onclick="@{()=>OpenCompanyListDialog(answer)}">@ReportedCompany(answer)</RadzenText>
                                 </div>
-                            }
-                        </div>
-                        <div>
-                            <RadzenText TextStyle="TextStyle.Body1" onclick="@{()=>OpenCompanyListDialog(answer)}">@ReportedCompany(answer)</RadzenText>
-                        </div>
 
-                    }
-                    <div class="row align-content-center">
-                        <RadzenButton Text="Aggiungi note" Variant="Variant.Text" Click="@(()=>OpenNoteDialog(question))" Style="width: 170px;" />
+                            }
+                            <div class="row align-content-center">
+                                <RadzenButton Text="Aggiungi note" Variant="Variant.Text" Click="@(()=>OpenNoteDialog(question))" Style="width: 170px;" />
+                            </div>
+                        </div>
                     </div>
-                    </div>
-                </div>
+                }
             }
-        }
         </div>
     }
 </div>
@@ -79,7 +79,7 @@
     [Parameter]
     public List<CompanyModel> Companies { get; set; } = [];
     [Parameter]
-    public EventCallback OnStateChangeNotification {get; set;}
+    public EventCallback OnStateChangeNotification { get; set; }
 
 
     private List<VisualCategory> visualCategories { get; set; } = [];
@@ -94,8 +94,9 @@
         CreateVisualCategories();
     }
 
-    private async Task StateChangeNotification(){
-            await OnStateChangeNotification!.InvokeAsync();
+    private async Task StateChangeNotification()
+    {
+        await OnStateChangeNotification!.InvokeAsync();
     }
 
     private void CreateVisualCategories()
@@ -129,7 +130,7 @@
     private void AddAnswer(DocumentQuestionModel question)
     {
         var index = question.CurrentChoices.Count;
-        question.CurrentChoices.Add(new(){ChoiceIndex = index});
+        question.CurrentChoices.Add(new() { ChoiceIndex = index });
     }
 
     private void RemoveAnswer(DocumentQuestionModel question, DocumentChoiceModel choice)
@@ -242,7 +243,7 @@
 
     #region Visualizzazione
 
-        private static string CategoryNumber(DocumentCategoryModel cat)
+    private static string CategoryNumber(DocumentCategoryModel cat)
     {
         return cat.Order + ".";
     }
