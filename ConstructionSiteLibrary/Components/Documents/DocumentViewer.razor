@@ -1,5 +1,6 @@
 ﻿@using Shared.Documents
 @using Microsoft.JSInterop
+@layout EmptyLayout
 
 @inject DocumentsRepository DocumentsRepository
 @inject IJSRuntime JS
@@ -13,169 +14,171 @@
 else
 {
     <meta name="viewport" content="width=1024">
-    <div id="printPDF">
-        @* INTRO DOCUMENTO *@
-        <div class="pdfElement">
-            <div class="row SectionTitleDiv">
-                <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" class="SectionTitle"><strong>@Document.Title</strong> </RadzenText>
-            </div>
-            <div class="border paddingSezione">
-                <div class="row my-2">
-                    <RadzenText>@Document.Description</RadzenText>
-                </div>
-            </div>
-            <div class="border paddingSezione">
-                <div class=" row my-2">
-                    <div class="col">
-                        <RadzenText>Il C.S.E.: <strong>@Document.CSE</strong></RadzenText>
-                    </div>
-                    <div class="col">
-                        <div class="row">
-                            <div class="col">
-                                <RadzenText>Data sopralluogo: <strong>@StampaData()</strong></RadzenText>
-                            </div>
-                            <div class="col">
-                                <RadzenText>Ora: <strong>@StampaOra()</strong></RadzenText>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <RadzenRow class="my-2">
-                    <RadzenText>Condizioni meteo: <strong>@Document.MeteoCondition.Description</strong></RadzenText>
-                </RadzenRow>
-            </div>
-        </div>
-        @* DATI CANTIERE *@
-        <div class="pdfElement">
-            <div class="row SectionTitleDiv">
-                <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" class="SectionTitle">
-                    <strong>
-                        DATI, CANTIERE, FIGURE RESPONSABILI, PROGETTISTI,RIUNIONI
-                    </strong>
-                </RadzenText>
-            </div>
-            <div class="border my-4 paddingSezione">
-                <div class="row my-2">
-                    <div class="col">
-                        <RadzenText>Committente: <strong>@Document.Client?.Name</strong></RadzenText>
-                    </div>
-                    <div class="col">
-                        <RadzenText>Lavori di: <strong>@Document.ConstructorSite.JobDescription</strong></RadzenText>
-                    </div>
-                </div>
-                <div class="row my-2">
-                    <div class="col">
-                        <RadzenText>Indirizzo cantiere: @Document.ConstructorSite.Address</RadzenText>
-                    </div>
-                    <div class="col">
-                        <RadzenText>Inizio lavori: @Document.ConstructorSite.StartDate</RadzenText>
-                    </div>
-                </div>
-                <div class="row my-2">
-                    <div class="col">
-                        <RadzenText>Notifica preliminare inizio cantiere del:@Document.ConstructorSite.PreliminaryNotificationStartDate</RadzenText>
-                    </div>
-                    <div class="col">
-                        <RadzenText>Id. SICO: @Document.ConstructorSite.IdSico</RadzenText>
-                    </div>
-                </div>
-                <div class="row my-2">
-                    <div class="col">
-                        <RadzenText> Notifica preliminare in corso: @Document.ConstructorSite.PreliminaryNotificationInProgress</RadzenText>
-                    </div>
-                    <div class="col">
-                        <RadzenText>Id. SICO: @Document.ConstructorSite.IdSicoInProgress</RadzenText>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        @* COMPANY DOCUMENTO *@
-        <div class="pdfElement">
-            <div class="row SectionTitleDiv">
-                <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center"><strong>IMPRESE PRESENTI: FIGURE RESPONSABILI, PERSONALE, FORMALE,ATTREZZATURA</strong></RadzenText>
-            </div>
-        </div>
-        @foreach (var company in Document.Companies)
-        {
+    <div class="document">
+        <div id="printPDF" class="card shadow" style="max-width:1024px;padding:1rem;">
+            @* INTRO DOCUMENTO *@
             <div class="pdfElement">
+                <div class="row SectionTitleDiv">
+                    <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" class="SectionTitle"><strong>@Document.Title</strong> </RadzenText>
+                </div>
                 <div class="border paddingSezione">
-                    <div class=" row my-2 borderBottom">
-                        <div class="col ">
-                            <RadzenText>Impresa Esecutrice</RadzenText>
-                        </div>
-                        <div class="col impresaEsecutrice">
-                            <RadzenRow>
-                                <RadzenLabel Text="Presente" Component="Presente" />
-                                <RadzenCheckBox Value="@company.Present" Name="Presente" />
-                            </RadzenRow>
-                        </div>
-                    </div>
                     <div class="row my-2">
-                        <div class="col">
-                            <RadzenText>Ragione Sociale: <strong>@company.CompanyName</strong></RadzenText>
-                        </div>
-                        <div class="col">
-                            <RadzenText>Sede legale: @company.Address</RadzenText>
-                        </div>
-                    </div>
-                    <div class="row my-2">
-                        <div class="col">
-                            <RadzenText>Lavori previsti: @company.JobsDescriptions</RadzenText>
-                        </div>
-                        <div class="col">
-                            <RadzenText>P. Iva: @company.VatCode</RadzenText>
-                        </div>
+                        <RadzenText>@Document.Description</RadzenText>
                     </div>
                 </div>
-            </div>
-        }
-        @* DOMANDE DOCUMENTO *@
-        @foreach (var category in Document.Categories)
-        {
-            <div class="pdfElement">
-                <div class="SectionTitleDiv">
-                    <RadzenRow Style="justify-content:space-between !important;">
-                        <RadzenColumn Size="1" Style="display:flex">
-                            <RadzenText TextStyle="TextStyle.DisplayH6" Style="margin-left:1rem;margin-top:0.5rem;"><strong>@CategoryNumber(category)</strong></RadzenText>
-                        </RadzenColumn>
-                        <RadzenColumn Size="10" Style="display:flex;justify-content: center;">
-                            <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" Style="margin-left:1rem;margin-top:0.5rem;"><strong>@CategoryText(category)</strong></RadzenText>
-                        </RadzenColumn>
-                        <RadzenColumn Size="1" Style="display:flex;justify-content:end;">
-                        </RadzenColumn>
+                <div class="border paddingSezione">
+                    <div class=" row my-2">
+                        <div class="col">
+                            <RadzenText>Il C.S.E.: <strong>@Document.CSE</strong></RadzenText>
+                        </div>
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <RadzenText>Data sopralluogo: <strong>@StampaData()</strong></RadzenText>
+                                </div>
+                                <div class="col">
+                                    <RadzenText>Ora: <strong>@StampaOra()</strong></RadzenText>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <RadzenRow class="my-2">
+                        <RadzenText>Condizioni meteo: <strong>@Document.MeteoCondition.Description</strong></RadzenText>
                     </RadzenRow>
                 </div>
             </div>
-            @foreach (var question in category.Questions)
+            @* DATI CANTIERE *@
+            <div class="pdfElement">
+                <div class="row SectionTitleDiv">
+                    <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" class="SectionTitle">
+                        <strong>
+                            DATI, CANTIERE, FIGURE RESPONSABILI, PROGETTISTI,RIUNIONI
+                        </strong>
+                    </RadzenText>
+                </div>
+                <div class="border my-4 paddingSezione">
+                    <div class="row my-2">
+                        <div class="col">
+                            <RadzenText>Committente: <strong>@Document.Client?.Name</strong></RadzenText>
+                        </div>
+                        <div class="col">
+                            <RadzenText>Lavori di: <strong>@Document.ConstructorSite.JobDescription</strong></RadzenText>
+                        </div>
+                    </div>
+                    <div class="row my-2">
+                        <div class="col">
+                            <RadzenText>Indirizzo cantiere: @Document.ConstructorSite.Address</RadzenText>
+                        </div>
+                        <div class="col">
+                            <RadzenText>Inizio lavori: @Document.ConstructorSite.StartDate</RadzenText>
+                        </div>
+                    </div>
+                    <div class="row my-2">
+                        <div class="col">
+                            <RadzenText>Notifica preliminare inizio cantiere del:@Document.ConstructorSite.PreliminaryNotificationStartDate</RadzenText>
+                        </div>
+                        <div class="col">
+                            <RadzenText>Id. SICO: @Document.ConstructorSite.IdSico</RadzenText>
+                        </div>
+                    </div>
+                    <div class="row my-2">
+                        <div class="col">
+                            <RadzenText> Notifica preliminare in corso: @Document.ConstructorSite.PreliminaryNotificationInProgress</RadzenText>
+                        </div>
+                        <div class="col">
+                            <RadzenText>Id. SICO: @Document.ConstructorSite.IdSicoInProgress</RadzenText>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            @* COMPANY DOCUMENTO *@
+            <div class="pdfElement">
+                <div class="row SectionTitleDiv">
+                    <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center"><strong>IMPRESE PRESENTI: FIGURE RESPONSABILI, PERSONALE, FORMALE,ATTREZZATURA</strong></RadzenText>
+                </div>
+            </div>
+            @foreach (var company in Document.Companies)
             {
                 <div class="pdfElement">
                     <div class="border paddingSezione">
-                        <div class="margineDomande bordoDomanda">
-                            <div class="hstack ">
-                                <RadzenText>@QuestionText(category, question.Text, question.Order)</RadzenText>
+                        <div class=" row my-2 borderBottom">
+                            <div class="col ">
+                                <RadzenText>Impresa Esecutrice</RadzenText>
                             </div>
-                            @foreach (var answer in question.CurrentChoices)
-                            {
-                                <div class="hstack">
-                                    <div>
-                                        <RadzenText class="selectChoice">@answer.Value</RadzenText>
-                                    </div>
-                                </div>
-                                <div>
-                                    <RadzenText TextStyle="TextStyle.Body1">@ReportedCompany(answer)</RadzenText>
-                                </div>
-
-                            }
+                            <div class="col impresaEsecutrice">
+                                <RadzenRow>
+                                    <RadzenLabel Text="Presente" Component="Presente" />
+                                    <RadzenCheckBox Value="@company.Present" Name="Presente" />
+                                </RadzenRow>
+                            </div>
+                        </div>
+                        <div class="row my-2">
+                            <div class="col">
+                                <RadzenText>Ragione Sociale: <strong>@company.CompanyName</strong></RadzenText>
+                            </div>
+                            <div class="col">
+                                <RadzenText>Sede legale: @company.Address</RadzenText>
+                            </div>
+                        </div>
+                        <div class="row my-2">
+                            <div class="col">
+                                <RadzenText>Lavori previsti: @company.JobsDescriptions</RadzenText>
+                            </div>
+                            <div class="col">
+                                <RadzenText>P. Iva: @company.VatCode</RadzenText>
+                            </div>
                         </div>
                     </div>
                 </div>
             }
-        }
+            @* DOMANDE DOCUMENTO *@
+            @foreach (var category in Document.Categories)
+            {
+                <div class="pdfElement">
+                    <div class="SectionTitleDiv">
+                        <RadzenRow Style="justify-content:space-between !important;">
+                            <RadzenColumn Size="1" Style="display:flex">
+                                <RadzenText TextStyle="TextStyle.DisplayH6" Style="margin-left:1rem;margin-top:0.5rem;"><strong>@CategoryNumber(category)</strong></RadzenText>
+                            </RadzenColumn>
+                            <RadzenColumn Size="10" Style="display:flex;justify-content: center;">
+                                <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" Style="margin-left:1rem;margin-top:0.5rem;"><strong>@CategoryText(category)</strong></RadzenText>
+                            </RadzenColumn>
+                            <RadzenColumn Size="1" Style="display:flex;justify-content:end;">
+                            </RadzenColumn>
+                        </RadzenRow>
+                    </div>
+                </div>
+                @foreach (var question in category.Questions)
+                {
+                    <div class="pdfElement">
+                        <div class="border paddingSezione">
+                            <div class="margineDomande bordoDomanda">
+                                <div class="hstack ">
+                                    <RadzenText>@QuestionText(category, question.Text, question.Order)</RadzenText>
+                                </div>
+                                @foreach (var answer in question.CurrentChoices)
+                                {
+                                    <div class="hstack">
+                                        <div>
+                                            <RadzenText class="selectChoice">@answer.Value</RadzenText>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <RadzenText TextStyle="TextStyle.Body1">@ReportedCompany(answer)</RadzenText>
+                                    </div>
+
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
 
 
 
 
+        </div>
     </div>
     <div class="mx-4">
         <RadzenButton Text="Stampa" Click="StampaDocumento" />
