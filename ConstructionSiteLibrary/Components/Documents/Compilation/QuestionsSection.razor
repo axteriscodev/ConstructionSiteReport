@@ -1,7 +1,9 @@
-﻿@using Shared.Documents
+﻿@using ConstructionSiteLibrary.Interfaces
+@using Shared.Documents
 @using ConstructionSiteLibrary.Model.DocumentCompilation
 
 @inject DialogService DialogService
+@inject ICameraService CameraService
 
 <ScreenComponent @ref="screenComponent" />
 
@@ -30,7 +32,7 @@
                     <div class="border paddingSezione">
                 <div class="margineDomande bordoDomanda">
                     <div class="hstack ">
-                        <RadzenButton Icon="photo_camera" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Text" class="buttonPhoto" />
+                        <RadzenButton Icon="photo_camera" Click="@TakePicture" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Text" class="buttonPhoto" />
                         <RadzenText>@QuestionText(visual.Category, question.Text, question.Order)</RadzenText>
                     </div>
                     @foreach (var answer in question.CurrentChoices)
@@ -97,6 +99,14 @@
     private async Task StateChangeNotification(){
             await OnStateChangeNotification!.InvokeAsync();
     }
+
+    private async Task TakePicture()
+    {
+        var img = await CameraService.OpenCamera();
+       
+       // StateHasChanged();
+    }
+
 
     private void CreateVisualCategories()
     {
