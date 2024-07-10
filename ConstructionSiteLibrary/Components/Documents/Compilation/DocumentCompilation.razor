@@ -1,5 +1,11 @@
 ﻿@using Shared.Documents
+@using Microsoft.JSInterop
+
+@inject DialogService DialogService
 @inject DocumentsRepository DocumentsRepository
+@inject IJSRuntime JS
+
+<ScreenComponent @ref="screenComponent" />
 
 @if (onLoading)
 {
@@ -10,9 +16,13 @@ else
     <div class="card shadow DocumentCard">
         <ReportConstructorSiteDataSection Document="@document" />
         <CompaniesPresentSection Companies="@document.Companies" />
-        <QuestionsSection Categories="document.Categories" Companies="document.Companies" OnStateChangeNotification="@QuestionNoteUpdated" />
-	    <FormQuestionAdditionalNotesList Document="@document" />
+        <QuestionsSection Categories="document.Categories" Companies="document.Companies" OnStateChangeNotification="@UpdateDocument" />
+        <QuestionNotesSection Document="@document" />
+        <DocumentNoteSection Document="@document" />
         <CompaniesSignsSection Document="@document" />
+    </div>
+    <div class="d-flex justify-content-center">
+        <RadzenButton Text="Stampa" Click="StampaDocumento" Style="width:300px;height:40px;"/>
     </div>
 }
 
@@ -21,6 +31,7 @@ else
     public int DocumentId { get; set; }
     private DocumentModel document = new();
     private bool onLoading = false;
+    ScreenComponent screenComponent;
 
     protected override async Task OnInitializedAsync()
     {
@@ -34,7 +45,35 @@ else
         document = await DocumentsRepository.GetDocumentById(DocumentId);
     }
 
-    private void QuestionNoteUpdated(){
+    private void UpdateDocument()
+    {
         StateHasChanged();
     }
+
+    private async Task StampaDocumento()
+    {
+        var width = screenComponent.GetScreenSize().Width;
+
+        // creo uno style aggiuntivo da inviare al componente caricato con il popup come options
+        var additionalStyle = $"min-height:fit-content;height:fit-content;width:{width}px;";
+        var newOptions = new DialogOptions
+            {
+                Style = additionalStyle
+            };
+        //creo parametri da inviare al componente caricato con il popup
+        var param = new Dictionary<string, object>
+            {
+                //tra i parametri che invio al dialog creo un EventCallback da passare al componente
+                { "OnPrintComplete", EventCallback.Factory.Create(this, PrintComplete) },
+                { "Document", document },
+            };
+        await DialogService.OpenAsync<DocumentViewer>("", parameters: param, options: newOptions);
+    }
+
+
+    private void PrintComplete()
+    {
+        DialogService.Close();
+    }
+
 }

@@ -232,7 +232,7 @@
 { "Question", question},
 
 };
-        await DialogService.OpenAsync<FormQuestionNotes>("Scrivi note", parameters: param, options: newOptions);
+        await DialogService.OpenAsync<FormQuestionNote>("Scrivi note", parameters: param, options: newOptions);
     }
 
     private async Task OpenCompanyListDialog(DocumentChoiceModel choice)

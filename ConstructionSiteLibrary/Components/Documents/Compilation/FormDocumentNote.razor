@@ -1,10 +1,10 @@
 ﻿@using Shared.Documents
 
 <div>
-    <RadzenTextArea @bind-Value="notes" Rows="5" Style="width:100%" />
+    @* <RadzenTextArea @bind-Value="notes" Rows="5" Style="width:100%" />
     <div class="row justify-content-center">
         <RadzenButton Icon="save" Text="Salva" Click="@Save" Style="width: 170px;" />
-    </div>
+    </div> *@
 </div>
 
 
@@ -12,12 +12,10 @@
 @code {
 
     [Parameter]
-    public EventCallback OnQuestionNoteChanged{ get; set; }
+    public EventCallback<NoteModel> OnDocumentNoteChanged { get; set; }
 
     [Parameter]
-    public DocumentQuestionModel Question { get; set; } = new();
-
-    private string notes { get; set; } = "";
+    public NoteModel? Note { get; set; }
 
 
     protected override async Task OnParametersSetAsync()
@@ -28,15 +26,11 @@
 
     private void LoadData()
     {
-        if(Question is not null)
-        {
-            notes = Question.Note;
-        }
+
     }
 
     private void Save()
     {
-        Question.Note = notes;
-        OnQuestionNoteChanged.InvokeAsync();
+        OnDocumentNoteChanged.InvokeAsync();
     }
 }
