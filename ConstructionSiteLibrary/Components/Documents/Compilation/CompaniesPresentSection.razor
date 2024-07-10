@@ -29,18 +29,31 @@ else
                     </div>
                     <div class="row my-2">
                         <div class="col">
-                            <RadzenText>Ragione Sociale: <strong>@company.CompanyName</strong></RadzenText>
+        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Ragione Sociale: </RadzenText>
+                    <RadzenTextArea Placeholder="Inserisci Ragione Sociale"
+                    Change=@(args => OnChange(args, "RagioneSociale"))
+                    class="w-100" @bind-Value=@company.CompanyName
+                    />
                         </div>
                         <div class="col">
-                            <RadzenText>Sede legale: @company.Address</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Sede legale: </RadzenText>
+                            <RadzenTextArea Placeholder="Inserisci Sede Legale"
+                            Change=@(args => OnChange(args, "Sedelegale"))
+                            class="w-100" @bind-Value=@company.Address />
                         </div>
                     </div>
                     <div class="row my-2">
                         <div class="col">
-                            <RadzenText>Lavori previsti: @company.JobsDescriptions</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Lavori previsti: </RadzenText>
+                            <RadzenTextArea Placeholder="Inserisci Lavori previsti"
+                            Change=@(args => OnChange(args, "LavoriPrevisti"))
+                            class="w-100" @bind-Value=@company.JobsDescriptions />
                         </div>
                         <div class="col">
-                            <RadzenText>P. Iva: @company.VatCode</RadzenText>
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">P. Iva: </RadzenText>
+                            <RadzenTextArea Placeholder="Inserisci P. Iva"
+                            Change=@(args => OnChange(args, "PIva"))
+                            class="w-100" @bind-Value=@company.VatCode />
                         </div>
                     </div>
                     </div>
@@ -58,6 +71,7 @@ else
 
     private bool onLoading = false;
 
+
     protected override async Task OnInitializedAsync()
     {
         onLoading = true;
@@ -73,5 +87,11 @@ else
 
     private async Task LoadData()
     {
+
+    }
+
+        void OnChange(string value, string name)
+    {
+        Console.Write($"{name} value changed to {value}");
     }
 }
