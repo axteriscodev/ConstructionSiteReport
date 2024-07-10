@@ -8,13 +8,13 @@
 else
 {
     <div class="card shadow p-3 m-5">
-    <ReportConstructorSiteDataSection Document="@document" />
-    <CompaniesPresentSection Companies="@document.Companies" />
-        <CompaniesSignsSection Document="@document" />
+        <ReportConstructorSiteDataSection Document="@document" />
+        <CompaniesPresentSection Companies="@document.Companies" />
         <QuestionsSection Categories="document.Categories" Companies="document.Companies" OnStateChangeNotification="@QuestionNoteUpdated" />
-    <QuestionNoteSection Document="@document" />
-    <DocumentNoteSection Document="@document" />
-</div>
+        <QuestionNotesSection Document="@document" />
+        <DocumentNoteSection Document="@document" />
+        <CompaniesSignsSection Document="@document" />
+    </div>
 }
 
 @code {
