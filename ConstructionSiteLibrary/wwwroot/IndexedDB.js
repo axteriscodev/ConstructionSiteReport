@@ -98,11 +98,12 @@ export function selectMulti(storeName) {
     });
 }
 
+
 /**
  * Metodo per selezionare un record da un object store in base alla sua key (id)
- * @param {any} storeName
- * @param {any} id
- * @param {any} dotnethelper
+ * @param {any} storeName il nome dell'object store
+ * @param {any} key la chiave per ricercare il record
+ * @returns
  */
 export function selectByKey(storeName, key) {
     return new Promise((resolve) => {
@@ -118,6 +119,14 @@ export function selectByKey(storeName, key) {
     });
 }
 
+
+/**
+ * Metodo per selezionare un record in base ad un indice e il suo valore
+ * @param {any} storeName l'object store dove eseguire la ricerca
+ * @param {any} idx l'indice di ricerca
+ * @param {any} value il valore dell'indice
+ * @returns
+ */
 export function selectByIndex(storeName, idx, value) {
     console.log("indice: " + idx);
     return new Promise((resolve) => {
@@ -138,6 +147,12 @@ export function selectByIndex(storeName, idx, value) {
     });
 }
 
+/**
+ * Metodo che cancella un record
+ * @param {any} storeName l'object store dove eseguire la ricerca
+ * @param {any} key la chiave per ricercare il record
+ * @returns
+ */
 export function deleteRecord(storeName, key) {
     return new Promise((resolve) => {
         let store = GetObjectStorage(storeName, READ_WRITE);

@@ -1,0 +1,506 @@
+﻿@using Shared.Documents
+@using Microsoft.JSInterop
+@layout EmptyLayout
+
+@inject DocumentsRepository DocumentsRepository
+@inject IJSRuntime JS
+
+@if (onLoading)
+{
+    <Loading />
+}
+else
+{
+    <meta name="viewport" content="width=1024">
+    <div class="document">
+        <div id="printPDF" class="card shadow" style="max-width:1024px;padding:1rem;">
+            @* INTRO DOCUMENTO *@
+            <div class="pdfElement">
+                <div class="row SectionTitleDiv">
+                    <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" class="SectionTitle"><strong>@StampaCampoDocumento(Document.Title)</strong> </RadzenText>
+                </div>
+                <div class="border paddingSezione">
+                    <div class="row my-2">
+                        <RadzenText>@StampaCampoDocumento(Document.Description)</RadzenText>
+                    </div>
+                </div>
+                <div class="border paddingSezione">
+                    <div class=" row my-2">
+                        <div class="col-6">
+                            <RadzenText>Il C.S.E.: <strong>@StampaCampoDocumento(Document.CSE)</strong></RadzenText>
+                        </div>
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col-8">
+                                    <RadzenText>Data sopralluogo: <strong>@StampaData(Document.CompilationDate)</strong></RadzenText>
+                                </div>
+                                <div class="col-4">
+                                    <RadzenText>Ora: <strong>@StampaOra()</strong></RadzenText>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <RadzenRow class="my-2">
+                        <RadzenText>Condizioni meteo: <strong>@StampaMeteo()</strong></RadzenText>
+                    </RadzenRow>
+                </div>
+            </div>
+            @* DATI CANTIERE *@
+            <div class="pdfElement">
+                <div class="row SectionTitleDiv">
+                    <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" class="SectionTitle">
+                        <strong>
+                            DATI,CANTIERE,FIGURE RESPONSABILI,PROGETTISTI,RIUNIONI
+                        </strong>
+                    </RadzenText>
+                </div>
+                <div class="border my-4 paddingSezione">
+                    <div class="row my-2">
+                        <div class="col">
+                            <RadzenText>Committente: <strong>@StampaCampoDocumento("")</strong></RadzenText>
+                        </div>
+                        <div class="col">
+                            <RadzenText>Lavori di: <strong>@StampaCampoDocumento(Document.ConstructorSite.JobDescription)</strong></RadzenText>
+                        </div>
+                    </div>
+                    <div class="row my-2">
+                        <div class="col">
+                            <RadzenText>Indirizzo cantiere: <strong>@StampaCampoDocumento(Document.ConstructorSite.Address)</strong</RadzenText>
+                        </div>
+                        <div class="col">
+                            <RadzenText>Inizio lavori: <strong>@StampaData(Document.ConstructorSite.StartDate)</strong</RadzenText>
+                        </div
+                    </div>
+                    <div class="row my-2">
+                        <div class="col">
+                            <RadzenText>Notifica preliminare inizio cantiere del: <strong>@StampaCampoDocumento(Document.ConstructorSite.PreliminaryNotificationStartDate)</strong</RadzenText>
+                        </div>
+                        <div class="col">
+                            <RadzenText>Id. SICO: <strong>@StampaCampoDocumento(Document.ConstructorSite.IdSico)</strong</RadzenText>
+                        </div>
+                    </div>
+                    <div class="row my-2">
+                        <div class="col">
+                            <RadzenText> Notifica preliminare in corso: <strong>@StampaCampoDocumento(Document.ConstructorSite.PreliminaryNotificationInProgress)</strong</RadzenText>
+                        </div>
+                        <div class="col">
+                            <RadzenText>Id. SICO: <strong>@StampaCampoDocumento(Document.ConstructorSite.IdSicoInProgress)</strong</RadzenText>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            @* COMPANY DOCUMENTO *@
+            <div class="pdfElement">
+                <div class="row SectionTitleDiv">
+                    <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center"><strong>IMPRESE PRESENTI: FIGURE RESPONSABILI, PERSONALE, FORMALE,ATTREZZATURA</strong></RadzenText>
+                </div>
+            </div>
+            @foreach (var company in Document.Companies)
+            {
+                <div class="pdfElement">
+                    <div class="border paddingSezione">
+                        <div class=" row my-2 borderBottom">
+                            <div class="col impresaEsecutriceCol1">
+                                <RadzenText>Impresa Esecutrice</RadzenText>
+                            </div>
+                            <div class="col impresaEsecutrice">
+                                <RadzenRow Style="align-items: center !important;">
+                                    <RadzenLabel Text="Presente" />
+                                    <div>
+                                        @if(CheckCompanyPresent(company.Present))
+                                        {
+                                            <span class="material-icons" style="font-family: 'Material Icons'; font-size: 24px">&#xe834;</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="material-icons" style="font-family: 'Material Icons'; font-size: 24px">&#xe835;</span>                           
+                                        }
+
+                                    </div>
+                                    @* <RadzenCheckBox Value="@company.Present" Name="Presente" /> *@
+                                </RadzenRow>
+                            </div>
+                        </div>
+                        <div class="row my-2">
+                            <div class="col">
+                                <RadzenText>Ragione Sociale: <strong>@company.CompanyName</strong></RadzenText>
+                            </div>
+                            <div class="col">
+                                <RadzenText>Sede legale: <strong>@company.Address</strong</RadzenText>
+                            </div>
+                        </div>
+                        <div class="row my-2">
+                            <div class="col">
+                                <RadzenText>Lavori previsti: <strong>@company.JobsDescriptions</strong</RadzenText>
+                            </div>
+                            <div class="col">
+                                <RadzenText>P. Iva: <strong>@StampaCampoDocumento(company.VatCode)</strong></RadzenText>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            @* DOMANDE DOCUMENTO *@
+            @foreach (var category in Document.Categories)
+            {
+                <div class="pdfElement">
+                    <div class="SectionTitleDiv">
+                        <RadzenRow Style="justify-content:space-between !important;">
+                            <RadzenColumn Size="1" Style="display:flex">
+                                <RadzenText TextStyle="TextStyle.DisplayH6" Style="margin-left:1rem;margin-top:0.5rem;"><strong>@CategoryNumber(category)</strong></RadzenText>
+                            </RadzenColumn>
+                            <RadzenColumn Size="10" Style="display:flex;justify-content: center;">
+                                <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" Style="margin-left:1rem;margin-top:0.5rem;"><strong>@CategoryText(category)</strong></RadzenText>
+                            </RadzenColumn>
+                            <RadzenColumn Size="1" Style="display:flex;justify-content:end;">
+                            </RadzenColumn>
+                        </RadzenRow>
+                    </div>
+                </div>
+                @foreach (var question in category.Questions)
+                {
+                    <div class="pdfElement">
+                        <div class="border paddingSezione">
+                            <div class="margineDomande bordoDomanda">
+                                <div class="hstack ">
+                                    <RadzenText>@QuestionText(category, question.Text, question.Order)</RadzenText>
+                                </div>
+                                <ul>
+                                @foreach (var answer in question.CurrentChoices)
+                                {
+                                    <li>
+                                    <div class="hstack">
+                                        <div>
+                                            <RadzenText class="selectChoice"><strong>@StampaCampoDocumento(answer.Value)</strong></RadzenText>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <RadzenText TextStyle="TextStyle.Caption">@ReportedCompany(answer)</RadzenText>
+                                    </div>
+                                    </li>
+                                }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            @* NOTE AGGIUNTIVE *@
+            @if(NoteList.Count > 0)
+            {
+                <div class="pdfElement">
+                    <div class="row SectionTitleDiv">
+                        <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center"><strong>ULTERIORI PRECISAZIONI ED EVENTUALI PRESCRIZIONI</strong></RadzenText>
+                    </div>
+                </div>
+                @foreach (var elem in NoteList)
+                {
+                    <div class="pdfElement paddingSezione">
+                        <RadzenRow JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Start" Gap="0">
+                            <RadzenColumn Size="1" class="rz-text-align-center paddingYResponsive">
+                                <RadzenText TextStyle="TextStyle.H6">@elem.QuestionNumber</RadzenText>
+                            </RadzenColumn>
+                            <RadzenColumn>
+                                <div class="paddingYResponsive">
+                                    <RadzenText Style="width:100%" Text="@elem.Note" />
+                                </div>
+                            </RadzenColumn>
+                        </RadzenRow>
+                    </div>
+                }   
+            }
+            @* FIRME *@
+            <div class="pdfElement">
+                <div class="row SectionTitleDiv">
+                    <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center"><strong>FIRME</strong></RadzenText>
+                </div>
+                <div class="paddingDescrizione marginYResponsive border">
+                    <RadzenText Style="text-decoration:underline">Le firme di presa visione e accettazione di seguito fanno riferimento alle prescrizioni riportate nel verbale, riferite all'impresa di appartenenza e relativi subappaltatori.</RadzenText>
+                </div>
+                <div class="hstack">
+                    <RadzenText Style="margin-right: 8px; vertical-align: middle;">Data: <strong>@StampaData(Document.SignDate)</strong></RadzenText>
+                </div>
+            </div>
+            <div class="pdfElement">
+                <div class="row">
+                    <div class="col-6">
+                        <div style="margin-bottom:2rem;">
+                        </div>
+                        <div class="paddingDescrizione border my-2">
+                            <RadzenText>Il C.S.E: <strong>@Document.CSE</strong></RadzenText>
+                            @if (Document.CseSignature is not null)
+                            {
+                                <div class="col-12 p-2">
+                                    <img src="@Document.CseSignature.Sign" width="@Document.CseSignature.Width" height="@Document.CseSignature.Height" style="max-width:100%; height:100%" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div style="height:60px"></div>
+                            }
+                            <div class="borderBottom w-100"></div>
+                        </div>
+                    </div>
+                     <div class="col-6">
+                        <div class="mb-1">
+                            <RadzenText Style="text-decoration:underline">Per presa visione e accettazione</RadzenText>
+                        </div>
+                        @if(Document.Signatures.Count > 0)
+                        {
+                            <div class="paddingDescrizione border my-2">
+                                <RadzenText>Per: <strong>@StampaAziendaFromSignature(Document.Signatures[0])</strong></RadzenText>
+                                @if (!string.IsNullOrEmpty(firstCompanySignature.Sign))
+                                {
+                                    <div class="col-12 p-2">
+                                        <img src="@Document.Signatures[0].Sign" width="@Document.Signatures[0].Width" height="@Document.Signatures[0].Height" style="max-width:100%; height:100%" />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div style="height:60px"></div>
+                                }
+                                <div class="borderBottom w-100"></div>
+                                <div class="hstack mt-2">
+                                    <RadzenText TextStyle="TextStyle.Caption" class="mb-0">Quesiti contestati:</RadzenText>
+                                    @foreach (var questionId in Document.Signatures[0].ReporteQuestionsIds)
+                                    {
+                                        <RadzenText TextStyle="TextStyle.Caption" class="mb-0">@StampaNumeroSegnalazione(questionId)</RadzenText>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            @* Visualizzo le firme rimanenti *@
+            @foreach(var sign in OthercompanySignatures)
+            {
+                <div class="pdfElement">
+                <div class="row">
+                    <div class="col-6">
+                    </div>
+                     <div class="col-6">
+                            <div class="paddingDescrizione border my-2">
+                                <RadzenText>Per: <strong>@StampaAziendaFromSignature(sign)</strong></RadzenText>
+                                @if (!string.IsNullOrEmpty(sign.Sign))
+                                {
+                                    <div class="col-12 p-2 ">
+                                        <img src="@sign.Sign" width="@sign.Width" height="@sign.Height" style="max-width:100%; height:100%" />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div style="height:60px"></div>
+                                }
+                                <div class="borderBottom w-100"></div>
+                                <div class="hstack mt-2">
+                                    <RadzenText TextStyle="TextStyle.Caption" class="mb-0">Quesiti contestati:</RadzenText>
+                                    @foreach (var questionId in sign.ReporteQuestionsIds)
+                                    {
+                                        <RadzenText TextStyle="TextStyle.Caption" class="mb-0">@StampaNumeroSegnalazione(questionId)</RadzenText>
+                                    }
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+
+    <div class="m-4 d-flex justify-content-center">
+        <RadzenButton Text="Stampa" Click="StampaDocumento" class="buttonPrint"/>
+    </div>
+    <div class="mt-3"></div>
+}
+
+@code {
+
+    [Parameter]
+    public EventCallback OnPrintComplete { get; set; }
+    [Parameter]
+    public DocumentModel? Document { get; set; }
+    private List<QuestionNote> NoteList { get; set; } = [];
+    private List<SignatureModel> OthercompanySignatures { get; set; } = [];
+    private SignatureModel? firstCompanySignature;
+    private bool onLoading = false;
+    private IJSObjectReference? jsModule;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        onLoading = true;
+        await base.OnInitializedAsync();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+        LoadData();
+
+    }
+
+    private void LoadData()
+    {
+        if(Document is not null)
+        {
+            LoadQuestionNotes();
+            if(Document.Signatures.Count > 0)
+            {
+                firstCompanySignature = Document.Signatures.FirstOrDefault();
+                for(int i = 1; i < Document.Signatures.Count; i++)
+                {
+                    OthercompanySignatures.Add(Document.Signatures[i]);
+                }
+            }
+            onLoading = false;           
+        }
+    }
+
+
+    private void LoadQuestionNotes()
+    {
+        NoteList = [];
+
+        ///Da caricare per ogni question
+        if (Document is not null)
+        {
+            foreach (var cat in Document.Categories)
+            {
+                foreach (var question in cat.Questions)
+                {
+                    if (!string.IsNullOrEmpty(question.Note.Trim()))
+                    {
+                        var qNote = new QuestionNote()
+                        {
+                                QuestionNumber = cat.Order.ToString() + "." + question.Order.ToString(),
+                                Note = question.Note
+                        };
+                        NoteList.Add(qNote);
+                    }
+                }
+            }
+        }
+    }
+
+    private async Task StampaDocumento()
+    {
+        try
+        {
+            var fileName = "documento-" + Document.Title + ".pdf";
+            if (jsModule is null)
+            {
+                jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/ConstructionSiteLibrary/pdfManager.js");
+            }
+
+            // Generate and download the PDF
+            await jsModule.InvokeVoidAsync("generaPDFDocumento2", fileName);
+            //await jsModule.InvokeVoidAsync("CreateDocumentPages");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("errore: " + e.Message);
+        }
+
+    }
+
+    private bool CheckCompanyPresent(bool? value)
+    {
+        return value.HasValue ? value.Value : false;
+    }
+
+    #region Visualizzazione
+
+    private string StampaAziendaFromSignature(SignatureModel signature)
+    {
+        var compName = "";
+        var company = Document.Companies.Where(x => x.Id == signature.CompanyId).FirstOrDefault();
+        if(company is not null)
+        {
+            compName = string.IsNullOrEmpty(company.CompanyName) ? company.SelfEmployedName : company.CompanyName;
+        }
+        return compName;
+    }
+
+    private string StampaNumeroSegnalazione(int idQuestion)
+    {
+        var questionNumber = "";
+        foreach (var category in Document.Categories)
+        {
+            var q = category.Questions.Where(x => x.Id == idQuestion).SingleOrDefault();
+            if(q is not null)
+            {
+                questionNumber = $"{category.Order}.{q.Order} ";
+                break;
+            }
+        }
+        return questionNumber;
+    }
+
+    private string StampaCampoDocumento(string? campo)
+    {
+        return string.IsNullOrEmpty(campo) ? "" : campo;
+    }
+
+    public string StampaMeteo()
+    {
+        return Document.MeteoCondition is not null ? Document.MeteoCondition.Description : "";
+    }
+
+    public string StampaData(DateTime? data)
+    {
+        return data.HasValue ? data.Value.ToString("dd/MM/yyyy") : "";
+    }
+
+    public string StampaOra()
+    {
+        return Document.CompilationDate.HasValue ? Document.CompilationDate.Value.ToString("HH:mm") : "";
+    }
+
+    private static string CategoryNumber(DocumentCategoryModel cat)
+    {
+        return cat.Order + ".";
+    }
+
+    private static string CategoryText(DocumentCategoryModel cat)
+    {
+        return cat.Text;
+    }
+
+    private static string QuestionText(DocumentCategoryModel cat, string questionText, int order)
+    {
+        return cat.Order + "." + order + " " + questionText;
+    }
+
+    private string ReportedCompany(DocumentChoiceModel choice)
+    {
+        var message = choice.ReportedCompanyIds.Count > 0 ? "(" : "";
+        foreach (var companyId in choice.ReportedCompanyIds)
+        {
+            var companyName = Document.Companies.Where(x => x.Id == companyId).Select(x => x.CompanyName).FirstOrDefault() ?? "";
+            message += $"{companyName}, ";
+        }
+
+        if (message.EndsWith(", "))
+        {
+            //rimuovo l'ultima virgola
+            message = message.Remove(message.Length - 2);
+            message += ")";
+        }
+
+        return message;
+    }
+
+    #endregion
+
+    #region Classi interne 
+
+    public class QuestionNote
+    {
+        public string QuestionNumber { get; set; } = "";
+        public string Note { get; set; } = "";
+    }
+
+    #endregion
+}

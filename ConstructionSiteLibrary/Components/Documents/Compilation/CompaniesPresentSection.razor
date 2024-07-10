@@ -23,7 +23,7 @@ else
                         <div class="col impresaEsecutrice">
                             <RadzenRow>
                                 <RadzenLabel Text="Presente" Component="Presente" />
-                                <RadzenCheckBox Value="@company.Present" Name="Presente" />
+                                    <RadzenCheckBox Value="@company.Present" Name="Presente" TValue="bool?" Change="@(args=>AddPresent(args, company))" />
                             </RadzenRow>
                         </div>
                     </div>
@@ -76,7 +76,6 @@ else
     {
         onLoading = true;
         await base.OnInitializedAsync();
-        await LoadData();
         onLoading = false;
     }
 
@@ -85,13 +84,8 @@ else
         await base.OnParametersSetAsync();
     }
 
-    private async Task LoadData()
+    private void AddPresent(bool? isPresent, CompanyModel company)
     {
-
-    }
-
-        void OnChange(string value, string name)
-    {
-        Console.Write($"{name} value changed to {value}");
+        company.Present = isPresent.HasValue ? isPresent.Value : false;
     }
 }

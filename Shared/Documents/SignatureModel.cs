@@ -4,8 +4,8 @@ namespace Shared.Documents;
 
 public class SignatureModel
 {
-    [JsonPropertyName("idAzienda")]
-    public int IdAzienda { get; set; }
+    [JsonPropertyName("CompanyId")]
+    public int CompanyId { get; set; }
     [JsonPropertyName("reportedQuestionsId")]
     public List<int> ReporteQuestionsIds { get; set; } = [];
     [JsonPropertyName("sign")]
