@@ -30,7 +30,7 @@ export async function generaPDFDocumento2(filename) {
         let altezza = elem.offsetHeight + currentSize;
         console.log(" currentSize= " + currentSize + " offsetHeight= " + elem.offsetHeight);
         console.log(" pagina " + pageCount + " altezza= " + altezza);
-        if (altezza < 1024) {
+        if (altezza < 1200) {
             console.log("dentro if, pagina " + pageCount);
             pages[pageCount].innerHTML += elem.innerHTML;
             currentSize = altezza;
@@ -43,8 +43,9 @@ export async function generaPDFDocumento2(filename) {
             console.log("dentro else, pagina " + pageCount);
         }
     });
-
+    console.log("creazione pagine - N.pagine= " + pages.length)
     for (let i = 0; i < pages.length; i++) {
+        console.log("pagina " + i);
         await doc.html(pages[i], {
             callback: function (doc) {
                 return doc;
@@ -53,7 +54,16 @@ export async function generaPDFDocumento2(filename) {
             y: yPosition + pageHeight * (i),
             width: 570,
             windowWidth: 900,
-            //autoPaging: 'text'
+            autoPaging: 'text',
+            fontFaces: [{
+                family: 'Material Icons',
+                style: 'normal',
+                weight: 'normal',
+                src: [{
+                    url: 'https://cdnjs.cloudflare.com/ajax/libs/mdui/0.1.2/icons/material-icons/MaterialIcons-Regular.ttf',
+                    format: 'truetype'
+                }]
+            }]
         });
     }
 

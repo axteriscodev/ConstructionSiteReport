@@ -1,8 +1,11 @@
 ﻿@using Shared.Documents
 @using Microsoft.JSInterop
 
+@inject DialogService DialogService
 @inject DocumentsRepository DocumentsRepository
 @inject IJSRuntime JS
+
+<ScreenComponent @ref="screenComponent" />
 
 @if (onLoading)
 {
@@ -27,6 +30,7 @@ else
     public int DocumentId { get; set; }
     private DocumentModel document = new();
     private bool onLoading = false;
+    ScreenComponent screenComponent;
 
     protected override async Task OnInitializedAsync()
     {
@@ -47,11 +51,28 @@ else
 
     private async Task StampaDocumento()
     {
-        var fileName = "documento-" + document.Title + ".pdf";
-        var jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/ConstructionSiteLibrary/pdfManager.js");
-        // Generate and download the PDF
-        await jsModule.InvokeVoidAsync("generaPDFDocumento2", fileName);
-        //await jsModule.InvokeVoidAsync("CreateDocumentPages");
+        var width = screenComponent.GetScreenSize().Width;
+
+        // creo uno style aggiuntivo da inviare al componente caricato con il popup come options
+        var additionalStyle = $"min-height:fit-content;height:fit-content;width:{width}px;";
+        var newOptions = new DialogOptions
+            {
+                Style = additionalStyle
+            };
+        //creo parametri da inviare al componente caricato con il popup
+        var param = new Dictionary<string, object>
+            {
+                //tra i parametri che invio al dialog creo un EventCallback da passare al componente
+                { "OnPrintComplete", EventCallback.Factory.Create(this, PrintComplete) },
+                { "Document", document },
+            };
+        await DialogService.OpenAsync<DocumentViewer>("", parameters: param, options: newOptions);
+    }
+
+
+    private void PrintComplete()
+    {
+        DialogService.Close();
     }
 
 }

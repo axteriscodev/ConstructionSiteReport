@@ -40,18 +40,6 @@
     font-weight: 400;
 }
 
-.buttonPhoto, ::deep .buttonPhoto {
-    margin: 0rem 0rem 0.5rem 0rem !important;
-}
-
-.buttonChoice, ::deep .buttonChoice {
-    margin: 0rem 0rem 0rem 0rem !important;
-}
-
-.selectChoice, ::deep .selectChoice {
-    width: 400px;
-}
-
 
 /* */
 
@@ -87,6 +75,10 @@
     margin-bottom: 1.5rem !important;
 }
 
+.paddingDescrizione {
+    padding: 3rem;
+}
+
 
 .marginYResponsive {
     margin-top: 1.5rem !important;
@@ -108,6 +100,10 @@
     margin-right: 1rem;
 }
 
+.impresaEsecutriceCol1 {
+    display: flex;
+    align-items: flex-end;
+}
 /*@media(max-width: 768px) {
 
     .categoria {
