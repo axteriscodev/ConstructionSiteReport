@@ -1,0 +1,27 @@
+﻿@using Shared.Documents
+@using ConstructionSiteLibrary.Model.DocumentCompilation
+
+<div>
+    <table class="table table-striped table-hover">
+        <thead>
+        </thead>
+        <tbody>
+                <tr>
+                    <td>
+                        <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" Style="padding-top: 0.5rem"> @QuestionText</RadzenText>
+                    </td>
+                </tr>
+        </tbody>
+    </table>
+</div>
+
+
+@code {
+
+    [Parameter]
+    public string QuestionText { get; set; }
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+    }
+}

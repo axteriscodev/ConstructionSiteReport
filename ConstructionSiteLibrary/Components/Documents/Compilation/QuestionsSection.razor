@@ -16,7 +16,8 @@
                 <RadzenRow Style="justify-content:space-between !important;">
                     <RadzenColumn Size="1" Style="display:flex">
                         <RadzenText TextStyle="TextStyle.DisplayH6" Style="margin-left:1rem;margin-top:0.5rem;">
-                            <strong>@CategoryNumber(visual.Category)</strong></RadzenText>
+                            <strong>@CategoryNumber(visual.Category)</strong>
+                        </RadzenText>
                     </RadzenColumn>
                     <RadzenColumn Size="10" Style="display:flex;justify-content: center;">
                         <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center"
@@ -65,8 +66,7 @@
                                 </div>
                                 <div>
                                     <RadzenText TextStyle="TextStyle.Body1" onclick="@{
-                        ()=>OpenCompanyListDialog(answer)
-}">
+                                        ()=>OpenCompanyListDialog(answer)}">
                                         @ReportedCompany(answer)</RadzenText>
                                 </div>
 
