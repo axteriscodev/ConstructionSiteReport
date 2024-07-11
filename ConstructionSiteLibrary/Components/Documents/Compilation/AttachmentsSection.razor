@@ -6,7 +6,7 @@
 <ScreenComponent @ref="screenComponent" />
 
 <div class="vstack documentSection">
-    @foreach (var category in Categories)
+    @foreach (var visual in visualCategories)
     {
         <div class="marginYResponsive2">
             <div class="SectionTitleDiv">
@@ -25,31 +25,37 @@
                         <RadzenButton Icon="@AccordionIcon(visual)" Variant="Variant.Text"
                             Click="@(()=>ShowQuestions(visual))" />
                     </RadzenColumn>
-                </RadzenRow </div>
-            @foreach (var question in category.Questions)
+                </RadzenRow>
+            </div>
+            @if (visual.ShowQuestion)
             {
-                @if (question.Attachments.Any())
+
+
+                @foreach (var question in visual.Category.Questions)
                 {
+                    @if (question.Attachments.Any())
+                    {
                         <div class="border paddingSezione">
                             <div class="margineDomande bordoDomanda">
                                 <RadzenText>@QuestionText(visual.Category, question.Text, question.Order)</RadzenText>
                             </div>
                             <div>
                                 <RadzenRow>
-                                @foreach(var attach in question.Attachments)
-                                {
-                                    <RadzenImage Path="@attach.Image"/>
-                                }
+                                    @foreach (var attach in question.Attachments)
+                                    {
+                                        <RadzenImage Path="@attach.Image" />
+                                    }
                                 </RadzenRow>
                             </div>
                         </div>
+                    }
                 }
             }
 
-            </div>
+        </div>
     }
 
-    </div>
+</div>
 
 @code {
 
@@ -57,6 +63,8 @@
     public List<DocumentCategoryModel> Categories { get; set; } = [];
 
     private List<VisualCategory> visualCategories { get; set; } = [];
+
+    ScreenComponent? screenComponent;
 
 
     protected override async Task OnParametersSetAsync()
@@ -72,8 +80,8 @@
             visualCategories = [];
             foreach (var cat in Categories)
             {
-                var hasAttachments = false
-            foreach (var question in cat.Questions)
+                var hasAttachments = false;
+                foreach (var question in cat.Questions)
                 {
                     if (question.Attachments.Any())
                     {
@@ -83,7 +91,7 @@
 
                 if (hasAttachments)
                 {
-                    visualCategories.Add(new VisualCategory() { Categories = cat });
+                    visualCategories.Add(new VisualCategory() { Category = cat });
                 }
 
             }
@@ -130,4 +138,4 @@
 
     #endregion
 
-    }
+}

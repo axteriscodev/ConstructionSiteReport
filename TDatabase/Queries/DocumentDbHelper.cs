@@ -21,6 +21,7 @@ public class DocumentDbHelper
                     select new DocumentModel()
                     {
                         Id = d.Id,
+                        IdTemplate = d.IdTemplate,
                         Title = d.Title,
                         Description = d.Description ?? "",
                         CreationDate = d.CreationDate ?? DateTime.Now,
@@ -59,7 +60,7 @@ public class DocumentDbHelper
                                                        orderby qc.Order
                                                        select new DocumentQuestionModel()
                                                        {
-                                                           Id = qc.IdQuestion,
+                                                           Id = qc.Id,
                                                            Text = q.Text,
                                                            Order = qc.Order,
                                                            Note = qc.Note ?? "",
@@ -168,7 +169,7 @@ public class DocumentDbHelper
                                                         Name = att.Name,
                                                         Date = att.DateTime,
                                                         Path = att.FilePath ?? "",
-                                                        Image = att.Image
+                                                        Image = att.Image ?? "",
                                                     }).ToList(),
                                  }).ToList(),
                     }).ToList();
@@ -185,6 +186,7 @@ public class DocumentDbHelper
                     select new DocumentModel()
                     {
                         Id = d.Id,
+                        IdTemplate = d.IdTemplate,
                         Title = d.Title,
                         Description = d.Description ?? "",
                         CreationDate = d.CreationDate ?? DateTime.Now,
@@ -222,7 +224,7 @@ public class DocumentDbHelper
         var documentId = 0;
         try
         {
-            var nextId = (db.Documents.Any() ? db.Documents.Max(x => x.Id) : 0) + 1;
+            var nextId = document.Id == 0 ? (db.Documents.Any() ? db.Documents.Max(x => x.Id) : 0) + 1 : document.Id;
             // inserisco i dati principali del documento
             Document newDocument = new()
             {
@@ -266,36 +268,43 @@ public class DocumentDbHelper
                 {
                     foreach (var cc in q.CurrentChoices)
                     {
-                        QuestionAnswered qc = new()
+                        if (cc.Id != 0)
                         {
-                            IdDocument = nextId,
-                            IdCurrentChoice = cc.Id,
-                            IdQuestionChosen = q.Id
-                        };
-                        db.QuestionAnswereds.Add(qc);
-                        //aggiungo le compagnie riportate delle varie risposte se ci sono
-                        foreach (var rci in cc.ReportedCompanyIds)
-                        {
-                            ReportedCompany rc = new()
+                            QuestionAnswered qc = new()
                             {
-                                IdCompany = rci,
                                 IdDocument = nextId,
                                 IdCurrentChoice = cc.Id,
                                 IdQuestionChosen = q.Id
                             };
-                            db.ReportedCompanies.Add(rc);
+                            db.QuestionAnswereds.Add(qc);
+                            //aggiungo le compagnie riportate delle varie risposte se ci sono
+                            foreach (var rci in cc.ReportedCompanyIds)
+                            {
+                                ReportedCompany rc = new()
+                                {
+                                    IdCompany = rci,
+                                    IdDocument = nextId,
+                                    IdCurrentChoice = cc.Id,
+                                    IdQuestionChosen = q.Id
+                                };
+                                db.ReportedCompanies.Add(rc);
+                            }
                         }
+
                     }
+
                     foreach (var attach in q.Attachments)
                     {
 
                         Attachment attachment = new()
                         {
                             Id = nextAttachId,
+                            IdType = 1,
                             IdDocument = nextId,
                             DateTime = attach.Date,
+                            Name = attach.Name,
                             Image = attach.Image,
-                            
+
                         };
                         db.Attachments.Add(attachment);
 
@@ -373,6 +382,7 @@ public class DocumentDbHelper
                 if (doc is not null)
                 {
                     db.Documents.Remove(doc);
+                    await db.SaveChangesAsync();
                     await Insert(db, document);
                 }
             }

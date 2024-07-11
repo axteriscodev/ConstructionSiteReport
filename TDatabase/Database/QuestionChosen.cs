@@ -15,6 +15,8 @@ public partial class QuestionChosen
 
     public string? Note { get; set; }
 
+    public virtual ICollection<AttachmentQuestion> AttachmentQuestions { get; set; } = new List<AttachmentQuestion>();
+
     public virtual Question IdQuestionNavigation { get; set; } = null!;
 
     public virtual Template IdTemplateNavigation { get; set; } = null!;

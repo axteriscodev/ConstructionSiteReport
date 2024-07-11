@@ -13,9 +13,17 @@ export function Init(dotnethelper) {
         context.drawImage(player, 0, 0, canvas.width, canvas.height);
         //dotnethelper.invokeMethodAsync('ClientWebApp', 'GetImage', canvas.toDataURL())
 
+        const stream = player.srcObject;
+        stream.getTracks().forEach(function(track) {
+            track.stop();
+          });
+
+        player.srcObject = null;
+
+
         dotnethelper.invokeMethodAsync('GetImage', canvas.toDataURL()).then(() => {
         }).catch(error => {
-             console.log("Errore immagine: " + error);
+            console.log("Errore immagine: " + error);
         });
     });
 
