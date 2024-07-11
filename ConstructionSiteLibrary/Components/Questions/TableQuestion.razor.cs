@@ -62,7 +62,7 @@ namespace ConstructionSiteLibrary.Components.Questions
             await DialogService.OpenAsync<FormQuestions>("Aggiorna domanda", parameters: param, options: newOptions);
         }
 
-        private async Task OpenUpdateForm(QuestionModel model)
+        private async Task OpenUpdateForm(TemplateQuestionModel model)
         {
             var width = screenComponent.ScreenSize.Width;
 
@@ -83,7 +83,7 @@ namespace ConstructionSiteLibrary.Components.Questions
             await DialogService.OpenAsync<FormQuestions>("Aggiorna domanda", parameters: param, options: newOptions);
         }
 
-        private async Task Disable(QuestionModel model)
+        private async Task Disable(TemplateQuestionModel model)
         {
             var titolo = "Disattivazione domanda";
             var text = "Vuoi disattivare la domanda: " + model.Text + "?";
