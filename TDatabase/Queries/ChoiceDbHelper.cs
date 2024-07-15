@@ -30,8 +30,9 @@ namespace TDatabase.Queries
                 {
                     Id = nextId,
                     Value = choice.Value,
-                    Tag = choice.Tag,
+                    Tag = choice.Tag, //Max 10 char
                     Reportable = choice.Reportable,
+                    Color = "black", //TODO impostare colore quando verrà usato, max 10 char
                     Active = true
                 };
                 db.Choices.Add(newChoice);

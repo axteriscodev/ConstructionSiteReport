@@ -47,6 +47,7 @@ else
                         <RadzenDropDownDataGrid Data="@clients" @bind-Value="@form.Client" TextProperty="Name"
                                                 AllowFiltering="true" AllowColumnResize="true" AllowSorting="true" Name="Cliente">
                             <Columns>
+                                
                                 <RadzenDropDownDataGridColumn Property="Id" Title="N." Width="40px" />
                                 <RadzenDropDownDataGridColumn Property="Name" Title="Nome" Width="200px" />
                             </Columns>
@@ -56,8 +57,17 @@ else
                 <RadzenFormField Text="Aziende" Variant="@GlobalVariables.ComponentVariant">
                     <ChildContent>
                         <RadzenDropDownDataGrid Data="@companies" @bind-Value="@form.Companies" TextProperty="CompanyName" Multiple="true"
-                                                AllowFiltering="true" AllowColumnResize="true" AllowSorting="true" Name="companies">
+                                                AllowFiltering="true" AllowColumnResize="true" AllowSorting="true" Name="companies"
+                                                Change="@CheckIfAllSelected">
                             <Columns>
+                                <RadzenDropDownDataGridColumn Width="40px" Sortable="false">
+                                    <HeaderTemplate>
+                                        <RadzenCheckBox TriState="false" Value="@areAllSelected" TValue="bool" Change="@(args => SelectAll(args))"/>
+                                    </HeaderTemplate>
+                                    <Template Context="data">
+                                        <RadzenCheckBox TriState="false" Value="@CheckIfSelected(data)"/>
+                                    </Template>
+                                </RadzenDropDownDataGridColumn>
                                 <RadzenDropDownDataGridColumn Property="Id" Title="N." Width="40px" />
                                 <RadzenDropDownDataGridColumn Property="CompanyName" Title="Nome" Width="200px" />
                             </Columns>

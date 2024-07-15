@@ -13,7 +13,7 @@ else
 {
     <RadzenTemplateForm TItem="FormData" Data="@Data" Submit="@Forward">
         <div class="card shadow mb-3 divCard">
-            <RadzenText>Clicca "Successivo" per creare un nuovo template o selezionane uno da usare come base</RadzenText>
+            <RadzenText>Clicca "Avanti" per creare un nuovo template o selezionane prima uno da usare come base</RadzenText>
             <RadzenDropDown @bind-Value=@Data.SelectedTemplate Data=@Templates TextProperty="TitleTemplate" AllowClear=true
                             Placeholder="-" />
         </div>

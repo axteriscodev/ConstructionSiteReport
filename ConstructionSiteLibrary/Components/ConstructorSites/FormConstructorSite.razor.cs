@@ -20,6 +20,8 @@ namespace ConstructionSiteLibrary.Components.ConstructorSites
         private bool onSaving = false;
         private bool onLoading = false;
 
+        private bool areAllSelected = false;
+
         protected override async Task OnInitializedAsync()
         {
             onLoading = true;
@@ -45,6 +47,39 @@ namespace ConstructionSiteLibrary.Components.ConstructorSites
             }
 
             await base.OnParametersSetAsync();
+        }
+
+        private bool CheckIfSelected(CompanyModel company)
+        {
+            return form.Companies.Any(x => x.Id == company.Id);
+        }
+
+        private void CheckIfAllSelected()
+        {
+            if(companies.Count == form.Companies.Count)
+            {
+                areAllSelected = true;
+            }
+
+            if(form.Companies.Count < companies.Count)
+            {
+                areAllSelected = false;
+            }
+
+        }
+
+        private void SelectAll(bool allSelected)
+        {
+            if(allSelected)
+            {
+                form.Companies = companies;
+                areAllSelected = true;
+            }
+            else
+            {
+                form.Companies = [];
+                areAllSelected = false;
+            }
         }
 
         private async Task LoadData()
