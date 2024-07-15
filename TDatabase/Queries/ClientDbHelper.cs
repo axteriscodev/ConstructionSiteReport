@@ -25,12 +25,16 @@ public class ClientDbHelper
             {
                 Id = nextId,
                 Name = client.Name,
+                Active = true,
             };
             db.Clients.Add(newClient);
             await db.SaveChangesAsync();
             clientId = nextId;
         } 
-        catch (Exception) {}
+        catch (Exception e) 
+        {
+            Console.WriteLine(e.Message);
+        }
 
         return clientId;
     }
