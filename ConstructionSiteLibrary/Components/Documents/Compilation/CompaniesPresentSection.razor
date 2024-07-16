@@ -1,4 +1,6 @@
 ﻿@using Shared.Documents;
+@using ConstructionSiteLibrary.Model.DocumentCompilation
+
 
 @if (onLoading)
 {
@@ -10,7 +12,11 @@ else
         <div class="vstack documentSection">
             <div class="marginYResponsive2">
                 <div class="row SectionTitleDiv">
-                    <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center"><strong>IMPRESE PRESENTI: FIGURE RESPONSABILI, PERSONALE, FORMALE,ATTREZZATURA</strong></RadzenText>
+                    <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center">
+                        <strong>
+                            @DocumentCompilationUtils.Companies
+                        </strong>
+                    </RadzenText>
                 </div>
 
                 @foreach (var company in Companies)

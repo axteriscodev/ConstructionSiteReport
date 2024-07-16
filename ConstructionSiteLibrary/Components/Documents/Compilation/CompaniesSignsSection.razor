@@ -1,5 +1,6 @@
 ﻿@using ConstructionSiteLibrary.Model
 @using Shared.Documents;
+@using ConstructionSiteLibrary.Model.DocumentCompilation
 
 @inject DialogService DialogService
 
@@ -13,7 +14,11 @@ else
     <div class="vstack documentSection">
     <div class="marginYResponsive2">
         <div class="row SectionTitleDiv">
-            <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center"><strong>FIRME</strong></RadzenText>
+            <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center">
+                <strong>
+                    @DocumentCompilationUtils.DocumentSignatures
+                </strong>
+            </RadzenText>
         </div>
         <div class="paddingDescrizione marginYResponsive border">
             <RadzenText Style="text-decoration:underline">Le firme di presa visione e accettazione di seguito fanno

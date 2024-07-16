@@ -51,7 +51,7 @@ else
                 <div class="row SectionTitleDiv">
                     <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" class="SectionTitle">
                         <strong>
-                            DATI,CANTIERE,FIGURE RESPONSABILI,PROGETTISTI,RIUNIONI
+                            @DocumentCompilationUtils.ConstructionSiteData
                         </strong>
                     </RadzenText>
                 </div>
@@ -94,7 +94,11 @@ else
             @* COMPANY DOCUMENTO *@
             <div class="pdfElement">
                 <div class="row SectionTitleDiv">
-                    <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center"><strong>IMPRESE PRESENTI: FIGURE RESPONSABILI, PERSONALE, FORMALE,ATTREZZATURA</strong></RadzenText>
+                    <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center">
+                        <strong>
+                            @DocumentCompilationUtils.Companies
+                        </strong>
+                    </RadzenText>
                 </div>
             </div>
             @foreach (var company in Document.Companies)
@@ -119,7 +123,6 @@ else
                                         }
 
                                     </div>
-                                    @* <RadzenCheckBox Value="@company.Present" Name="Presente" /> *@
                                 </RadzenRow>
                             </div>
                         </div>
@@ -192,7 +195,11 @@ else
             {
                 <div class="pdfElement">
                     <div class="row SectionTitleDiv">
-                        <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center"><strong>ULTERIORI PRECISAZIONI ED EVENTUALI PRESCRIZIONI</strong></RadzenText>
+                        <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center">
+                            <strong>
+                                @DocumentCompilationUtils.QuestionNotes
+                            </strong>
+                        </RadzenText>
                     </div>
                 </div>
                 @foreach (var elem in NoteList)
@@ -216,7 +223,11 @@ else
             {
                 <div class="pdfElement">
                     <div class="row SectionTitleDiv">
-                        <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center"><strong>ALLEGATI DOMANDE</strong></RadzenText>
+                        <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center">
+                            <strong>
+                                @DocumentCompilationUtils.Attachment
+                            </strong>
+                        </RadzenText>
                     </div>
                 </div>
                 foreach(var cat in visualCategories)
@@ -250,7 +261,11 @@ else
             {
                 <div class="pdfElement">
                     <div class="row SectionTitleDiv">
-                        <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center"><strong>NOTE AGGIUNTIVE</strong></RadzenText>
+                        <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center">
+                            <strong>
+                                @DocumentCompilationUtils.DocumentNotes
+                            </strong>
+                        </RadzenText>
                     </div>
                 </div>
                 @foreach (var elem in Document.Notes)
@@ -265,7 +280,11 @@ else
             @* FIRME *@
             <div class="pdfElement">
                 <div class="row SectionTitleDiv">
-                    <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center"><strong>FIRME</strong></RadzenText>
+                        <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center">
+                            <strong>
+                                @DocumentCompilationUtils.DocumentSignatures
+                            </strong>
+                        </RadzenText>
                 </div>
                 <div class="paddingDescrizione marginYResponsive border">
                     <RadzenText Style="text-decoration:underline">Le firme di presa visione e accettazione di seguito fanno riferimento alle prescrizioni riportate nel verbale, riferite all'impresa di appartenenza e relativi subappaltatori.</RadzenText>
