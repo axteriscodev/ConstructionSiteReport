@@ -21,18 +21,36 @@ export function takePicture(dotnethelper) {
      context.drawImage(player, 0, 0, canvas.width, canvas.height);
      //dotnethelper.invokeMethodAsync('ClientWebApp', 'GetImage', canvas.toDataURL())
 
-     const stream = player.srcObject;
-     stream.getTracks().forEach(function(track) {
-         track.stop();
-       });
+     context.font = "10pt Arial";
+     context.fillStyle = "white";
 
-     player.srcObject = null;
+     if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition((position) => {
+            context.fillText(`Posizione: ${position.coords.latitude} - ${position.coords.longitude}`, 20, 20 )
+            //doSomething(position.coords.latitude, position.coords.longitude);
+            
+            const stream = player.srcObject;
+            stream.getTracks().forEach(function(track) {
+                track.stop();
+            });
+
+            player.srcObject = null;
 
 
-     dotnethelper.invokeMethodAsync('GetImage', canvas.toDataURL()).then(() => {
-     }).catch(error => {
-         console.log("Errore immagine: " + error);
-     });
+            dotnethelper.invokeMethodAsync('GetImage', canvas.toDataURL()).then(() => {
+            }).catch(error => {
+                console.log("Errore immagine: " + error);
+            });
+        });
+      } else {
+        context.fillText("Posizione: non disponibile", 20, 20);
+      }
+
+     
+
+     
+
+     
 }
 
 export function openDocuments() {

@@ -56,7 +56,6 @@
 
   private async Task LoadFile(InputFileChangeEventArgs e)
   {
-    Console.WriteLine("");
     var readStream = e.File.OpenReadStream(2048000);
 
     var buffer = new byte[e.File.Size];

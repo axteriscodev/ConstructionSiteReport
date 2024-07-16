@@ -44,7 +44,11 @@
                                 <RadzenRow>
                                     @foreach (var attach in question.Attachments)
                                     {
-                                        <RadzenImage Path="@attach.Image" Style="width:8rem;" />
+                                        <RadzenColumn Size="3">
+                                            <RadzenImage Path="@attach.Image" Style="width:8rem;" />
+                                            <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Filled"
+                                            Click="@(() => DeleteAttachment(question.Attachments, attach))"/>
+                                        </RadzenColumn>
                                     }
                                 </RadzenRow>
                             </div>
@@ -74,5 +78,10 @@
         visualCategories = DocumentCompilationUtils.CreateVisualCategories(Categories);
     }
 
+    private void DeleteAttachment(List<AttachmentModel> attachments, AttachmentModel attachment)
+    {
+        attachments.Remove(attachment);
+        visualCategories = DocumentCompilationUtils.CreateVisualCategories(Categories);
+    }
 
 }
