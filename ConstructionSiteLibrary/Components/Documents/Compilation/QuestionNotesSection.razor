@@ -1,5 +1,5 @@
 ﻿@using Shared.Documents
-
+@using ConstructionSiteLibrary.Model.DocumentCompilation
 
 
 @if(NoteList.Count > 0)
@@ -10,7 +10,7 @@
             <div class="row SectionTitleDiv">
                 <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" class="SectionTitle">
                     <strong>
-                        ULTERIORI PRECISAZIONI ED EVENTUALI PRESCRIZIONI
+                        @DocumentCompilationUtils.QuestionNotes
                     </strong>
                 </RadzenText>
             </div>

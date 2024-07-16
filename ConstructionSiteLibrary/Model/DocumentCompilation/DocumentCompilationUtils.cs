@@ -10,7 +10,20 @@ namespace ConstructionSiteLibrary.Model.DocumentCompilation
     class DocumentCompilationUtils
     {
 
-        #region Medoti di visualizzazione per Firme
+
+        #region Titoli macro categorie documento
+
+        public static string ConstructionSiteData = "DATI,CANTIERE,FIGURE RESPONSABILI,PROGETTISTI,RIUNIONI";
+        public static string Companies = "IMPRESE PRESENTI: FIGURE RESPONSABILI,PERSONALE,FORMALE,ATTREZZATURA";
+        public static string QuestionNotes = "ULTERIORI PRECISAZIONI ED EVENTUALI PRESCRIZIONI";
+        public static string Attachment = "ALLEGATI";
+        public static string DocumentNotes = "NOTE AGGIUNTIVE";
+        public static string DocumentSignatures = "FIRME";
+
+
+        #endregion
+
+        #region Metodi di visualizzazione per Firme
 
         public static string PrintCompanyFromSignature(SignatureModel signature, DocumentModel document)
         {

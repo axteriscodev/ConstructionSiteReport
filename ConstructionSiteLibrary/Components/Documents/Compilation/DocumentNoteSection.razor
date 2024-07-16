@@ -2,6 +2,7 @@
 @using ConstructionSiteLibrary.Components.Utilities;
 @using ConstructionSiteLibrary.Repositories;
 @using ConstructionSiteLibrary.Utility;
+@using ConstructionSiteLibrary.Model.DocumentCompilation
 @using Microsoft.AspNetCore.Components;
 @using Radzen;
 @using Radzen.Blazor;
@@ -13,7 +14,7 @@
         <div class="row SectionTitleDiv">
             <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" class="SectionTitle">
                 <strong>
-                    NOTE AGGIUNTIVE
+                    @DocumentCompilationUtils.DocumentNotes
                 </strong>
             </RadzenText>
         </div>
