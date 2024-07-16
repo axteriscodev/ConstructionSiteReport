@@ -24,8 +24,10 @@ else
        
     </div>
     <div class="d-flex justify-content-center">
-        <RadzenButton Text="Stampa" Click="StampaDocumento" Style="width:300px;height:40px;"/>
-        <RadzenButton Text="Salva" Click="SalvaDocumento" Style="width: 300xp;height:40px;" IsBusy="@onSaving"/>
+        <RadzenButton Icon="save" Text="Salva" Click="SalvaDocumento" Style="width: 200px;height:40px;" IsBusy="@onSaving" />
+        <div class="mx-2"></div>
+        <RadzenButton Icon="print" Text="Stampa" Click="StampaDocumento" Style="width:200px;height:40px;"/>
+
     </div>
 }
 

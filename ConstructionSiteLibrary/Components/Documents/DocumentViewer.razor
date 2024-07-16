@@ -176,7 +176,7 @@ else
                                         </div>
                                     </div>
                                     <div>
-                                        <RadzenText TextStyle="TextStyle.Caption">@ReportedCompany(answer)</RadzenText>
+                                        <RadzenText TextStyle="TextStyle.Caption">@ReportedCompany(answer.ReportedCompanyIds)</RadzenText>
                                     </div>
                                     </li>
                                 }
@@ -186,7 +186,7 @@ else
                     </div>
                 }
             }
-            @* NOTE AGGIUNTIVE *@
+            @* NOTE AGGIUNTIVE DOMANDE *@
             @if(NoteList.Count > 0)
             {
                 <div class="pdfElement">
@@ -210,6 +210,23 @@ else
                     </div>
                 }   
             }
+            @* NOTE AGGIUNTIVE DOCUMENTO *@
+            @if(Document.Notes.Count > 0)
+            {
+                <div class="pdfElement">
+                    <div class="row SectionTitleDiv">
+                        <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center"><strong>NOTE AGGIUNTIVE</strong></RadzenText>
+                    </div>
+                </div>
+                @foreach (var elem in Document.Notes)
+                {
+                    <div class="pdfElement paddingSezione">
+                        <RadzenText Style="width:100%" Text="@elem.Text" />
+                        <RadzenText TextStyle="TextStyle.Caption" class="mt-2">@ReportedCompany(elem.CompanyListIds)</RadzenText>
+                    </div>
+                }                  
+            }
+
             @* FIRME *@
             <div class="pdfElement">
                 <div class="row SectionTitleDiv">
@@ -310,7 +327,7 @@ else
     </div>
 
     <div class="m-4 d-flex justify-content-center">
-        <RadzenButton Text="Stampa" Click="StampaDocumento" class="buttonPrint"/>
+        <RadzenButton Text="Stampa" Click="StampaDocumento" class="buttonPrint" IsBusy="@creation"/>
     </div>
     <div class="mt-3"></div>
 }
@@ -321,11 +338,13 @@ else
     public EventCallback OnPrintComplete { get; set; }
     [Parameter]
     public DocumentModel? Document { get; set; }
+
     private List<QuestionNote> NoteList { get; set; } = [];
     private List<SignatureModel> OthercompanySignatures { get; set; } = [];
     private SignatureModel? firstCompanySignature;
     private bool onLoading = false;
     private IJSObjectReference? jsModule;
+    private bool creation = false;
 
 
     protected override async Task OnInitializedAsync()
@@ -386,6 +405,7 @@ else
 
     private async Task StampaDocumento()
     {
+        creation = true;
         try
         {
             var fileName = "documento-" + Document.Title + ".pdf";
@@ -395,14 +415,19 @@ else
             }
 
             // Generate and download the PDF
-            await jsModule.InvokeVoidAsync("generaPDFDocumento2", fileName);
-            //await jsModule.InvokeVoidAsync("CreateDocumentPages");
+            await jsModule.InvokeVoidAsync("generaPDFDocumento", fileName, DotNetObjectReference.Create(this));
         }
         catch (Exception e)
         {
             Console.WriteLine("errore: " + e.Message);
+            creation = false;
         }
+    }
 
+    [JSInvokable]
+    private void DocumentCreated()
+    {
+        creation = false;
     }
 
     private bool CheckCompanyPresent(bool? value)
@@ -473,10 +498,10 @@ else
         return cat.Order + "." + order + " " + questionText;
     }
 
-    private string ReportedCompany(DocumentChoiceModel choice)
+    private string ReportedCompany(List<int> reportedCompanyIds)
     {
-        var message = choice.ReportedCompanyIds.Count > 0 ? "(" : "";
-        foreach (var companyId in choice.ReportedCompanyIds)
+        var message = reportedCompanyIds.Count > 0 ? "(" : "";
+        foreach (var companyId in reportedCompanyIds)
         {
             var companyName = Document.Companies.Where(x => x.Id == companyId).Select(x => x.CompanyName).FirstOrDefault() ?? "";
             message += $"{companyName}, ";

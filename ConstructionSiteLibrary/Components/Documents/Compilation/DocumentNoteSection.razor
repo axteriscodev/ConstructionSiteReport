@@ -17,19 +17,23 @@
                 </strong>
             </RadzenText>
         </div>
-        <div class="border my-4">
+        <div class=" my-4">
             @foreach (var nota in Document.Notes)
             {
-                <RadzenColumn class="rz-text-align-center rz-border-info-light rz-p-8" Gap="1rem">
-                    <RadzenTextArea Placeholder="Enter here..." class="w-100" Value="@nota.Text" />
-                    <div class="row align-content-center">
-                        <RadzenButton Text="Assegna azienda alla nota" Variant="Variant.Text"
-                            Click="@(()=>OpenCompanyListDialog(nota))" />
+                <RadzenColumn class="mt-4">
+                    <RadzenTextArea Placeholder="Enter here..." class="w-100" Rows="5" Value="@nota.Text" Change="@(args=> AddTextNote(args, nota.Id))" />
+                    <div class="row">
+                        <div class="col-12">
+                            <RadzenText TextStyle="TextStyle.Caption" class="mt-2">@ReportedCompany(nota.CompanyListIds)</RadzenText>
+                            <RadzenButton Icon="edit" Text="Assegna" Variant="Variant.Text" Style="width:140px;"
+                                          Click="@(()=>OpenCompanyListDialog(nota))" />
+                        </div>
                     </div>
                 </RadzenColumn>
             }
-
-            <RadzenButton Text="Aggiungi note" Variant="Variant.Text" Click="@AddNewNote" />
+            <div class="d-flex justify-content-center mt-2">
+                <RadzenButton Icon="add" Text="Aggiungi note" Variant="Variant.Filled" Click="@AddNewNote" />
+            </div>
         </div>
     </div>
 </div>
@@ -50,8 +54,19 @@
 
     private void AddNewNote()
     {
-        Document.Notes.Add(new NoteModel());
 
+        var number = Document.Notes.Count();
+        Document.Notes.Add(new NoteModel(){ Id = number});
+
+    }
+
+    private void AddTextNote(string text, int number)
+    {
+        var note = Document.Notes.Where(x=>x.Id == number).SingleOrDefault();
+        if(note is not null)
+        {
+            note.Text = text;
+        }
     }
 
     private async Task OpenCompanyListDialog(NoteModel nota)
@@ -79,6 +94,25 @@
     {
         DialogService.Close();
         StateHasChanged();
+    }
+
+    private string ReportedCompany(List<int> reportedCompanyIds)
+    {
+        var message = reportedCompanyIds.Count > 0 ? "(" : "";
+        foreach (var companyId in reportedCompanyIds)
+        {
+            var companyName = Document.Companies.Where(x => x.Id == companyId).Select(x => x.CompanyName).FirstOrDefault() ?? "";
+            message += $"{companyName}, ";
+        }
+
+        if (message.EndsWith(", "))
+        {
+            //rimuovo l'ultima virgola
+            message = message.Remove(message.Length - 2);
+            message += ")";
+        }
+
+        return message;
     }
 
 }

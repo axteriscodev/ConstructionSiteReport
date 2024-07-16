@@ -1,10 +1,10 @@
 ﻿
 /**
- * Metodo usato per creare il PDF della scheda strumento
+ * Metodo usato per creare il PDF del documento compilato
  * @param {any} filename il nome del file
  * @returns il file pdf come download dal browser
  */
-export async function generaPDFDocumento2(filename) {
+export async function generaPDFDocumento(filename, dotnet) {
 
     const doc = new jspdf.jsPDF({
         orientation: 'p',
@@ -15,6 +15,7 @@ export async function generaPDFDocumento2(filename) {
 
     const content = document.getElementById('printPDF').innerHTML;
     console.log("content: " + content.offsetHeight);
+    //seleziono gli elementi che 
     const elements = document.querySelectorAll('.pdfElement');
     let yPosition = 15;
     let xPosition = 12;
@@ -26,6 +27,7 @@ export async function generaPDFDocumento2(filename) {
 
     let tempDiv = document.createElement('div');
     pages.push(tempDiv);
+    //Ciclo ogni elemento per verificare se aggiungerlo in una pagina o creare una pagina nuova in base all'altezza
     elements.forEach((elem, index) => {
         let altezza = elem.offsetHeight + currentSize;
         console.log(" currentSize= " + currentSize + " offsetHeight= " + elem.offsetHeight);
@@ -44,6 +46,7 @@ export async function generaPDFDocumento2(filename) {
         }
     });
     console.log("creazione pagine - N.pagine= " + pages.length)
+    //creo le pagine in base alla divisione dell html fatta in precedenza
     for (let i = 0; i < pages.length; i++) {
         console.log("pagina " + i);
         await doc.html(pages[i], {
@@ -69,112 +72,14 @@ export async function generaPDFDocumento2(filename) {
 
 
     return new Promise((resolve, reject) => {
+        // invoco il metodo di c# per settare la nuova dimensione dello schermo
+        dotnet.invokeMethodAsync('DocumentCreated').then(() => {
+        }).catch(error => {
+            console.log("Errore durante il ridimensionamento dello schermo: " + error);
+        });
+        //salvo il file
         doc.save(filename);
         resolve();
     });
 
-}
-
-/**/
-
-
-/**
- * Metodo usato per creare il PDF della scheda strumento
- * @param {any} filename il nome del file
- * @returns il file pdf come download dal browser
- */
-export async function generaPDFDocumento(filename) {
-    console.log("Dentro genera PDF")
-    const doc = new jspdf.jsPDF({
-        orientation: 'p',
-        unit: 'pt',
-        format: 'a4',
-        width: 570, //target width in the PDF document
-        windowWidth: 900 //window width in CSS pixels
-    });
-    var htmlOrElement1 = document.getElementById("stampaPDF1");
-    var htmlOrElement2 = document.getElementById("stampaPDF2");
-    var htmlOrElement3 = document.getElementById("stampaPDF3");
-    var htmlOrElement4 = document.getElementById("stampaPDF4");
-    var htmlOrElement5 = document.getElementById("stampaPDF5");
-
-    let pageHeight = doc.internal.pageSize.getHeight();
-
-    await doc.html(htmlOrElement1, {
-        callback: function (doc) {
-            return doc;
-        },
-        x: 10,
-        y: 10,
-        width: 570,
-        windowWidth: 900,
-        autoPaging: 'text'
-    });
-    await doc.html(htmlOrElement2, {
-        callback: function (doc) {
-            return doc;
-        },
-        x: 10,
-        y: 10 + pageHeight ,
-        width: 570,
-        windowWidth: 900,
-        autoPaging: 'text'
-    });
-    await doc.html(htmlOrElement3, {
-        callback: function (doc) {
-            return doc;
-        },
-        x: 10,
-        y: 10 + pageHeight * 2,
-        width: 570,
-        windowWidth: 900,
-        autoPaging: 'text'
-    });
-    await doc.html(htmlOrElement4, {
-        callback: function (doc) {
-            return doc;
-        },
-        x: 10,
-        y: 10 + pageHeight * 3,
-        width: 570,
-        windowWidth: 900,
-        autoPaging: 'text'
-    });
-    //await doc.html(htmlOrElement5, {
-    //    callback: function (doc) {
-    //        return doc;
-    //    },
-    //    x: 10,
-    //    y: 10,
-    //    width: 570,
-    //    windowWidth: 900,
-    //    autoPaging: 'text'
-    //});
-
-    return new Promise((resolve, reject) => {
-        doc.save(filename);
-        resolve();
-        });
-
- /*   return new Promise((resolve, reject) => {
-
-        doc.html(htmlOrElement, {
-            callback: function(doc) {
-                doc.save(filename);
-                resolve();
-            },
-
-        });
-    });*/
-}
-
-
-
-export function CreateDocumentPages() {
-    var total = document.getElementById("stampaPDF");
-    var totalHeight = total.offsetHeight;
-    console.log("tot: " + totalHeight);
-    var pageHeight = 840;
-    var pages = Math.floor(totalHeight / pageHeight);
-    console.log("pages " + pages);
 }
