@@ -7,7 +7,7 @@
 <div class="">
     <RadzenTemplateForm TItem="FormChoiceData" Data=@form Submit=@Save>
         <RadzenStack class="px-2">
-            <RadzenFormField Text="Tag <span style='color:red'> (obbligatorio)</span>" Variant="@variant">
+            <RadzenFormField Text="Tag - Max 10 caratteri<span style='color:red'> (obbligatorio)</span>" Variant="@variant">
                 <ChildContent>
                     <RadzenTextBox Name="Tag" @bind-Value="@form.Tag" />
                 </ChildContent>

@@ -1,0 +1,141 @@
+﻿@using Shared.Documents
+@using ConstructionSiteLibrary.Model.DocumentCompilation
+
+@inject DialogService DialogService
+
+<ScreenComponent @ref="screenComponent" />
+
+<div class="vstack documentSection">
+    @foreach (var visual in visualCategories)
+    {
+        <div class="marginYResponsive2">
+            <div class="SectionTitleDiv">
+                <RadzenRow Style="justify-content:space-between !important;">
+                    <RadzenColumn Size="1" Style="display:flex">
+                        <RadzenText TextStyle="TextStyle.DisplayH6" Style="margin-left:1rem;margin-top:0.5rem;">
+                            <strong>@CategoryNumber(visual.Category)</strong>
+                        </RadzenText>
+                    </RadzenColumn>
+                    <RadzenColumn Size="10" Style="display:flex;justify-content: center;">
+                        <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center"
+                            Style="margin-left:1rem;margin-top:0.5rem;"><strong>@CategoryText(visual.Category)</strong>
+                        </RadzenText>
+                    </RadzenColumn>
+                    <RadzenColumn Size="1" Style="display:flex;justify-content:end;">
+                        <RadzenButton Icon="@AccordionIcon(visual)" Variant="Variant.Text"
+                            Click="@(()=>ShowQuestions(visual))" />
+                    </RadzenColumn>
+                </RadzenRow>
+            </div>
+            @if (visual.ShowQuestion)
+            {
+
+
+                @foreach (var question in visual.Category.Questions)
+                {
+                    @if (question.Attachments.Any())
+                    {
+                        <div class="border paddingSezione">
+                            <div class="margineDomande bordoDomanda">
+                                <RadzenText>@QuestionText(visual.Category, question.Text, question.Order)</RadzenText>
+                            </div>
+                            <div>
+                                <RadzenRow>
+                                    @foreach (var attach in question.Attachments)
+                                    {
+                                        <RadzenImage Path="@attach.Image" Style="width:8rem;" />
+                                    }
+                                </RadzenRow>
+                            </div>
+                        </div>
+                    }
+                }
+            }
+
+        </div>
+    }
+
+</div>
+
+@code {
+
+    [Parameter]
+    public List<DocumentCategoryModel> Categories { get; set; } = [];
+
+    private List<VisualCategory> visualCategories { get; set; } = [];
+
+    ScreenComponent? screenComponent;
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+        CreateVisualCategories();
+    }
+
+    private void CreateVisualCategories()
+    {
+        if (Categories is not null)
+        {
+            visualCategories = [];
+            foreach (var cat in Categories)
+            {
+                var hasAttachments = false;
+                foreach (var question in cat.Questions)
+                {
+                    if (question.Attachments.Any())
+                    {
+                        hasAttachments = true;
+                    }
+                }
+
+                if (hasAttachments)
+                {
+                    visualCategories.Add(new VisualCategory() { Category = cat });
+                }
+
+            }
+        }
+    }
+
+
+    #region Visualizzazione
+
+    private static string CategoryNumber(DocumentCategoryModel cat)
+    {
+        return cat.Order + ".";
+    }
+
+    private static string CategoryText(DocumentCategoryModel cat)
+    {
+        return cat.Text;
+    }
+
+    private static void ShowQuestions(VisualCategory cat)
+    {
+        cat.ShowQuestion = !cat.ShowQuestion;
+    }
+
+    private static string AccordionIcon(VisualCategory cat)
+    {
+        return cat.ShowQuestion ? "remove" : "add";
+    }
+
+    private static string QuestionText(DocumentCategoryModel cat, string questionText, int order)
+    {
+        return cat.Order + "." + order + " " + questionText;
+    }
+
+    #endregion
+
+    #region Classe interna
+
+    class VisualCategory
+    {
+        public bool ShowQuestion = true;
+        public DocumentCategoryModel Category { get; set; } = new();
+    }
+
+    #endregion
+
+}

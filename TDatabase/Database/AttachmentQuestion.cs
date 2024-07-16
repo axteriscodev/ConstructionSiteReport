@@ -15,5 +15,5 @@ public partial class AttachmentQuestion
 
     public virtual Attachment IdAttachmentNavigation { get; set; } = null!;
 
-    public virtual Question IdQuestionNavigation { get; set; } = null!;
+    public virtual QuestionChosen IdQuestionNavigation { get; set; } = null!;
 }

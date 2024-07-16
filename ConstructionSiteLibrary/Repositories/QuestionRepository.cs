@@ -29,7 +29,7 @@ public class QuestionRepository(HttpManager httpManager)
         return Questions;
     }
 
-    public async Task<bool> SaveQuestion(QuestionModel question)
+    public async Task<bool> SaveQuestion(TemplateQuestionModel question)
     {
         var response = await _httpManager.SendHttpRequest(ApiRouting.SaveQuestion, question);
 
@@ -43,7 +43,7 @@ public class QuestionRepository(HttpManager httpManager)
         return false;
     }
 
-    public async Task<bool> UpdateQuestions(List<QuestionModel> questions)
+    public async Task<bool> UpdateQuestions(List<TemplateQuestionModel> questions)
     {
         var response = await _httpManager.SendHttpRequest(ApiRouting.UpdateQuestions, questions);
         //NotificationService.Notify(response);
@@ -57,7 +57,7 @@ public class QuestionRepository(HttpManager httpManager)
     }
 
 
-    public async Task<bool> HideQuestions(List<QuestionModel> questions)
+    public async Task<bool> HideQuestions(List<TemplateQuestionModel> questions)
     {
         var response = await _httpManager.SendHttpRequest(ApiRouting.HideQuestions, questions);
         //NotificationService.Notify(response);

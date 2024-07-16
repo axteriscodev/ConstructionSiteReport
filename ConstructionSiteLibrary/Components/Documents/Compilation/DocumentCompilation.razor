@@ -17,12 +17,15 @@ else
         <ReportConstructorSiteDataSection Document="@document" />
         <CompaniesPresentSection Companies="@document.Companies" />
         <QuestionsSection Categories="document.Categories" Companies="document.Companies" OnStateChangeNotification="@UpdateDocument" />
+        <AttachmentsSection Categories="@document.Categories" /> 
         <QuestionNotesSection Document="@document" />
         <DocumentNoteSection Document="@document" />
         <CompaniesSignsSection Document="@document" />
+       
     </div>
     <div class="d-flex justify-content-center">
         <RadzenButton Text="Stampa" Click="StampaDocumento" Style="width:300px;height:40px;"/>
+        <RadzenButton Text="Salva" Click="SalvaDocumento" Style="width: 300xp;height:40px;" IsBusy="@onSaving"/>
     </div>
 }
 
@@ -31,6 +34,9 @@ else
     public int DocumentId { get; set; }
     private DocumentModel document = new();
     private bool onLoading = false;
+
+    private bool onSaving = false;
+
     ScreenComponent screenComponent;
 
     protected override async Task OnInitializedAsync()
@@ -68,6 +74,13 @@ else
                 { "Document", document },
             };
         await DialogService.OpenAsync<DocumentViewer>("", parameters: param, options: newOptions);
+    }
+
+    private async Task SalvaDocumento()
+    {
+        onSaving = true;
+        await DocumentsRepository.UpdateDocuments([document]);
+        onSaving = false;
     }
 
 
