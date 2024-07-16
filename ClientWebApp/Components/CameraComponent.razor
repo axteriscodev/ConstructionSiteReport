@@ -5,9 +5,8 @@
 @inject DialogService DialogService
 
 
-<RadzenButton Text="Fotocamera" Icon="photo_camera" Click="@OpenCamera" />
-<RadzenButton Text="Documenti" Icon="folder" Click="@OpenDocuments" />
-<InputFile OnChange="LoadFile" style="display: none;" id="pictureLoader"/>
+
+
 
 @if (isCameraOpen)
 {
@@ -15,7 +14,13 @@
 
   <canvas id="canvas" width="320" height="240"></canvas>
 
-  <RadzenButton Text="Scatta" Click="@TakePicture" />
+    <RadzenButton Text="Scatta" Click="@TakePicture" />
+}
+else
+{
+    <RadzenButton Text="Fotocamera" Icon="photo_camera" Click="@OpenCamera" />
+    <RadzenButton Text="Documenti" Icon="folder" Click="@OpenDocuments" />
+    <InputFile OnChange="LoadFile" style="display: none;" id="pictureLoader" />
 }
 
 

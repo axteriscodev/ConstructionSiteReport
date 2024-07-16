@@ -16,17 +16,18 @@
                 <RadzenRow Style="justify-content:space-between !important;">
                     <RadzenColumn Size="1" Style="display:flex">
                         <RadzenText TextStyle="TextStyle.DisplayH6" Style="margin-left:1rem;margin-top:0.5rem;">
-                            <strong>@CategoryNumber(visual.Category)</strong>
+                            <strong>@DocumentCompilationUtils.CategoryNumber(visual.Category)</strong>
                         </RadzenText>
                     </RadzenColumn>
                     <RadzenColumn Size="10" Style="display:flex;justify-content: center;">
                         <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center"
-                            Style="margin-left:1rem;margin-top:0.5rem;"><strong>@CategoryText(visual.Category)</strong>
+                                    Style="margin-left:1rem;margin-top:0.5rem;">
+                            <strong>@DocumentCompilationUtils.CategoryText(visual.Category)</strong>
                         </RadzenText>
                     </RadzenColumn>
                     <RadzenColumn Size="1" Style="display:flex;justify-content:end;">
-                        <RadzenButton Icon="@AccordionIcon(visual)" Variant="Variant.Text"
-                            Click="@(()=>ShowQuestions(visual))" />
+                        <RadzenButton Icon="@DocumentCompilationUtils.AccordionIcon(visual)" Variant="Variant.Text"
+                                      Click="@(()=>DocumentCompilationUtils.ShowQuestions(visual))" />
                     </RadzenColumn>
                 </RadzenRow>
             </div>
@@ -39,7 +40,7 @@
                             <div class="hstack ">
                                 <RadzenButton Icon="photo_camera" Click="@(() => TakePicture(question))"
                                     ButtonStyle="ButtonStyle.Primary" Variant="Variant.Text" class="buttonPhoto" />
-                                <RadzenText>@QuestionText(visual.Category, question.Text, question.Order)</RadzenText>
+                                <RadzenText>@DocumentCompilationUtils.QuestionText(visual.Category, question.Text, question.Order)</RadzenText>
                             </div>
                             @foreach (var answer in question.CurrentChoices)
                             {
@@ -118,7 +119,7 @@
                 });
         }
 
-        StateChangeNotification();
+        await StateChangeNotification();
     }
 
 
@@ -256,36 +257,6 @@
 
     #region Visualizzazione
 
-    private static string CategoryNumber(DocumentCategoryModel cat)
-    {
-        return cat.Order + ".";
-    }
-
-    private static string CategoryText(DocumentCategoryModel cat)
-    {
-        return cat.Text;
-    }
-
-    private static string CategoryNumberText(DocumentCategoryModel cat)
-    {
-        return cat.Order + ". " + cat.Text;
-    }
-
-    private static string QuestionText(DocumentCategoryModel cat, string questionText, int order)
-    {
-        return cat.Order + "." + order + " " + questionText;
-    }
-
-    private static void ShowQuestions(VisualCategory cat)
-    {
-        cat.ShowQuestion = !cat.ShowQuestion;
-    }
-
-    private static string AccordionIcon(VisualCategory cat)
-    {
-        return cat.ShowQuestion ? "remove" : "add";
-    }
-
     private bool ShowAddChoiceButton(DocumentChoiceModel answer, DocumentQuestionModel question)
     {
         return question.CurrentChoices.IndexOf(answer) == question.CurrentChoices.Count - 1;
@@ -298,13 +269,4 @@
 
     #endregion
 
-    #region Classe interna
-
-    class VisualCategory
-    {
-        public bool ShowQuestion = true;
-        public DocumentCategoryModel Category { get; set; } = new();
-    }
-
-    #endregion
 }
