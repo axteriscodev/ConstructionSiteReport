@@ -12,7 +12,7 @@
 {
   <video id="player" controls autoplay></video>
 
-  <canvas id="canvas" width="320" height="240"></canvas>
+  <canvas id="canvas" width="1280" height="720"></canvas>
 
     <RadzenButton Text="Scatta" Click="@TakePicture" />
 }
@@ -30,11 +30,15 @@ else
 
   private bool isCameraOpen = false;
 
+  private bool isAlreadyOpen = false;
+
   protected override async Task OnAfterRenderAsync(bool firstRender)
   {
-    if(isCameraOpen)
+    if(isCameraOpen && !isAlreadyOpen)
     {
+      isAlreadyOpen = true;
       await jsModule.InvokeVoidAsync("openCamera");
+      
     }
     Console.WriteLine("Reloaded");
     await base.OnAfterRenderAsync(firstRender);
@@ -81,6 +85,7 @@ else
   [JSInvokable]
   public async Task GetImage(string base64Image)
   {
+    isAlreadyOpen = false;
     DialogService.Close(base64Image);
   }
 

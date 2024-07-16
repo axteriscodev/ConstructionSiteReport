@@ -45,7 +45,7 @@
                                     @foreach (var attach in question.Attachments)
                                     {
                                         <RadzenStack Orientation="Orientation.Vertical">
-                                            <RadzenImage Path="@attach.Image" Style="width:8rem;" />
+                                            <RadzenImage Path="@attach.Image" Style="width: 10rem;" />
                                             <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Filled"
                                             Click="@(() => DeleteAttachment(question.Attachments, attach))"/>
                                         </RadzenStack>
