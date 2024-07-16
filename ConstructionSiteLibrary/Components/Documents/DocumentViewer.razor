@@ -310,7 +310,7 @@ else
     </div>
 
     <div class="m-4 d-flex justify-content-center">
-        <RadzenButton Text="Stampa" Click="StampaDocumento" class="buttonPrint"/>
+        <RadzenButton Text="Stampa" Click="StampaDocumento" class="buttonPrint" IsBusy="@creation"/>
     </div>
     <div class="mt-3"></div>
 }
@@ -321,11 +321,13 @@ else
     public EventCallback OnPrintComplete { get; set; }
     [Parameter]
     public DocumentModel? Document { get; set; }
+
     private List<QuestionNote> NoteList { get; set; } = [];
     private List<SignatureModel> OthercompanySignatures { get; set; } = [];
     private SignatureModel? firstCompanySignature;
     private bool onLoading = false;
     private IJSObjectReference? jsModule;
+    private bool creation = false;
 
 
     protected override async Task OnInitializedAsync()
@@ -386,6 +388,7 @@ else
 
     private async Task StampaDocumento()
     {
+        creation = true;
         try
         {
             var fileName = "documento-" + Document.Title + ".pdf";
@@ -395,14 +398,19 @@ else
             }
 
             // Generate and download the PDF
-            await jsModule.InvokeVoidAsync("generaPDFDocumento2", fileName);
-            //await jsModule.InvokeVoidAsync("CreateDocumentPages");
+            await jsModule.InvokeVoidAsync("generaPDFDocumento", fileName, DotNetObjectReference.Create(this));
         }
         catch (Exception e)
         {
             Console.WriteLine("errore: " + e.Message);
+            creation = false;
         }
+    }
 
+    [JSInvokable]
+    private void DocumentCreated()
+    {
+        creation = false;
     }
 
     private bool CheckCompanyPresent(bool? value)

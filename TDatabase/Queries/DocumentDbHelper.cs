@@ -222,7 +222,7 @@ public class DocumentDbHelper
         var documentId = 0;
         try
         {
-            var nextId = (db.Documents.Any() ? db.Documents.Max(x => x.Id) : 0) + 1;
+            var nextId = document.Id == 0 ? (db.Documents.Any() ? db.Documents.Max(x => x.Id) : 0) + 1 : document.Id;
             // inserisco i dati principali del documento
             Document newDocument = new()
             {
