@@ -176,7 +176,7 @@ else
                                         </div>
                                     </div>
                                     <div>
-                                        <RadzenText TextStyle="TextStyle.Caption">@ReportedCompany(answer)</RadzenText>
+                                        <RadzenText TextStyle="TextStyle.Caption">@ReportedCompany(answer.ReportedCompanyIds)</RadzenText>
                                     </div>
                                     </li>
                                 }
@@ -186,7 +186,7 @@ else
                     </div>
                 }
             }
-            @* NOTE AGGIUNTIVE *@
+            @* NOTE AGGIUNTIVE DOMANDE *@
             @if(NoteList.Count > 0)
             {
                 <div class="pdfElement">
@@ -210,6 +210,23 @@ else
                     </div>
                 }   
             }
+            @* NOTE AGGIUNTIVE DOCUMENTO *@
+            @if(Document.Notes.Count > 0)
+            {
+                <div class="pdfElement">
+                    <div class="row SectionTitleDiv">
+                        <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center"><strong>NOTE AGGIUNTIVE</strong></RadzenText>
+                    </div>
+                </div>
+                @foreach (var elem in Document.Notes)
+                {
+                    <div class="pdfElement paddingSezione">
+                        <RadzenText Style="width:100%" Text="@elem.Text" />
+                        <RadzenText TextStyle="TextStyle.Caption" class="mt-2">@ReportedCompany(elem.CompanyListIds)</RadzenText>
+                    </div>
+                }                  
+            }
+
             @* FIRME *@
             <div class="pdfElement">
                 <div class="row SectionTitleDiv">
@@ -481,10 +498,10 @@ else
         return cat.Order + "." + order + " " + questionText;
     }
 
-    private string ReportedCompany(DocumentChoiceModel choice)
+    private string ReportedCompany(List<int> reportedCompanyIds)
     {
-        var message = choice.ReportedCompanyIds.Count > 0 ? "(" : "";
-        foreach (var companyId in choice.ReportedCompanyIds)
+        var message = reportedCompanyIds.Count > 0 ? "(" : "";
+        foreach (var companyId in reportedCompanyIds)
         {
             var companyName = Document.Companies.Where(x => x.Id == companyId).Select(x => x.CompanyName).FirstOrDefault() ?? "";
             message += $"{companyName}, ";
