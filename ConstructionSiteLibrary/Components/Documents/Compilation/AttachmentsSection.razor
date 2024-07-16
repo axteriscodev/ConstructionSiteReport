@@ -6,58 +6,36 @@
 <ScreenComponent @ref="screenComponent" />
 
 <div class="vstack documentSection">
-    @foreach (var visual in visualCategories)
+    <div class="row SectionTitleDiv">
+        <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center">
+            <strong>
+                @DocumentCompilationUtils.Attachment
+            </strong>
+        </RadzenText>
+    </div>
+    @foreach (var cat in visualCategories)
     {
-        <div class="marginYResponsive2">
-            <div class="SectionTitleDiv">
-                <RadzenRow Style="justify-content:space-between !important;">
-                    <RadzenColumn Size="1" Style="display:flex">
-                        <RadzenText TextStyle="TextStyle.DisplayH6" Style="margin-left:1rem;margin-top:0.5rem;">
-                            <strong>@DocumentCompilationUtils.CategoryNumber(visual.Category)</strong>
-                        </RadzenText>
-                    </RadzenColumn>
-                    <RadzenColumn Size="10" Style="display:flex;justify-content: center;">
-                        <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center"
-                                    Style="margin-left:1rem;margin-top:0.5rem;">
-                            <strong>@DocumentCompilationUtils.CategoryText(visual.Category)</strong>
-                        </RadzenText>
-                    </RadzenColumn>
-                    <RadzenColumn Size="1" Style="display:flex;justify-content:end;">
-                        <RadzenButton Icon="@DocumentCompilationUtils.AccordionIcon(visual)" Variant="Variant.Text"
-                                      Click="@(()=>DocumentCompilationUtils.ShowQuestions(visual))" />
-                    </RadzenColumn>
-                </RadzenRow>
-            </div>
-            @if (visual.ShowQuestion)
+        foreach (var elem in cat.Category.Questions)
+        {
+            if (elem.Attachments.Count > 0)
             {
-
-
-                @foreach (var question in visual.Category.Questions)
-                {
-                    @if (question.Attachments.Any())
-                    {
-                        <div class="border paddingSezione">
-                            <div class="margineDomande bordoDomanda">
-                                <RadzenText>@DocumentCompilationUtils.QuestionText(visual.Category, question.Text, question.Order)</RadzenText>
-                            </div>
-                            <div>
-                                <RadzenRow>
-                                    @foreach (var attach in question.Attachments)
-                                    {
-                                        <RadzenStack Orientation="Orientation.Vertical">
-                                            <RadzenImage Path="@attach.Image" Style="width:8rem;" />
-                                            <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Filled"
-                                            Click="@(() => DeleteAttachment(question.Attachments, attach))"/>
-                                        </RadzenStack>
-                                    }
-                                </RadzenRow>
-                            </div>
-                        </div>
-                    }
-                }
+                <div class="pdfElement paddingSezione">
+                    <RadzenRow JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Start" Gap="0">
+                        <RadzenColumn Size="1" class="rz-text-align-center paddingYResponsive">
+                            <RadzenText TextStyle="TextStyle.H6">@DocumentCompilationUtils.QuestionNumber(cat.Category, elem.Order)</RadzenText>
+                        </RadzenColumn>
+                        <RadzenColumn>
+                            <RadzenRow>
+                                @foreach (var attach in elem.Attachments)
+                                {
+                                    <RadzenImage Path="@attach.Image" Style="width:8rem;" />
+                                }
+                            </RadzenRow>
+                        </RadzenColumn>
+                    </RadzenRow>
+                </div>
             }
-
-        </div>
+        }
     }
 
 </div>
