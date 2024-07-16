@@ -81,6 +81,52 @@ namespace ConstructionSiteLibrary.Model.DocumentCompilation
             return cat.Order + "." + order + " " + questionText;
         }
 
+        public static string QuestionNumber(DocumentCategoryModel cat, int order)
+        {
+            return cat.Order + "." + order;
+        }
+
+        public static void ShowQuestions(VisualCategory cat)
+        {
+            cat.ShowQuestion = !cat.ShowQuestion;
+        }
+
+        public static string AccordionIcon(VisualCategory cat)
+        {
+            return cat.ShowQuestion ? "remove" : "add";
+        }
+
+        #endregion
+
+
+        #region Metodi di visualizzazione per allegati domande
+
+        public static List<VisualCategory> CreateVisualCategories(List<DocumentCategoryModel> categories)
+        {
+            List<VisualCategory> visualCategories = [];
+
+            if (categories is not null)
+            {
+                foreach (var cat in categories)
+                {
+                    var hasAttachments = false;
+                    foreach (var question in cat.Questions)
+                    {
+                        if (question.Attachments.Any())
+                        {
+                            hasAttachments = true;
+                        }
+                    }
+
+                    if (hasAttachments)
+                    {
+                        visualCategories.Add(new VisualCategory() { Category = cat });
+                    }
+                }
+            }
+            return visualCategories;
+        }
+
         #endregion
     }
 }

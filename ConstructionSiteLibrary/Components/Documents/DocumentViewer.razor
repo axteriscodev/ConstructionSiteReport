@@ -58,7 +58,7 @@ else
                 <div class="border my-4 paddingSezione">
                     <div class="row my-2">
                         <div class="col">
-                            <RadzenText>Committente: <strong>@StampaCampoDocumento("")</strong></RadzenText>
+                            <RadzenText>Committente: <strong>@DocumentCompilationUtils.PrintDocumentField("")</strong></RadzenText>
                         </div>
                         <div class="col">
                             <RadzenText>Lavori di: <strong>@DocumentCompilationUtils.PrintDocumentField(Document.ConstructorSite.JobDescription)</strong></RadzenText>
@@ -66,26 +66,26 @@ else
                     </div>
                     <div class="row my-2">
                         <div class="col">
-                            <RadzenText>Indirizzo cantiere: <strong>@DocumentCompilationUtils.PrintDocumentField(Document.ConstructorSite.Address)</strong</RadzenText>
+                            <RadzenText>Indirizzo cantiere: <strong>@DocumentCompilationUtils.PrintDocumentField(Document.ConstructorSite.Address)</strong></RadzenText>
                         </div>
                         <div class="col">
-                            <RadzenText>Inizio lavori: <strong>@StampaData(Document.ConstructorSite.StartDate)</strong</RadzenText>
-                        </div
-                    </div>
-                    <div class="row my-2">
-                        <div class="col">
-                            <RadzenText>Notifica preliminare inizio cantiere del: <strong>@DocumentCompilationUtils.PrintDocumentField(Document.ConstructorSite.PreliminaryNotificationStartDate)</strong</RadzenText>
-                        </div>
-                        <div class="col">
-                            <RadzenText>Id. SICO: <strong>@DocumentCompilationUtils.PrintDocumentField(Document.ConstructorSite.IdSico)</strong</RadzenText>
+                            <RadzenText>Inizio lavori: <strong>@StampaData(Document.ConstructorSite.StartDate)</strong></RadzenText>
                         </div>
                     </div>
                     <div class="row my-2">
                         <div class="col">
-                            <RadzenText> Notifica preliminare in corso: <strong>@DocumentCompilationUtils.PrintDocumentField(Document.ConstructorSite.PreliminaryNotificationInProgress)</strong</RadzenText>
+                            <RadzenText>Notifica preliminare inizio cantiere del: <strong>@DocumentCompilationUtils.PrintDocumentField(Document.ConstructorSite.PreliminaryNotificationStartDate)</strong></RadzenText>
                         </div>
                         <div class="col">
-                            <RadzenText>Id. SICO: <strong>@DocumentCompilationUtils.PrintDocumentField(Document.ConstructorSite.IdSicoInProgress)</strong</RadzenText>
+                            <RadzenText>Id. SICO: <strong>@DocumentCompilationUtils.PrintDocumentField(Document.ConstructorSite.IdSico)</strong></RadzenText>
+                        </div>
+                    </div>
+                    <div class="row my-2">
+                        <div class="col">
+                            <RadzenText> Notifica preliminare in corso: <strong>@DocumentCompilationUtils.PrintDocumentField(Document.ConstructorSite.PreliminaryNotificationInProgress)</strong></RadzenText>
+                        </div>
+                        <div class="col">
+                            <RadzenText>Id. SICO: <strong>@DocumentCompilationUtils.PrintDocumentField(Document.ConstructorSite.IdSicoInProgress)</strong></RadzenText>
                         </div>
                     </div>
                 </div>
@@ -212,8 +212,38 @@ else
                 }   
             }
             @* ALLEGATI ASSEGNATI ALLE DOMANDE *@
-
-
+            @if(visualCategories.Count > 0)
+            {
+                <div class="pdfElement">
+                    <div class="row SectionTitleDiv">
+                        <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center"><strong>ALLEGATI DOMANDE</strong></RadzenText>
+                    </div>
+                </div>
+                foreach(var cat in visualCategories)
+                {
+                    foreach(var elem in cat.Category.Questions)
+                    {
+                        if(elem.Attachments.Count > 0)
+                        {
+                        <div class="pdfElement paddingSezione">
+                            <RadzenRow JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Start" Gap="0">
+                                <RadzenColumn Size="1" class="rz-text-align-center paddingYResponsive">
+                                    <RadzenText TextStyle="TextStyle.H6">@DocumentCompilationUtils.QuestionNumber(cat.Category, elem.Order)</RadzenText>
+                                </RadzenColumn>
+                                <RadzenColumn>
+                                    <RadzenRow>
+                                        @foreach (var attach in elem.Attachments)
+                                        {
+                                            <RadzenImage Path="@attach.Image" Style="width:8rem;" />
+                                        }
+                                    </RadzenRow>
+                                 </RadzenColumn>
+                            </RadzenRow>
+                        </div>     
+                        } 
+                    }  
+                }
+            }
 
             @* NOTE AGGIUNTIVE DOCUMENTO *@
             @if(Document.Notes.Count > 0)
@@ -344,6 +374,7 @@ else
     [Parameter]
     public DocumentModel? Document { get; set; }
 
+    private List<VisualCategory> visualCategories { get; set; } = [];
     private List<QuestionNote> NoteList { get; set; } = [];
     private List<SignatureModel> OthercompanySignatures { get; set; } = [];
     private SignatureModel? firstCompanySignature;
@@ -369,6 +400,7 @@ else
     {
         if(Document is not null)
         {
+            visualCategories = DocumentCompilationUtils.CreateVisualCategories(Document.Categories);
             LoadQuestionNotes();
             if(Document.Signatures.Count > 0)
             {

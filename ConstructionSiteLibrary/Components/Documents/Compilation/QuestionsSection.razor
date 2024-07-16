@@ -26,8 +26,8 @@
                         </RadzenText>
                     </RadzenColumn>
                     <RadzenColumn Size="1" Style="display:flex;justify-content:end;">
-                        <RadzenButton Icon="@AccordionIcon(visual)" Variant="Variant.Text"
-                                      Click="@(()=>ShowQuestions(visual))" />
+                        <RadzenButton Icon="@DocumentCompilationUtils.AccordionIcon(visual)" Variant="Variant.Text"
+                                      Click="@(()=>DocumentCompilationUtils.ShowQuestions(visual))" />
                     </RadzenColumn>
                 </RadzenRow>
             </div>
@@ -256,16 +256,6 @@
     #endregion
 
     #region Visualizzazione
-
-    private static void ShowQuestions(VisualCategory cat)
-    {
-        cat.ShowQuestion = !cat.ShowQuestion;
-    }
-
-    private static string AccordionIcon(VisualCategory cat)
-    {
-        return cat.ShowQuestion ? "remove" : "add";
-    }
 
     private bool ShowAddChoiceButton(DocumentChoiceModel answer, DocumentQuestionModel question)
     {
