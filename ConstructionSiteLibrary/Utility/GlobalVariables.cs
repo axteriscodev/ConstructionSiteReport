@@ -1,4 +1,5 @@
-﻿using Radzen;
+﻿using ConstructionSiteLibrary.Model;
+using Radzen;
 
 
 namespace ConstructionSiteLibrary.Utility
@@ -12,7 +13,7 @@ namespace ConstructionSiteLibrary.Utility
         public const int PageSize = 8;
 
 
-        public bool IsNavBarOpen { get; set; } = true;
+        public NavbarState IsNavBarOpen { get; set; } = NavbarState.Open;
 
 
     }
