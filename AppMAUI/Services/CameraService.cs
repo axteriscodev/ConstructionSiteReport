@@ -75,5 +75,10 @@ namespace AppMAUI.Services
             }
             return "";
         }
+
+        public Task OpenDocuments()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

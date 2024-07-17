@@ -9,5 +9,7 @@ namespace ConstructionSiteLibrary.Interfaces
     public interface ICameraService
     {
         public Task<string> OpenCamera();
+
+        public Task OpenDocuments();
     }
 }

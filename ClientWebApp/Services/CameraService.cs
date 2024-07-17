@@ -32,5 +32,12 @@ namespace ClientWebApp.Services
             var img = await _dialogService.OpenAsync<CameraComponent>("", options: options);
             return img;
         }
+
+        public async Task OpenDocuments()
+        {
+             var jsModule = await _iJSRuntime.InvokeAsync<IJSObjectReference>("import", "./camera-service.js");
+
+            await jsModule.InvokeVoidAsync("openDocuments");
+        }
     }
 }

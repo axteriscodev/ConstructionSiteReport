@@ -1,6 +1,7 @@
 ﻿@using ConstructionSiteLibrary.Interfaces
 @using Shared.Documents
 @using ConstructionSiteLibrary.Model.DocumentCompilation
+@using Microsoft.AspNetCore.Components.Forms
 
 @inject DialogService DialogService
 @inject ICameraService CameraService
@@ -38,14 +39,16 @@
                     <div class="border paddingSezione">
                         <div class="margineDomande bordoDomanda">
                             <div class="hstack ">
-                                <RadzenSplitButton Click=@(args => SelectAttachSource(args, question)) Icon="photo_camera" class="buttonPhoto">
+                                <RadzenSplitButton Click=@(args => SelectAttachSource(args, question)) Icon="photo_camera"
+                                    class="buttonPhoto">
                                     <ChildContent>
                                         <RadzenSplitButtonItem Text="Fotocamera" Value="1" Icon="photo_camera" />
                                         <RadzenSplitButtonItem Text="Documenti" Value="2" Icon="folder" />
                                     </ChildContent>
                                 </RadzenSplitButton>
+                                <InputFile OnChange="@(args => LoadFile(args, question))" style="display: none;" id="pictureLoader" />
                                 @*<RadzenButton Icon="photo_camera" Click="@(() => TakePicture(question))"
-                                    ButtonStyle="ButtonStyle.Primary" Variant="Variant.Text" class="buttonPhoto" />*@
+                    ButtonStyle="ButtonStyle.Primary" Variant="Variant.Text" class="buttonPhoto" />*@
                                 <RadzenText>@DocumentCompilationUtils.QuestionText(visual.Category, question.Text, question.Order)
                                 </RadzenText>
                             </div>
@@ -103,6 +106,8 @@
 
     ScreenComponent? screenComponent;
 
+
+  
     protected override async Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
@@ -116,21 +121,43 @@
 
     private void SelectAttachSource(RadzenSplitButtonItem item, DocumentQuestionModel question)
     {
-        if(item is null)
+        if (item is null)
         {
             TakePicture(question);
         }
         else
         {
-            if(item.Value.Equals("1"))
+            if (item.Value.Equals("1"))
             {
                 TakePicture(question);
             }
             else
             {
-                //apro i documenti
+                CameraService.OpenDocuments();
             }
         }
+    }
+
+    private async Task LoadFile(InputFileChangeEventArgs e, DocumentQuestionModel question)
+    {
+        var readStream = e.File.OpenReadStream(2048000);
+
+        var buffer = new byte[e.File.Size];
+
+        await readStream.ReadAsync(buffer, 0, buffer.Length);
+
+        var base64Image = Convert.ToBase64String(buffer);
+
+        var img = "data:image/jpeg;charset=utf-8;base64," + base64Image;
+
+        question.Attachments.Add(new AttachmentModel()
+                {
+                    Name = "",
+                    Date = DateTime.Now,
+                    Image = img,
+                });
+
+        await StateChangeNotification();
     }
 
     private async Task TakePicture(DocumentQuestionModel question)
@@ -244,11 +271,11 @@
             };
         //creo parametri da inviare al componente caricato con il popup
         var param = new Dictionary<string, object>
-{
-//tra i parametri che invio al dialog creo un EventCallback da passare al componente
-{ "OnQuestionNoteChanged", EventCallback.Factory.Create(this, QuestionNotesChanged) },
-{ "Question", question},
-};
+            {
+                //tra i parametri che invio al dialog creo un EventCallback da passare al componente
+                { "OnQuestionNoteChanged", EventCallback.Factory.Create(this, QuestionNotesChanged) },
+                { "Question", question},
+            };
         await DialogService.OpenAsync<FormQuestionNote>("Scrivi note", parameters: param, options: newOptions);
     }
 
@@ -262,12 +289,12 @@
             { Style = additionalStyle };
         //creo parametri da inviare al componente caricato con il popup
         var param = new Dictionary<string, object>
-                        {
-                            //tra i parametri che invio al dialog creo un EventCallback da passare al componente
-                            { "OnCompaniesSelected", EventCallback.Factory.Create(this, SelectedCompanies) },
-                            { "Choice", choice },
-                            { "Companies", Companies },
-                        };
+            {
+                //tra i parametri che invio al dialog creo un EventCallback da passare al componente
+                { "OnCompaniesSelected", EventCallback.Factory.Create(this, SelectedCompanies) },
+                { "Choice", choice },
+                { "Companies", Companies },
+            };
         await DialogService.OpenAsync<FormSelectCompany>("Seleziona aziende", parameters: param, options: newOptions);
     }
 
