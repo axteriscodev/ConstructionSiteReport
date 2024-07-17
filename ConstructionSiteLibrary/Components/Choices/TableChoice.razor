@@ -19,7 +19,7 @@ else
     @* La tabella dei campi misurazione *@
     <div class="marginComponent">
         <RadzenFieldset Text="Possibili Scelte" class="shadow rounded" Style="font-weight:400;">
-            <RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
+            <RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Success" class="ButtonAdd"
                           Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenNewForm())" />
             <RadzenDataGrid @ref="grid" TItem="TemplateChoiceModel" GridLines="@DataGridGridLines.Both" IsLoading=@isLoading Count="@count" PageSize="@pageSize" Data="@list"
                             AllowColumnResize="true" AllowAlternatingRows="true" ColumnWidth="200px" AllowFiltering="true" FilterMode="FilterMode.Simple"
@@ -32,13 +32,11 @@ else
                     <RadzenDataGridColumn TItem="TemplateChoiceModel" Property="Value" Title="Scelta" />
                     <RadzenDataGridColumn TItem="TemplateChoiceModel" Title="Azioni" Width="60px" Sortable="false">
                         <Template Context="data">
-                            <RadzenRow JustifyContent="JustifyContent.SpaceAround">
                                 @* Mostro i bottoni solo se ho i permessi di modifica *@
-                                <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Filled" Size="ButtonSize.Large"
-                                              Click="@(()=>OpenUpdateForm(data))" class="buttonEdit" Style="width: 45%;" />
-                                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Light" Variant="Variant.Filled" Size="ButtonSize.Large"
-                                              Click="@(()=>Disable(data))" class="buttonDelete" Style="width: 45%;" />
-                            </RadzenRow>
+                            <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Info" Variant="Variant.Filled" Size="ButtonSize.Large"
+                                              Click="@(()=>OpenUpdateForm(data))"  />
+                                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Filled" Size="ButtonSize.Large"
+                                              Click="@(()=>Disable(data))" />
                         </Template>
                     </RadzenDataGridColumn>
                 </Columns>
