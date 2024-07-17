@@ -2,12 +2,13 @@
 @using ConstructionSiteLibrary.Services
 
 @inherits LayoutComponentBase
-@inject GlobalVariables GlobalVariables
+@inject GlobalVariables GVariables
 
 
+<ScreenComponent @ref="@screenComponent" SizeS="641" OnScreenDimensionChanged="ScreenDimensionObserver" />
 <div class="page">
     <div class="sidebar" style="@IconMenuCssClass">
-        <NavMenu ShowIconMenu="ToggleIconMenu"/>
+        <NavMenu ShowIconMenu="ToggleIconMenu" IconMenuActive="@_iconMenuActive"/>
     </div>
     
 
@@ -20,9 +21,27 @@
 </div>
 
 @code{
-    private bool _iconMenuActive { get; set; }
-    private string? IconMenuCssClass => _iconMenuActive ? $"width:{GlobalVariables.NavbarWidthClosed};" : "";
+    private ScreenComponent screenComponent;
+    private bool _iconMenuActive  = false;
+    private NavbarState navbarState = NavbarState.Open;
+    private string? IconMenuCssClass => navbarState switch
+    {
+        NavbarState.Open => $"width:{GlobalVariables.NavbarWidthOpen};",
+        NavbarState.Close => $"width:{GlobalVariables.NavbarWidthClosed};",
+        NavbarState.Collapse => "",
+        _ => ""
+    };
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        var size = screenComponent.GetScreenSize();
+        Console.WriteLine("ciao");
+        if(size.Width < 641)
+        {
+            navbarState = NavbarState.Collapse;
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -33,7 +52,19 @@
     protected void ToggleIconMenu(bool iconMenuActive)
     {
         _iconMenuActive = iconMenuActive;
-        //GlobalVariables.IsNavBarOpen = _iconMenuActive;
+
+        navbarState = _iconMenuActive ? NavbarState.Close : NavbarState.Open;
+
+    }
+
+    private void ScreenDimensionObserver(ScreenDimension? dimension)
+    {
+        if (dimension == ScreenDimension.S)
+        {
+            _iconMenuActive = false;
+            navbarState = NavbarState.Collapse;
+            StateHasChanged();
+        }
     }
 
 

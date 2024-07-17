@@ -7,6 +7,7 @@ namespace ConstructionSiteLibrary.Utility
     public class GlobalVariables
     {
 
+        public const string MinWidthNavbat = "641px";
         public const string NavbarWidthOpen = "250px";
         public const string NavbarWidthClosed = "80px";
         public const Variant ComponentVariant = Variant.Outlined;
