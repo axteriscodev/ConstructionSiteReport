@@ -237,7 +237,8 @@ else
                     {
                         if(elem.Attachments.Count > 0)
                         {
-                        <div class="pdfElement paddingSezione">
+                        <div class="pdfElement ">
+                            <div class="paddingSezione">
                             <RadzenRow JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Start" Gap="0">
                                 <RadzenColumn Size="1" class="rz-text-align-center paddingYResponsive">
                                     <RadzenText TextStyle="TextStyle.H6">@DocumentCompilationUtils.QuestionNumber(cat.Category, elem.Order)</RadzenText>
@@ -246,11 +247,12 @@ else
                                     <RadzenRow>
                                         @foreach (var attach in elem.Attachments)
                                         {
-                                            <RadzenImage Path="@attach.Image" Style="width:8rem;" />
+                                            <img src="@attach.Image" width="500px" height="500px"/>
                                         }
                                     </RadzenRow>
                                  </RadzenColumn>
                             </RadzenRow>
+                            </div>
                         </div>     
                         } 
                     }  
