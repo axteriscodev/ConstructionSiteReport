@@ -3,6 +3,7 @@
 @using Microsoft.JSInterop
 @layout EmptyLayout
 
+@inject DialogService DialogService
 @inject DocumentsRepository DocumentsRepository
 @inject IJSRuntime JS
 
@@ -481,9 +482,10 @@ else
     }
 
     [JSInvokable]
-    private void DocumentCreated()
+    public void DocumentCreated()
     {
         creation = false;
+        DialogService.Close(true);
     }
 
     private bool CheckCompanyPresent(bool? value)

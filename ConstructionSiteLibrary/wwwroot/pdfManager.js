@@ -32,7 +32,7 @@ export async function generaPDFDocumento(filename, dotnet) {
         let altezza = elem.offsetHeight + currentSize;
         console.log(" currentSize= " + currentSize + " offsetHeight= " + elem.offsetHeight);
         console.log(" pagina " + pageCount + " altezza= " + altezza);
-        if (altezza < 1200) {
+        if (altezza < 1350) {
             console.log("dentro if, pagina " + pageCount);
             pages[pageCount].innerHTML += elem.innerHTML;
             currentSize = altezza;
@@ -73,7 +73,10 @@ export async function generaPDFDocumento(filename, dotnet) {
 
     return new Promise((resolve, reject) => {
         // invoco il metodo di c# per settare la nuova dimensione dello schermo
+
+        console.log("ciao");
         dotnet.invokeMethodAsync('DocumentCreated').then(() => {
+            console.log("ciao2");
         }).catch(error => {
             console.log("Errore durante il ridimensionamento dello schermo: " + error);
         });
