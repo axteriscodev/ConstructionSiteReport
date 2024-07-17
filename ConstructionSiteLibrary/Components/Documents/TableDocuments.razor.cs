@@ -122,9 +122,10 @@ namespace ConstructionSiteLibrary.Components.Documents
 
             documentColumn = newDimension switch
             {
-                ScreenDimension.XL => 4,
-                ScreenDimension.L => 3,
-                ScreenDimension.M => 2,
+                ScreenDimension.XL => 5,
+                ScreenDimension.L => 4,
+                ScreenDimension.M => 3,
+                ScreenDimension.S => 2,
                 _ => 1,
             };
             StateHasChanged();
