@@ -3,144 +3,134 @@
 @using Radzen.Blazor;
 
 @inject DocumentsRepository DocumentsRepository;
+@inject ClientsRepository ClientsRepository;
 
 @if (onLoading)
 {
-            <Loading />
+    <Loading />
 }
 else
 {
-<div class="">
-    <div class="vstack px-4">
-        @* INTRO DOCUMENTO *@
-        <div class=" my-4">
-            <div class="row SectionTitleDiv">
-                <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" class="SectionTitle">
-                <strong>@Document.Title</strong>
-                </RadzenText>
-            </div>
-            <div class="border my-4 paddingSezione">
-                <div class="row my-2">
-                <RadzenText>@Document.Description</RadzenText>
+    <div class="">
+        <div class="vstack px-4">
+            @* INTRO DOCUMENTO *@
+            <div class=" my-4">
+                <div class="row SectionTitleDiv">
+                    <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" class="SectionTitle">
+                        <strong>@Document.Title</strong>
+                    </RadzenText>
                 </div>
-            </div>
-            <div class="border my-4 paddingSezione">
-                <div class=" row my-2">
-                <div class="col">
-                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Il CSE</RadzenText>
-                    <RadzenTextArea Placeholder="Inserisci Nome Cognome" Change=@(args =>
-                    OnChange(args, "CSE"))
-                    class="w-100" @bind-Value=@CSE />
+                <div class="my-4 paddingSezione">
+                    <div class="row my-2">
+                        <RadzenTextArea @bind-Value="@Document.Description" class="w-100" />
+                    </div>
                 </div>
-                <div class="col">
-                    <div class="row">
-                        <div class="col">
-                            <RadzenLabel Text="Data sopralluogo: " Component="RadzenDatePickerBindValue"
-                            Style="margin-right: 8px; vertical-align: middle;" />
-                            <RadzenDatePicker @bind-Value=@Date DateFormat="dd/MM/yyyy"
-                            Name="RadzenDatePickerBindValue" ShowCalendarWeek>
-                            <FooterTemplate>
-                                <RadzenButton Click=@(args =>
-                                Date = DateTime.Now) Text="Oggi"
-                                class="my-3 w-100" />
-                            </FooterTemplate>
-                            </RadzenDatePicker>
+                <div class="border my-4 paddingSezione">
+                    <div class=" row my-2">
+                        <div class="col-12 col-md-6 my-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Il CSE:</RadzenText>
+                            <RadzenTextBox Placeholder="Inserisci Nome Cognome" class="w-100" @bind-Value=@Document.CSE />
                         </div>
-                        <div class="col">
-                            <RadzenLabel Text="Ora: " Component="DatePickerTimeOnly"
-                            Style="margin-right: 8px; vertical-align: middle;" />
-                            <RadzenDatePicker @bind-Value=@Hour ShowTime="true" TimeOnly="true" DateFormat="HH:mm"
-                            Name="DatePickerTimeOnly">
-                            <FooterTemplate>
-                                <RadzenButton Click=@(args =>
-                                Hour = DateTime.Now) Text="Adesso"
-                                class="my-3 w-100" />
-                            </FooterTemplate>
+                        <div class="col-12 col-md-6">
+                            <div class="row">
+                                <div class="col-12 col-md-6 my-2">
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="margin-right: 8px; vertical-align: middle;">
+                                        Data sopralluogo:
+                                    </RadzenText>
+                                    <RadzenDatePicker @bind-Value=@compilationDate DateFormat="dd/MM/yyyy"
+                                                      Name="RadzenDatePickerBindValue" ShowCalendarWeek class="w-100"
+                                    Change="@(args=> CompilationDateChanged(args))">
+                                        <FooterTemplate>
+                                            <RadzenButton Click=@(args =>compilationDate = DateTime.Now) Text="Oggi" class="my-3 w-100" />
+                                        </FooterTemplate>
+                                    </RadzenDatePicker>
+                                </div>
+                                <div class="col-12 col-md-6 my-2">
+                                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Style="margin-right: 8px; vertical-align: middle;">
+                                        Ora:
+                                    </RadzenText>
+                                    <RadzenDatePicker @bind-Value=@compilationHour ShowTime="true" TimeOnly="true" DateFormat="HH:mm" Name="DatePickerTimeOnly"
+                                                      Change="@(args=> CompilationHoursChanged(args))" class="w-100">
+                                        <FooterTemplate>
+                                            <RadzenButton Click=@(args => compilationHour = DateTime.Now) Text="Adesso" class="my-3 w-100" />
+                                        </FooterTemplate>
+                                    </RadzenDatePicker>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <RadzenRow class="my-2">
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Condizioni meteo: </RadzenText>
+                        <RadzenRadioButtonList Data="@meteoConditions" TValue="MeteoConditionModel" Orientation="@meteoButtonsOrientation"
+                                               Value="@Document.MeteoCondition" TextProperty="Description" />
+                    </RadzenRow>
+                </div>
+            </div>
+            @* DATI CANTIERE *@
+            <div class="my-4 ">
+                <div class="row SectionTitleDiv">
+                    <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" class="SectionTitle">
+                        <strong>
+                            @DocumentCompilationUtils.ConstructionSiteData
+                        </strong>
+                    </RadzenText>
+                </div>
+                <div class="border my-4 paddingSezione">
+                    <div class="row my-2">
+                        <div class="col-12 col-md-6 my-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Committente: </RadzenText>
+                            <RadzenDropDown @bind-Value="@Document.Client" Data="@ClientsList" TValue="ClientModel" TextProperty="Name" class="w-100" />
+                        </div>
+                        <div class="col-12 col-md-6 my-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" Text="Inizio lavori: " Style="margin-right: 8px; vertical-align: middle;" />
+                            <RadzenDatePicker @bind-Value=@Document.ConstructorSite.StartDate ShowTime="true" DateFormat="dd/MM/yyyy h:mm" Name="InizioLavori" class="w-100">
+                                <FooterTemplate>
+                                    <RadzenButton Click=@(args =>
+                                              Document.ConstructorSite.StartDate = DateTime.Now) Text="Ora"
+                                                  class="my-3 w-100" />
+                                </FooterTemplate>
                             </RadzenDatePicker>
                         </div>
                     </div>
-                </div>
-                </div>
-                <RadzenRow class="my-2">
-                <RadzenText>Condizioni meteo:</RadzenText>
-                <RadzenRadioButtonList Data="@meteoConditions" TValue="MeteoConditionModel"
-                    Value="@Document.MeteoCondition" TextProperty="Description" />
-                </RadzenRow>
-            </div>
-        </div>
-        @* DATI CANTIERE *@
-        <div class="my-4 ">
-            <div class="row SectionTitleDiv">
-                <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" class="SectionTitle">
-                    <strong>
-                        @DocumentCompilationUtils.ConstructionSiteData
-                    </strong>
-                </RadzenText>
-            </div>
-            <div class="border my-4 paddingSezione">
-                <div class="row my-2">
-                <div class="col">
-                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Committente: </RadzenText>
-                    <RadzenTextArea Placeholder="Inserisci Committente" Change=@(args =>
-                    OnChange(args, "Committente"))
-                    class="w-100" @bind-Value=@Committente />
-                </div>
-                <div class="col">
-                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Lavori di: </RadzenText>
-                    <RadzenTextArea Placeholder="Inserisci di chi sono i lavori" Change=@(args =>
-                    OnChange(args, "LavoriDi"))
-                    class="w-100" @bind-Value=@LavoriDi />
-                </div>
-                </div>
-                <div class="row my-2">
-                <div class="col">
-                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Indirizzo cantiere: </RadzenText>
-                    <RadzenTextArea Placeholder="Inserisci l'indirizzo del cantiere" Change=@(args =>
-                    OnChange(args, "IndirizzoCantiere"))
-                    class="w-100" @bind-Value=@IndirizzoCantiere />
-                </div>
-                <div class="col">
-                    <RadzenLabel Text="Inizio lavori: " Component="DatePickerHourFormat" Style="margin-right: 8px; vertical-align: middle;" />
-                    <RadzenDatePicker @bind-Value=@InizioLavori ShowTime="true" DateFormat="dd/MM/yyyy h:mm" Name="InizioLavori" >
-                        <FooterTemplate>
-                            <RadzenButton Click=@(args =>
-                            InizioLavori = DateTime.Now) Text="Ora"
-                            class="my-3 w-100" />
-                        </FooterTemplate>
-                    </RadzenDatePicker>
-                </div>
-                </div>
-                <div class="row my-2">
-                <div class="col">
-                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Notifica preliminare inizio cantiere: </RadzenText>
-                    <RadzenTextArea Placeholder="Inserisci notifica preliminare inizio cantiere" Change=@(args =>
-                    OnChange(args, "NotificaPreliminareInizio"))
-                    class="w-100" @bind-Value=@NotificaPreliminareInizio />
-                </div>
-                <div class="col">
-   <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Id. SICO: </RadzenText>
-                    <RadzenTextArea Placeholder="Inserisci Id. SICO" Change=@(args =>
-                    OnChange(args, "IdSico"))
-                    class="w-100" @bind-Value=@IdSico />
-                </div>
-                </div>
-                <div class="row my-2">
-                <div class="col">
-                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Notifica preliminare in corso: </RadzenText>
-                    <RadzenTextArea Placeholder="Inserisci notifica preliminare in corso" Change=@(args =>
-                    OnChange(args, "NotificaPreliminareInCorso"))
-                    class="w-100" @bind-Value=@NotificaPreliminareInCorso />
-                </div>
-                <div class="col">
-   <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Id. SICO: </RadzenText>
-                    <RadzenTextArea Placeholder="Inserisci Id. SICO" Change=@(args =>
-                    OnChange(args, "IdSicoInProgress"))
-                    class="w-100" @bind-Value=@IdSicoInProgress />                </div>
+                    <div class="row my-2">
+                        <div class="col-12 col-md-6 my-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Indirizzo cantiere: </RadzenText>
+                            <RadzenTextArea Placeholder="Inserisci l'indirizzo del cantiere"
+                                            class="w-100" @bind-Value=@Document.ConstructorSite.Address />
+                        </div>
+                        <div class="col-12 col-md-6 my-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Lavori di: </RadzenText>
+                            <RadzenTextArea Placeholder="Inserisci il motivo dei lavori" class="w-100" @bind-Value=@Document.ConstructorSite.JobDescription />
+                        </div>
+                    </div>
+                    <div class="row my-2">
+                        <div class="col-12 col-md-6 my-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Notifica preliminare inizio cantiere: </RadzenText>
+                            <RadzenTextArea Placeholder="Inserisci notifica preliminare inizio cantiere" 
+                                            class="w-100" @bind-Value=@Document.ConstructorSite.PreliminaryNotificationStartDate />
+                        </div>
+                        <div class="col-12 col-md-6 my-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Id. SICO: </RadzenText>
+                            <RadzenTextArea Placeholder="Inserisci Id. SICO"
+                                            class="w-100" @bind-Value=@Document.ConstructorSite.IdSico />
+                        </div>
+                    </div>
+                    <div class="row my-2">
+                        <div class="col-12 col-md-6 my-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Notifica preliminare in corso: </RadzenText>
+                            <RadzenTextArea Placeholder="Inserisci notifica preliminare in corso"
+                                            class="w-100" @bind-Value=@Document.ConstructorSite.PreliminaryNotificationInProgress />
+                        </div>
+                        <div class="col-12 col-md-6 my-2">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Id. SICO: </RadzenText>
+                            <RadzenTextArea Placeholder="Inserisci Id. SICO"
+                                            class="w-100" @bind-Value=@Document.ConstructorSite.IdSicoInProgress />
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 }
 
 @code {
@@ -148,25 +138,14 @@ else
     [Parameter]
     public DocumentModel Document { get; set; } = new();
 
+    private List<ClientModel> ClientsList = [];
     private List<MeteoConditionModel> meteoConditions = [];
-
+    private Orientation meteoButtonsOrientation = Orientation.Horizontal;
     private bool onLoading = false;
 
     //VERBALE DI COORDINAMENTO IN CANTIERE
-    DateTime? Date;
-    DateTime? Hour;
-    string CSE;
-
-    //DATI, CANTIERE, FIGURE RESPONSABILI, PROGETTISTI,RIUNIONI
-    string Committente;
-    string LavoriDi;
-    string IndirizzoCantiere;
-    DateTime? InizioLavori;
-    string NotificaPreliminareInizio;
-    string IdSico;
-    string NotificaPreliminareInCorso;
-    string IdSicoInProgress;
-
+    DateTime? compilationDate;
+    DateTime? compilationHour;
 
     void OnChange(string value, string name)
     {
@@ -191,27 +170,52 @@ else
     private async Task LoadData()
     {
         meteoConditions = await DocumentsRepository.GetMeteoConditions();
-        CSE = Document.CSE ?? "";
-        Committente = Document.Client?.Name ?? "";
-        LavoriDi = Document.ConstructorSite.JobDescription ?? "";
-        IndirizzoCantiere = Document.ConstructorSite.Address ?? "";
-        InizioLavori = Document.ConstructorSite.StartDate;
-        NotificaPreliminareInizio = Document.ConstructorSite.PreliminaryNotificationStartDate ?? "";
-        IdSico = Document.ConstructorSite.IdSico ?? "";
-        NotificaPreliminareInCorso = Document.ConstructorSite.PreliminaryNotificationInProgress ?? "";
-        IdSicoInProgress = Document.ConstructorSite.IdSicoInProgress ?? "";
+        ClientsList = await ClientsRepository.GetClients();
     }
+
+
+    #region Eventi per catturare i dati dalla form
+
+    private void CompilationDateChanged(DateTime? date)
+    {
+        compilationDate = date;
+        MargeDate();
+    }
+
+    private void CompilationHoursChanged(DateTime? hour)
+    {
+        compilationHour = hour;
+        MargeDate();
+    }
+
+    private void MargeDate()
+    {
+        DateTime? newDate = null;
+        if (compilationDate is not null)
+        {
+            newDate = new(compilationDate.Value.Year, compilationDate.Value.Month, compilationDate.Value.Day);
+            if (compilationHour.HasValue)
+            {
+                newDate.Value.AddHours(compilationHour.Value.Hour);
+                newDate.Value.AddMinutes(compilationHour.Value.Minute);
+            }
+        }
+        Document.CompilationDate = newDate;
+        StateHasChanged();
+    }
+
+    #endregion
 
     #region Visualizzazione
 
     public void GetData()
     {
-        Date = Document.CompilationDate.HasValue ? Document.CompilationDate : DateTime.Now;
+        compilationDate = Document.CompilationDate.HasValue ? Document.CompilationDate : DateTime.Now;
     }
 
     public void GetHour()
     {
-        Hour = Document.CompilationDate.HasValue ? Document.CompilationDate : DateTime.Now;
+        compilationHour = Document.CompilationDate.HasValue ? Document.CompilationDate : DateTime.Now;
     }
 
     #endregion
