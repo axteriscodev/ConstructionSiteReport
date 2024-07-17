@@ -8,44 +8,36 @@
 
 
 
-@* @if (isCameraOpen)
-{ *@
-<video id="player" controls autoplay></video>
 
-<canvas id="canvas" width="1280" height="720"></canvas>
 
-<RadzenButton Text="Scatta" Click="@TakePicture" />
+<div class="vstack">
+  <video id="player" controls autoplay></video>
 
-@* }
-else
-{
-<RadzenButton Text="Fotocamera" Icon="photo_camera" Click="@OpenCamera" />
-<RadzenButton Text="Documenti" Icon="folder" Click="@OpenDocuments" />
-<InputFile OnChange="LoadFile" style="display: none;" id="pictureLoader" />
-} *@
+  <canvas id="canvas" width="1280" height="720" style="display: none;"></canvas>
+
+  <div class="row mt-2 justify-content-center" style="display: flex;" id="shutterButton">
+    <RadzenButton class="cameraButtons"Icon="camera" Click="@TakePicture" />
+  </div>
+
+  <div class="hstack gap-3 mt-2 justify-content-center" id="controlButtons" style="display: none;">  
+    <RadzenButton class="cameraButtons" Text="Cancella" ButtonStyle="ButtonStyle.Danger" Click="@CancelPicture" />
+    <RadzenButton class="cameraButtons" Text="Conferma" Click="@ConfirmPicture" IsBusy="@isSaving" BusyText="Salvataggio..."/>
+  </div>
+</div>
+
 
 
 @code {
 
   private IJSObjectReference jsModule;
 
-  private bool isCameraOpen = true;
+  private bool isSaving = false;
 
-  private bool isAlreadyOpen = false;
 
   @* protected override async Task OnAfterRenderAsync(bool firstRender)
-  {
-    if (isCameraOpen && !isAlreadyOpen)
-    {
-      isAlreadyOpen = true;
-      await jsModule.InvokeVoidAsync("openCamera");
+{
 
-    }
-    Console.WriteLine("Reloaded");
-    await base.OnAfterRenderAsync(firstRender);
-  } *@
-
-
+} *@
   protected override async Task OnInitializedAsync()
   {
     await base.OnInitializedAsync();
@@ -56,38 +48,27 @@ else
 
   }
 
-  @* public async Task OpenCamera()
+  public async Task ConfirmPicture()
   {
-    isCameraOpen = true;
-  } *@
-
-  @* public void OpenDocuments()
-  {
-    jsModule.InvokeVoidAsync("openDocuments");
+    isSaving = true;
+    await jsModule.InvokeVoidAsync("confirmPicture" , DotNetObjectReference.Create(this));
   }
 
-  private async Task LoadFile(InputFileChangeEventArgs e)
+  public async Task CancelPicture()
   {
-    var readStream = e.File.OpenReadStream(2048000);
-
-    var buffer = new byte[e.File.Size];
-
-    await readStream.ReadAsync(buffer, 0, buffer.Length);
-
-    var base64Image = Convert.ToBase64String(buffer);
-
-    DialogService.Close("data:image/jpeg;charset=utf-8;base64," + base64Image);
-  } *@
+    await jsModule.InvokeVoidAsync("openCamera");
+  }
 
   public async Task TakePicture()
   {
-    await jsModule.InvokeVoidAsync("takePicture", DotNetObjectReference.Create(this));
+    await jsModule.InvokeVoidAsync("takePicture");
   }
 
 
   [JSInvokable]
   public async Task GetImage(string base64Image)
   {
+    isSaving = false;
     //isAlreadyOpen = false;
     DialogService.Close(base64Image);
   }

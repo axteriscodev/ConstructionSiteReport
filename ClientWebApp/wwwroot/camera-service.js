@@ -1,6 +1,13 @@
 export function openCamera() {
     const player = document.getElementById('player');
     const canvas = document.getElementById('canvas');
+    const shutterButton = document.getElementById('shutterButton');
+    const controlButtons = document.getElementById('controlButtons');
+
+    player.style.display = "block";
+    shutterButton.style.display = "flex";
+    canvas.style.display = "none";
+    controlButtons.style.display = "none";
 
     const constraints = {
         video: {
@@ -25,7 +32,7 @@ export function openCamera() {
 
 }
 
-export async function takePicture(dotnethelper) {
+export async function takePicture() {
     const context = canvas.getContext('2d');
 
     console.log("post - height:"+ canvas.height + " width: " + canvas.width);   
@@ -35,8 +42,18 @@ export async function takePicture(dotnethelper) {
     context.drawImage(player, 0, 0, canvas.width, canvas.height);
     //dotnethelper.invokeMethodAsync('ClientWebApp', 'GetImage', canvas.toDataURL())
 
-    
 
+    player.style.display = "none";
+    canvas.style.display = "block";
+    shutterButton.style.display = "none";
+    controlButtons.style.display = "flex";
+   
+   
+}
+
+export function confirmPicture(dotnethelper)
+{
+    const context = canvas.getContext('2d');
 
     context.font = "30pt Arial";
     context.fillStyle = "white";
@@ -48,20 +65,17 @@ export async function takePicture(dotnethelper) {
             context.fillText(`Posizione: ${position.coords.latitude} - ${position.coords.longitude}`, 20, 40 );  
             context.fillText("Data: " + dateString, 20, 80);
             const img = canvas.toDataURL();
-            SavePhoto(img, dotnethelper);
+            savePhoto(img, dotnethelper);
         });
     } else {
         //context.fillText("Posizione: non disponibile", 20, 40);
         context.fillText("Data: " + dateString, 20, 40);
         const img = canvas.toDataURL();
-        SavePhoto(img, dotnethelper);
+        savePhoto(img, dotnethelper);
     }
-
-     
-   
 }
 
-export function SavePhoto(img, dotnethelper) {
+export function savePhoto(img, dotnethelper) {
 
     const stream = player.srcObject;
     stream.getTracks().forEach(function(track) {
