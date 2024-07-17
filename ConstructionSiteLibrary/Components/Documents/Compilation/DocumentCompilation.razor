@@ -75,7 +75,7 @@ else
                 { "OnPrintComplete", EventCallback.Factory.Create(this, PrintComplete) },
                 { "Document", document },
             };
-        await DialogService.OpenAsync<DocumentViewer>("", parameters: param, options: newOptions);
+        var success = await DialogService.OpenAsync<DocumentViewer>("", parameters: param, options: newOptions);
     }
 
     private async Task SalvaDocumento()

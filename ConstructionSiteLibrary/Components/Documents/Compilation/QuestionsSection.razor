@@ -182,19 +182,19 @@
 
     private async Task SelectedAnswer(object args, DocumentQuestionModel question, int index)
     {
+        Console.WriteLine("Change event");
         var cTemp = args as DocumentChoiceModel;
         if (cTemp is not null)
         {
             cTemp.ChoiceIndex = index;
-            if (cTemp.Id != question.CurrentChoices[index].Id ){
             var answer = cTemp.Clone();
             question.CurrentChoices[index] = answer;
-            }
 
             if (question.CurrentChoices[index].Reportable)
             {
                 await OpenCompanyListDialog(question.CurrentChoices[index]);
             }
+            StateHasChanged();
         }
     }
 

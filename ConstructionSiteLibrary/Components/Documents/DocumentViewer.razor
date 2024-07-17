@@ -3,6 +3,7 @@
 @using Microsoft.JSInterop
 @layout EmptyLayout
 
+@inject DialogService DialogService
 @inject DocumentsRepository DocumentsRepository
 @inject IJSRuntime JS
 
@@ -230,13 +231,14 @@ else
                         </RadzenText>
                     </div>
                 </div>
-                foreach(var cat in visualCategories)
+                @foreach(var cat in visualCategories)
                 {
                     foreach(var elem in cat.Category.Questions)
                     {
                         if(elem.Attachments.Count > 0)
                         {
-                        <div class="pdfElement paddingSezione">
+                        <div class="pdfElement ">
+                            <div class="paddingSezione">
                             <RadzenRow JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Start" Gap="0">
                                 <RadzenColumn Size="1" class="rz-text-align-center paddingYResponsive">
                                     <RadzenText TextStyle="TextStyle.H6">@DocumentCompilationUtils.QuestionNumber(cat.Category, elem.Order)</RadzenText>
@@ -245,11 +247,12 @@ else
                                     <RadzenRow>
                                         @foreach (var attach in elem.Attachments)
                                         {
-                                            <RadzenImage Path="@attach.Image" Style="width:8rem;" />
+                                            <img src="@attach.Image" width="300px" height="300px"/>
                                         }
                                     </RadzenRow>
                                  </RadzenColumn>
                             </RadzenRow>
+                            </div>
                         </div>     
                         } 
                     }  
@@ -481,9 +484,10 @@ else
     }
 
     [JSInvokable]
-    private void DocumentCreated()
+    public void DocumentCreated()
     {
         creation = false;
+        DialogService.Close(true);
     }
 
     private bool CheckCompanyPresent(bool? value)

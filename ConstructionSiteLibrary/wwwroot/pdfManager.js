@@ -29,11 +29,12 @@ export async function generaPDFDocumento(filename, dotnet) {
     pages.push(tempDiv);
     //Ciclo ogni elemento per verificare se aggiungerlo in una pagina o creare una pagina nuova in base all'altezza
     elements.forEach((elem, index) => {
+        console.log(elem.innerHTML);
         let altezza = elem.offsetHeight + currentSize;
-        console.log(" currentSize= " + currentSize + " offsetHeight= " + elem.offsetHeight);
-        console.log(" pagina " + pageCount + " altezza= " + altezza);
-        if (altezza < 1200) {
-            console.log("dentro if, pagina " + pageCount);
+        //console.log(" currentSize= " + currentSize + " offsetHeight= " + elem.offsetHeight);
+        //console.log(" pagina " + pageCount + " altezza= " + altezza);
+        if (altezza < 1350) {
+            //console.log("dentro if, pagina " + pageCount);
             pages[pageCount].innerHTML += elem.innerHTML;
             currentSize = altezza;
         } else {
@@ -42,13 +43,14 @@ export async function generaPDFDocumento(filename, dotnet) {
             pages.push(tempDiv);
             pages[pageCount].innerHTML += elem.innerHTML;
             currentSize = elem.offsetHeight;
-            console.log("dentro else, pagina " + pageCount);
+            //console.log("dentro else, pagina " + pageCount);
         }
     });
     console.log("creazione pagine - N.pagine= " + pages.length)
     //creo le pagine in base alla divisione dell html fatta in precedenza
     for (let i = 0; i < pages.length; i++) {
-        console.log("pagina " + i);
+        //console.log("pagina " + i);
+        //console.log(pages[i]);
         await doc.html(pages[i], {
             callback: function (doc) {
                 return doc;
@@ -73,7 +75,10 @@ export async function generaPDFDocumento(filename, dotnet) {
 
     return new Promise((resolve, reject) => {
         // invoco il metodo di c# per settare la nuova dimensione dello schermo
+
+        console.log("ciao");
         dotnet.invokeMethodAsync('DocumentCreated').then(() => {
+            console.log("ciao2");
         }).catch(error => {
             console.log("Errore durante il ridimensionamento dello schermo: " + error);
         });
