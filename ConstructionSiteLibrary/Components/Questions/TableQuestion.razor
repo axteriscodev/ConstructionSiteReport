@@ -23,7 +23,8 @@ else
                           Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenNewForm())" />
             <RadzenDataGrid @ref="grid" TItem="TemplateQuestionModel" GridLines="@DataGridGridLines.Both" IsLoading=@isLoading Count="@count" PageSize="@pageSize" Data="@questions"
                             AllowColumnResize="true" AllowAlternatingRows="true" ColumnWidth="200px" AllowFiltering="true" FilterMode="FilterMode.Simple"
-                            AllowSorting="true" AllowPaging="true" ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" PagerHorizontalAlign="HorizontalAlign.Left">
+                            AllowSorting="true" AllowPaging="true" ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" PagerHorizontalAlign="HorizontalAlign.Left"
+                            Density="Density.Compact">
 
                 <Columns>
                     @*<RadzenDataGridColumn TItem="QuestionModel" Property="Id" Title="Id" Width="40px" />*@

@@ -26,7 +26,7 @@ else
             <RadzenDataGrid @ref="grid" GridLines="@DataGridGridLines.Both" IsLoading=@isLoading Count="@count" PageSize="@pageSize" Data="@templates" TItem="TemplateModel"
                             AllowColumnResize="true" AllowAlternatingRows="true" ColumnWidth="200px" AllowFiltering="true" FilterMode="FilterMode.Simple"
                             AllowSorting="true" AllowPaging="true" ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" PagerHorizontalAlign="HorizontalAlign.Left"
-                            RowClick="@((data) => OnTemplateSelected(data.Data))">
+                            RowClick="@((data) => OnTemplateSelected(data.Data))" Density="Density.Compact">
 
                 <Columns>
                     @*<RadzenDataGridColumn TItem="CategoryModel" Property="Id" Title="Id" Width="40px" />*@
