@@ -6,6 +6,7 @@ using Radzen;
 using ConstructionSiteLibrary.Components.Utilities;
 using Shared.Defaults;
 using Shared.Templates;
+using ConstructionSiteLibrary.Utility;
 
 namespace ConstructionSiteLibrary.Components.Questions
 {
@@ -26,7 +27,7 @@ namespace ConstructionSiteLibrary.Components.Questions
         /// <summary>
         /// Intero che ci dice quanti elementi possono stare in una pagina
         /// </summary>
-        private int pageSize = 8;
+        private int pageSize = GlobalVariables.PageSize;
         /// <summary>
         /// Stringa indica la pagina e gli elementi
         /// </summary>

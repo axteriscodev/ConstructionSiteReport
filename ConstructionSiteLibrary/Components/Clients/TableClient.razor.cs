@@ -1,4 +1,5 @@
 ﻿using ConstructionSiteLibrary.Components.Utilities;
+using ConstructionSiteLibrary.Utility;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
@@ -29,7 +30,7 @@ public partial class TableClient
     /// <summary>
     /// Intero che ci dice quanti elementi possono stare in una pagina
     /// </summary>
-    private int pageSize = 8;
+    private int pageSize = GlobalVariables.PageSize;
 
     /// <summary>
     /// Stringa indica la pagina e gli elementi

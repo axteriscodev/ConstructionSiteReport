@@ -94,7 +94,8 @@
     }
 
     .collapse {
-        /* Never collapse the sidebar for wide screens */
+        /* Never collapse the 
+            for wide screens */
         display: block;
     }
 

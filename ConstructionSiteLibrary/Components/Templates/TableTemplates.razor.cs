@@ -31,7 +31,7 @@ public partial class TableTemplates
     /// <summary>
     /// Intero che ci dice quanti elementi possono stare in una pagina
     /// </summary>
-    private int pageSize = 8;
+    private int pageSize = GlobalVariables.PageSize;
 
     /// <summary>
     /// Stringa indica la pagina e gli elementi

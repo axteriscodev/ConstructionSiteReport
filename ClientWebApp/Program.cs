@@ -4,6 +4,7 @@ using ConstructionSiteLibrary.Interfaces;
 using ConstructionSiteLibrary.Managers;
 using ConstructionSiteLibrary.Repositories;
 using ConstructionSiteLibrary.Services;
+using ConstructionSiteLibrary.Utility;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Radzen;
@@ -33,6 +34,8 @@ builder.Services.AddScoped<ConstructorSitesRepository>();
 builder.Services.AddScoped<ClientsRepository>();
 //repository per le aziende
 builder.Services.AddScoped<CompaniesRepository>();
+//Global Variables
+builder.Services.AddSingleton<GlobalVariables>();
 
 builder.Services.AddScoped<ICameraService, CameraService>();
 builder.Services.AddScoped<IndexedDBService>();

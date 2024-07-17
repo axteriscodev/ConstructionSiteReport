@@ -17,7 +17,7 @@ public partial class TableCompanies
 
     private int count;
 
-    private int pageSize = 8;
+    private int pageSize = GlobalVariables.PageSize;
 
     private string pagingSummaryFormat = "Pagina {0} di {1} (Totale {2} aziende)";
 

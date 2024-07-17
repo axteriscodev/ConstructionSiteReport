@@ -1,7 +1,8 @@
 ﻿@using ConstructionSiteLibrary.Model
 @using ConstructionSiteLibrary.Services
-@inherits LayoutComponentBase
 
+@inherits LayoutComponentBase
+@inject GlobalVariables GlobalVariables
 
 
 <div class="page">
@@ -20,7 +21,7 @@
 
 @code{
     private bool _iconMenuActive { get; set; }
-    private string? IconMenuCssClass => _iconMenuActive ? "width: 80px;" : null;
+    private string? IconMenuCssClass => _iconMenuActive ? $"width:{GlobalVariables.NavbarWidthClosed};" : $"width:{GlobalVariables.NavbarWidthOpen};";
 
 
     protected override async Task OnInitializedAsync()
@@ -32,6 +33,7 @@
     protected void ToggleIconMenu(bool iconMenuActive)
     {
         _iconMenuActive = iconMenuActive;
+        GlobalVariables.IsNavBarOpen = _iconMenuActive;
     }
 
 
