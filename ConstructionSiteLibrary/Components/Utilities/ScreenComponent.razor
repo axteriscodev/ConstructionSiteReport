@@ -70,9 +70,15 @@
         await ScreenManager.Init(JS);
         ScreenSize = ScreenManager.GetScreenSize();
         ScreenDimension = CalculateScreenDimension(ScreenSize);
+        MainSize = ScreenManager.GetMainSize();
+        MainDimension = CalculateScreenDimension(MainSize);
         ScreenManager.ResizeScreen += ScreenDimensionChanged!;
-        CallMainDimensionEvent();
+        ScreenManager.ResizeMain += MainDimensionChanged!;
+
+        CallScreenSizeEvent();
         CallMainSizeEvent();
+        CallScreenDimensionEvent();
+        CallMainDimensionEvent();
     }
 
     /// <summary>

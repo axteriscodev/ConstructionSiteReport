@@ -17,10 +17,10 @@
 }
 
 .buttonNewSite, ::deep .buttonNewSite {
-    width: 50%;
-    height: 50px;
+    width: 120px;
+    height: 40px;
     border-radius: 1.2rem !important;
-    margin-right:1rem;
+    margin-right: 1rem;
 }
 
 .textNewSite, ::deep .textNewSite {
@@ -49,8 +49,8 @@
     }
 
     .buttonNewSite, ::deep .buttonNewSite {
-        width: 80%;
-        height: 50px;
+        width: 120px;
+        height: 40px;
         border-radius: 1.2rem !important;
         margin-right: 1rem;
     }

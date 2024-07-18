@@ -117,14 +117,34 @@ namespace ConstructionSiteLibrary.Components.Documents
             StateHasChanged();
         }
 
-        private void OnScreenDimensionChanged(ScreenDimension? newDimension)
+
+        private void MainSizeChanged(ScreenSize? size)
+        {
+            int cardDimension = 160;
+            int marginX = 10;
+            documentColumn = 1;
+
+            if(size is not null)
+            {
+                var temp = ((double)size.Width / (cardDimension + marginX));
+                Console.WriteLine($"decimal: {temp}");
+                documentColumn = (int)temp - 1;
+
+                Console.WriteLine($"numero colonne: {documentColumn}");
+
+            }
+            StateHasChanged();
+        }
+
+
+        private void MainDimensionChanged(ScreenDimension? newDimension)
         {
 
             documentColumn = newDimension switch
             {
-                ScreenDimension.XL => 5,
-                ScreenDimension.L => 4,
-                ScreenDimension.M => 3,
+                ScreenDimension.XL => 8,
+                ScreenDimension.L => 5,
+                ScreenDimension.M => 5,
                 ScreenDimension.S => 2,
                 _ => 1,
             };

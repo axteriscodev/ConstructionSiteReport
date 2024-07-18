@@ -1,6 +1,11 @@
 ﻿
+.divComponent {
+    width: 160px;
+    text-align: center;
+}
+
 .documentCard {
-    width: 240px;
+    width: 160px;
     border-radius: 1.5rem !important;
 }
 
@@ -11,10 +16,10 @@
     }
 
 .documentTitle, ::deep .documentTitle {
-    margin: 1rem 1rem;
+/*    margin: 1rem 1rem;*/
     text-align:center;
 }
 
 .documentIcon, ::deep .documentIcon {
-    font-size: 15rem !important;
+    font-size: 10rem !important;
 }

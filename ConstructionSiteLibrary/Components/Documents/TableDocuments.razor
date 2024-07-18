@@ -7,8 +7,7 @@
 @inject NavigationService NavigationService
 
 
-<ScreenComponent @ref="screenComponent" OnScreenDimensionChanged="@OnScreenDimensionChanged"
-                 SizeXL="1350" SizeL="1100" SizeM="820" SizeS="600" />
+<ScreenComponent @ref="screenComponent" OnMainSizeChanged="MainSizeChanged" />
 
 @if (onLoading)
 {
@@ -24,7 +23,7 @@ else
     </div>
     <div class="row" style="justify-content:space-between">
         <RadzenButton Icon="arrow_back" Text="Indietro" Click="@Back" class="buttonBack" />
-        <RadzenButton class="buttonNewDocument" Icon="add" Text="Crea nuovo" Click="@CreaNuovo" ButtonStyle="ButtonStyle.Success" />
+        <RadzenButton class="buttonNewDocument" Icon="add" Text="Nuovo" Click="@CreaNuovo" ButtonStyle="ButtonStyle.Success" />
     </div>
     <div class="mx-2 my-5">
         <div class="my-5">

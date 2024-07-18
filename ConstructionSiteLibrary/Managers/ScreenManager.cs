@@ -54,7 +54,6 @@ namespace ConstructionSiteLibrary.Managers
         {
             navbarSize = width;
             mainSize.Width = screenSize.Width - navbarSize;
-            Console.WriteLine($"funzione1 => width:{width} - mainSize.Width: {mainSize.Width}");
             ResizeMain?.Invoke(this, mainSize);
         }
 
@@ -72,7 +71,6 @@ namespace ConstructionSiteLibrary.Managers
             screenSize!.Height = jsBrowserHeight;
             mainSize!.Width = jsBrowserWidth - navbarSize;
             mainSize!.Height = jsBrowserHeight;
-            Console.WriteLine($"funzione2 => width:{navbarSize} - mainSize.Width: {mainSize.Width}");
             ResizeScreen?.Invoke(this, screenSize);
             ResizeMain?.Invoke(this, mainSize); 
         }
