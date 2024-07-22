@@ -23,11 +23,9 @@ namespace ClientWebApp.Services
             await screenManager.Init(_iJSRuntime);
             var screenSize = screenManager.GetScreenSize();
 
-            var scritta =  $"width : {screenSize!.Width}px; height: {screenSize!.Height}px;";
-
             var options = new DialogOptions
             {
-                Style = $"width : {screenSize!.Width}px; height: {screenSize!.Height}px;",
+                Style = $"width : {screenSize!.Width}px; height: {screenSize!.Height}px;top:0px !important;",
             };
             var img = await _dialogService.OpenAsync<CameraComponent>("", options: options);
             return img;

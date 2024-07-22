@@ -119,21 +119,21 @@
         await OnStateChangeNotification!.InvokeAsync();
     }
 
-    private void SelectAttachSource(RadzenSplitButtonItem item, DocumentQuestionModel question)
+    private async Task SelectAttachSource(RadzenSplitButtonItem item, DocumentQuestionModel question)
     {
         if (item is null)
         {
-            TakePicture(question);
+           await TakePicture(question);
         }
         else
         {
             if (item.Value.Equals("1"))
             {
-                TakePicture(question);
+                await TakePicture(question);
             }
             else
             {
-                CameraService.OpenDocuments();
+                await CameraService.OpenDocuments();
             }
         }
     }
