@@ -1,4 +1,5 @@
-﻿@using Shared.Documents
+﻿@using ConstructionSiteLibrary.Model
+@using Shared.Documents
 @using Microsoft.JSInterop
 
 @inject DialogService DialogService
@@ -13,6 +14,7 @@
 }
 else
 {
+    <meta name="viewport" content="width=@viewSize.Width">
     <div class="card shadow DocumentCard">
         <ReportConstructorSiteDataSection Document="@document" />
         <CompaniesPresentSection Companies="@document.Companies" />
@@ -38,6 +40,8 @@ else
     private bool onLoading = false;
 
     private bool onSaving = false;
+    private ScreenSize viewSize = new();
+    private ScreenSize nativeSize = new();
 
     ScreenComponent screenComponent;
 
@@ -46,6 +50,8 @@ else
         onLoading = true;
         await base.OnInitializedAsync();
         await LoadData();
+        viewSize = screenComponent.GetScreenSize();
+        nativeSize = viewSize.Clone();
         onLoading = false;
     }
     private async Task LoadData()
@@ -60,10 +66,15 @@ else
 
     private async Task StampaDocumento()
     {
-        var width = screenComponent.GetScreenSize().Width;
+        if(viewSize.Width < 1024)
+        {
+            viewSize.Width = 1024;
+            StateHasChanged();
+        }
+
 
         // creo uno style aggiuntivo da inviare al componente caricato con il popup come options
-        var additionalStyle = $"min-height:fit-content;height:fit-content;width:{width}px;";
+        var additionalStyle = $"height:{viewSize.Height};width:{viewSize.Width}px;";
         var newOptions = new DialogOptions
             {
                 Style = additionalStyle
@@ -76,6 +87,7 @@ else
                 { "Document", document },
             };
         var success = await DialogService.OpenAsync<DocumentViewer>("", parameters: param, options: newOptions);
+        PrintComplete();
     }
 
     private async Task SalvaDocumento()
@@ -88,6 +100,8 @@ else
 
     private void PrintComplete()
     {
+        viewSize = nativeSize.Clone();
+        StateHasChanged();
         DialogService.Close();
     }
 
