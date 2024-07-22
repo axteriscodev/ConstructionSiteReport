@@ -27,7 +27,7 @@ namespace TDatabase.Queries
                 Choices = (from qc in db.QuestionChoices
                            from c in db.Choices
                            where qc.IdQuestion == x.Id
-                           && c.Id == qc.IdChoice
+                           && c.Id == qc.IdChoice && c.Active == true
                            select new TemplateChoiceModel()
                            {
                                Id = c.Id,

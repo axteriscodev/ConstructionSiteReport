@@ -14,7 +14,7 @@ else
     <RadzenTemplateForm TItem="TemplateDescriptionModel" Data="@CurrentSelection" Submit="@Forward">
     <div class="card shadow mb-3 divCard">
         <RadzenText>Seleziona una descrizione</RadzenText>
-        <RadzenDropDown @bind-Value=@CurrentSelection Data=@TemplatesDescriptions TextProperty="Description" />
+        <RadzenDropDown @bind-Value=@CurrentSelection Data=@TemplatesDescriptions TextProperty="Description" Style="width: 500px" />
     </div>
     <div class="row">
         <div class="col">

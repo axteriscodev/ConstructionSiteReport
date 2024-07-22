@@ -59,7 +59,7 @@ namespace ConstructionSiteLibrary.Components.Choices
                 { "OnSaveComplete", EventCallback.Factory.Create(this, ReloadTable) },
                 { "CreationMode", true },
             };
-            await DialogService.OpenAsync<FormChoice>("Aggiorna argomento", parameters: param, options: newOptions);
+            await DialogService.OpenAsync<FormChoice>("Nuova scelta", parameters: param, options: newOptions);
         }
 
         private async Task OpenUpdateForm(TemplateChoiceModel model)

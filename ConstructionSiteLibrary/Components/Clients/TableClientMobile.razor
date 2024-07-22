@@ -1,5 +1,55 @@
-﻿<h3>TableClientMobile</h3>
+﻿@using ConstructionSiteLibrary.Repositories
+@using Shared;
+@using Shared.Documents;
 
-@code {
+@inject ClientsRepository ClientsRepository
+@inject DialogService DialogService
+@inject GlobalVariables GlobalVariables
+
+<ScreenComponent @ref="screenComponent" />
+@if (initialLoading)
+{
+    <Loading />
+}
+else
+{
+    <h2>@Param</h2>
+
+    @* La tabella dei clienti *@
+    <div class="marginComponent">
+
+        <RadzenFieldset class="shadow rounded" Style="font-weight:400;">
+            <RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Success" class="ButtonAdd"
+                          Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenNewForm())" />
+            @*<RadzenButton Icon="sort" Text="Ordina" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
+                          Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenOrderForm())" />*@
+
+            @foreach(var client in clients)
+            {
+                <RadzenCard Variant="Variant.Filled" Class="rz-my-2 rz-mx-auto" Style="max-width: 420px">
+                    <RadzenStack Gap="0">
+                        @*<RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Id
+                        </RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1"><b>@client.Id</b></RadzenText>*@
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Nome
+                        </RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1"><b>@client.Name</b></RadzenText>
+
+                        @* Mostro i bottoni solo se ho i permessi di modifica *@
+                        <RadzenRow Class="rz-mt-2" JustifyContent="JustifyContent.Right" Gap="1rem">
+                            <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Info" Variant="Variant.Filled"
+                                Size="ButtonSize.Medium" Click="@(()=>OpenUpdateForm(client))" class="buttonEdit"
+                                />
+                            <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Filled"
+                                Size="ButtonSize.Medium" Click="@(()=>Hide(client))" class="buttonDelete"
+                                 />
+                        </RadzenRow>
+                    </RadzenStack>
+
+                </RadzenCard>
+            }
+        </RadzenFieldset>
+    </div>
+
 
 }

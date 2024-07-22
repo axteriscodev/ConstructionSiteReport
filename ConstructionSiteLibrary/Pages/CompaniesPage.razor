@@ -7,10 +7,27 @@
 
 <h3>Aziende</h3>
 
-<TableCompanies />
+<ScreenComponent SizeS="800" OnScreenDimensionChanged="ScreenDimensionObserver" />
 
-@* <FormCompanies /> *@
+<DynamicComponent @ref=dynamicComponent Type=@selectedType/>
 
-@*<ScreenComponent MediumWith="800" OnScreenDimensionChanged="ScreenDimensionObserver" />*@
+@code
+{
 
-@*<DynamicComponent @ref=dynamicComponent Type=@selectedType />*@
+    private DynamicComponent? dynamicComponent;
+    private Type selectedType = typeof(TableCompanies);
+
+     private void ScreenDimensionObserver(ScreenDimension? dimension)
+    {
+        if (dimension == ScreenDimension.S || dimension == ScreenDimension.XS)
+        {
+            selectedType = typeof(TableCompaniesMobile);
+        }
+        else
+        {
+            selectedType = typeof(TableCompanies);
+        }
+
+        StateHasChanged();
+    }
+}

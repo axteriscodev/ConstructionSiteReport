@@ -1,0 +1,62 @@
+﻿@using ConstructionSiteLibrary.Repositories
+@using Shared
+@using Shared.Documents
+
+@inject CompaniesRepository CompaniesRepository
+@inject DialogService DialogService
+@inject NavigationService Navigation
+@inject GlobalVariables GlobalVariables
+
+<ScreenComponent @ref="screenComponent" />
+
+@if (initialLoading)
+{
+    <Loading />
+}
+else
+{
+    <h2>@Param</h2>
+
+    @* La tabella delle Aziende *@
+    <div class="marginComponent">
+
+        <RadzenFieldset class="shadow rounded" Style="font-weight:400;">
+            <RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Success" class="ButtonAdd"
+                Click="@(() => OpenAddCompanyPage())" Style="margin-bottom:2rem;margin-top:1rem;" />
+
+                @foreach (var company in companies)
+                {
+                    <RadzenCard Variant="Variant.Filled" Class="rz-my-2 rz-mx-auto" Style="max-width: 420px">
+                        <RadzenStack Gap="0">
+
+                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Nome
+                            </RadzenText>
+                            <RadzenText TextStyle="TextStyle.Body1"><b>@GetName(company)</b></RadzenText>
+
+                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Indirizzo
+                            </RadzenText>
+                            <RadzenText TextStyle="TextStyle.Body1"><b>@company.Address</b></RadzenText>
+
+                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Telefono
+                            </RadzenText>
+                            <RadzenText TextStyle="TextStyle.Body1"><b>@company.Phone</b></RadzenText>
+
+                            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Email
+                            </RadzenText>
+                            <RadzenText TextStyle="TextStyle.Body1"><b>@company.Email</b></RadzenText>
+
+                            @* Mostro i bottoni solo se ho i permessi di modifica *@
+                            <RadzenRow Class="rz-mt-2" JustifyContent="JustifyContent.Right" Gap="1rem">
+                                <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Info" Variant="Variant.Filled"
+                                    Size="ButtonSize.Medium" Click="@(()=>OpenUpdateCompany(company))" class="buttonEdit" />
+                                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Filled"
+                                    Size="ButtonSize.Medium" Click="@(()=>Hide(company))" class="buttonDelete" />
+                            </RadzenRow>
+                        </RadzenStack>
+
+                    </RadzenCard>
+                }
+
+        </RadzenFieldset>
+    </div>
+}

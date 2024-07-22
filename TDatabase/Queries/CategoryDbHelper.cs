@@ -16,6 +16,7 @@ namespace TDatabase.Queries
                 Order = x.Order,
                 Questions = (from q in db.Questions
                              where q.IdCategory == x.Id
+                             && q.Active == true
                              select new TemplateQuestionModel()
                              {
                                  Id = q.Id,
