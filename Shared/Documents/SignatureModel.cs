@@ -8,6 +8,8 @@ public class SignatureModel
     public int CompanyId { get; set; }
     [JsonPropertyName("reportedQuestionsId")]
     public List<int> ReporteQuestionsIds { get; set; } = [];
+    [JsonPropertyName("name")]
+    public string? Name { get; set; }
     [JsonPropertyName("sign")]
     public string? Sign { get; set; }
     [JsonPropertyName("width")]

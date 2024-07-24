@@ -62,8 +62,8 @@ else
                             <div class="paddingDescrizione border my-2">
                                 <RadzenText>Per: <strong>@reportedCompany.Company.CompanyName</strong></RadzenText>
                                 <RadzenText>Nome:</RadzenText>
-                                <RadzenTextBox @bind-Value=@reportedCompany.Sign.Name />
-                                @if (reportedCompany.Sign is not null)
+                                <RadzenTextBox @bind-Value=@reportedCompany.Name />
+                                @if (reportedCompany.Sign is not null && string.IsNullOrEmpty(reportedCompany.Sign.Image))
                                 {
                                     <div class="col-12 p-2 ">
                                         <img src="@reportedCompany.Sign.Image" width="@reportedCompany.Sign.Width"
@@ -211,10 +211,10 @@ else
                 Style = additionalStyle
             };
         string q = "";
-    var cat = Document.Categories.Where(x => x.Id == qr.CategoryId).SingleOrDefault();
-    if (cat is not null) {
-        q = cat.Questions.Where(x => x.Id == qr.QuestionId).Select( x => x.Text).SingleOrDefault() ?? "";
-    }
+        var cat = Document.Categories.Where(x => x.Id == qr.CategoryId).SingleOrDefault();
+        if (cat is not null) {
+            q = cat.Questions.Where(x => x.Id == qr.QuestionId).Select( x => x.Text).SingleOrDefault() ?? "";
+        }
         //creo parametri da inviare al componente caricato con il popup
         var param = new Dictionary<string, object>
             {{ "QuestionText", q },};
@@ -239,7 +239,8 @@ else
                         ReporteQuestionsIds = currentCompany.ReportedQuestions.Select(x => x.QuestionId).ToList(),
                         Sign = currentCompany.Sign.Image,
                         Width = currentCompany.Sign.Width,
-                        Height = currentCompany.Sign.Height
+                        Height = currentCompany.Sign.Height,
+                        Name = currentCompany.Name,
                     };
                 Document.Signatures.Add(compSign);
             }
@@ -250,6 +251,7 @@ else
                 compSign.Sign = currentCompany.Sign.Image;
                 compSign.Width = currentCompany.Sign.Width;
                 compSign.Height = currentCompany.Sign.Height;
+                compSign.Name = currentCompany.Name;
             }
         }
         //altrimenti è la firma del CSE
@@ -269,11 +271,12 @@ else
 
     class CompanyQuestionsReported
     {
-        public CompanyModel Company = new();
+        public CompanyModel Company { get; set; } = new();
 
-        public List<CategoryQuestionIds> ReportedQuestions = [];
+        public List<CategoryQuestionIds> ReportedQuestions { get; set; } = [];
+        public string Name { get; set; } = "";
 
-        public Signature? Sign;
+        public Signature? Sign { get; set; }
 
 
     }
