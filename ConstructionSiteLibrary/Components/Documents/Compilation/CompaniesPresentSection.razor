@@ -61,6 +61,20 @@ else
                                                 class="w-100" @bind-Value=@company.VatCode />
                             </div>
                         </div>
+                        <div class="row my-2">
+                            <div class="col-12 col-md-6 my-2">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Reponsabile: </RadzenText>
+                                <RadzenTextArea Placeholder="Reponsabile"
+                                                Change=@(args => OnChange(args, "Responsabile"))
+                                                class="w-100" @bind-Value=@company.InChargeWorker />
+                            </div>
+                            <div class="col-12 col-md-6 my-2">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Lavoratori: </RadzenText>
+                                <RadzenTextArea Placeholder="Lavoratori"
+                                                Change=@(args => OnChange(args, "PIva"))
+                                                class="w-100" @bind-Value=@company.Workers />
+                            </div>
+                        </div>
                     </div>
                 }
             </div>
