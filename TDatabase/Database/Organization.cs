@@ -11,6 +11,8 @@ public partial class Organization
 
     public string? Address { get; set; }
 
+    public string? Phone { get; set; }
+
     public bool Active { get; set; }
 
     public bool Hidden { get; set; }

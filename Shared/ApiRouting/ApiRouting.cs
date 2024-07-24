@@ -90,5 +90,10 @@ namespace Shared.ApiRouting
         public const string HideConstructorSites = "HideConstructorSites";
 
         #endregion
+
+        #region Organization routing
+
+        public const string Organization = "Organization";
+        public const string UpdateOrganization = "UpdateOrganization";
     }
 }

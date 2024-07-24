@@ -605,6 +605,9 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.Property(e => e.Name)
                 .IsUnicode(false)
                 .HasColumnName("NAME");
+            entity.Property(e => e.Phone)
+                .IsUnicode(false)
+                .HasColumnName("PHONE");
         });
 
         modelBuilder.Entity<Question>(entity =>
