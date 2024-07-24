@@ -74,7 +74,7 @@ else
                     </div>
                     <div class="row my-2">
                         <div class="col">
-                            <RadzenText>Notifica preliminare inizio cantiere del: <strong>@DocumentCompilationUtils.PrintDocumentField(Document?.ConstructorSite.PreliminaryNotificationStartDate)</strong></RadzenText>
+                            <RadzenText>Notifica preliminare inizio cantiere del: <strong>@StampaData(Document?.ConstructorSite.PreliminaryNotificationStartDate)</strong></RadzenText>
                         </div>
                         <div class="col">
                             <RadzenText>Id. SICO: <strong>@DocumentCompilationUtils.PrintDocumentField(Document?.ConstructorSite.IdSico)</strong></RadzenText>
@@ -82,7 +82,7 @@ else
                     </div>
                     <div class="row my-2">
                         <div class="col">
-                            <RadzenText> Notifica preliminare in corso: <strong>@DocumentCompilationUtils.PrintDocumentField(Document?.ConstructorSite.PreliminaryNotificationInProgress)</strong></RadzenText>
+                            <RadzenText> Notifica preliminare in corso: <strong>@StampaData(Document?.ConstructorSite.PreliminaryNotificationInProgress)</strong></RadzenText>
                         </div>
                         <div class="col">
                             <RadzenText>Id. SICO: <strong>@DocumentCompilationUtils.PrintDocumentField(Document?.ConstructorSite.IdSicoInProgress)</strong></RadzenText>

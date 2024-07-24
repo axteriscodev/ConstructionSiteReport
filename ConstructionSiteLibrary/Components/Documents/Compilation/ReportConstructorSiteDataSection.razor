@@ -106,24 +106,22 @@ else
                     <div class="row my-2">
                         <div class="col-12 col-md-6 my-2">
                             <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Notifica preliminare inizio cantiere: </RadzenText>
-                            <RadzenTextArea Placeholder="Inserisci notifica preliminare inizio cantiere" 
-                                            class="w-100" @bind-Value=@Document.ConstructorSite.PreliminaryNotificationStartDate />
+                            <RadzenDatePicker  ShowTime=false DateFormat="dd/MM/yyyy" class="w-100" @bind-Value=@Document.ConstructorSite.PreliminaryNotificationStartDate />
                         </div>
                         <div class="col-12 col-md-6 my-2">
                             <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Id. SICO: </RadzenText>
-                            <RadzenTextArea Placeholder="Inserisci Id. SICO"
+                            <RadzenTextBox Placeholder="Inserisci Id. SICO"
                                             class="w-100" @bind-Value=@Document.ConstructorSite.IdSico />
                         </div>
                     </div>
                     <div class="row my-2">
                         <div class="col-12 col-md-6 my-2">
                             <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Notifica preliminare in corso: </RadzenText>
-                            <RadzenTextArea Placeholder="Inserisci notifica preliminare in corso"
-                                            class="w-100" @bind-Value=@Document.ConstructorSite.PreliminaryNotificationInProgress />
+                            <RadzenDatePicker  ShowTime=false DateFormat="dd/MM/yyyy" class="w-100" @bind-Value=@Document.ConstructorSite.PreliminaryNotificationInProgress />
                         </div>
                         <div class="col-12 col-md-6 my-2">
                             <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Id. SICO: </RadzenText>
-                            <RadzenTextArea Placeholder="Inserisci Id. SICO"
+                            <RadzenTextBox Placeholder="Inserisci Id. SICO"
                                             class="w-100" @bind-Value=@Document.ConstructorSite.IdSicoInProgress />
                         </div>
                     </div>

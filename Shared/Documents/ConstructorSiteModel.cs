@@ -35,10 +35,10 @@ public class ConstructorSiteModel
     public string? IdSicoInProgress { get; set; }
 
     [JsonPropertyName("preliminaryNotificationStartDate")]
-    public string? PreliminaryNotificationStartDate { get; set; }
+    public DateTime? PreliminaryNotificationStartDate { get; set; }
 
     [JsonPropertyName("preliminaryNotificationInProgress")]
-    public string? PreliminaryNotificationInProgress { get; set; }
+    public DateTime? PreliminaryNotificationInProgress { get; set; }
 
     [JsonPropertyName("note")]
     public string? Note { get; set; }
