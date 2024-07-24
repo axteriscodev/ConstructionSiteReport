@@ -146,7 +146,9 @@ public class DocumentDbHelper
                                          CompanyName = comp.CompanyName ?? "",
                                          Address = comp.Address ?? "",
                                          VatCode = comp.Vatcode ?? "",
-                                         Present = compDoc.Present
+                                         Present = compDoc.Present,
+                                         InChargeWorker = compDoc.InChargeWorker ?? "",
+                                         Workers = compDoc.Workers ?? ""
                                      }).ToList(),
                         Notes = (from n in db.Notes
                                  where n.IdDocument == d.Id
@@ -254,6 +256,8 @@ public class DocumentDbHelper
                     IdCompany = companyDoc.Id,
                     IdDocument = nextId,
                     Present = companyDoc.Present ?? false,
+                    InChargeWorker = companyDoc.InChargeWorker ?? "",
+                    Workers = companyDoc.Workers ?? "",
                 };
 
                 db.CompanyDocuments.Add(cd);

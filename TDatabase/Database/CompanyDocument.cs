@@ -11,6 +11,10 @@ public partial class CompanyDocument
 
     public bool Present { get; set; }
 
+    public string? InChargeWorker { get; set; }
+
+    public string? Workers { get; set; }
+
     public virtual Company IdCompanyNavigation { get; set; } = null!;
 
     public virtual Document IdDocumentNavigation { get; set; } = null!;

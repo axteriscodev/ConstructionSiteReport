@@ -377,7 +377,13 @@ public partial class DbCsclDamicoV2Context : DbContext
 
             entity.Property(e => e.IdDocument).HasColumnName("ID_DOCUMENT");
             entity.Property(e => e.IdCompany).HasColumnName("ID_COMPANY");
+            entity.Property(e => e.InChargeWorker)
+                .IsUnicode(false)
+                .HasColumnName("IN_CHARGE_WORKER");
             entity.Property(e => e.Present).HasColumnName("PRESENT");
+            entity.Property(e => e.Workers)
+                .IsUnicode(false)
+                .HasColumnName("WORKERS");
 
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.CompanyDocuments)
                 .HasForeignKey(d => d.IdCompany)
@@ -595,13 +601,13 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("ID");
-            entity.Property(e => e.Active).HasColumnName("ACTIVE");
+            entity.Property(e => e.Active)
+                .HasDefaultValue(true)
+                .HasColumnName("ACTIVE");
             entity.Property(e => e.Address)
                 .IsUnicode(false)
                 .HasColumnName("ADDRESS");
-            entity.Property(e => e.Hidden)
-                .HasDefaultValue(true)
-                .HasColumnName("HIDDEN");
+            entity.Property(e => e.Hidden).HasColumnName("HIDDEN");
             entity.Property(e => e.Name)
                 .IsUnicode(false)
                 .HasColumnName("NAME");
@@ -830,6 +836,8 @@ public partial class DbCsclDamicoV2Context : DbContext
         modelBuilder.Entity<User>(entity =>
         {
             entity.ToTable("USER");
+
+            entity.HasIndex(e => e.Email, "UQ__USER__161CF72434EE76E0").IsUnique();
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()

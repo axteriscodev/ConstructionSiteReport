@@ -54,4 +54,10 @@ public class CompanyModel
 
     [JsonPropertyName("present")]
     public bool? Present { get; set; }
+
+    [JsonPropertyName("inChargeWorker")]
+    public string? InChargeWorker { get; set; } = "";
+
+    [JsonPropertyName("workers")]
+    public string? Workers { get; set; } = "";
 }
