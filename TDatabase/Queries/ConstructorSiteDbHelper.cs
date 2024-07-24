@@ -8,21 +8,21 @@ using DB = TDatabase.Database.DbCsclDamicoV2Context;
 
 public class ConstructorSiteDbHelper
 {
-    public static List<ConstructorSiteModel> Select(DB db, int idConstructorSite = 0)
+    public static List<ConstructorSiteModel> Select(DB db, int organizationId, int idConstructorSite = 0)
     {
         var constructorSites = db.ConstructorSites.AsQueryable();
 
         if (idConstructorSite > 0)
         {
-            constructorSites = constructorSites.Where(x => x.Id == idConstructorSite);
+            constructorSites = constructorSites.Where(x =>x.IdOrganization == organizationId && x.Id == idConstructorSite);
         }
 
-        return constructorSites.Select(x => new ConstructorSiteModel()
+        return constructorSites.Where(x => x.IdOrganization == organizationId).Select(x => new ConstructorSiteModel()
         {
             Id = x.Id,
             Name = x.Name,
-            JobDescription = x.JobDescription,
-            Address = x.Address,
+            JobDescription = x.JobDescription ?? "",
+            Address = x.Address ?? "",
             StartDate = x.StartDate ?? DateTime.Now,
             EndDate = x.EndDate,
             Client = db.Clients.Where(c => c.Id == x.IdClient).Select(nc => new ClientModel()
@@ -33,7 +33,7 @@ public class ConstructorSiteDbHelper
         }).ToList();
     }
 
-    public static async Task<int> Insert(DB db, ConstructorSiteModel constructorSite)
+    public static async Task<int> Insert(DB db, ConstructorSiteModel constructorSite, int organizationId)
     {
         var siteId = 0;
         try
@@ -48,6 +48,7 @@ public class ConstructorSiteDbHelper
                 StartDate = constructorSite.StartDate,
                 EndDate = constructorSite.EndDate,
                 IdClient = constructorSite.Client.Id > 0 ? constructorSite.Client.Id : null,
+                IdOrganization = organizationId
             };
             db.ConstructorSites.Add(newConstructorSite);
             await db.SaveChangesAsync();

@@ -8,7 +8,7 @@ namespace TDatabase.Queries;
 
 public class DocumentDbHelper
 {
-    public static List<DocumentModel> Select(DB db, int idDocument = 0)
+    public static List<DocumentModel> Select(DB db, int organizationId, int idDocument = 0)
     {
         var documents = db.Documents.AsQueryable();
 

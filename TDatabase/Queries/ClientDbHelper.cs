@@ -6,16 +6,16 @@ namespace TDatabase.Queries;
 
 public class ClientDbHelper
 {
-    public static List<ClientModel> Select(DB db)
+    public static List<ClientModel> Select(DB db, int organizationId)
     {
-        return db.Clients.Where(x => x.Active == true).Select(c => new ClientModel()
+        return db.Clients.Where(x => x.IdOrganization == organizationId &&  x.Active == true).Select(c => new ClientModel()
         {
             Id = c.Id,
             Name = c.Name,
         }).ToList();
     }
 
-    public static async Task<int> Insert(DB db, ClientModel client)
+    public static async Task<int> Insert(DB db, ClientModel client, int organizationId)
     {
         var clientId = 0;
         try
@@ -26,6 +26,7 @@ public class ClientDbHelper
                 Id = nextId,
                 Name = client.Name,
                 Active = true,
+                IdOrganization = organizationId,
             };
             db.Clients.Add(newClient);
             await db.SaveChangesAsync();

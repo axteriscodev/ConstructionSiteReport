@@ -25,7 +25,8 @@ public class CategoryController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var list = CategoryDbHelper.Select(db);
+            var idOrganizzation = GetUserOrganization();
+            var list = CategoryDbHelper.Select(db, idOrganizzation);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
         }
@@ -49,7 +50,8 @@ public class CategoryController : DefaultController
         try
         {
             var db = GetDbConnection();
-            var list = await CategoryDbHelper.Insert(db, newCategory);
+            var idOrganizzation = GetUserOrganization();
+            var list = await CategoryDbHelper.Insert(db, newCategory, idOrganizzation);
             response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
 
         }

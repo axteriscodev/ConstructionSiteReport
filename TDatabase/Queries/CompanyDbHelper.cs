@@ -6,16 +6,16 @@ namespace TDatabase.Queries;
 
 public class CompanyDbHelper
 {
-    public static List<CompanyModel> Select(DB db, int companyId = 0)
+    public static List<CompanyModel> Select(DB db,int organizationId, int companyId = 0)
     {
         var companySelect = db.Companies.AsQueryable();
 
         if(companyId > 0)
         {
-            companySelect = companySelect.Where(x => x.Id == companyId);
+            companySelect = companySelect.Where(x => x.IdOrganization == organizationId && x.Id == companyId && x.Active == true);
         }
 
-        return companySelect.Where(x => x.Active == true).Select(c => new CompanyModel()
+        return companySelect.Where(x => x.IdOrganization == organizationId && x.Active == true).Select(c => new CompanyModel()
         {
             Id = c.Id,
             CompanyName = c.CompanyName ?? "",
@@ -36,7 +36,7 @@ public class CompanyDbHelper
         }).ToList();
     }
 
-    public static async Task<int> Insert(DB db, CompanyModel company)
+    public static async Task<int> Insert(DB db, CompanyModel company, int organizationId)
     {
         var companyId = 0;
         try
@@ -61,6 +61,7 @@ public class CompanyDbHelper
                 InailPat = company.InailPat ?? "",
                 JobsDescriptions = company.JobsDescriptions ?? "",
                 Active = true,
+                IdOrganization = organizationId
             };
             db.Companies.Add(newCompany);
             await db.SaveChangesAsync();

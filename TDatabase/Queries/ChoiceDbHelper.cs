@@ -8,9 +8,9 @@ namespace TDatabase.Queries
     public class ChoiceDbHelper
     {
 
-        public static List<TemplateChoiceModel> Select(DB db)
+        public static List<TemplateChoiceModel> Select(DB db, int organizationId)
         {
-            return [.. db.Choices.Where(x=>x.Active == true).Select(c => new TemplateChoiceModel
+            return [.. db.Choices.Where(x=>x.IdOrganization == organizationId && x.Active == true).Select(c => new TemplateChoiceModel
             {
                 Id = c.Id,
                 Value = c.Value,
@@ -20,7 +20,7 @@ namespace TDatabase.Queries
             })];
         }
 
-        public static async Task<int> Insert(DB db, TemplateChoiceModel choice)
+        public static async Task<int> Insert(DB db, TemplateChoiceModel choice, int organizationId)
         {
             var choiceId = 0;
             try
@@ -33,7 +33,8 @@ namespace TDatabase.Queries
                     Tag = choice.Tag, //Max 10 char
                     Reportable = choice.Reportable,
                     Color = "black", //TODO impostare colore quando verrà usato, max 10 char
-                    Active = true
+                    Active = true,
+                    IdOrganization = organizationId
                 };
                 db.Choices.Add(newChoice);
                 await db.SaveChangesAsync();

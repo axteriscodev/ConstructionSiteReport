@@ -7,9 +7,9 @@ namespace TDatabase.Queries
 {
     public class CategoryDbHelper
     {
-        public static List<TemplateCategoryModel> Select(DB db)
+        public static List<TemplateCategoryModel> Select(DB db, int organizationId)
         {
-            return db.Categories.Where(x => x.Active == true).Select(x => new TemplateCategoryModel()
+            return db.Categories.Where(x =>x.IdOrganization == organizationId && x.Active == true).Select(x => new TemplateCategoryModel()
             {
                 Id = x.Id,
                 Text = x.Text,
@@ -21,12 +21,12 @@ namespace TDatabase.Queries
                              {
                                  Id = q.Id,
                                  IdCategory = q.IdCategory,
-                                 Text = q.Text,                                  
+                                 Text = q.Text,
                              }).ToList()
             }).OrderBy(x => x.Order).ToList();
         }
 
-        public static async Task<int> Insert(DB db, CategoryModel category)
+        public static async Task<int> Insert(DB db, CategoryModel category, int organizationId)
         {
             var id = 0;
             try
@@ -38,6 +38,7 @@ namespace TDatabase.Queries
                     Id = nextId,
                     Text = category.Text,
                     Order = nextOrder,
+                    IdOrganization = organizationId,
                     Active = true
                 };
                 db.Categories.Add(newCat);
