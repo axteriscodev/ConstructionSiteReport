@@ -95,5 +95,17 @@ namespace Shared.ApiRouting
 
         public const string Organization = "Organization";
         public const string UpdateOrganization = "UpdateOrganization";
+
+        #endregion
+
+        #region Role routing
+
+        public const string RolesList = "RoleList";
+        public const string SaveRole = "SaveRole";
+        public const string UpdateRoles = "UpdateRoles";
+        public const string HideRoles = "HideRoles";
+
+        #endregion
+    
     }
 }

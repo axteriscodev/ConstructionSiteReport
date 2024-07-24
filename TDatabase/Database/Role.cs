@@ -15,6 +15,10 @@ public partial class Role
 
     public bool UsersManagement { get; set; }
 
+    public bool Active { get; set; }
+
+    public bool Hidden { get; set; }
+
     public virtual Organization IdOrganizationNavigation { get; set; } = null!;
 
     public virtual ICollection<User> Users { get; set; } = new List<User>();
