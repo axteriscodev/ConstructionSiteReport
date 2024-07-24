@@ -19,9 +19,13 @@ public partial class Template
 
     public bool Active { get; set; }
 
+    public int? IdOrganization { get; set; }
+
     public virtual ICollection<Document> Documents { get; set; } = new List<Document>();
 
     public virtual TemplateDescription? IdDescriptionNavigation { get; set; }
+
+    public virtual Organization? IdOrganizationNavigation { get; set; }
 
     public virtual ICollection<QuestionChosen> QuestionChosens { get; set; } = new List<QuestionChosen>();
 }

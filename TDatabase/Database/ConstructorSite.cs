@@ -7,6 +7,8 @@ public partial class ConstructorSite
 {
     public int Id { get; set; }
 
+    public int? IdOrganization { get; set; }
+
     public int? IdClient { get; set; }
 
     public string Name { get; set; } = null!;
@@ -42,4 +44,6 @@ public partial class ConstructorSite
     public virtual ICollection<Document> Documents { get; set; } = new List<Document>();
 
     public virtual Client? IdClientNavigation { get; set; }
+
+    public virtual Organization? IdOrganizationNavigation { get; set; }
 }

@@ -13,5 +13,9 @@ public partial class TemplateDescription
 
     public bool Active { get; set; }
 
+    public int? IdOrganization { get; set; }
+
+    public virtual Organization? IdOrganizationNavigation { get; set; }
+
     public virtual ICollection<Template> Templates { get; set; } = new List<Template>();
 }

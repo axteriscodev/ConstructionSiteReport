@@ -45,6 +45,8 @@ public partial class DbCsclDamicoV2Context : DbContext
 
     public virtual DbSet<Note> Notes { get; set; }
 
+    public virtual DbSet<Organization> Organizations { get; set; }
+
     public virtual DbSet<Question> Questions { get; set; }
 
     public virtual DbSet<QuestionAnswered> QuestionAnswereds { get; set; }
@@ -55,9 +57,13 @@ public partial class DbCsclDamicoV2Context : DbContext
 
     public virtual DbSet<ReportedCompany> ReportedCompanies { get; set; }
 
+    public virtual DbSet<Role> Roles { get; set; }
+
     public virtual DbSet<Template> Templates { get; set; }
 
     public virtual DbSet<TemplateDescription> TemplateDescriptions { get; set; }
+
+    public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -84,6 +90,7 @@ public partial class DbCsclDamicoV2Context : DbContext
                 .IsUnicode(false)
                 .HasColumnName("FILE_PATH");
             entity.Property(e => e.IdDocument).HasColumnName("ID_DOCUMENT");
+            entity.Property(e => e.IdOrganization).HasColumnName("ID_ORGANIZATION");
             entity.Property(e => e.IdType).HasColumnName("ID_TYPE");
             entity.Property(e => e.Image)
                 .IsUnicode(false)
@@ -96,6 +103,10 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.HasOne(d => d.IdDocumentNavigation).WithMany(p => p.Attachments)
                 .HasForeignKey(d => d.IdDocument)
                 .HasConstraintName("FK__ATTACHMEN__ID_DO__671F4F74");
+
+            entity.HasOne(d => d.IdOrganizationNavigation).WithMany(p => p.Attachments)
+                .HasForeignKey(d => d.IdOrganization)
+                .HasConstraintName("FK_ATTACHMENT_ORGANIZATION");
 
             entity.HasOne(d => d.IdTypeNavigation).WithMany(p => p.Attachments)
                 .HasForeignKey(d => d.IdType)
@@ -182,10 +193,15 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.Property(e => e.Active)
                 .HasDefaultValue(true)
                 .HasColumnName("ACTIVE");
+            entity.Property(e => e.IdOrganization).HasColumnName("ID_ORGANIZATION");
             entity.Property(e => e.Order).HasColumnName("ORDER");
             entity.Property(e => e.Text)
                 .IsUnicode(false)
                 .HasColumnName("TEXT");
+
+            entity.HasOne(d => d.IdOrganizationNavigation).WithMany(p => p.Categories)
+                .HasForeignKey(d => d.IdOrganization)
+                .HasConstraintName("FK_CATEGORY_ORGANIZATION");
         });
 
         modelBuilder.Entity<Choice>(entity =>
@@ -208,6 +224,7 @@ public partial class DbCsclDamicoV2Context : DbContext
                 .HasMaxLength(10)
                 .IsUnicode(false)
                 .HasColumnName("COLOR");
+            entity.Property(e => e.IdOrganization).HasColumnName("ID_ORGANIZATION");
             entity.Property(e => e.Reportable).HasColumnName("REPORTABLE");
             entity.Property(e => e.Tag)
                 .HasMaxLength(10)
@@ -217,6 +234,10 @@ public partial class DbCsclDamicoV2Context : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("VALUE");
+
+            entity.HasOne(d => d.IdOrganizationNavigation).WithMany(p => p.Choices)
+                .HasForeignKey(d => d.IdOrganization)
+                .HasConstraintName("FK_CHOICE_ORGANIZATION");
         });
 
         modelBuilder.Entity<Client>(entity =>
@@ -233,15 +254,20 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.Property(e => e.Active)
                 .HasDefaultValue(true)
                 .HasColumnName("ACTIVE");
+            entity.Property(e => e.IdOrganization).HasColumnName("ID_ORGANIZATION");
             entity.Property(e => e.Name)
                 .HasMaxLength(200)
                 .IsUnicode(false)
                 .HasColumnName("NAME");
+
+            entity.HasOne(d => d.IdOrganizationNavigation).WithMany(p => p.Clients)
+                .HasForeignKey(d => d.IdOrganization)
+                .HasConstraintName("FK_CLIENT_ORGANIZATION");
         });
 
         modelBuilder.Entity<Company>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3214EC27A3DF9A04");
+            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3214EC27F2F32220");
 
             entity.ToTable("COMPANY");
 
@@ -267,6 +293,7 @@ public partial class DbCsclDamicoV2Context : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("EMAIL");
+            entity.Property(e => e.IdOrganization).HasColumnName("ID_ORGANIZATION");
             entity.Property(e => e.InailId)
                 .HasMaxLength(50)
                 .IsUnicode(false)
@@ -310,6 +337,10 @@ public partial class DbCsclDamicoV2Context : DbContext
                 .HasMaxLength(200)
                 .IsUnicode(false)
                 .HasColumnName("WORKER_WELFARE_FUNDS");
+
+            entity.HasOne(d => d.IdOrganizationNavigation).WithMany(p => p.Companies)
+                .HasForeignKey(d => d.IdOrganization)
+                .HasConstraintName("FK_COMPANY_ORGANIZATION");
         });
 
         modelBuilder.Entity<CompanyConstructorSite>(entity =>
@@ -330,12 +361,12 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.CompanyConstructorSites)
                 .HasForeignKey(d => d.IdCompany)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__COMPANY_C__ID_CO__31B762FC");
+                .HasConstraintName("FK__COMPANY_C__ID_CO__0697FACD");
 
             entity.HasOne(d => d.IdConstructorSiteNavigation).WithMany(p => p.CompanyConstructorSites)
                 .HasForeignKey(d => d.IdConstructorSite)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__COMPANY_C__ID_CO__395884C4");
+                .HasConstraintName("FK__COMPANY_C__ID_CO__19AACF41");
         });
 
         modelBuilder.Entity<CompanyDocument>(entity =>
@@ -351,7 +382,7 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.CompanyDocuments)
                 .HasForeignKey(d => d.IdCompany)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__COMPANY_D__ID_CO__08B54D69");
+                .HasConstraintName("FK__COMPANY_D__ID_CO__078C1F06");
 
             entity.HasOne(d => d.IdDocumentNavigation).WithMany(p => p.CompanyDocuments)
                 .HasForeignKey(d => d.IdDocument)
@@ -376,7 +407,7 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.CompanyNotes)
                 .HasForeignKey(d => d.IdCompany)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__COMPANY_N__ID_CO__3F115E1A");
+                .HasConstraintName("FK__COMPANY_N__ID_CO__04AFB25B");
 
             entity.HasOne(d => d.IdNoteNavigation).WithMany(p => p.CompanyNotes)
                 .HasForeignKey(d => d.IdNote)
@@ -385,11 +416,11 @@ public partial class DbCsclDamicoV2Context : DbContext
 
         modelBuilder.Entity<ConstructorSite>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3214EC271C384673");
+            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3214EC2748314723");
 
             entity.ToTable("CONSTRUCTOR_SITE");
 
-            entity.HasIndex(e => e.Name, "UQ__tmp_ms_x__D9C1FA0006672FF6").IsUnique();
+            entity.HasIndex(e => e.Name, "UQ__tmp_ms_x__D9C1FA00BD4550CD").IsUnique();
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
@@ -411,6 +442,7 @@ public partial class DbCsclDamicoV2Context : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("END_DATE");
             entity.Property(e => e.IdClient).HasColumnName("ID_CLIENT");
+            entity.Property(e => e.IdOrganization).HasColumnName("ID_ORGANIZATION");
             entity.Property(e => e.IdSico)
                 .HasMaxLength(30)
                 .IsUnicode(false)
@@ -444,7 +476,11 @@ public partial class DbCsclDamicoV2Context : DbContext
 
             entity.HasOne(d => d.IdClientNavigation).WithMany(p => p.ConstructorSites)
                 .HasForeignKey(d => d.IdClient)
-                .HasConstraintName("FK__CONSTRUCT__ID_CL__3864608B");
+                .HasConstraintName("FK__CONSTRUCT__ID_CL__18B6AB08");
+
+            entity.HasOne(d => d.IdOrganizationNavigation).WithMany(p => p.ConstructorSites)
+                .HasForeignKey(d => d.IdOrganization)
+                .HasConstraintName("FK_CONSTRUCTOR_SITE_ORGANIZATION");
         });
 
         modelBuilder.Entity<Document>(entity =>
@@ -477,6 +513,7 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.Property(e => e.IdClient).HasColumnName("ID_CLIENT");
             entity.Property(e => e.IdConstructorSite).HasColumnName("ID_CONSTRUCTOR_SITE");
             entity.Property(e => e.IdMeteo).HasColumnName("ID_METEO");
+            entity.Property(e => e.IdOrganization).HasColumnName("ID_ORGANIZATION");
             entity.Property(e => e.IdTemplate).HasColumnName("ID_TEMPLATE");
             entity.Property(e => e.LastEditDate)
                 .HasColumnType("datetime")
@@ -493,11 +530,15 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.HasOne(d => d.IdConstructorSiteNavigation).WithMany(p => p.Documents)
                 .HasForeignKey(d => d.IdConstructorSite)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__DOCUMENT__ID_CON__37703C52");
+                .HasConstraintName("FK__DOCUMENT__ID_CON__1A9EF37A");
 
             entity.HasOne(d => d.IdMeteoNavigation).WithMany(p => p.Documents)
                 .HasForeignKey(d => d.IdMeteo)
                 .HasConstraintName("FK__DOCUMENT__ID_MET__2739D489");
+
+            entity.HasOne(d => d.IdOrganizationNavigation).WithMany(p => p.Documents)
+                .HasForeignKey(d => d.IdOrganization)
+                .HasConstraintName("FK_DOCUMENT_ORGANIZATION");
 
             entity.HasOne(d => d.IdTemplateNavigation).WithMany(p => p.Documents)
                 .HasForeignKey(d => d.IdTemplate)
@@ -547,6 +588,25 @@ public partial class DbCsclDamicoV2Context : DbContext
                 .HasConstraintName("FK__NOTE__ID_DOCUMEN__3D2915A8");
         });
 
+        modelBuilder.Entity<Organization>(entity =>
+        {
+            entity.ToTable("ORGANIZATION");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("ID");
+            entity.Property(e => e.Active).HasColumnName("ACTIVE");
+            entity.Property(e => e.Address)
+                .IsUnicode(false)
+                .HasColumnName("ADDRESS");
+            entity.Property(e => e.Hidden)
+                .HasDefaultValue(true)
+                .HasColumnName("HIDDEN");
+            entity.Property(e => e.Name)
+                .IsUnicode(false)
+                .HasColumnName("NAME");
+        });
+
         modelBuilder.Entity<Question>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__QUESTION__3214EC279BB738DF");
@@ -560,6 +620,7 @@ public partial class DbCsclDamicoV2Context : DbContext
                 .HasDefaultValue(true)
                 .HasColumnName("ACTIVE");
             entity.Property(e => e.IdCategory).HasColumnName("ID_CATEGORY");
+            entity.Property(e => e.IdOrganization).HasColumnName("ID_ORGANIZATION");
             entity.Property(e => e.Text)
                 .IsUnicode(false)
                 .HasColumnName("TEXT");
@@ -568,6 +629,10 @@ public partial class DbCsclDamicoV2Context : DbContext
                 .HasForeignKey(d => d.IdCategory)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__QUESTION__ID_CAT__29572725");
+
+            entity.HasOne(d => d.IdOrganizationNavigation).WithMany(p => p.Questions)
+                .HasForeignKey(d => d.IdOrganization)
+                .HasConstraintName("FK_QUESTION_ORGANIZATION");
         });
 
         modelBuilder.Entity<QuestionAnswered>(entity =>
@@ -664,11 +729,35 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.ReportedCompanies)
                 .HasForeignKey(d => d.IdCompany)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__REPORTED___ID_CO__09A971A2");
+                .HasConstraintName("FK__REPORTED___ID_CO__05A3D694");
 
             entity.HasOne(d => d.QuestionAnswered).WithMany(p => p.ReportedCompanies)
                 .HasForeignKey(d => new { d.IdCurrentChoice, d.IdQuestionChosen, d.IdDocument })
                 .HasConstraintName("FK__REPORTED_COMPANY__3C34F16F");
+        });
+
+        modelBuilder.Entity<Role>(entity =>
+        {
+            entity.ToTable("ROLE");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("ID");
+            entity.Property(e => e.DocumentsManagement)
+                .HasDefaultValue(true)
+                .HasColumnName("DOCUMENTS_MANAGEMENT");
+            entity.Property(e => e.IdOrganization).HasColumnName("ID_ORGANIZATION");
+            entity.Property(e => e.Name)
+                .IsUnicode(false)
+                .HasColumnName("NAME");
+            entity.Property(e => e.UsersManagement)
+                .HasDefaultValue(true)
+                .HasColumnName("USERS_MANAGEMENT");
+
+            entity.HasOne(d => d.IdOrganizationNavigation).WithMany(p => p.Roles)
+                .HasForeignKey(d => d.IdOrganization)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ID_ORGANIZATION");
         });
 
         modelBuilder.Entity<Template>(entity =>
@@ -687,6 +776,7 @@ public partial class DbCsclDamicoV2Context : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("DATE");
             entity.Property(e => e.IdDescription).HasColumnName("ID_DESCRIPTION");
+            entity.Property(e => e.IdOrganization).HasColumnName("ID_ORGANIZATION");
             entity.Property(e => e.Name)
                 .IsUnicode(false)
                 .HasDefaultValue("")
@@ -701,6 +791,10 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.HasOne(d => d.IdDescriptionNavigation).WithMany(p => p.Templates)
                 .HasForeignKey(d => d.IdDescription)
                 .HasConstraintName("FK__TEMPLATE__ID_DES__4D5F7D71");
+
+            entity.HasOne(d => d.IdOrganizationNavigation).WithMany(p => p.Templates)
+                .HasForeignKey(d => d.IdOrganization)
+                .HasConstraintName("FK_TEMPLATE_ORGANIZATION");
         });
 
         modelBuilder.Entity<TemplateDescription>(entity =>
@@ -716,9 +810,58 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.Property(e => e.Description)
                 .IsUnicode(false)
                 .HasColumnName("DESCRIPTION");
+            entity.Property(e => e.IdOrganization).HasColumnName("ID_ORGANIZATION");
             entity.Property(e => e.Title)
                 .IsUnicode(false)
                 .HasColumnName("TITLE");
+
+            entity.HasOne(d => d.IdOrganizationNavigation).WithMany(p => p.TemplateDescriptions)
+                .HasForeignKey(d => d.IdOrganization)
+                .HasConstraintName("FK_TEMPLATE_DESCRIPTION_ORGANIZATION");
+        });
+
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.ToTable("USER");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("ID");
+            entity.Property(e => e.Active)
+                .HasDefaultValue(true)
+                .HasColumnName("ACTIVE");
+            entity.Property(e => e.Email)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .HasColumnName("EMAIL");
+            entity.Property(e => e.Hidden).HasColumnName("HIDDEN");
+            entity.Property(e => e.IdOrganization).HasColumnName("ID_ORGANIZATION");
+            entity.Property(e => e.IdRole).HasColumnName("ID_ROLE");
+            entity.Property(e => e.Name)
+                .IsUnicode(false)
+                .HasColumnName("NAME");
+            entity.Property(e => e.Password)
+                .IsUnicode(false)
+                .HasColumnName("PASSWORD");
+            entity.Property(e => e.Phone)
+                .IsUnicode(false)
+                .HasColumnName("PHONE");
+            entity.Property(e => e.Salt)
+                .IsUnicode(false)
+                .HasColumnName("SALT");
+            entity.Property(e => e.Surname)
+                .IsUnicode(false)
+                .HasColumnName("SURNAME");
+
+            entity.HasOne(d => d.IdOrganizationNavigation).WithMany(p => p.Users)
+                .HasForeignKey(d => d.IdOrganization)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_USER_ORGANIZATION");
+
+            entity.HasOne(d => d.IdRoleNavigation).WithMany(p => p.Users)
+                .HasForeignKey(d => d.IdRole)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_USER_ROLE");
         });
 
         OnModelCreatingPartial(modelBuilder);

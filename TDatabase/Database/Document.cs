@@ -33,6 +33,8 @@ public partial class Document
 
     public bool ReadOnly { get; set; }
 
+    public int? IdOrganization { get; set; }
+
     public virtual ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
 
     public virtual ICollection<CompanyDocument> CompanyDocuments { get; set; } = new List<CompanyDocument>();
@@ -42,6 +44,8 @@ public partial class Document
     public virtual ConstructorSite IdConstructorSiteNavigation { get; set; } = null!;
 
     public virtual MeteoCondition? IdMeteoNavigation { get; set; }
+
+    public virtual Organization? IdOrganizationNavigation { get; set; }
 
     public virtual Template IdTemplateNavigation { get; set; } = null!;
 

@@ -7,6 +7,8 @@ public partial class Company
 {
     public int Id { get; set; }
 
+    public int? IdOrganization { get; set; }
+
     public string? CompanyName { get; set; }
 
     public string? SelfEmployedName { get; set; }
@@ -44,6 +46,8 @@ public partial class Company
     public virtual ICollection<CompanyDocument> CompanyDocuments { get; set; } = new List<CompanyDocument>();
 
     public virtual ICollection<CompanyNote> CompanyNotes { get; set; } = new List<CompanyNote>();
+
+    public virtual Organization? IdOrganizationNavigation { get; set; }
 
     public virtual ICollection<ReportedCompany> ReportedCompanies { get; set; } = new List<ReportedCompany>();
 }

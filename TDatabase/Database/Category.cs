@@ -13,5 +13,9 @@ public partial class Category
 
     public bool Active { get; set; }
 
+    public int? IdOrganization { get; set; }
+
+    public virtual Organization? IdOrganizationNavigation { get; set; }
+
     public virtual ICollection<Question> Questions { get; set; } = new List<Question>();
 }

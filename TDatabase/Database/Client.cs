@@ -11,7 +11,11 @@ public partial class Client
 
     public bool Active { get; set; }
 
+    public int? IdOrganization { get; set; }
+
     public virtual ICollection<ConstructorSite> ConstructorSites { get; set; } = new List<ConstructorSite>();
 
     public virtual ICollection<Document> Documents { get; set; } = new List<Document>();
+
+    public virtual Organization? IdOrganizationNavigation { get; set; }
 }

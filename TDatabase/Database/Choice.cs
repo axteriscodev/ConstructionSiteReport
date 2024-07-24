@@ -17,6 +17,10 @@ public partial class Choice
 
     public bool Active { get; set; }
 
+    public int? IdOrganization { get; set; }
+
+    public virtual Organization? IdOrganizationNavigation { get; set; }
+
     public virtual ICollection<QuestionAnswered> QuestionAnswereds { get; set; } = new List<QuestionAnswered>();
 
     public virtual ICollection<QuestionChoice> QuestionChoices { get; set; } = new List<QuestionChoice>();

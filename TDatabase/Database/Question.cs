@@ -13,7 +13,11 @@ public partial class Question
 
     public bool Active { get; set; }
 
+    public int? IdOrganization { get; set; }
+
     public virtual Category IdCategoryNavigation { get; set; } = null!;
+
+    public virtual Organization? IdOrganizationNavigation { get; set; }
 
     public virtual ICollection<QuestionChoice> QuestionChoices { get; set; } = new List<QuestionChoice>();
 

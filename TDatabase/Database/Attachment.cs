@@ -21,11 +21,15 @@ public partial class Attachment
 
     public bool Active { get; set; }
 
+    public int? IdOrganization { get; set; }
+
     public virtual ICollection<AttachmentNote> AttachmentNotes { get; set; } = new List<AttachmentNote>();
 
     public virtual ICollection<AttachmentQuestion> AttachmentQuestions { get; set; } = new List<AttachmentQuestion>();
 
     public virtual Document IdDocumentNavigation { get; set; } = null!;
+
+    public virtual Organization? IdOrganizationNavigation { get; set; }
 
     public virtual AttachmentType IdTypeNavigation { get; set; } = null!;
 }
