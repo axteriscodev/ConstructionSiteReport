@@ -253,6 +253,12 @@ public class DocumentDbHelper
             //aggiungo le compagnia associate al documento
             foreach (var companyDoc in document.Companies)
             {
+                //se la company è nuova riutilizziamo l'insert della company per aggiungerla
+                if (companyDoc.Id == 0)
+                {
+                    companyDoc.Id = await CompanyDbHelper.Insert(db, companyDoc, organizationId, false);
+                }
+
                 CompanyDocument cd = new()
                 {
                     IdCompany = companyDoc.Id,

@@ -36,7 +36,7 @@ public class CompanyDbHelper
         }).ToList();
     }
 
-    public static async Task<int> Insert(DB db, CompanyModel company, int organizationId)
+    public static async Task<int> Insert(DB db, CompanyModel company, int organizationId, bool save = true)
     {
         var companyId = 0;
         try
@@ -64,7 +64,10 @@ public class CompanyDbHelper
                 IdOrganization = organizationId
             };
             db.Companies.Add(newCompany);
-            await db.SaveChangesAsync();
+            if (save)
+            {
+                await db.SaveChangesAsync();
+            }
             companyId = nextId;
         }
         catch (Exception) { }
