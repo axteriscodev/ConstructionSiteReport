@@ -142,6 +142,16 @@ else
                                 <RadzenText>P. Iva: <strong>@DocumentCompilationUtils.PrintDocumentField(company.VatCode)</strong></RadzenText>
                             </div>
                         </div>
+                        <div class="row my-2">
+                            <div class="col-12">
+                                <RadzenText>Responsabile: <strong>@DocumentCompilationUtils.PrintDocumentField(company.InChargeWorker)</strong</RadzenText>
+                            </div>
+                        </div>
+                        <div class="row my-2">
+                            <div class="col-12">
+                                <RadzenText>Lavoratori: <strong>@DocumentCompilationUtils.PrintDocumentField(company.Workers)</strong></RadzenText>
+                            </div>
+                        </div>
                     </div>
                 </div>
             }
@@ -325,6 +335,9 @@ else
                                 <RadzenText>Per: <strong>@DocumentCompilationUtils.PrintCompanyFromSignature(Document.Signatures[0], Document)</strong></RadzenText>
                                 @if (!string.IsNullOrEmpty(firstCompanySignature.Sign))
                                 {
+                                <div class=" col-12 mb-2">
+                                    <RadzenText> Nome: <strong>@firstCompanySignature.Name</strong></RadzenText>
+                                </div>
                                     <div class="col-12 p-2">
                                         <img src="@Document.Signatures[0].Sign" width="@Document.Signatures[0].Width" height="@Document.Signatures[0].Height" style="max-width:100%; height:100%" />
                                     </div>
@@ -358,6 +371,9 @@ else
                                 <RadzenText>Per: <strong>@DocumentCompilationUtils.PrintCompanyFromSignature(sign, Document)</strong></RadzenText>
                                 @if (!string.IsNullOrEmpty(sign.Sign))
                                 {
+                                    <div class=" col-12 mb-2">
+                                        <RadzenText> Nome: <strong>@sign.Name</strong></RadzenText>
+                                    </div>
                                     <div class="col-12 p-2 ">
                                         <img src="@sign.Sign" width="@sign.Width" height="@sign.Height" style="max-width:100%; height:100%" />
                                     </div>

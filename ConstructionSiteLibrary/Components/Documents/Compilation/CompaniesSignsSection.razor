@@ -61,9 +61,11 @@ else
                         {
                             <div class="paddingDescrizione border my-2">
                                 <RadzenText>Per: <strong>@reportedCompany.Company.CompanyName</strong></RadzenText>
-                                <RadzenText>Nome:</RadzenText>
-                                <RadzenTextBox @bind-Value=@reportedCompany.Name />
-                                @if (reportedCompany.Sign is not null && string.IsNullOrEmpty(reportedCompany.Sign.Image))
+                                <RadzenRow>
+                                    <RadzenText Style="margin-top: 0.5rem;">Nome:</RadzenText>
+                                    <RadzenTextBox @bind-Value=@reportedCompany.Name />
+                                </RadzenRow>
+                                @if (reportedCompany.Sign is not null)
                                 {
                                     <div class="col-12 p-2 ">
                                         <img src="@reportedCompany.Sign.Image" width="@reportedCompany.Sign.Width"
