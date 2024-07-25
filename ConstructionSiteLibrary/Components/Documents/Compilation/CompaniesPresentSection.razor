@@ -1,6 +1,8 @@
 ﻿@using Shared.Documents;
 @using ConstructionSiteLibrary.Model.DocumentCompilation
 
+@inject DialogService DialogService
+
 
 @if (onLoading)
 {
@@ -117,11 +119,30 @@ else
         company.Present = isPresent.HasValue ? isPresent.Value : false;
     }
 
-    private void AddCompany(RadzenSplitButtonItem item)
+    private async Task AddCompany(RadzenSplitButtonItem item)
     {
         if(item.Value.Equals("Anagrafica"))
         {
             //popup
+            // creo uno style aggiuntivo da inviare al componente caricato con il popup come options
+            var additionalStyle = $"min-height:fit-content;height:fit-content;max-width:600px";
+            var newOptions = new DialogOptions
+                {
+                    Style = additionalStyle
+                };
+            //creo parametri da inviare al componente caricato con il popup
+            var param = new Dictionary<string, object>
+            {
+               
+                { "PresentCompanies", Companies },
+            }; 
+            CompanyModel? selectedCompany = await DialogService.OpenAsync<FormAddCompany>("Seleziona azienda", parameters: param,  options: newOptions);
+
+            if(selectedCompany is not null)
+            {
+                selectedCompany.Present = true;
+                Companies.Add(selectedCompany);
+            }
         }
         else
         {

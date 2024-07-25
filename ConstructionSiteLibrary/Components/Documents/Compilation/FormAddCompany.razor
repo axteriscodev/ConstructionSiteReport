@@ -1,0 +1,53 @@
+﻿@using Shared.Documents;
+
+@inject CompaniesRepository CompaniesRepository
+@inject DialogService DialogService
+
+@if (onLoading)
+{
+    <Loading />
+}
+else
+{
+    <div class="vstack mb-5">
+        <RadzenFormField Variant="@GlobalVariables.ComponentVariant" class="formField"> 
+            <ChildContent>
+                <RadzenDropDown TValue="CompanyModel" @bind-Value=@selectedCompany Data=@Companies Name="Companies"
+                    TextProperty="CompanyName" />
+            </ChildContent>
+        </RadzenFormField>
+    </div>
+    <RadzenButton Text="Conferma" ButtonStyle="ButtonStyle.Info" Click="@Confirm" />
+    
+}
+
+
+@code {
+
+    [Parameter]
+    public List<CompanyModel> PresentCompanies { get; set; }
+
+    private bool onLoading = false;
+
+    private List<CompanyModel> Companies = [];
+
+    private CompanyModel selectedCompany;
+    protected override async Task OnInitializedAsync()
+    {
+        onLoading = true;
+        await base.OnInitializedAsync();
+        await LoadData();
+        onLoading = false;
+    }
+
+    public async Task LoadData()
+    {
+        Companies = await CompaniesRepository.GetCompanies();
+        Companies = Companies.Where(x => !PresentCompanies.Select(y => y.Id).Contains(x.Id)).ToList();
+    }
+
+    public void Confirm()
+    {
+        DialogService.Close(selectedCompany);
+    }
+}
