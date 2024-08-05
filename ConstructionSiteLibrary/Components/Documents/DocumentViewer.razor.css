@@ -47,7 +47,12 @@
 
 
 /* */
-
+.attachmentImg, ::deep .attachmentImg {
+    object-fit: contain;
+    width: 40%;
+    max-width: fit-content;
+    margin: 0.5rem;
+}
 
 
 .SectionTitleDiv, ::deep .SectionTitleDiv {
