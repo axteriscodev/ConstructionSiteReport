@@ -1,6 +1,8 @@
 ﻿@using ConstructionSiteLibrary.Model
 @using Microsoft.AspNetCore.Components.Routing;
 @inject NavigationService Navigation
+@inject DialogService DialogService
+@inject AppAuthenticationStateProvider AuthProvider
 
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
@@ -80,6 +82,15 @@
                 }
             </NavLink>
         </div>
+         <div class="nav-item px-3">
+            <NavLink class="nav-link navItem-size" @onclick=@Logout >
+                <span class="bi bi-shop @biClassRules" aria-hidden="true"></span>
+                @if (!@IconMenuActive)
+                {
+                    <label>Logout</label>
+                }
+            </NavLink>
+        </div>
 
     </nav>
 </div>
@@ -141,5 +152,15 @@
     private void OnLinkClick(string url)
     {
         Navigation.ChangePage(url);
+    }
+
+    private async Task Logout()
+    {
+        var confirmClose = await DialogService.Confirm("Sei sicuro?", "Conferma", new ConfirmOptions() { OkButtonText = "Sì", CancelButtonText = "No", ShowClose = false });
+
+        if (confirmClose ?? false)
+        {
+            await AuthProvider.Logout();
+        }
     }
 }
