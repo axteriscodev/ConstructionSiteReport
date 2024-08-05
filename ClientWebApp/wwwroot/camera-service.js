@@ -53,26 +53,36 @@ export async function takePicture() {
 
 export function confirmPicture(dotnethelper)
 {
+    console.log("ciao");
     const context = canvas.getContext('2d');
 
     context.font = "30pt Arial";
     context.fillStyle = "white";
 
-    let dateString = new Date().toLocaleString();
 
+    console.log("prima di geolocalization");
     if ("geolocation" in navigator) {
+        console.log("geolocalization on");
         navigator.geolocation.getCurrentPosition((position) => {
-            context.fillText(`Posizione: ${position.coords.latitude} - ${position.coords.longitude}`, 20, 40 );  
-            context.fillText("Data: " + dateString, 20, 80);
-            const img = canvas.toDataURL();
-            savePhoto(img, dotnethelper);
+            let geotext = `Posizione: ${position.coords.latitude} - ${position.coords.longitude}`;
+            createGeolabel(context, geotext, dotnethelper);
+        },
+        (error) => {
+            let geotext = "Posizione: non disponibile";
+            createGeolabel(context, geotext, dotnethelper);
         });
     } else {
-        //context.fillText("Posizione: non disponibile", 20, 40);
-        context.fillText("Data: " + dateString, 20, 40);
-        const img = canvas.toDataURL();
-        savePhoto(img, dotnethelper);
+        let geotext = "Posizione: non disponibile";
+        createGeolabel(context, geotext, dotnethelper);
     }
+}
+
+export function createGeolabel(context, geotext, dotnethelper) {
+    let dateString = new Date().toLocaleString();
+    context.fillText(geotext, 20, 40);
+    context.fillText("Data: " + dateString, 20, 80);
+    const img = canvas.toDataURL();
+    savePhoto(img, dotnethelper);
 }
 
 export function savePhoto(img, dotnethelper) {
