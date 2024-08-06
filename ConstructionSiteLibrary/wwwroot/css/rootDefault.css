@@ -21,8 +21,12 @@
     --button-Info: #dbdbdb !important;*/
     /* Background elementi */
     --background-page-color: #FFFFFF !important;
-    --background-Card-color1: #f6fbff !important;
+    --background-Card-color1: #ffffff !important;
     --background-Card-color2: #f7f7f7 !important;
     --background-Card-color3: #f1f1f1 !important;
     --background-tabella-color1: #ffffff !important;
+    /*Bordi*/
+    --border-Card: #afcaf3 !important;
+    /*Font*/
+    --font-Card-color1: #0C336E;
 }

@@ -11,8 +11,22 @@
     font-size: 15px;
 }
 
+.text-color {
+    color: var(--font-Card-color1);
+}
+
+.title-weight {
+    font-weight: 900;
+}
+
+
 .cardClass {
-    max-width: 800px;
+    border-radius: 0.8rem !important;
+    background: #FFF;
+    border-color: var(--border-Card);
+    padding: 1rem 2.5rem !important;
+
+
 }
 
     .cardClass:hover {

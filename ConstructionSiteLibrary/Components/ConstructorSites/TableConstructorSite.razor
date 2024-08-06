@@ -14,42 +14,44 @@
 else
 {
     <div class="mx-2 my-5">
-        <div class="my-5">
-            <div class="row">
-                <div class="col-xl-4 EmptyColumn"></div>
-                <div class="divSearchBar">
-                    <RadzenFormField Text="Ricerca cantiere" Variant="@GlobalVariables.ComponentVariant" class="searchBar">
-                        <Start>
-                            <RadzenIcon Icon="search" />
-                        </Start>
-                        <ChildContent>
-                            <RadzenTextBox ValueChanged="@(args => SearchChanged(args))" />
-                        </ChildContent>
-                    </RadzenFormField>
-                </div>
-                <div class="col-4 buttonContainer">
-                    <RadzenButton class="buttonNewSite" ButtonStyle="ButtonStyle.Success" Icon="add" Text="Nuovo" Click="@OpenForm" />
-                </div>
+    <div class="my-5">
+        <div class="hstack justify-content-between">
+
+            <RadzenText TextStyle="TextStyle.H4" class="text-color">
+                <strong>I miei cantieri</strong>
+            </RadzenText>
+            <RadzenFormField AllowFloatingLabel="false" Variant="@GlobalVariables.ComponentVariant" class="searchBar">
+                <Start>
+                    <RadzenIcon Icon="search" />
+                </Start>
+                <ChildContent>
+                    <RadzenTextBox Placeholder="Ricerca cantieri" ValueChanged="@(args => SearchChanged(args))" />
+                </ChildContent>
+            </RadzenFormField>
+
+        </div>
+        <div class="row text-center mt-4">
+            <div class="col-12">
+                <RadzenButton Variant="Variant.Text" class="buttonNewSite" Click="@OpenForm">
+                    <i><u>+ Aggiungi Cantiere</u></i>
+                </RadzenButton>
             </div>
         </div>
-        <div>
-            @for (int i = 0; i < displayedSites.Count; i+=2)
+
+    </div>
+    <div>
+        @for (int i = 0; i < displayedSites.Count; i += 1)
             {
                 <div class="row mt-4">
                     <div class="col">
                         <CardConstructorSite Site="@displayedSites[i]" />
                     </div>
-                    <div class="col">
-                        @if((i+1) < displayedSites.Count)
-                        {
-                            <CardConstructorSite Site="@displayedSites[i+1]" />
-                        }
-                    </div>
-                </div> 
+                </div>
             }
         </div>
         <div class="mt-5">
-            <RadzenPager ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" HorizontalAlign="HorizontalAlign.Left" Count="count" PageSize="@pageSize" PageChanged="@PageChanged" />
+            <RadzenPager ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" Density="Density.Compact"
+                HorizontalAlign="HorizontalAlign.Right" Count="count" PageSize="@pageSize" PageChanged="@PageChanged" />
         </div>
     </div>
 }
