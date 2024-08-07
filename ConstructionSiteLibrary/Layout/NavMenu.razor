@@ -18,9 +18,9 @@
 </div>
 
 <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
+    <nav class="flex-column dropdownWrappers">
          <div class="nav-item px-3">
-            <NavLink class="nav-link navItem-size" style="padding: .5rem .9rem!important;" href="@PageRouting.HomePage" Match="NavLinkMatch.All">
+            <NavLink class="nav-link text-20 lh-07" href="@PageRouting.HomePage" Match="NavLinkMatch.All">
                 <span class="bi bi-house-door @biClassRules" aria-hidden="true"></span>
                 @if (!@IconMenuActive)
                 {
@@ -28,69 +28,83 @@
                 }
             </NavLink>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link navItem-size" href="@PageRouting.TemplatePage">
-                <span class="bi bi-plus-square @biClassRules" aria-hidden="true"></span>
-                @if (!@IconMenuActive)
-                {
-                    <label>Template</label>
-                }
-            </NavLink>
+        <div class="separator" @onclick="@ToggleAccordionElementi">
+            <p class ="text-16">ELEMENTI REPORT</p>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link navItem-size" href="@PageRouting.CategoriesPage">
-                <span class="bi bi-bookmarks @biClassRules" aria-hidden="true"></span>
-                @if (!@IconMenuActive)
-                {
-                    <label>Categorie</label>
-                }
-            </NavLink>
+        @if (elementiAccordion)
+        {
+            <div class="nav-item px-3">
+                <NavLink class="nav-link text-20 lh-07" href="@PageRouting.TemplatePage">
+                    <span class="bi bi-plus-square @biClassRules" aria-hidden="true"></span>
+                    @if (!@IconMenuActive)
+                    {
+                        <label>Template</label>
+                    }
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link text-20 lh-07" href="@PageRouting.CategoriesPage">
+                    <span class="bi bi-bookmarks @biClassRules" aria-hidden="true"></span>
+                    @if (!@IconMenuActive)
+                    {
+                        <label>Categorie</label>
+                    }
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link text-20 lh-07" href="@PageRouting.QuestionPage">
+                    <span class="bi bi-question-square @biClassRules" aria-hidden="true"></span>
+                    @if (!@IconMenuActive)
+                    {
+                        <label>Domande</label>
+                    }
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link text-20 lh-07" href="@PageRouting.ChoicesPage">
+                    <span class="bi bi-exclamation-square @biClassRules" aria-hidden="true"></span>
+                    @if (!@IconMenuActive)
+                    {
+                        <label>Scelte</label>
+                    }
+                </NavLink>
+            </div>
+        }
+
+        <div class="separator" @onclick="ToggleAccordionAnagrafiche">
+            <p class="text-16">ANAGRAFICHE</p>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link navItem-size" href="@PageRouting.QuestionPage">
-                <span class="bi bi-question-square @biClassRules" aria-hidden="true"></span>
-                @if (!@IconMenuActive)
-                {
-                    <label>Domande</label>
-                }
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link navItem-size" href="@PageRouting.ChoicesPage">
-                <span class="bi bi-exclamation-square @biClassRules" aria-hidden="true"></span>
-                @if (!@IconMenuActive)
-                {
-                    <label>Scelte</label>
-                }
-            </NavLink>
-        </div>
-         <div class="nav-item px-3">
-            <NavLink class="nav-link navItem-size" href="@PageRouting.ClientsPage">
-                <span class="bi bi-person-lines-fill @biClassRules" aria-hidden="true"></span>
-                @if (!@IconMenuActive)
-                {
-                    <label>Clienti</label>
-                }
-            </NavLink>
-        </div>
-         <div class="nav-item px-3">
-            <NavLink class="nav-link navItem-size" href="@PageRouting.CompaniesPage">
-                <span class="bi bi-shop @biClassRules" aria-hidden="true"></span>
-                @if (!@IconMenuActive)
-                {
-                    <label>Aziende</label>
-                }
-            </NavLink>
-        </div>
-         <div class="nav-item px-3">
-            <NavLink class="nav-link navItem-size" @onclick=@Logout >
+        @if (AnagraficheAccordion)
+        {
+            <div class="nav-item px-3">
+                <NavLink class="nav-link text-20 lh-07" href="@PageRouting.ClientsPage">
+                    <span class="bi bi-person-lines-fill @biClassRules" aria-hidden="true"></span>
+                    @if (!@IconMenuActive)
+                    {
+                        <label>Clienti</label>
+                    }
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link text-20 lh-07" href="@PageRouting.CompaniesPage">
+                    <span class="bi bi-shop @biClassRules" aria-hidden="true"></span>
+                    @if (!@IconMenuActive)
+                    {
+                        <label>Aziende</label>
+                    }
+                </NavLink>
+            </div>
+        }
+
+@*          <div class="nav-item px-3">
+            <NavLink class="nav-link text-20 lh-07" @onclick=@Logout>
                 <span class="bi bi-shop @biClassRules" aria-hidden="true"></span>
                 @if (!@IconMenuActive)
                 {
                     <label>Logout</label>
                 }
             </NavLink>
-        </div>
+        </div> *@
     </nav>
     <div class="bottom-row">
         <div class="icon-menu-arrow">
@@ -118,6 +132,9 @@
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
+    private bool elementiAccordion;
+    private bool AnagraficheAccordion;
+
     protected override async Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
@@ -130,6 +147,18 @@
         collapseNavMenu = !collapseNavMenu;
 
     }
+
+    private void ToggleAccordionElementi()
+    {
+        elementiAccordion = !elementiAccordion;
+    }
+
+    
+    private void ToggleAccordionAnagrafiche()
+    {
+        AnagraficheAccordion = !AnagraficheAccordion;
+    }
+
 
     private void UpdateToggleIconMenu()
     {
