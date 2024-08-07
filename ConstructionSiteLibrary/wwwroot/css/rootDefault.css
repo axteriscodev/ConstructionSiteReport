@@ -6,17 +6,20 @@
     --font: Inter;
     --font-Card-color1: #0C336E;
     /* Colori principali APP */
-    --rz-primary: #256fe1 !important;
+    --rz-primary: #0C336E !important;
+    --rz-primary-light: #0065ff !important;
     --rz-primary-lighter: #418bff !important;
-    --rz-primary-light: #0064ff !important;
     --rz-primary-dark: #1d5bbb !important;
     --rz-primary-darker: #124188 !important;
     --rz-secondary: #ff5e00 !important;
-    --rz-secondary-lighter: #ff7151 !important;
     --rz-secondary-light: #ff0e0e !important;
+    --rz-secondary-lighter: #ff7151 !important;
     --rz-secondary-dark: #c34800 !important;
     --rz-secondary-darker: #c90000 !important;
-    --Background-Color: #F1F4F7 !important;
+    /* Colori background */
+    --page-background-color: #F1F4F7 !important;
+    --card-background-color: white !important;
+    --card-background-color-hover: white !important;
     /* Colori sidebar */
     --side-bar-color: #124799 !important;
     --side-bar-color2: #0c336e !important;

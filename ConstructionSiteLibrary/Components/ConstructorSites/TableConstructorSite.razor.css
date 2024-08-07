@@ -1,66 +1,14 @@
 ﻿
 .searchBar, ::deep .searchBar {
     width: 350px !important;
-    margin-bottom: 0.8rem;
+    margin-bottom: 1.5rem;
 }
 
-.divSearchBar {
-    flex: 0 0 auto;
-    width: 33.33333333%;
-    justify-content: center;
-    display: flex !important;
-    flex-wrap: wrap;
-}
-
-.buttonContainer {
-    display:flex;
-    justify-content:end;
-}
 
 .buttonNewSite, ::deep .buttonNewSite {
-   
-    color: var(--font-Card-color1) !important;
+  
     min-width: 220px;
 }
 
-.textNewSite, ::deep .textNewSite {
-    font-style: italic;
-    text-decoration: underline;
-}
 
-
-.colUtility {
-    flex: 0 0 auto;
-    width: 33.33333333%;
-}
-
-.text-color, ::deep .text-color {
-    color: var(--font-Card-color1) !important;
-}
-
-@media(max-width: 1400px) {
-
-    .divSearchBar {
-        flex: 0 0 auto;
-        width: 66.66666667%;
-        display: flex !important;
-        flex-wrap: wrap;
-        justify-content: end;
-    }
-
-    .searchBar, ::deep .searchBar {
-        width: 80% !important;
-    }
-
-    .buttonNewSite, ::deep .buttonNewSite {
-        width: 120px;
-        height: 40px;
-        border-radius: 1.2rem !important;
-        margin-right: 1rem;
-    }
-
-    .EmptyColumn {
-        display:none;
-    }
-}
 
