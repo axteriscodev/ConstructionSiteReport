@@ -1,0 +1,55 @@
+﻿
+
+<div class="my-5">
+    <div class="hstack justify-content-between">
+        <h1>@PageTitle</h1>
+        <RadzenFormField AllowFloatingLabel="false" Variant="@GlobalVariables.ComponentVariant" class="searchBar">
+            <Start>
+                <RadzenIcon Icon="search" />
+            </Start>
+            <ChildContent>
+                <RadzenTextBox Placeholder="@SearchPlaceholder" @oninput="@SearchChanged" />
+            </ChildContent>
+        </RadzenFormField>
+
+    </div>
+    <div class="row text-center mt-4">
+        <div class="col-12">
+            <RadzenButton Variant="Variant.Text" class="btu-section" Click="@ButtonClick">
+                <i><u>@ButtonText</u></i>
+            </RadzenButton>
+        </div>
+    </div>
+
+</div>
+
+
+@code {
+
+    [Parameter]
+    public EventCallback OnButtonClicked { get; set; }
+    [Parameter]
+    public EventCallback<string> OnSearchChanged { get; set; }
+    [Parameter]
+    public string PageTitle { get; set; } = "";
+    [Parameter]
+    public string ButtonText { get; set; } = "";
+    [Parameter]
+    public string SearchPlaceholder { get; set; } = "";
+
+
+
+
+    private void SearchChanged(ChangeEventArgs args)
+    {
+        if(args is not null && args.Value is not null)
+        {
+            OnSearchChanged.InvokeAsync(args.Value as string);
+        }
+    }
+
+    private void ButtonClick()
+    {
+        OnButtonClicked.InvokeAsync();
+    }
+}

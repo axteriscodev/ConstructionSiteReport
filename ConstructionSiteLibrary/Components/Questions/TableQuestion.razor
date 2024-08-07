@@ -16,7 +16,10 @@
 }
 else
 {
-    @* La tabella delle questions *@
+
+
+
+@*     @* La tabella delle questions 
     <div class="marginComponent">
 
         <RadzenFieldset Text="Domande" class="shadow rounded" Style="font-weight:400;">
@@ -28,12 +31,12 @@ else
                             Density="Density.Compact">
 
                 <Columns>
-                    @*<RadzenDataGridColumn TItem="QuestionModel" Property="Id" Title="Id" Width="40px" />*@
+                    @*<RadzenDataGridColumn TItem="QuestionModel" Property="Id" Title="Id" Width="40px" />
                     <RadzenDataGridColumn TItem="TemplateQuestionModel" Property="Text" Title="Nome" />
                     <RadzenDataGridColumn TItem="TemplateQuestionModel" Property="IdCategory" Title="Categoria" Width="60px" />
                     <RadzenDataGridColumn TItem="TemplateQuestionModel" Title="Azioni" Width="60px" Sortable="false">
                         <Template Context="data">
-                                @* Mostro i bottoni solo se ho i permessi di modifica *@
+                                Mostro i bottoni solo se ho i permessi di modifica 
                             <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Info" Variant="Variant.Filled" Size="ButtonSize.Large"
                                               Click="@(()=>OpenUpdateForm(data))"/>
                                 <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Filled" Size="ButtonSize.Large"
@@ -43,7 +46,7 @@ else
                 </Columns>
             </RadzenDataGrid>
         </RadzenFieldset>
-    </div>
+    </div> *@
 
 
 }

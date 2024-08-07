@@ -1,0 +1,15 @@
+﻿
+.searchBar, ::deep .searchBar {
+    width: 350px !important;
+    margin-bottom: 1.5rem;
+}
+
+
+.btu-section, ::deep .btu-section {
+    min-width: 220px;
+}
+
+.btu-section:hover, ::deep .btu-section:hover {
+    background-color: var(--rz-primary) !important;
+    color: white !important;
+}

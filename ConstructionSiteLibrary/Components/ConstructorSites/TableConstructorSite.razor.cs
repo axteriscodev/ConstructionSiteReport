@@ -52,9 +52,10 @@ public partial class TableConstructorSite
     private void FilterSites()
     {
         displayedSites = sites;
+        search = search.TrimStart().TrimEnd();
         if (!string.IsNullOrEmpty(search))
         {
-            displayedSites = sites.Where(x => x.Name.Contains(search)).ToList();
+            displayedSites = sites.Where(x => x.Name.Contains(search, StringComparison.InvariantCultureIgnoreCase)).ToList();
         }
         count = displayedSites.Count;
         SelectCurrentPage();

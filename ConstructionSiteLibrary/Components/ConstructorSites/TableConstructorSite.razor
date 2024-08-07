@@ -1,5 +1,6 @@
 ﻿@using ConstructionSiteLibrary.Model;
 @using ConstructionSiteLibrary.Utility;
+@using ConstructionSiteLibrary.Components.Generics;
 
 @inject ConstructorSitesRepository SiteRepository
 @inject DialogService DialogService
@@ -14,28 +15,8 @@
 else
 {
     <div class="mx-2 my-5">
-    <div class="my-5">
-        <div class="hstack justify-content-between">
-            <h1>I miei cantieri</h1>
-            <RadzenFormField AllowFloatingLabel="false" Variant="@GlobalVariables.ComponentVariant" class="searchBar">
-                <Start>
-                    <RadzenIcon Icon="search" />
-                </Start>
-                <ChildContent>
-                    <RadzenTextBox Placeholder="Ricerca cantieri" ValueChanged="@(args => SearchChanged(args))" />
-                </ChildContent>
-            </RadzenFormField>
-
-        </div>
-        <div class="row text-center mt-4">
-            <div class="col-12">
-                <RadzenButton Variant="Variant.Text" class="buttonNewSite" Click="@OpenForm">
-                    <i><u>+ Aggiungi Cantiere</u></i>
-                </RadzenButton>
-            </div>
-        </div>
-
-    </div>
+        <SectionTitle PageTitle="I miei cantieri" ButtonText="+ aggiungi cantiere" SearchPlaceholder="Cerca cantiere"
+                      OnButtonClicked="@OpenForm" OnSearchChanged="@SearchChanged" />
     <div>
         @for (int i = 0; i < displayedSites.Count; i += 1)
             {
