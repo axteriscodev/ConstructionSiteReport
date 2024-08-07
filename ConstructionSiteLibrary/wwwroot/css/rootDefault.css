@@ -1,4 +1,10 @@
-﻿:root {
+﻿/* Font */
+@import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+:root {
+    /* Font */
+    --font: Inter;
+    --font-Card-color1: #0C336E;
     /* Colori principali APP */
     --rz-primary: #256fe1 !important;
     --rz-primary-lighter: #418bff !important;
@@ -10,23 +16,13 @@
     --rz-secondary-light: #ff0e0e !important;
     --rz-secondary-dark: #c34800 !important;
     --rz-secondary-darker: #c90000 !important;
+    --Background-Color: #F1F4F7 !important;
     /* Colori sidebar */
     --side-bar-color: #124799 !important;
     --side-bar-color2: #0c336e !important;
     --topRow-Background-Color: #f7f7f7 !important;
     --topRow-Background-alpha: rgba(0, 0, 0, 0.2) !important;
-    /* Bottoni particolari */
-/*    --button-Delete: #b1b1b1 !important;
-    --button-Confirm: #D51116 !important;
-    --button-Info: #dbdbdb !important;*/
-    /* Background elementi */
-    --background-page-color: #FFFFFF !important;
-    --background-Card-color1: #ffffff !important;
-    --background-Card-color2: #f7f7f7 !important;
-    --background-Card-color3: #f1f1f1 !important;
-    --background-tabella-color1: #ffffff !important;
     /*Bordi*/
     --border-Card: #afcaf3 !important;
-    /*Font*/
-    --font-Card-color1: #0C336E;
+    /* Gestione dimensioni */
 }
