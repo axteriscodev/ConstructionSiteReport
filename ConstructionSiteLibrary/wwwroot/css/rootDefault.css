@@ -28,5 +28,5 @@
     /* Bordi */
     --border-Card: #afcaf3 !important;
     /* Colori tabelle */
-    --bs-table-striped-bg: rgba(175, 201, 243, 0.15) !important; 
+    --axt-table-striped-bg: rgba(175, 201, 243, 0.15) !important; 
 }
