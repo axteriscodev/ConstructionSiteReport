@@ -21,12 +21,14 @@
 
 .dropdownWrappers {
     padding: 0px 36px;
-    /*    display: flex;
-    flex-direction: column;
-    align-items: center;
+    display: flex;
     gap: 35px;
-    flex: 1 0 0;
-    align-self: stretch;*/
+}
+
+.dropdownWrappers-closed {
+    padding: 0px 0px;
+    display: flex;
+    gap: 35px;
 }
 
     .nav-item:first-of-type {
@@ -54,6 +56,9 @@
             background-color: var(--nav-item-selected-bg);
         }
 
+.nav-item-closed{
+    padding: 0px 10px;
+}
 .separator {
     display: flex;
     padding: 0px 20px;
@@ -71,6 +76,34 @@
         color: white !important;
         border-color:white !important;
     }
+
+.margin-top-35{
+    margin-top:35px;
+}
+
+.margin-top-12{
+    margin-top:12px;
+}
+
+::deep .onlyIcon {
+    justify-content: center;
+    color: var(--nav-item-color);
+    border-radius: var(--nav-item-border-radius);
+    gap: 12px;
+    padding: 20px 20px;
+}
+
+    .onlyIcon ::deep a {
+    }
+
+.onlyIcon ::deep a:hover{
+
+}
+
+::deep a .active {
+    background-color: red;
+}
+
 /**/
 
 .navbar-brand {
@@ -82,13 +115,7 @@
 }
 
 .bi {
-/*    display: inline-block;
-    position: relative;
-    width: 1.25rem;
-    height: 1.25rem;
-    margin-right: 0.75rem;
-    top: -0.9rem;
-    background-size: cover;*/
+    background-size: cover;
 }
 
 .margin-right-zero {
