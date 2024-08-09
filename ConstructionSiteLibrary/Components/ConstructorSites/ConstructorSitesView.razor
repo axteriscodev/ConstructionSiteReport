@@ -19,14 +19,15 @@ else
         <SectionTitle PageTitle="I miei cantieri" ButtonText="+ aggiungi cantiere" SearchPlaceholder="Cerca cantiere"
                       OnButtonClicked="@OpenForm" OnSearchChanged="@SearchChanged" />
         <div>
-            @for (int i = 0; i < displayedSites.Count; i += 1)
-            {
-                <div class="row mt-4">
-                    <div class="col">
-                        <CardConstructorSite Site="@displayedSites[i]" />
+            <Repeater Data="@displayedSites" TItem="ConstructorSiteModel">
+                <ContentTemplate Context="Item">
+                    <div class="row mt-4">
+                        <div class="col">
+                            <CardConstructorSite Site="@Item" />
+                        </div>
                     </div>
-                </div>
-            }
+                </ContentTemplate>
+            </Repeater>
         </div>
         <div class="mt-5">
             <AxtPager PagingSummaryFormat="@pagingSummaryFormat" Count="@count" PageSize="@pageSize" OnPageChanged="@PageChanged" />
@@ -89,6 +90,7 @@ else
     {
         var skip = pageIndex * pageSize;
         displayedSites = displayedSites.Skip(skip).Take(pageSize).ToList();
+        StateHasChanged();
     }
 
     private async Task OpenForm()

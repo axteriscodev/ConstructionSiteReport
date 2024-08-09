@@ -1,0 +1,59 @@
+﻿@using ConstructionSiteLibrary.Model;
+@using ConstructionSiteLibrary.Utility;
+@using ConstructionSiteLibrary.Components.Generics;
+@using Shared.Documents;
+
+@inject ConstructorSitesRepository SiteRepository
+@inject DialogService DialogService
+
+<ScreenComponent @ref="screenComponent" />
+
+@if (onLoading)
+{
+    <Loading />
+}
+else
+{
+    <div class="mx-2 my-5">
+        <SectionTitle PageTitle="I miei cantieri" ButtonText="+ aggiungi cantiere" SearchPlaceholder="Cerca cantiere"
+                       OnSearchChanged="@SearchChanged" />
+        <div>
+            @for (int i = 0; i < displayedSites.Count; i += 1)
+            {
+                <div class="row mt-4">
+                    <div class="col">
+                        <CardConstructorSite Site="@displayedSites[i]" />
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="mt-5">
+            <AxtPager PagingSummaryFormat="@pagingSummaryFormat" Count="@count" PageSize="@pageSize" OnPageChanged="@PageChanged" />
+        </div>
+    </div>
+}
+
+
+@code {
+    ScreenComponent? screenComponent;
+
+    private List<ConstructorSiteModel> sites = [];
+    private List<ConstructorSiteModel> displayedSites = [];
+    private bool onLoading = false;
+    private string search = "";
+    private string pagingSummaryFormat = "Pagina {0} di {1} (Totale {2} cantieri)";
+    private int count = 0;
+    private int pageSize = GlobalVariables.PageSize;
+    private int pageIndex = 0;
+
+
+    private void SearchChanged(string args)
+    {
+        search = args;
+    }
+
+    private void PageChanged(AxtPagerEventArgs args)
+    {
+        pageIndex = args.CurrentPage;
+    }
+}
