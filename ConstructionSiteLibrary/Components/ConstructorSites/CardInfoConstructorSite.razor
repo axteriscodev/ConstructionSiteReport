@@ -1,0 +1,53 @@
+﻿@using Shared.Documents
+
+<div class="card">
+    <div class="row">
+        <div class="col-10">
+            <h3>@ConstructorSite.Name</h3>
+        </div>
+        <div class="col-2 justify-content-end">
+            <RadzenButton Variant="Variant.Text" Icon="edit"></RadzenButton>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <label>Descrizione</label>
+            <p>@ConstructorSite.JobDescription</p>
+        </div>
+        <div class="col-6">
+            <label>Data inizio</label>
+            <p>@ConstructorSite.StartDate</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <label>Cliente</label>
+            <p>@PrintClient()</p>
+        </div>
+        <div class="col-6">
+            <label>Indirizzo</label>
+            <p>@ConstructorSite.Address</p>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public ConstructorSiteModel ConstructorSite { get; set; } = new();
+
+
+    #region Visualizzazione
+
+    public string PrintClient()
+    {
+        var client = "";
+        if (ConstructorSite.Client is not null)
+        {
+            client = ConstructorSite.Client.Name;
+        }
+        return client;
+    }
+
+    #endregion
+}

@@ -5,11 +5,6 @@ using ConstructionSiteLibrary.Utility;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Shared.Documents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ConstructionSiteLibrary.Components.Documents
 {

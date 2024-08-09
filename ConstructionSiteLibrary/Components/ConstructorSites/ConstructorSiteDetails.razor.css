@@ -1,0 +1,9 @@
+﻿
+.btu-back, ::deep .btu-back {
+    min-width: 220px;
+}
+
+    .btu-back:hover, ::deep .btu-back:hover {
+        background-color: var(--rz-primary) !important;
+        color: white !important;
+    }

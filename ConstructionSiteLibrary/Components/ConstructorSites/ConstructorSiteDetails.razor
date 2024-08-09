@@ -4,7 +4,9 @@
 @using Shared.Documents;
 
 @inject ConstructorSitesRepository SiteRepository
+@inject DocumentsRepository DocumentsRepository
 @inject DialogService DialogService
+@inject NavigationService NavigationService
 
 <ScreenComponent @ref="screenComponent" />
 
@@ -16,16 +18,14 @@ else
 {
     <div class="mx-2 my-5">
         <SectionTitle PageTitle="I miei cantieri" ButtonText="+ aggiungi cantiere" SearchPlaceholder="Cerca cantiere"
-                       OnSearchChanged="@SearchChanged" />
-        <div>
-            @for (int i = 0; i < displayedSites.Count; i += 1)
-            {
-                <div class="row mt-4">
-                    <div class="col">
-                        <CardConstructorSite Site="@displayedSites[i]" />
-                    </div>
-                </div>
-            }
+                       OnSearchChanged="@SearchChanged" ShowButton="false" />
+        <div class="vstack">
+            <RadzenButton Variant="Variant.Text" Click="@Back" class="btu-back">
+                <RadzenIcon Icon="chevron_left"/> Torna a tutti i cantieri
+            </RadzenButton>
+            <div class="py-3">
+                <CardInfoConstructorSite ConstructorSite="@site" />
+            </div>
         </div>
         <div class="mt-5">
             <AxtPager PagingSummaryFormat="@pagingSummaryFormat" Count="@count" PageSize="@pageSize" OnPageChanged="@PageChanged" />
@@ -37,8 +37,15 @@ else
 @code {
     ScreenComponent? screenComponent;
 
-    private List<ConstructorSiteModel> sites = [];
-    private List<ConstructorSiteModel> displayedSites = [];
+
+
+    [Parameter]
+    public int SiteId { get; set; }
+
+    ConstructorSiteModel site = new();
+
+    private List<DocumentModel> documents = [];
+    private List<DocumentModel> displayedDocuments = [];
     private bool onLoading = false;
     private string search = "";
     private string pagingSummaryFormat = "Pagina {0} di {1} (Totale {2} cantieri)";
@@ -47,13 +54,53 @@ else
     private int pageIndex = 0;
 
 
-    private void SearchChanged(string args)
+
+
+    protected override async Task OnParametersSetAsync()
     {
-        search = args;
+        await base.OnParametersSetAsync();
+    }
+
+
+
+    private async Task LoadData()
+    {
+        site = await SiteRepository.GetConstructorSiteInfo(SiteId);
+        documents = await DocumentsRepository.GetSiteDocuments(SiteId);
+        FilterSites();
     }
 
     private void PageChanged(AxtPagerEventArgs args)
     {
         pageIndex = args.CurrentPage;
+        FilterSites();
+    }
+
+    private void SearchChanged(string args)
+    {
+        search = args;
+        FilterSites();
+    }
+
+    private void FilterSites()
+    {
+        displayedDocuments = documents;
+        if (!string.IsNullOrEmpty(search))
+        {
+            displayedDocuments = documents.Where(x => x.Title.Contains(search)).ToList();
+        }
+        count = displayedDocuments.Count;
+        SelectCurrentPage();
+    }
+
+    private void SelectCurrentPage()
+    {
+        var skip = pageIndex * pageSize;
+        displayedDocuments = displayedDocuments.Skip(skip).Take(pageSize).ToList();
+    }
+
+    private void Back()
+    {
+        NavigationService.ChangePage(PageRouting.HomePage);
     }
 }
