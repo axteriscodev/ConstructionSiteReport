@@ -5,6 +5,7 @@
 
 @inject ConstructorSitesRepository SiteRepository
 @inject DialogService DialogService
+@inject NavigationManager NavigationManager
 
 
 <ScreenComponent @ref="screenComponent" />
@@ -90,7 +91,7 @@ else
     {
         var skip = pageIndex * pageSize;
         displayedSites = displayedSites.Skip(skip).Take(pageSize).ToList();
-        StateHasChanged();
+        NavigationManager.NavigateTo(PageRouting.HomePage);
     }
 
     private async Task OpenForm()
@@ -119,4 +120,4 @@ else
         await LoadData();
         StateHasChanged();
     }
-            }
+}
