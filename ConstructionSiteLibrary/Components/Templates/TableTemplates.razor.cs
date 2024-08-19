@@ -1,4 +1,5 @@
 ﻿using ConstructionSiteLibrary.Components.Utilities;
+using ConstructionSiteLibrary.Model;
 using ConstructionSiteLibrary.Utility;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -68,6 +69,12 @@ public partial class TableTemplates
     private void OpenWizard()
     {
         NavigationService.ChangePage(PageRouting.TemplateWizardPage);
+    }
+
+    private void PageChanged(AxtPagerEventArgs args)
+    {
+        pageIndex = args.CurrentPage;
+        FilterTemplates();
     }
 
     private void SearchChanged(string args)

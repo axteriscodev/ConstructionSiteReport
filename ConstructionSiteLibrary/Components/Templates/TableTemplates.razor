@@ -18,8 +18,11 @@ else
 
     <div class="mx-2 my-5">
         <SectionTitle PageTitle="Template" ButtonText="+ aggiungi template" SearchPlaceholder="Cerca template"
-                        OnButtonClicked="@OpenWizard"
-    
+                        OnButtonClicked="@OpenWizard" OnSearchChanged="@SearchChanged" />
+        
+        <div class="mt-5">
+            <AxtPager PagingSummaryFormat="@pagingSummaryFormat" Count="@count" PageSize="@pageSize" OnPageChanged="@PageChanged" />
+        </div>
     </div>
 
     <!--
