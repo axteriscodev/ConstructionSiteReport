@@ -46,7 +46,7 @@ public partial class TableTemplates
     private async Task LoadData()
     {
         templates = await TemplatesRepository.GetTemplates();
-        count = templates.Count;
+        FilterTemplates();
     }
 
     private async Task Hide(TemplateModel template)

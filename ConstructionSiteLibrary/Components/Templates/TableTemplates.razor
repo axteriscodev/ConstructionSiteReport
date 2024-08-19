@@ -20,6 +20,24 @@ else
         <SectionTitle PageTitle="Template" ButtonText="+ aggiungi template" SearchPlaceholder="Cerca template"
                         OnButtonClicked="@OpenWizard" OnSearchChanged="@SearchChanged" />
         
+        <table class="table table-striped">
+            <thead>
+                <th scope="col">Nome template</th>
+                <th scope="col">Data</th>
+                <th scope="col"></th>
+            </thead>
+            <tbody>
+                @for(int i = 0; i < displayedTemplates.Count; i += 1)
+                {
+                    <tr>
+                        <td>@displayedTemplates[i].NameTemplate</td>
+                        <td>@displayedTemplates[i].CreationDate</td>
+                        <td></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
         <div class="mt-5">
             <AxtPager PagingSummaryFormat="@pagingSummaryFormat" Count="@count" PageSize="@pageSize" OnPageChanged="@PageChanged" />
         </div>
