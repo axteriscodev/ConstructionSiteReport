@@ -1,0 +1,52 @@
+﻿@using Shared.Templates
+
+
+<div class="dropdown">
+    <RadzenButton Icon="more_vert" Click="@ToggleDropdown" class="buttonOptions" />
+    <div id="myDropdown" class="dropdown-content @DropdownCssClass()">
+        <RadzenButton Icon="edit" Text="Modifica" class="buttonEdit" Click="Modify" />
+        <RadzenButton Icon="delete" Text="Elimina" class="buttonDelete" Click="Delete"/>
+    </div>
+</div>
+
+@code {
+
+
+    [Parameter]
+    public EventCallback<object> OnUpdateClicked { get; set; }
+    [Parameter]
+    public EventCallback<object> OnDeleteClicked { get; set; }
+    [Parameter]
+    public object Object { get; set; } = new();
+
+
+    private bool dropdownShow;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+
+    private void ToggleDropdown()
+    {
+        dropdownShow = !dropdownShow;
+        StateHasChanged();
+    }
+
+    private string DropdownCssClass()
+    {
+        return dropdownShow ? "dropdown-open" : "dropdown-close";
+    }
+
+    private void Delete()
+    {
+        OnDeleteClicked.InvokeAsync(Object);
+    }
+
+    private void Modify()
+    {
+        OnUpdateClicked.InvokeAsync(Object);
+    }
+
+}

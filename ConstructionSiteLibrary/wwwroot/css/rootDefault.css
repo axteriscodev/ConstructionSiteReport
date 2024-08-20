@@ -35,6 +35,8 @@
     --sidebar-separator-color: #6787B8 !important;
     /*    --topRow-Background-Color: #0C336E !important;
     --topRow-Background-alpha: rgba(0, 0, 0, 0.2) !important;*/
-    /*Bordi*/
+    /* Bordi */
     --border-Card: #afcaf3 !important;
+    /* Colori tabelle */
+    --axt-table-striped-bg: rgba(175, 201, 243, 0.15) !important; 
 }

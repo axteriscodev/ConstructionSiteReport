@@ -3,8 +3,6 @@
 
 @attribute [Route(PageRouting.QuestionPage)]
 
-<h3>Domande</h3>
-
 <ScreenComponent SizeS="800" OnScreenDimensionChanged="ScreenDimensionObserver" />
 
 <DynamicComponent @ref=dynamicComponent Type=@selectedType/>
@@ -23,7 +21,7 @@
         // }
         // else
         // {
-        //     selectedType = typeof(TableQuestion);
+             //selectedType = typeof(TableQuestion);
         // }
 
         StateHasChanged();

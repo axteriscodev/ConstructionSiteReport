@@ -2,51 +2,184 @@
 @using ConstructionSiteLibrary.Repositories
 @using Shared;
 @using Shared.Templates
+@using ConstructionSiteLibrary.Utility
+@using ConstructionSiteLibrary.Model;
+@using ConstructionSiteLibrary.Components.Generics;
+@using Shared.Documents;
 
+@inject ConstructorSitesRepository SiteRepository
 @inject DialogService DialogService
 @inject NotificationManager NotificationManager
 @inject QuestionRepository QuestionRepository
 @inject GlobalVariables GlobalVariables
+@inject QuestionRepository QuestionRepository
 
-<ScreenComponent @ref = "screenComponent"/>
+<ScreenComponent @ref="screenComponent" />
 
-@if (initialLoading)
+@if (onLoading)
 {
     <Loading />
 }
 else
 {
+    <div class="mx-2 my-5">
+        <SectionTitle PageTitle="Domande" ButtonText="+ aggiungi domanda" SearchPlaceholder="Cerca domanda"
+                      OnButtonClicked="@OpenForm" OnSearchChanged="@SearchChanged" />
+        <div>
+
+            <table class="table table-striped">
+                <thead>
+                <th>
+                    <span> Domanda</span>
+                </th>
+                <th>
+                    <span class="">Id Categoria</span>
+                </th>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < displayedQuestions.Count; i += 1)
+                    {
+                        <tr>
+                            <td>@displayedQuestions[i].Text</td>
+                            <td>@displayedQuestions[i].IdCategory</td>
+                            <td>
+                                <ButtonDropdown Object="@displayedQuestions[i]"
+                                 OnUpdateClicked="@OpenModifyQuestion" OnDeleteClicked="@OpenDeleteQuestion"/>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="mt-5">
+            <AxtPager PagingSummaryFormat="@pagingSummaryFormat" Count="@count" PageSize="@pageSize"
+                      OnPageChanged="@PageChanged" />
+        </div>
+    </div>
+
+}
+
+<script>
+    @*When the user clicks on the button,
+        toggle between hiding and showing the dropdown content *@
+        function myFunction() {
+            document.getElementById("myDropdown").classList.toggle("show");
+        }
+
+    // Close the dropdown if the user clicks outside of it
+    window.onclick = function (event) {
+        if (!event.target.matches('.dropbtn')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    }
+</script>
 
 
+@code {
+    ScreenComponent? screenComponent;
 
-@*     @* La tabella delle questions 
-    <div class="marginComponent">
+    private List<TemplateQuestionModel> questions = [];
+    private List<TemplateQuestionModel> displayedQuestions = [];
+    private bool onLoading = false;
+    private string search = "";
+    private string pagingSummaryFormat = "Pagina {0} di {1} (Totale {2} cantieri)";
+    private int count = 0;
+    private int pageSize = GlobalVariables.PageSize;
+    private int pageIndex = 0;
 
-        <RadzenFieldset Text="Domande" class="shadow rounded" Style="font-weight:400;">
-            <RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Success" class="ButtonAdd"
-                          Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenNewForm())" />
-            <RadzenDataGrid @ref="grid" TItem="TemplateQuestionModel" GridLines="@DataGridGridLines.Both" IsLoading=@isLoading Count="@count" PageSize="@pageSize" Data="@questions"
-                            AllowColumnResize="true" AllowAlternatingRows="true" ColumnWidth="200px" AllowFiltering="true" FilterMode="FilterMode.Simple"
-                            AllowSorting="true" AllowPaging="true" ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" PagerHorizontalAlign="HorizontalAlign.Left"
-                            Density="Density.Compact">
+    protected override async Task OnInitializedAsync()
+    {
+        onLoading = true;
+        await base.OnInitializedAsync();
+        await LoadData();
+        onLoading = false;
+    }
 
-                <Columns>
-                    @*<RadzenDataGridColumn TItem="QuestionModel" Property="Id" Title="Id" Width="40px" />
-                    <RadzenDataGridColumn TItem="TemplateQuestionModel" Property="Text" Title="Nome" />
-                    <RadzenDataGridColumn TItem="TemplateQuestionModel" Property="IdCategory" Title="Categoria" Width="60px" />
-                    <RadzenDataGridColumn TItem="TemplateQuestionModel" Title="Azioni" Width="60px" Sortable="false">
-                        <Template Context="data">
-                                Mostro i bottoni solo se ho i permessi di modifica 
-                            <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Info" Variant="Variant.Filled" Size="ButtonSize.Large"
-                                              Click="@(()=>OpenUpdateForm(data))"/>
-                                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Filled" Size="ButtonSize.Large"
-                                              Click="@(()=>Disable(data))" />
-                        </Template>
-                    </RadzenDataGridColumn>
-                </Columns>
-            </RadzenDataGrid>
-        </RadzenFieldset>
-    </div> *@
 
+    private async Task LoadData()
+    {
+        questions = await QuestionRepository.GetQuestions();
+        FilterQuestions();
+    }
+
+
+    private void PageChanged(AxtPagerEventArgs args)
+    {
+        pageIndex = args.CurrentPage;
+        FilterQuestions();
+    }
+
+
+    private void SearchChanged(string args)
+    {
+        search = args;
+        FilterQuestions();
+    }
+
+    private void FilterQuestions()
+    {
+        displayedQuestions = questions;
+        search = search.TrimStart().TrimEnd();
+        if (!string.IsNullOrEmpty(search))
+        {
+            displayedQuestions = questions.Where(x => x.Text.Contains(search,
+            StringComparison.InvariantCultureIgnoreCase)).ToList();
+        }
+        count = displayedQuestions.Count;
+        SelectCurrentPage();
+    }
+
+
+    private void SelectCurrentPage()
+    {
+        var skip = pageIndex * pageSize;
+        displayedQuestions = displayedQuestions.Skip(skip).Take(pageSize).ToList();
+    }
+
+    private async Task OpenForm()
+    {
+        var width = screenComponent.GetScreenSize();
+
+        // creo uno style aggiuntivo da inviare al componente caricato con il popup come options
+        var additionalStyle = $"min-height:fit-content;height:fit-content;width:{width}px;max-width:600px";
+        var newOptions = new DialogOptions
+            {
+                Style = additionalStyle
+            };
+        //creo parametri da inviare al componente caricato con il popup
+        var param = new Dictionary<string, object>
+        {
+            //tra i parametri che invio al dialog creo un EventCallback da passare al componente
+            { "OnSaveComplete", EventCallback.Factory.Create(this, Reload) },
+            { "CreationMode", true },
+        };
+        await DialogService.OpenAsync<FormQuestions>("Nuova domanda", parameters: param, options: newOptions);
+    }
+
+    private async Task Reload()
+    {
+        DialogService.Close();
+        await LoadData();
+        StateHasChanged();
+    }
+
+    private async Task OpenModifyQuestion(object question)
+    {
+        var q = question as TemplateQuestionModel;
+        Console.WriteLine("apro la form di modifica");
+    }
+
+    private async Task OpenDeleteQuestion(object question)
+    {
+        var q = question as TemplateQuestionModel;
+        Console.WriteLine("apro la form di conferma cancellazione");
+    }
 
 }
