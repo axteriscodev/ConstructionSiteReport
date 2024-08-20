@@ -30,10 +30,10 @@ public partial class TableTemplates
     private string pagingSummaryFormat = "Pagina {0} di {1} (Totale {2} template)";
 
 
-    [Parameter] 
+    [Parameter]
     public EventCallback<TemplateModel> GetTemplate { get; set; }
 
-    
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -87,7 +87,7 @@ public partial class TableTemplates
     {
         displayedTemplates = templates;
         search = search.TrimStart().TrimEnd();
-        if(!string.IsNullOrEmpty(search))
+        if (!string.IsNullOrEmpty(search))
         {
             displayedTemplates = templates.Where(x => x.TitleTemplate.Contains(search, StringComparison.InvariantCultureIgnoreCase)).ToList();
         }
@@ -108,6 +108,19 @@ public partial class TableTemplates
     private void OnTemplateSelected(TemplateModel selectedTemplate)
     {
         GetTemplate.InvokeAsync(selectedTemplate);
+    }
+
+    private async Task OpenModifyTemplate(object question)
+    {
+        //var q = question as TemplateModel;
+        Console.WriteLine("non è prevista la modifica dei template");
+    }
+
+    private async Task OpenDeleteTemplate(object question)
+    {
+        var q = question as TemplateModel;
+
+        await Hide(q ?? new());
     }
 
     private async Task ReloadTable()
