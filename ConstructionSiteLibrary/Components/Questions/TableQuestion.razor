@@ -23,36 +23,28 @@
 else
 {
     <div class="mx-2 my-5">
-    <SectionTitle PageTitle="Domande" ButtonText="+ aggiungi domanda" SearchPlaceholder="Cerca domanda"
-        OnButtonClicked="@OpenForm" OnSearchChanged="@SearchChanged" />
-    <div>
+        <SectionTitle PageTitle="Domande" ButtonText="+ aggiungi domanda" SearchPlaceholder="Cerca domanda"
+                      OnButtonClicked="@OpenForm" OnSearchChanged="@SearchChanged" />
+        <div>
 
-        <table class="table table-striped">
-            <thead>
+            <table class="table table-striped">
+                <thead>
                 <th>
                     <span> Domanda</span>
                 </th>
                 <th>
                     <span class="">Id Categoria</span>
                 </th>
-            </thead>
-            <tbody>
-                @for (int i = 0; i < displayedQuestions.Count; i += 1)
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < displayedQuestions.Count; i += 1)
                     {
                         <tr>
                             <td>@displayedQuestions[i].Text</td>
                             <td>@displayedQuestions[i].IdCategory</td>
-
-                            <td>                               <div class="dropdown">
-
-                                <RadzenButton Icon="more_vert" class="dropbtn" Click="@myFunction()" /> 
-  @* <button onclick="myFunction()" class="dropbtn">Dropdown</button > *@
-  <div id="myDropdown" class="dropdown-content">
-    <a href="#home">Home</a>
-    <a href="#about">About</a>
-    <a href="#contact">Contact</a>
-  </div>
-</div>
+                            <td>
+                                <ButtonDropdown Object="@displayedQuestions[i]"
+                                 OnUpdateClicked="@OpenModifyQuestion" OnDeleteClicked="@OpenDeleteQuestion"/>
                             </td>
                         </tr>
                     }
@@ -61,7 +53,7 @@ else
         </div>
         <div class="mt-5">
             <AxtPager PagingSummaryFormat="@pagingSummaryFormat" Count="@count" PageSize="@pageSize"
-                OnPageChanged="@PageChanged" />
+                      OnPageChanged="@PageChanged" />
         </div>
     </div>
 
@@ -163,11 +155,11 @@ else
             };
         //creo parametri da inviare al componente caricato con il popup
         var param = new Dictionary<string, object>
-{
-//tra i parametri che invio al dialog creo un EventCallback da passare al componente
-{ "OnSaveComplete", EventCallback.Factory.Create(this, Reload) },
-{ "CreationMode", true },
-};
+        {
+            //tra i parametri che invio al dialog creo un EventCallback da passare al componente
+            { "OnSaveComplete", EventCallback.Factory.Create(this, Reload) },
+            { "CreationMode", true },
+        };
         await DialogService.OpenAsync<FormQuestions>("Nuova domanda", parameters: param, options: newOptions);
     }
 
@@ -177,4 +169,17 @@ else
         await LoadData();
         StateHasChanged();
     }
+
+    private async Task OpenModifyQuestion(object question)
+    {
+        var q = question as TemplateQuestionModel;
+        Console.WriteLine("apro la form di modifica");
+    }
+
+    private async Task OpenDeleteQuestion(object question)
+    {
+        var q = question as TemplateQuestionModel;
+        Console.WriteLine("apro la form di conferma cancellazione");
+    }
+
 }
