@@ -20,7 +20,7 @@ else
         <SectionTitle PageTitle="Template" ButtonText="+ aggiungi template" SearchPlaceholder="Cerca template"
                         OnButtonClicked="@OpenWizard" OnSearchChanged="@SearchChanged" />
         
-        <table class="table table-striped">
+        <table class="table table-striped table-hover">
             <thead>
                 <th scope="col">Nome template</th>
                 <th scope="col">Data</th>
@@ -29,7 +29,8 @@ else
             <tbody>
                 @for(int i = 0; i < displayedTemplates.Count; i += 1)
                 {
-                    <tr>
+                    int index = i;
+                    <tr @onclick="@(() => OnTemplateSelected(displayedTemplates[index]))">
                         <td>@displayedTemplates[i].NameTemplate</td>
                         <td>@displayedTemplates[i].CreationDate</td>
                         <td>
