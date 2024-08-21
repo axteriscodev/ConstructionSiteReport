@@ -94,7 +94,6 @@ public partial class TableTemplates
 
         count = displayedTemplates.Count;
         SelectCurrentPage();
-
     }
 
 
