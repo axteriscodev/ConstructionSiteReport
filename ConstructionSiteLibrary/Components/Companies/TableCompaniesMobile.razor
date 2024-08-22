@@ -1,4 +1,5 @@
 ﻿@using ConstructionSiteLibrary.Repositories
+@using ConstructionSiteLibrary.Components.Generics
 @using Shared
 @using Shared.Documents
 
@@ -15,18 +16,22 @@
 }
 else
 {
-    <h2>@Param</h2>
 
     @* La tabella delle Aziende *@
-    <div class="marginComponent">
+    <div class="marginMobile">
 
-        <RadzenFieldset class="shadow rounded" Style="font-weight:400;">
+        @* <RadzenFieldset class="shadow rounded" Style="font-weight:400;">
             <RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Success" class="ButtonAdd"
-                Click="@(() => OpenAddCompanyPage())" Style="margin-bottom:2rem;margin-top:1rem;" />
+                Click="@(() => OpenAddCompanyPage())" Style="margin-bottom:2rem;margin-top:1rem;" /> *@
 
-                @foreach (var company in companies)
+         <SectionTitle PageTitle="Ditte" ButtonText="+ aggiungi ditta" SearchPlaceholder="Cerca ditta"
+            OnButtonClicked="@OpenAddCompanyPage" OnSearchChanged="@SearchChanged" />
+
+                @foreach (var company in displayedCompanies)
                 {
-                    <RadzenCard Variant="Variant.Filled" Class="rz-my-2 rz-mx-auto" Style="max-width: 420px">
+                    @* <RadzenCard Variant="Variant.Filled" Class="rz-my-2 rz-mx-auto" Style="max-width: 420px"> *@
+                    <div class="card round-border cardClass mb-3">
+                        
                         <RadzenStack Gap="0">
 
                             <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Nome
@@ -53,10 +58,11 @@ else
                                     Size="ButtonSize.Medium" Click="@(()=>Hide(company))" class="buttonDelete" />
                             </RadzenRow>
                         </RadzenStack>
+                    </div>
 
-                    </RadzenCard>
+                    @* </RadzenCard> *@
                 }
 
-        </RadzenFieldset>
+        @* </RadzenFieldset> *@
     </div>
 }
