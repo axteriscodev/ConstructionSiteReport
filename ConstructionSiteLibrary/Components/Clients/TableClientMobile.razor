@@ -1,4 +1,5 @@
 ﻿@using ConstructionSiteLibrary.Repositories
+@using ConstructionSiteLibrary.Components.Generics
 @using Shared;
 @using Shared.Documents;
 
@@ -13,19 +14,23 @@
 }
 else
 {
-    <h2>@Param</h2>
+    @* La tabella dei committenti *@
+    <div class="marginMobile">
 
-    @* La tabella dei clienti *@
-    <div class="marginComponent">
-
-            <RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Success" class="ButtonAdd"
+            @*<RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Success" class="ButtonAdd"
                           Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenNewForm())" />
-            @*<RadzenButton Icon="sort" Text="Ordina" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
+            <RadzenButton Icon="sort" Text="Ordina" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
                           Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenOrderForm())" />*@
 
-            @foreach(var client in clients)
+            <SectionTitle PageTitle="Committenti" ButtonText="+ aggiungi committente" SearchPlaceholder="Cerca committente"
+                OnButtonClicked="@OpenNewForm" OnSearchChanged="@SearchChanged" />
+
+            @foreach(var client in displayClients)
             {
-                <RadzenCard Variant="Variant.Filled" Class="rz-my-2 rz-mx-auto" Style="max-width: 420px">
+                @* <RadzenCard Variant="Variant.Filled" Class="rz-my-2 rz-mx-auto" Style="max-width: 420px"> *@
+                   
+                <div class="card round-border cardClass mb-3">
+
                     <RadzenStack Gap="0">
                         @*<RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Id
                         </RadzenText>
@@ -45,7 +50,9 @@ else
                         </RadzenRow>
                     </RadzenStack>
 
-                </RadzenCard>
+                </div>
+
+                @* </RadzenCard> *@
             }
     </div>
 
