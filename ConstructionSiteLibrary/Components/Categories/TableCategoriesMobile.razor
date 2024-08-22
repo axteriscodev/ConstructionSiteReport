@@ -37,10 +37,10 @@ else
 
                         @* Mostro i bottoni solo se ho i permessi di modifica *@
                         <RadzenRow Class="rz-mt-2" JustifyContent="JustifyContent.Right" Gap="1rem">
-                            <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Filled"
+                            <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Info" Variant="Variant.Filled"
                                 Size="ButtonSize.Medium" Click="@(()=>OpenUpdateForm(@category))" class="buttonEdit"
                                 />
-                            <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Light" Variant="Variant.Filled"
+                            <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Filled"
                                 Size="ButtonSize.Medium" Click="@(()=>Hide(@category))" class="buttonDelete"
                                  />
                         </RadzenRow>
