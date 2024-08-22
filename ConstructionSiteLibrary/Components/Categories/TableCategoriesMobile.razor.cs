@@ -11,6 +11,8 @@ public partial class TableCategoriesMobile
 {
      private List<TemplateCategoryModel> categories = [];
 
+     private List<TemplateCategoryModel> displayedCategories = [];
+
     /// <summary>
     /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
     /// </summary>
@@ -32,8 +34,8 @@ public partial class TableCategoriesMobile
     /// </summary>
     private string pagingSummaryFormat = "Pagina {0} di {1} (Totale {2} categorie)";
 
-    [Parameter]
-    public string Param { get; set; } = "";
+   
+    private string search = "";
 
     ScreenComponent screenComponent;
 
@@ -48,7 +50,25 @@ public partial class TableCategoriesMobile
     private async Task LoadData()
     {
         categories = await CategoriesRepository.GetCategories();
-        count = categories.Count;
+        FilterCategories();
+    }
+
+    private void SearchChanged(string args)
+    {
+        search = args;
+        FilterCategories();
+    }
+
+    private void FilterCategories()
+    {
+        displayedCategories = categories;
+        search = search.TrimStart().TrimEnd();
+        if(!string.IsNullOrEmpty(search))
+        {
+            displayedCategories = categories.Where(x => x.Text.Contains(search, StringComparison.InvariantCultureIgnoreCase)).ToList();
+        }
+
+        count = displayedCategories.Count;
     }
 
     private async Task OpenOrderForm()

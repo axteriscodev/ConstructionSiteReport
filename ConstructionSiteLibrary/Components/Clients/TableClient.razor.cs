@@ -1,4 +1,5 @@
 ﻿using ConstructionSiteLibrary.Components.Utilities;
+using ConstructionSiteLibrary.Model;
 using ConstructionSiteLibrary.Utility;
 using Microsoft.AspNetCore.Components;
 using Radzen;
@@ -9,56 +10,68 @@ namespace ConstructionSiteLibrary.Components.Clients;
 
 public partial class TableClient
 {
+    ScreenComponent? screenComponent;
+
     private List<ClientModel> clients = [];
 
-    /// <summary>
-    /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
-    /// </summary>
-    private bool initialLoading;
+    private List<ClientModel> displayedClients = [];
 
-    /// <summary>
-    /// Booleano che è impostata durante una ricerca
-    /// </summary>
-    private bool isLoading = false;
+    private bool onLoading = false;
 
+    private string search = "";
 
-    /// <summary>
-    /// Intero che ci dice quanti sono gli elementi
-    /// </summary>
-    private int count;
+    private int count = 0;
 
-    /// <summary>
-    /// Intero che ci dice quanti elementi possono stare in una pagina
-    /// </summary>
     private int pageSize = GlobalVariables.PageSize;
 
-    /// <summary>
-    /// Stringa indica la pagina e gli elementi
-    /// </summary>
-    private string pagingSummaryFormat = "Pagina {0} di {1} (Totale {2} clienti)";
+    private int pageIndex = 0;
 
-    /// <summary>
-    /// Riferimento al componente tabella
-    /// </summary>
-    private RadzenDataGrid<ClientModel>? grid;
+    private string pagingSummaryFormat = "Pagina {0} di {1} (Totale {2} committenti)";
 
-    [Parameter]
-    public string Param { get; set; } = "";
-
-    ScreenComponent screenComponent;
 
     protected override async Task OnInitializedAsync()
     {
-        initialLoading = true;
+        onLoading = true;
         await base.OnInitializedAsync();
         await LoadData();
-        initialLoading = false;
+        onLoading = false;
     }
 
     private async Task LoadData()
     {
         clients = await ClientsRepository.GetClients();
-        count = clients.Count;
+        FilterClients();
+    }
+
+    private void PageChanged(AxtPagerEventArgs args)
+    {
+        pageIndex = args.CurrentPage;
+        FilterClients();
+    }
+
+    private void SearchChanged(string args)
+    {
+        search = args;
+        FilterClients();
+    }
+
+    private void FilterClients()
+    {
+        displayedClients = clients;
+        search = search.TrimStart().TrimEnd();
+        if (!string.IsNullOrEmpty(search))
+        {
+            displayedClients = displayedClients.Where(x => x.Name.Contains(search, StringComparison.InvariantCultureIgnoreCase)).ToList();
+        }
+
+        count = displayedClients.Count;
+        SelectCurrentPage();
+    }
+
+    private void SelectCurrentPage()
+    {
+        var skip = pageIndex * pageSize;
+        displayedClients = displayedClients.Skip(skip).Take(pageSize).ToList();
     }
 
     private async Task OpenNewForm()
@@ -80,8 +93,10 @@ public partial class TableClient
         await DialogService.OpenAsync<FormClient>("Nuovo cliente", parameters: param, options: newOptions);
     }
 
-    private async Task OpenUpdateForm(ClientModel client)
+    private async Task OpenUpdateForm(object item)
     {
+        var client = item as ClientModel;
+
         var width = screenComponent.ScreenSize.Width;
 
         //creo uno style aggiuntivo da inviare al componente caricato con il popup come options
@@ -101,8 +116,10 @@ public partial class TableClient
     }
 
 
-    private async Task Hide(ClientModel client)
+    private async Task Hide(object item)
     {
+        var client = item as ClientModel;
+
         var titolo = "Disattivazione cliente";
         var text = "Vuoi disattivare il cliente: " + client.Name + "?";
         var confirmationResult = await DialogService.Confirm(text, titolo, new ConfirmOptions { OkButtonText = "Si", CancelButtonText = "No" });
@@ -122,7 +139,7 @@ public partial class TableClient
     {
         DialogService.Close();
         await LoadData();
-        await grid!.Reload();
+        //await grid!.Reload();
     }
 
 }
