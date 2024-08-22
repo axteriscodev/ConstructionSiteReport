@@ -51,6 +51,11 @@ public partial class TableCategoriesMobile
         count = categories.Count;
     }
 
+    private void SearchChanged()
+    {
+        
+    }
+
     private async Task OpenOrderForm()
     {   
         var width = screenComponent.ScreenSize.Width;
