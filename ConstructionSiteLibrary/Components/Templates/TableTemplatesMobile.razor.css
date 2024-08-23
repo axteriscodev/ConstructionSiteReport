@@ -1,0 +1,12 @@
+.cardClass {
+    border-radius: 0.8rem !important;
+    background: #FFF;
+    border-color: var(--border-Card);
+    padding: 1rem 2.5rem !important;
+    background-color: var(--card-background-color) !important;
+}
+
+.marginMobile {
+    margin-top: 1.5rem !important;
+    margin: 1.5rem !important;
+}
