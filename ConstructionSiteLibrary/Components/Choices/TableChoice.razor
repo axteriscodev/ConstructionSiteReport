@@ -1,5 +1,6 @@
 ﻿@using ConstructionSiteLibrary.Managers
 @using ConstructionSiteLibrary.Repositories
+@using ConstructionSiteLibrary.Components.Generics
 @using Shared;
 @using Shared.Templates
 
@@ -10,14 +11,67 @@
 
 
 <ScreenComponent @ref="screenComponent" />
-@if (initialLoading)
+@if (onLoading)
 {
     <Loading />
 }
 else
 {
+    <div class="mx-2 my-5">
+        <SectionTitle PageTitle="Scelte" ButtonText="+ aggiungi scelta" SearchPlaceholder="Cerca scelta"
+        OnButtonClicked="@OpenNewForm" OnSearchChanged="@SearchChanged" />
+    
+        <table class="table table-striped">
+            <thead>
+                <th scope="col">Tag</th>
+                <th scope="col">Valore</th>
+                <th scope="col"></th>
+            </thead>
+            <tbody>
+                @for(int i = 0; i < displayedChoices.Count; i += 1)
+                {
+                    <tr>
+                        <td>@displayedChoices[i].Tag</td>
+                        <td>@displayedChoices[i].Value</td>
+                        <td>
+                            <ButtonDropdown Object="@displayedChoices[i]"
+                                OnUpdateClicked="@OpenUpdateForm" OnDeleteClicked="@Hide"/>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="mt-5">
+            <AxtPager PagingSummaryFormat="@pagingSummaryFormat" Count="@count" PageSize="@pageSize" OnPageChanged="@PageChanged" />
+        </div>
+    
+    </div>
+
+    <script>
+    @*When the user clicks on the button,
+    toggle between hiding and showing the dropdown content *@
+    function myFunction() {
+        document.getElementById("myDropdown").classList.toggle("show");
+    }
+
+    // Close the dropdown if the user clicks outside of it
+    window.onclick = function (event) {
+        if (!event.target.matches('.buttonOptions')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    }
+</script>
+
     @* La tabella dei campi misurazione *@
-    <div class="marginComponent">
+    @* <div class="marginComponent">
         <RadzenFieldset Text="Possibili Scelte" class="shadow rounded" Style="font-weight:400;">
             <RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Success" class="ButtonAdd"
                           Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenNewForm())" />
@@ -27,12 +81,12 @@ else
                             Density="Density.Compact">
 
                 <Columns>
-                    @*<RadzenDataGridColumn TItem="ChoiceModel" Property="Id" Title="Id" Width="40px" />*@
+                    <RadzenDataGridColumn TItem="ChoiceModel" Property="Id" Title="Id" Width="40px" /> 
                     <RadzenDataGridColumn TItem="TemplateChoiceModel" Property="Tag" Title="Nome" Width="100px" />
                     <RadzenDataGridColumn TItem="TemplateChoiceModel" Property="Value" Title="Scelta" />
                     <RadzenDataGridColumn TItem="TemplateChoiceModel" Title="Azioni" Width="60px" Sortable="false">
                         <Template Context="data">
-                                @* Mostro i bottoni solo se ho i permessi di modifica *@
+                                 Mostro i bottoni solo se ho i permessi di modifica 
                             <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Info" Variant="Variant.Filled" Size="ButtonSize.Large"
                                               Click="@(()=>OpenUpdateForm(data))"  />
                                 <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Filled" Size="ButtonSize.Large"
@@ -42,7 +96,7 @@ else
                 </Columns>
             </RadzenDataGrid>
         </RadzenFieldset>
-    </div>
+    </div> *@
 
 
 }
