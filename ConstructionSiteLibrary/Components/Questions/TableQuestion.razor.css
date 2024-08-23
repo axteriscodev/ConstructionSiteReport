@@ -1,9 +1,9 @@
 ::deep .buttonDelete {
-  background-color: #ff9f9f !important;
+  background-color: var(--action-delete) !important;
 }
 
 ::deep .buttonEdit {
-  background-color: #ffe8a1 !important;
+  background-color: var(--action-edit) !important;
 }
 
 ::deep .buttonOptions {

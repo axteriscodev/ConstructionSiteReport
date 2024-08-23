@@ -29,4 +29,7 @@
     --border-Card: #afcaf3 !important;
     /* Colori tabelle */
     --axt-table-striped-bg: rgba(175, 201, 243, 0.15) !important; 
+    /* Colori azioni */
+    --action-delete: #ff0e0e !important;
+    --action-edit: #0065ff !important;
 }

@@ -23,28 +23,27 @@
 else
 {
     <div class="mx-2 my-5">
-        <SectionTitle PageTitle="Domande" ButtonText="+ aggiungi domanda" SearchPlaceholder="Cerca domanda"
-                      OnButtonClicked="@OpenForm" OnSearchChanged="@SearchChanged" />
-        <div>
-
-            <table class="table table-striped">
-                <thead>
+    <SectionTitle PageTitle="Domande" ButtonText="+ aggiungi domanda" SearchPlaceholder="Cerca domanda"
+        OnButtonClicked="@OpenForm" OnSearchChanged="@SearchChanged" />
+    <div>
+        <table class="table table-striped">
+            <thead>
                 <th>
                     <span> Domanda</span>
                 </th>
                 <th>
                     <span class="">Id Categoria</span>
                 </th>
-                </thead>
-                <tbody>
-                    @for (int i = 0; i < displayedQuestions.Count; i += 1)
+            </thead>
+            <tbody>
+                @for (int i = 0; i < displayedQuestions.Count; i += 1)
                     {
                         <tr>
                             <td>@displayedQuestions[i].Text</td>
                             <td>@displayedQuestions[i].IdCategory</td>
                             <td>
-                                <ButtonDropdown Object="@displayedQuestions[i]"
-                                 OnUpdateClicked="@OpenModifyQuestion" OnDeleteClicked="@OpenDeleteQuestion"/>
+                                <ButtonDropdown Object="@displayedQuestions[i]" OnUpdateClicked="@OpenModifyQuestion"
+                                    OnDeleteClicked="@OpenDeleteQuestion" />
                             </td>
                         </tr>
                     }
@@ -53,33 +52,33 @@ else
         </div>
         <div class="mt-5">
             <AxtPager PagingSummaryFormat="@pagingSummaryFormat" Count="@count" PageSize="@pageSize"
-                      OnPageChanged="@PageChanged" />
+                OnPageChanged="@PageChanged" />
         </div>
     </div>
 
-}
 
-<script>
-    @*When the user clicks on the button,
-        toggle between hiding and showing the dropdown content *@
-        function myFunction() {
-            document.getElementById("myDropdown").classList.toggle("show");
+
+    <script>
+    function myFunction() {
+        var isAlreadyOpen = false;
+        if (!this.nextElementSibling.classList.contains('hide')) {
+            // if the clicked button dropdown is already open then use this bool to not show it again.
+            isAlreadyOpen = true;
         }
-
-    // Close the dropdown if the user clicks outside of it
-    window.onclick = function (event) {
-        if (!event.target.matches('.dropbtn')) {
-            var dropdowns = document.getElementsByClassName("dropdown-content");
-            var i;
-            for (i = 0; i < dropdowns.length; i++) {
-                var openDropdown = dropdowns[i];
-                if (openDropdown.classList.contains('show')) {
-                    openDropdown.classList.remove('show');
-                }
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        for (var d = 0; d < dropdowns.length; d++) {
+            var openDropdown = dropdowns[d];
+            if (!openDropdown.classList.contains('hide')) {
+                openDropdown.classList.toggle("hide");
             }
+        }
+        if (!isAlreadyOpen) {
+            // if the dropdown was hidden when clicked then show it
+            this.nextElementSibling.classList.toggle("hide");
         }
     }
 </script>
+}
 
 
 @code {
@@ -102,20 +101,17 @@ else
         onLoading = false;
     }
 
-
     private async Task LoadData()
     {
         questions = await QuestionRepository.GetQuestions();
         FilterQuestions();
     }
 
-
     private void PageChanged(AxtPagerEventArgs args)
     {
         pageIndex = args.CurrentPage;
         FilterQuestions();
     }
-
 
     private void SearchChanged(string args)
     {
@@ -136,7 +132,6 @@ else
         SelectCurrentPage();
     }
 
-
     private void SelectCurrentPage()
     {
         var skip = pageIndex * pageSize;
@@ -155,11 +150,11 @@ else
             };
         //creo parametri da inviare al componente caricato con il popup
         var param = new Dictionary<string, object>
-        {
-            //tra i parametri che invio al dialog creo un EventCallback da passare al componente
-            { "OnSaveComplete", EventCallback.Factory.Create(this, Reload) },
-            { "CreationMode", true },
-        };
+{
+//tra i parametri che invio al dialog creo un EventCallback da passare al componente
+{ "OnSaveComplete", EventCallback.Factory.Create(this, Reload) },
+{ "CreationMode", true },
+};
         await DialogService.OpenAsync<FormQuestions>("Nuova domanda", parameters: param, options: newOptions);
     }
 
@@ -181,5 +176,4 @@ else
         var q = question as TemplateQuestionModel;
         Console.WriteLine("apro la form di conferma cancellazione");
     }
-
 }
