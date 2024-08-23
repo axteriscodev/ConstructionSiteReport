@@ -3,79 +3,91 @@
 @using ConstructionSiteLibrary.Components.Generics
 @using Shared;
 @using Shared.Templates
-
+@using ConstructionSiteLibrary.Utility
+@using ConstructionSiteLibrary.Model;
+@using ConstructionSiteLibrary.Components.Generics;
+@using Shared.Documents;
 
 @inject DialogService DialogService
+@inject QuestionRepository ChoiceRepository
+@inject ConstructorSitesRepository SiteRepository
 @inject NotificationManager NotificationManager
-@inject QuestionRepository QuestionRepository
-
+@inject GlobalVariables GlobalVariables
 
 <ScreenComponent @ref="screenComponent" />
+
 @if (onLoading)
 {
     <Loading />
 }
 else
 {
-    <div class="mx-2 my-5">
-        <SectionTitle PageTitle="Scelte" ButtonText="+ aggiungi scelta" SearchPlaceholder="Cerca scelta"
-        OnButtonClicked="@OpenNewForm" OnSearchChanged="@SearchChanged" />
-    
+  <div class="mx-2 my-5">
+    <SectionTitle PageTitle="Opzioni risposta" ButtonText="+ aggiungi risposta" SearchPlaceholder="Cerca scelta"
+        OnButtonClicked="@OpenForm" OnSearchChanged="@SearchChanged" />
+    <div>
         <table class="table table-striped">
             <thead>
-                <th scope="col">Tag</th>
-                <th scope="col">Valore</th>
-                <th scope="col"></th>
+                <th>
+                    <span>Sigla</span>
+                </th>
+                <th>
+                    <span class="">Scelta</span>
+                </th>
             </thead>
             <tbody>
-                @for(int i = 0; i < displayedChoices.Count; i += 1)
-                {
-                    <tr>
-                        <td>@displayedChoices[i].Tag</td>
-                        <td>@displayedChoices[i].Value</td>
-                        <td>
-                            <ButtonDropdown Object="@displayedChoices[i]"
-                                OnUpdateClicked="@OpenUpdateForm" OnDeleteClicked="@Hide"/>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-
-        <div class="mt-5">
-            <AxtPager PagingSummaryFormat="@pagingSummaryFormat" Count="@count" PageSize="@pageSize" OnPageChanged="@PageChanged" />
+                @for (int i = 0; i < displayedChoices.Count; i += 1)
+                    {
+                        <tr>
+                            <td>@displayedChoices[i].Tag</td>
+                            <td>@displayedChoices[i].Value</td>
+                            <td>
+                                <ButtonDropdown Object="@displayedChoices[i]" OnUpdateClicked="@OpenModifyChoice"
+                                    OnDeleteClicked="@OpenDeleteChoice" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
-    
+        <div class="mt-5">
+            <AxtPager PagingSummaryFormat="@pagingSummaryFormat" Count="@count" PageSize="@pageSize"
+                OnPageChanged="@PageChanged" />
+        </div>
     </div>
 
-    <script>
-    @*When the user clicks on the button,
-    toggle between hiding and showing the dropdown content *@
+    @* <script>
     function myFunction() {
-        document.getElementById("myDropdown").classList.toggle("show");
-    }
-
-    // Close the dropdown if the user clicks outside of it
-    window.onclick = function (event) {
-        if (!event.target.matches('.buttonOptions')) {
-            var dropdowns = document.getElementsByClassName("dropdown-content");
-            var i;
-            for (i = 0; i < dropdowns.length; i++) {
-                var openDropdown = dropdowns[i];
-                if (openDropdown.classList.contains('show')) {
-                    openDropdown.classList.remove('show');
-                }
+        var isAlreadyOpen = false;
+        if (!this.nextElementSibling.classList.contains('hide')) {
+            // if the clicked button dropdown is already open then use this bool to not show it again.
+            isAlreadyOpen = true;
+        }
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        for (var d = 0; d < dropdowns.length; d++) {
+            var openDropdown = dropdowns[d];
+            if (!openDropdown.classList.contains('hide')) {
+                openDropdown.classList.toggle("hide");
             }
         }
+        if (!isAlreadyOpen) {
+            // if the dropdown was hidden when clicked then show it
+            this.nextElementSibling.classList.toggle("hide");
+        }
     }
-</script>
-
+</script> *@
+ 
+ 
     @* La tabella dei campi misurazione *@
-    @* <div class="marginComponent">
-        <RadzenFieldset Text="Possibili Scelte" class="shadow rounded" Style="font-weight:400;">
-            <RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Success" class="ButtonAdd"
-                          Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenNewForm())" />
-            <RadzenDataGrid @ref="grid" TItem="TemplateChoiceModel" GridLines="@DataGridGridLines.Both" IsLoading=@isLoading Count="@count" PageSize="@pageSize" Data="@list"
+   /*
+   
+    using ConstructionSiteLibrary.Components.Questions;
+
+#line default
+#line hidden
+#nullable disable
+lable disable
+        <RadzenDataGrid @ref="grid" TItem="TemplateChoiceModel" GridLines="@DataGridGridLines.Both" IsLoading=@isLoading Count="@count" PageSize="@pageSize" Data="@list"
                             AllowColumnResize="true" AllowAlternatingRows="true" ColumnWidth="200px" AllowFiltering="true" FilterMode="FilterMode.Simple"
                             AllowSorting="true" AllowPaging="true" ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" PagerHorizontalAlign="HorizontalAlign.Left"
                             Density="Density.Compact">
@@ -98,5 +110,101 @@ else
         </RadzenFieldset>
     </div> *@
 
+*/
+}
+@code {
+    ScreenComponent? screenComponent;
 
+    private List<TemplateChoiceModel> choices = [];
+    private List<TemplateChoiceModel> displayedChoices = [];
+    private bool onLoading = false;
+    private string search = "";
+    private string pagingSummaryFormat = "Pagina {0} di {1} (Totale {2} risposte)";
+    private int count = 0;
+    private int pageSize = GlobalVariables.PageSize;
+    private int pageIndex = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        onLoading = true;
+        await base.OnInitializedAsync();
+        await LoadData();
+        onLoading = false;
+    }
+
+    private async Task LoadData()
+    {
+        choices = await ChoiceRepository.GetChoices();
+        FilterChoices();
+    }
+
+    private void PageChanged(AxtPagerEventArgs args)
+    {
+        pageIndex = args.CurrentPage;
+        FilterChoices();
+    }
+
+    private void SearchChanged(string args)
+    {
+        search = args;
+        FilterChoices();
+    }
+
+    private void FilterChoices()
+    {
+        displayedChoices = choices;
+        search = search.TrimStart().TrimEnd();
+        if (!string.IsNullOrEmpty(search))
+        {
+            displayedChoices = choices.Where(x => x.Value.Contains(search,
+            StringComparison.InvariantCultureIgnoreCase)).ToList();
+        }
+        count = displayedChoices.Count;
+        SelectCurrentPage();
+    }
+
+    private void SelectCurrentPage()
+    {
+        var skip = pageIndex * pageSize;
+        displayedChoices = displayedChoices.Skip(skip).Take(pageSize).ToList();
+    }
+
+    private async Task OpenForm()
+    {
+        var width = screenComponent.GetScreenSize();
+
+        // creo uno style aggiuntivo da inviare al componente caricato con il popup come options
+        var additionalStyle = $"min-height:fit-content;height:fit-content;width:{width}px;max-width:600px";
+        var newOptions = new DialogOptions
+            {
+                Style = additionalStyle
+            };
+        //creo parametri da inviare al componente caricato con il popup
+        var param = new Dictionary<string, object>
+{
+//tra i parametri che invio al dialog creo un EventCallback da passare al componente
+{ "OnSaveComplete", EventCallback.Factory.Create(this, Reload) },
+{ "CreationMode", true },
+};
+        @* await DialogService.OpenAsync<FormQuestions>("Nuova risposta", parameters: param, options: newOptions); *@
+    }
+
+    private async Task Reload()
+    {
+        DialogService.Close();
+        await LoadData();
+        StateHasChanged();
+    }
+
+    private async Task OpenModifyChoice(object choice)
+    {
+        var q = choice as TemplateChoiceModel;
+        Console.WriteLine("apro la form di modifica");
+    }
+
+    private async Task OpenDeleteChoice(object choice)
+    {
+        var q = choice as TemplateChoiceModel;
+        Console.WriteLine("apro la form di conferma cancellazione");
+    }
 }

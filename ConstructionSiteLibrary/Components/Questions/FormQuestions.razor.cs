@@ -1,12 +1,7 @@
-﻿using AXT_WebComunication.WebResponse;
-using ConstructionSiteLibrary.Managers;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
-using Shared;
-using Shared.Defaults;
 using Shared.Templates;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ConstructionSiteLibrary.Components.Questions;
 
@@ -71,7 +66,7 @@ public partial class FormQuestions
 
     private async Task CaricaDati()
     {
-       categories = await CategoriesRepository.GetCategories();
+        categories = await CategoriesRepository.GetCategories();
         choices = await QuestionRepository.GetChoices();
     }
 
@@ -100,7 +95,7 @@ public partial class FormQuestions
 
     private bool ChoiceCheckBoxValue(TemplateChoiceModel choice)
     {
-        return form.Choices.Find(x => x.Id == choice.Id ) is not null;
+        return form.Choices.Find(x => x.Id == choice.Id) is not null;
     }
 
     private async Task<bool> ChoiceCheckBoxChange(bool value, TemplateChoiceModel choice)
@@ -112,7 +107,7 @@ public partial class FormQuestions
         else
         {
             var c = form.Choices.Where(x => x.Id == choice.Id).FirstOrDefault();
-            if(c is not null)
+            if (c is not null)
             {
                 form.Choices.Remove(c);
             }
