@@ -116,8 +116,10 @@ public partial class TableCategoriesMobile
     }
 
 
-    private async Task OpenUpdateForm(CategoryModel item)
+    private async Task OpenUpdateForm(object category)
     {
+        var item = category as TemplateChoiceModel;
+
         var width = screenComponent.ScreenSize.Width;
 
         //creo uno style aggiuntivo da inviare al componente caricato con il popup come options
@@ -137,8 +139,12 @@ public partial class TableCategoriesMobile
         await DialogService.OpenAsync<FormCategories>("Aggiorna categoria", parameters: param, options: newOptions);
     }
 
-    private async Task Hide(TemplateCategoryModel category)
+    private async Task Hide(object item)
     {
+
+        var category = item as TemplateCategoryModel;
+
+
         var titolo = "Disattivazione sezione";
         var text = "Vuoi disattivare la sezione: " + category.Text + "?";
         var confirmationResult = await DialogService.Confirm(text, titolo, new ConfirmOptions { OkButtonText = "Si", CancelButtonText = "No" });
