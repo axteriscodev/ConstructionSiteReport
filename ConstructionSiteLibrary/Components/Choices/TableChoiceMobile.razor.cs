@@ -1,6 +1,8 @@
 ﻿using System.Text.Json;
 using ConstructionSiteLibrary.Components.Utilities;
 using ConstructionSiteLibrary.Managers;
+using ConstructionSiteLibrary.Model;
+using ConstructionSiteLibrary.Utility;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
@@ -11,6 +13,14 @@ namespace ConstructionSiteLibrary.Components.Choices;
 
 public partial class TableChoiceMobile
 {
+
+    /// <summary>
+    /// Riferimento alla lista di choices
+    /// </summary>
+    private List<TemplateChoiceModel> choices = [];
+
+    private List<TemplateChoiceModel> displayedChoices = [];
+
     /// <summary>
     /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
     /// </summary>
@@ -22,16 +32,16 @@ public partial class TableChoiceMobile
     /// <summary>
     /// Intero che ci dice quanti elementi possono stare in una pagina
     /// </summary>
-    private int pageSize = 8;
+    private int pageSize = GlobalVariables.PageSize;
+
+    private int pageIndex = 0;
+
     /// <summary>
     /// Stringa indica la pagina e gli elementi
     /// </summary>
     private string pagingSummaryFormat = "Pagina {0} di {1} (Totale {2} scelte)";
-    /// <summary>
-    /// Riferimento alla lista di choices
-    /// </summary>
-    private List<TemplateChoiceModel> list = [];
-
+   
+    private string search = "";
 
     ScreenComponent screenComponent;
 
@@ -107,7 +117,38 @@ public partial class TableChoiceMobile
     }
     private async Task LoadData()
     {
-        list = await QuestionRepository.GetChoices();
-        count = list.Count;
+        choices = await QuestionRepository.GetChoices();
+        FilterChoices();
+    }
+
+    private void PageChanged(AxtPagerEventArgs args)
+    {
+        pageIndex = args.CurrentPage;
+        FilterChoices();
+    }
+
+    private void SearchChanged(string args)
+    {
+        search = args;
+        FilterChoices();
+    }
+
+    private void FilterChoices()
+    {
+        displayedChoices = choices;
+        search = search.TrimStart().TrimEnd();
+        if(!string.IsNullOrEmpty(search))
+        {
+            displayedChoices = choices.Where(x => x.Value.Contains(search, StringComparison.InvariantCultureIgnoreCase)).ToList();
+        }
+
+        count = displayedChoices.Count;
+        SelectCurrentPage();
+    }
+
+    private void SelectCurrentPage()
+    {
+        var skip = pageIndex * pageSize;
+        displayedChoices = displayedChoices.Skip(skip).Take(pageSize).ToList();
     }
 }

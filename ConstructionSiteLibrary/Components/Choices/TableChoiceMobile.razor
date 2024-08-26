@@ -1,5 +1,6 @@
 ﻿@using ConstructionSiteLibrary.Managers
 @using ConstructionSiteLibrary.Repositories
+@using ConstructionSiteLibrary.Components.Generics
 @using Shared
 @using Shared.Templates
 
@@ -17,18 +18,20 @@ else
 {
     @* La tabella dei campi misurazione *@
     <div class="marginComponent">
-            <RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
-                          Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenNewForm())" />
-           
+            @* <RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
+                          Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenNewForm())" />*@
 
-               @foreach (var choice in list)
+            <SectionTitle PageTitle="Opzioni risposta" ButtonText="+ aggiungi opzione risposta" SearchPlaceholder="Cerca opzione risposta"
+            OnButtonClicked="@OpenNewForm" OnSearchChanged="@SearchChanged" />
+
+            @foreach (var choice in displayedChoices)
             {
                 <RadzenCard Variant="Variant.Filled" Class="rz-my-2 rz-mx-auto" Style="max-width: 420px">
                     <RadzenStack Gap="0">
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Nome
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Tag
                         </RadzenText>
                         <RadzenText TextStyle="TextStyle.Body1"><b>@choice.Tag</b></RadzenText>
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Scelta
+                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Valore
                         </RadzenText>
                         <RadzenText TextStyle="TextStyle.Body1"><b>@choice.Value</b></RadzenText>
 
