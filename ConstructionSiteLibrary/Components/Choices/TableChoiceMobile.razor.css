@@ -1,7 +1,12 @@
-::deep .buttonDelete {
-    background-color: #ff9f9f !important;
+.cardClass {
+    border-radius: 0.8rem !important;
+    background: #FFF;
+    border-color: var(--border-Card);
+    padding: 1rem 2.5rem !important;
+    background-color: var(--card-background-color) !important;
 }
 
-::deep .buttonEdit {
-    background-color: #ffe8a1 !important;
+.marginMobile {
+    margin-top: 1.5rem !important;
+    margin: 1.5rem !important;
 }
