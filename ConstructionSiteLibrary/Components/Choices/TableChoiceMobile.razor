@@ -9,7 +9,7 @@
 @inject QuestionRepository QuestionRepository
 
 
-<ScreenComponent @ref="screenComponent"/>
+<ScreenComponent @ref="screenComponent" />
 @if (initialLoading)
 {
     <Loading />
@@ -18,37 +18,36 @@ else
 {
     @* La tabella dei campi misurazione *@
     <div class="marginComponent">
-            @* <RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
-                          Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenNewForm())" />*@
+        @* <RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
+    Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenNewForm())" />*@
 
-            <SectionTitle PageTitle="Opzioni risposta" ButtonText="+ aggiungi opzione risposta" SearchPlaceholder="Cerca opzione risposta"
-            OnButtonClicked="@OpenNewForm" OnSearchChanged="@SearchChanged" />
+        <SectionTitle PageTitle="Opzioni risposta" ButtonText="+ aggiungi opzione risposta"
+            SearchPlaceholder="Cerca opzione risposta" OnButtonClicked="@OpenNewForm" OnSearchChanged="@SearchChanged" />
 
-            @foreach (var choice in displayedChoices)
-            {
-                <RadzenCard Variant="Variant.Filled" Class="rz-my-2 rz-mx-auto" Style="max-width: 420px">
+    </div>
+    <ul class="list-unstyled">
+    @foreach (var choice in displayedChoices)
+        {
+            <li>
+                <div class="marginListEntry">
                     <RadzenStack Gap="0">
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Tag
-                        </RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1"><b>@choice.Tag</b></RadzenText>
+                        <RadzenRow Class="rz-mt-2" JustifyContent="JustifyContent.SpaceBetween">
+                            <RadzenColumn>
+                                <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Tag
+                                </RadzenText>
+                                <RadzenText TextStyle="TextStyle.Body1"><b>@choice.Tag</b></RadzenText>
+                            </RadzenColumn>
+                            <ButtonDropdown Object="@choice" OnUpdateClicked="@OpenUpdateForm" OnDeleteClicked="@Hide" />
+                        </RadzenRow>
                         <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Valore
                         </RadzenText>
                         <RadzenText TextStyle="TextStyle.Body1"><b>@choice.Value</b></RadzenText>
-
-                        @* Mostro i bottoni solo se ho i permessi di modifica *@
-                        <RadzenRow Class="rz-mt-2" JustifyContent="JustifyContent.Right" Gap="1rem">
-                            <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Filled"
-                                Size="ButtonSize.Medium" Click="@(()=>OpenUpdateForm(@choice))" class="buttonEdit"
-                                />
-                            <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Light" Variant="Variant.Filled"
-                                Size="ButtonSize.Medium" Click="@(()=>Disable(@choice))" class="buttonDelete"
-                                 />
-                        </RadzenRow>
                     </RadzenStack>
-
-                </RadzenCard>
-            }
-    </div>
+                </div>
+                <hr class="solid">
+            </li>
+        }
+    </ul>
 
 
 }

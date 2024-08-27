@@ -15,40 +15,42 @@ else
     @* La tabella delle Categorie *@
     <div class="marginMobile">
 
-            @* <RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
-                Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenNewForm())" />
-            <RadzenButton Icon="sort" Text="Ordina" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
-                Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenOrderForm())" /> *@
+        @* <RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
+    Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenNewForm())" />
+    <RadzenButton Icon="sort" Text="Ordina" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
+    Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenOrderForm())" /> *@
 
         <SectionTitle PageTitle="Categorie" ButtonText="+ aggiungi categoria" SearchPlaceholder="Cerca categoria"
             OnButtonClicked="@OpenNewForm" OnSearchChanged="@SearchChanged" />
 
-            @foreach (var category in displayedCategories)
-            {
-                <div class="card round-border cardClass mb-3">
-   
+    </div>
+
+
+    <ul class="list-unstyled">
+    @foreach (var category in displayedCategories)
+        {
+            <li>
+                <div class="marginListEntry">
                     <RadzenStack Gap="0">
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Numero
-                        </RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1"><b>@category.Order</b></RadzenText>
+                        <RadzenRow Class="rz-mt-2" JustifyContent="JustifyContent.SpaceBetween">
+                            <RadzenColumn>
+                                <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Numero
+                                </RadzenText>
+                                <RadzenText TextStyle="TextStyle.Body1"><b>@category.Order</b></RadzenText>
+                            </RadzenColumn>
+                            <ButtonDropdown Object="@category" OnUpdateClicked="@OpenUpdateForm" OnDeleteClicked="@Hide" />
+                        </RadzenRow>
+
                         <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Categoria
                         </RadzenText>
                         <RadzenText TextStyle="TextStyle.Body1"><b>@category.Text</b></RadzenText>
-
-                        @* Mostro i bottoni solo se ho i permessi di modifica *@
-                        <RadzenRow Class="rz-mt-2" JustifyContent="JustifyContent.Right" Gap="1rem">
-                            <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Info" Variant="Variant.Filled"
-                                Size="ButtonSize.Medium" Click="@(()=>OpenUpdateForm(@category))" class="buttonEdit"
-                                />
-                            <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Filled"
-                                Size="ButtonSize.Medium" Click="@(()=>Hide(@category))" class="buttonDelete"
-                                 />
-                        </RadzenRow>
                     </RadzenStack>
-
                 </div>
-            }
-    </div>
+                <hr class="solid">
+
+            </li>
+        }
+    </ul>
 
 
 }

@@ -17,44 +17,39 @@ else
     @* La tabella dei committenti *@
     <div class="marginMobile">
 
-            @*<RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Success" class="ButtonAdd"
-                          Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenNewForm())" />
-            <RadzenButton Icon="sort" Text="Ordina" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
-                          Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenOrderForm())" />*@
+        @*<RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Success" class="ButtonAdd"
+    Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenNewForm())" />
+    <RadzenButton Icon="sort" Text="Ordina" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
+    Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenOrderForm())" />*@
 
-            <SectionTitle PageTitle="Committenti" ButtonText="+ aggiungi committente" SearchPlaceholder="Cerca committente"
-                OnButtonClicked="@OpenNewForm" OnSearchChanged="@SearchChanged" />
+        <SectionTitle PageTitle="Committenti" ButtonText="+ aggiungi committente" SearchPlaceholder="Cerca committente"
+            OnButtonClicked="@OpenNewForm" OnSearchChanged="@SearchChanged" />
 
-            @foreach(var client in displayClients)
-            {
-                @* <RadzenCard Variant="Variant.Filled" Class="rz-my-2 rz-mx-auto" Style="max-width: 420px"> *@
-                   
-                <div class="card round-border cardClass mb-3">
-
-                    <RadzenStack Gap="0">
-                        @*<RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Id
-                        </RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1"><b>@client.Id</b></RadzenText>*@
-                        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Nome
-                        </RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1"><b>@client.Name</b></RadzenText>
-
-                        @* Mostro i bottoni solo se ho i permessi di modifica *@
-                        <RadzenRow Class="rz-mt-2" JustifyContent="JustifyContent.Right" Gap="1rem">
-                            <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Info" Variant="Variant.Filled"
-                                Size="ButtonSize.Medium" Click="@(()=>OpenUpdateForm(client))" class="buttonEdit"
-                                />
-                            <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Filled"
-                                Size="ButtonSize.Medium" Click="@(()=>Hide(client))" class="buttonDelete"
-                                 />
-                        </RadzenRow>
-                    </RadzenStack>
-
-                </div>
-
-                @* </RadzenCard> *@
-            }
     </div>
 
+    <ul class="list-unstyled">
+
+    @foreach (var client in displayClients)
+        {
+            <li>
+                <div class="marginListEntry">
+                    <RadzenStack Gap="0">
+                        @*<RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Id
+                </RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1"><b>@client.Id</b></RadzenText>*@
+                        <RadzenRow Class="rz-mt-2" JustifyContent="JustifyContent.SpaceBetween">
+                            <RadzenColumn>
+                                <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Nome
+                                </RadzenText>
+                                <RadzenText TextStyle="TextStyle.Body1"><b>@client.Name</b></RadzenText>
+                            </RadzenColumn>
+                            <ButtonDropdown Object="@client" OnUpdateClicked="@OpenUpdateForm" OnDeleteClicked="@Hide" />
+                        </RadzenRow>
+                    </RadzenStack>
+                </div>
+                <hr class="solid">
+            </li>
+        }
+    </ul>
 
 }

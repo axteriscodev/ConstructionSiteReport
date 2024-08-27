@@ -89,8 +89,10 @@ public partial class TableClientMobile
         await DialogService.OpenAsync<FormClient>("Nuovo cliente", parameters: param, options: newOptions);
     }
 
-    private async Task OpenUpdateForm(ClientModel client)
+    private async Task OpenUpdateForm(object item)
     {
+        var client = item as ClientModel;
+
         var width = screenComponent.ScreenSize.Width;
 
         //creo uno style aggiuntivo da inviare al componente caricato con il popup come options
@@ -110,8 +112,9 @@ public partial class TableClientMobile
     }
 
 
-    private async Task Hide(ClientModel client)
+    private async Task Hide(object item)
     {
+        var client = item as ClientModel;
         var titolo = "Disattivazione cliente";
         var text = "Vuoi disattivare il cliente: " + client.Name + "?";
         var confirmationResult = await DialogService.Confirm(text, titolo, new ConfirmOptions { OkButtonText = "Si", CancelButtonText = "No" });
