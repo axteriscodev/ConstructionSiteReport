@@ -1,6 +1,6 @@
 ﻿@using Shared.Templates
 
-<div class="dropdown">
+<div class="dropdown" @onfocusout="@(() => ToggleDropdown())">
     <RadzenButton Icon="more_vert" Click="@ToggleDropdown" class="buttonOptions" />
     <div id="myDropdown" class="dropdown-content @DropdownCssClass()">
         <RadzenButton Icon="edit" Text="Modifica" class="buttonEdit" Click="Modify" />
