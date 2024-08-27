@@ -65,8 +65,10 @@ public partial class TableChoiceMobile
         await DialogService.OpenAsync<FormChoice>("Nuova scelta", parameters: param, options: newOptions);
     }
 
-    private async Task OpenUpdateForm(TemplateChoiceModel model)
+    private async Task OpenUpdateForm(object item)
     {
+        var model = item as TemplateChoiceModel;  
+
         var width = screenComponent.ScreenSize.Width;
 
         //creo uno style aggiuntivo da inviare al componente caricato con il popup come options
@@ -86,8 +88,9 @@ public partial class TableChoiceMobile
         await DialogService.OpenAsync<FormChoice>("Aggiorna scelta", parameters: param, options: newOptions);
     }
 
-    private async Task Disable(TemplateChoiceModel model)
+    private async Task Hide(object item)
     {
+        var model = item as TemplateChoiceModel;
         var titolo = "Disattivazione scelta";
         var text = "Vuoi disattivare la scelta: " + model.Value + "?";
         var confirmationResult = await DialogService.Confirm(text, titolo,
