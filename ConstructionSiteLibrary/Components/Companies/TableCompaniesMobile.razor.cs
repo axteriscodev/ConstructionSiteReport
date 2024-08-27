@@ -64,13 +64,15 @@ public partial class TableCompaniesMobile
         Navigation.ChangePage(PageRouting.AddCompanyPage);
     }
 
-    private void OpenUpdateCompany(CompanyModel company)
+    private void OpenUpdateCompany(object item)
     {
+        var company = item as CompanyModel;
         Navigation.ChangePage(PageRouting.AddCompanyPage + company.Id);
     }
 
-    private async Task Hide(CompanyModel company)
+    private async Task Hide(object item)
     {
+        var company = item as CompanyModel;
         var titolo = "Elimina Azienda";
         var text = "Vuoi eliminare l'azienda selezionata?";
         var confirmationResult = await DialogService.Confirm(text, titolo, new ConfirmOptions { OkButtonText = "Sì", CancelButtonText = "No" });

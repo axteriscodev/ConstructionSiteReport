@@ -10,3 +10,15 @@
     margin-top: 1.5rem !important;
     margin: 1.5rem !important;
 }
+
+li { background: none;}
+li:nth-child(odd) { background: var(--axt-table-striped-bg); }
+
+hr {
+    margin: 0 !important;
+}
+
+.marginListEntry {
+    margin-inline: 1rem !important;
+    padding-block: 0.5rem !important;
+}
