@@ -57,29 +57,6 @@ else
                 OnPageChanged="@PageChanged" />
         </div>
     </div>
-
-    <script>
-        @* function myFunction() {
-            var isAlreadyOpen = false;
-            if (!this.nextElementSibling.classList.contains('hide')) {
-                // if the clicked button dropdown is already open then use this bool to not show it again.
-                isAlreadyOpen = true;
-            }
-            var dropdowns = document.getElementsByClassName("dropdown-content");
-            for (var d = 0; d < dropdowns.length; d++) {
-                var openDropdown = dropdowns[d];
-                if (!openDropdown.classList.contains('hide')) {
-                    openDropdown.classList.toggle("hide");
-                }
-            }
-            if (!isAlreadyOpen) {
-                // if the dropdown was hidden when clicked then show it
-                this.nextElementSibling.classList.toggle("hide");
-            }
-        } *@
-    </script>
-
-
 }
 @code {
     ScreenComponent? screenComponent;
