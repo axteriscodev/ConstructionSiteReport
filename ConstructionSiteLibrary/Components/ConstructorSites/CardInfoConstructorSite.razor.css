@@ -1,0 +1,12 @@
+﻿
+
+.info-label {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--rz-primary);
+}
+
+.btu-modify:hover, ::deep .btu-modify:hover {
+    background-color: var(--rz-primary) !important;
+    color: white !important;
+}

@@ -2,27 +2,40 @@
 
 <div class="my-5">
     <div class="row">
-        <div class="col-12 col-lg-6 d-flex justify-content-center justify-content-lg-start">
-            <h1 class="title">@PageTitle</h1>
-        </div>
-        <div class="col-12 col-lg-6 mt-5 m-lg-0 d-flex justify-content-center justify-content-lg-end">
-            <RadzenFormField AllowFloatingLabel="false" Variant="@GlobalVariables.ComponentVariant" class="searchBar">
-                <Start>
-                    <RadzenIcon Icon="search" />
-                </Start>
-                <ChildContent>
-                    <RadzenTextBox Placeholder="@SearchPlaceholder" @oninput="@SearchChanged" />
-                </ChildContent>
-            </RadzenFormField>
-        </div>
+        @if (ShowSearchBar)
+        {
+            <div class="col-12 col-lg-6 d-flex justify-content-center justify-content-lg-start">
+                <h1 class="title">@PageTitle</h1>
+            </div>
+            <div class="col-12 col-lg-6 mt-5 m-lg-0 d-flex justify-content-center justify-content-lg-end">
+                <RadzenFormField AllowFloatingLabel="false" Variant="@GlobalVariables.ComponentVariant" class="searchBar">
+                    <Start>
+                        <RadzenIcon Icon="search" />
+                    </Start>
+                    <ChildContent>
+                        <RadzenTextBox Placeholder="@SearchPlaceholder" @oninput="@SearchChanged" />
+                    </ChildContent>
+                </RadzenFormField>
+            </div>
+        }
+        else
+        {
+            <div class="col-12 d-flex justify-content-center justify-content-lg-start">
+                <h1 class="title">@PageTitle</h1>
+            </div>
+        }
+
     </div>
-    <div class="row text-center mt-4">
-        <div class="col-12">
-            <RadzenButton Variant="Variant.Text" class="btu-section" Click="@ButtonClick">
-                <i><u>@ButtonText</u></i>
-            </RadzenButton>
+    @if (ShowButton)
+    {
+        <div class="row text-center mt-4">
+            <div class="col-12">
+                <RadzenButton Variant="Variant.Text" class="btu-section" Click="@ButtonClick">
+                    <i><u>@ButtonText</u></i>
+                </RadzenButton>
+            </div>
         </div>
-    </div>
+    }
 </div>
 
 
@@ -36,6 +49,10 @@
     public string PageTitle { get; set; } = "";
     [Parameter]
     public string ButtonText { get; set; } = "";
+    [Parameter]
+    public bool ShowButton { get; set; } = true;
+    [Parameter]
+    public bool ShowSearchBar { get; set; } = true;
     [Parameter]
     public string SearchPlaceholder { get; set; } = "";
 

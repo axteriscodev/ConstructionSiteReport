@@ -1,10 +1,4 @@
-::deep .buttonDelete {
-  background-color: var(--action-delete) !important;
-}
 
-::deep .buttonEdit {
-  background-color: var(--action-edit) !important;
-}
 
 ::deep .buttonOptions {
   background-color: transparent !important;

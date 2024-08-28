@@ -15,6 +15,8 @@ namespace ConstructionSiteLibrary.Components.Documents.Wizard
     public partial class WizardDocumentCreation
     {
         [Parameter]
+        public EventCallback OnSaveComplete { get;set; }
+        [Parameter]
         public int SiteId { get; set; }
 
         private TemplateModel? _selectedTemplate;

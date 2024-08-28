@@ -3,8 +3,8 @@
 <div class="dropdown" @onfocusout="@(() => ToggleDropdown())">
     <RadzenButton Icon="more_vert" Click="@ToggleDropdown" class="buttonOptions" />
     <div id="myDropdown" class="dropdown-content @DropdownCssClass()">
-        <RadzenButton Icon="edit" Text="Modifica" class="buttonEdit" Click="Modify" />
-        <RadzenButton Icon="delete" Text="Elimina" class="buttonDelete" Click="Delete" />
+        <RadzenButton Icon="edit" Text="Modifica" Variant="Variant.Text" class="buttonEdit" Click="Modify" />
+        <RadzenButton Icon="delete" Text="Elimina " class="buttonDelete" Variant="Variant.Text" Click="Delete" />
     </div>
 </div>
 

@@ -5,6 +5,7 @@
 
 @inject ConstructorSitesRepository SiteRepository
 @inject DialogService DialogService
+@inject NavigationManager NavigationManager
 
 
 <ScreenComponent @ref="screenComponent" />
@@ -16,17 +17,18 @@
 else
 {
     <div class="mx-2 my-5">
-    <SectionTitle PageTitle="I miei cantieri" ButtonText="+ aggiungi cantiere" SearchPlaceholder="Cerca cantiere"
-        OnButtonClicked="@OpenForm" OnSearchChanged="@SearchChanged" />
-    <div>
-        @for (int i = 0; i < displayedSites.Count; i += 1)
-            {
-                <div class="row mt-4">
-                    <div class="col">
-                        <CardConstructorSite Site="@displayedSites[i]" />
+        <SectionTitle PageTitle="I miei cantieri" ButtonText="+ aggiungi cantiere" SearchPlaceholder="Cerca cantiere"
+                      OnButtonClicked="@OpenForm" OnSearchChanged="@SearchChanged" />
+        <div>
+            <Repeater Data="@displayedSites" TItem="ConstructorSiteModel">
+                <ContentTemplate Context="Item">
+                    <div class="row mt-4">
+                        <div class="col">
+                            <CardConstructorSite Site="@Item" />
+                        </div>
                     </div>
-                </div>
-            }
+                </ContentTemplate>
+            </Repeater>
         </div>
         <div class="mt-5">
             <AxtPager PagingSummaryFormat="@pagingSummaryFormat" Count="@count" PageSize="@pageSize"
@@ -90,6 +92,7 @@ else
     {
         var skip = pageIndex * pageSize;
         displayedSites = displayedSites.Skip(skip).Take(pageSize).ToList();
+        NavigationManager.NavigateTo(PageRouting.HomePage);
     }
 
     private async Task OpenForm()
