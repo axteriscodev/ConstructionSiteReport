@@ -5,43 +5,37 @@ using ConstructionSiteLibrary.Repositories;
 using ConstructionSiteLibrary.Components.Utilities;
 using Shared.Templates;
 using ConstructionSiteLibrary.Utility;
+using ConstructionSiteLibrary.Model;
 
 namespace ConstructionSiteLibrary.Components.Choices
 {
     public partial class TableChoice
     {
-        /// <summary>
-        /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
-        /// </summary>
-        private bool initialLoading;
-        /// <summary>
-        /// Booleano che è impostata durante una ricerca
-        /// </summary>
-        private bool isLoading = false;
-        /// <summary>
-        /// Intero che ci dice quanti sono gli elementi
-        /// </summary>
-        private int count;
-        /// <summary>
-        /// Intero che ci dice quanti elementi possono stare in una pagina
-        /// </summary>
-        private int pageSize = GlobalVariables.PageSize;
-        /// <summary>
-        /// Stringa indica la pagina e gli elementi
-        /// </summary>
-        private string pagingSummaryFormat = "Pagina {0} di {1} (Totale {2} scelte)";
-        /// <summary>
-        /// Riferimento al componente tabella
-        /// </summary>
-        private RadzenDataGrid<TemplateChoiceModel>? grid;
+        ScreenComponent screenComponent;
+
         /// <summary>
         /// Riferimento alla lista di choices
         /// </summary>
-        private List<TemplateChoiceModel> list = [];
+        private List<TemplateChoiceModel> choices = [];
 
+        private List<TemplateChoiceModel> displayedChoices = [];
 
-        ScreenComponent screenComponent;
+        /// <summary>
+        /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
+        /// </summary>
+        private bool onLoading = false;
 
+        private string search = "";
+
+        private int count = 0;
+
+        private int pageSize = GlobalVariables.PageSize;
+
+        private int pageIndex = 0;
+    
+        private string pagingSummaryFormat = "Pagina {0} di {1} (Totale {2} scelte)";
+    
+        
         private async Task OpenNewForm()
         {
             var width = screenComponent.ScreenSize.Width;
@@ -62,8 +56,10 @@ namespace ConstructionSiteLibrary.Components.Choices
             await DialogService.OpenAsync<FormChoice>("Nuova scelta", parameters: param, options: newOptions);
         }
 
-        private async Task OpenUpdateForm(TemplateChoiceModel model)
+        private async Task OpenUpdateForm(object item)
         {
+            var model = item as TemplateChoiceModel;
+
             var width = screenComponent.ScreenSize.Width;
 
             //creo uno style aggiuntivo da inviare al componente caricato con il popup come options
@@ -83,8 +79,10 @@ namespace ConstructionSiteLibrary.Components.Choices
             await DialogService.OpenAsync<FormChoice>("Aggiorna scelta", parameters: param, options: newOptions);
         }
 
-        private async Task Disable(TemplateChoiceModel model)
+        private async Task Hide(object item)
         {
+             var model = item as TemplateChoiceModel;
+
             var titolo = "Disattivazione scelta";
             var text = "Vuoi disattivare la scelta: " + model.Value + "?";
             var confirmationResult = await DialogService.Confirm(text, titolo,
@@ -103,20 +101,51 @@ namespace ConstructionSiteLibrary.Components.Choices
         {
             DialogService.Close();
             await LoadData();
-            await grid!.Reload();
+            //await grid!.Reload();
         }
 
         protected override async Task OnInitializedAsync()
         {
-            initialLoading = true;
+            onLoading = true;
             await base.OnInitializedAsync();
             await LoadData();
-            initialLoading = false;
+            onLoading = false;
         }
         private async Task LoadData()
         {
-            list = await QuestionRepository.GetChoices();
-            count = list.Count;
+            choices = await QuestionRepository.GetChoices();
+            FilterChoices();
+        }
+
+        private void PageChanged(AxtPagerEventArgs args)
+        {
+            pageIndex = args.CurrentPage;
+            FilterChoices();
+        }
+
+        private void SearchChanged(string args)
+        {
+            search = args;
+            FilterChoices();
+        }
+
+        private void FilterChoices()
+        {
+            displayedChoices = choices;
+            search = search.TrimStart().TrimEnd();
+            if(!string.IsNullOrEmpty(search))
+            {
+                displayedChoices = choices.Where(x => x.Value.Contains(search, StringComparison.InvariantCultureIgnoreCase)).ToList();
+            }
+
+            count = displayedChoices.Count;
+            SelectCurrentPage();
+        }
+
+        private void SelectCurrentPage()
+        {
+            var skip = pageIndex * pageSize;
+            displayedChoices = displayedChoices.Skip(skip).Take(pageSize).ToList();
         }
     }
 }

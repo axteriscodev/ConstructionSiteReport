@@ -11,15 +11,12 @@ public partial class TableClientMobile
     
     private List<ClientModel> clients = [];
 
+    private List<ClientModel> displayClients = [];
+
     /// <summary>
     /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
     /// </summary>
     private bool initialLoading;
-
-    /// <summary>
-    /// Booleano che è impostata durante una ricerca
-    /// </summary>
-    private bool isLoading = false;
 
 
     /// <summary>
@@ -35,15 +32,9 @@ public partial class TableClientMobile
     /// <summary>
     /// Stringa indica la pagina e gli elementi
     /// </summary>
-    private string pagingSummaryFormat = "Pagina {0} di {1} (Totale {2} clienti)";
+    private string pagingSummaryFormat = "Pagina {0} di {1} (Totale {2} committenti)";
 
-    /// <summary>
-    /// Riferimento al componente tabella
-    /// </summary>
-    private RadzenDataGrid<ClientModel>? grid;
-
-    [Parameter]
-    public string Param { get; set; } = "";
+    private string search = "";
 
     ScreenComponent screenComponent;
 
@@ -58,7 +49,25 @@ public partial class TableClientMobile
     private async Task LoadData()
     {
         clients = await ClientsRepository.GetClients();
-        count = clients.Count;
+        FilterClients();
+    }
+
+    private void SearchChanged(string args)
+    {
+        search = args;
+        FilterClients();
+    }
+
+    private void FilterClients()
+    {
+        displayClients = clients;
+        search = search.TrimStart().TrimEnd();
+        if(!string.IsNullOrEmpty(search))
+        {
+            displayClients = clients.Where(x => x.Name.Contains(search, StringComparison.InvariantCultureIgnoreCase)).ToList();
+        }
+
+        count = displayClients.Count;
     }
 
     private async Task OpenNewForm()
@@ -80,8 +89,10 @@ public partial class TableClientMobile
         await DialogService.OpenAsync<FormClient>("Nuovo cliente", parameters: param, options: newOptions);
     }
 
-    private async Task OpenUpdateForm(ClientModel client)
+    private async Task OpenUpdateForm(object item)
     {
+        var client = item as ClientModel;
+
         var width = screenComponent.ScreenSize.Width;
 
         //creo uno style aggiuntivo da inviare al componente caricato con il popup come options
@@ -101,8 +112,9 @@ public partial class TableClientMobile
     }
 
 
-    private async Task Hide(ClientModel client)
+    private async Task Hide(object item)
     {
+        var client = item as ClientModel;
         var titolo = "Disattivazione cliente";
         var text = "Vuoi disattivare il cliente: " + client.Name + "?";
         var confirmationResult = await DialogService.Confirm(text, titolo, new ConfirmOptions { OkButtonText = "Si", CancelButtonText = "No" });
@@ -122,6 +134,6 @@ public partial class TableClientMobile
     {
         DialogService.Close();
         await LoadData();
-        await grid!.Reload();
+        //await grid!.Reload();
     }
 }

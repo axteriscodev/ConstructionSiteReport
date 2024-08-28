@@ -1,7 +1,52 @@
 ﻿::deep .buttonDelete {
-    background-color: #ff9f9f !important;
-}
-
-::deep .buttonEdit {
-    background-color: #ffe8a1 !important;
-}
+    background-color: var(--action-delete) !important;
+  }
+  
+  ::deep .buttonEdit {
+    background-color: var(--action-edit) !important;
+  }
+  
+  ::deep .buttonOptions {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    color: var(--rz-primary) !important;
+  }
+  
+  .table-striped > tbody > tr:nth-child(odd) > td,
+  .table-striped > tbody > tr:nth-child(odd) > th {
+    background-color: var(--axt-table-striped-bg);
+  }
+  
+  .table-striped > tbody > tr > td:not(:last-child),
+  .table-striped > tbody > tr > th:not(:last-child) {
+    border-right: 1px solid #afcaf3;
+  }
+  
+  tbody,
+  td,
+  tfoot,
+  th,
+  thead,
+  tr {
+    /*    border-color: inherit;
+      border-style: solid;*/
+    border-width: 0;
+    color: var(--rz-primary);
+  }
+  
+  thead > tr > th {
+    font-size: 12px;
+    padding-left: 48px !important;
+    padding-right: 48px !important;
+    font-weight: normal;
+  }
+  
+  tbody > tr > td {
+    font-size: 20px;
+    padding: 24px 48px !important;
+  }
+  
+  tbody > tr {
+    height: 48px;
+  }
+  

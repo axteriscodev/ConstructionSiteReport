@@ -1,17 +1,15 @@
-﻿using ConstructionSiteLibrary.Components.Utilities;
+
 using ConstructionSiteLibrary.Model;
-using ConstructionSiteLibrary.Utility;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using Radzen;
-using Radzen.Blazor;
+using ConstructionSiteLibrary.Components.Utilities;
 using Shared.Templates;
+using ConstructionSiteLibrary.Utility;
+using Radzen;
 
 namespace ConstructionSiteLibrary.Components.Templates;
 
-public partial class TableTemplates
+public partial class TableTemplatesMobile
 {
-    ScreenComponent? screenComponent;
+     ScreenComponent? screenComponent;
 
     private List<TemplateModel> templates = [];
 
@@ -30,8 +28,8 @@ public partial class TableTemplates
     private string pagingSummaryFormat = "Pagina {0} di {1} (Totale {2} template)";
 
 
-    [Parameter]
-    public EventCallback<TemplateModel> GetTemplate { get; set; }
+    // [Parameter]
+    // public EventCallback<TemplateModel> GetTemplate { get; set; }
 
 
 
@@ -106,7 +104,7 @@ public partial class TableTemplates
 
     private void OnTemplateSelected(TemplateModel selectedTemplate)
     {
-        GetTemplate.InvokeAsync(selectedTemplate);
+        //GetTemplate.InvokeAsync(selectedTemplate);
     }
 
     private async Task OpenModifyTemplate(object question)

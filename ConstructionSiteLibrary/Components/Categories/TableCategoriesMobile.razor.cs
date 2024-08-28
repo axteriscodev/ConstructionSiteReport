@@ -11,6 +11,8 @@ public partial class TableCategoriesMobile
 {
      private List<TemplateCategoryModel> categories = [];
 
+     private List<TemplateCategoryModel> displayedCategories = [];
+
     /// <summary>
     /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
     /// </summary>
@@ -32,8 +34,8 @@ public partial class TableCategoriesMobile
     /// </summary>
     private string pagingSummaryFormat = "Pagina {0} di {1} (Totale {2} categorie)";
 
-    [Parameter]
-    public string Param { get; set; } = "";
+   
+    private string search = "";
 
     ScreenComponent screenComponent;
 
@@ -48,7 +50,25 @@ public partial class TableCategoriesMobile
     private async Task LoadData()
     {
         categories = await CategoriesRepository.GetCategories();
-        count = categories.Count;
+        FilterCategories();
+    }
+
+    private void SearchChanged(string args)
+    {
+        search = args;
+        FilterCategories();
+    }
+
+    private void FilterCategories()
+    {
+        displayedCategories = categories;
+        search = search.TrimStart().TrimEnd();
+        if(!string.IsNullOrEmpty(search))
+        {
+            displayedCategories = categories.Where(x => x.Text.Contains(search, StringComparison.InvariantCultureIgnoreCase)).ToList();
+        }
+
+        count = displayedCategories.Count;
     }
 
     private async Task OpenOrderForm()
@@ -96,8 +116,10 @@ public partial class TableCategoriesMobile
     }
 
 
-    private async Task OpenUpdateForm(CategoryModel item)
+    private async Task OpenUpdateForm(object category)
     {
+        var item = category as TemplateChoiceModel;
+
         var width = screenComponent.ScreenSize.Width;
 
         //creo uno style aggiuntivo da inviare al componente caricato con il popup come options
@@ -117,8 +139,12 @@ public partial class TableCategoriesMobile
         await DialogService.OpenAsync<FormCategories>("Aggiorna categoria", parameters: param, options: newOptions);
     }
 
-    private async Task Hide(TemplateCategoryModel category)
+    private async Task Hide(object item)
     {
+
+        var category = item as TemplateCategoryModel;
+
+
         var titolo = "Disattivazione sezione";
         var text = "Vuoi disattivare la sezione: " + category.Text + "?";
         var confirmationResult = await DialogService.Confirm(text, titolo, new ConfirmOptions { OkButtonText = "Si", CancelButtonText = "No" });

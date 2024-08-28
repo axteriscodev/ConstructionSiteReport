@@ -1,4 +1,5 @@
 ﻿@using ConstructionSiteLibrary.Repositories
+@using ConstructionSiteLibrary.Components.Generics
 @using Shared
 @using Shared.Templates
 
@@ -7,12 +8,68 @@
 @inject DialogService DialogService
 
 <ScreenComponent @ref="screenComponent" />
-@if (initialLoading)
+
+@if (onLoading)
 {
     <Loading />
 }
 else
-{
+{   
+
+    <div class="mx-2 my-5">
+        <SectionTitle PageTitle="Template" ButtonText="+ aggiungi template" SearchPlaceholder="Cerca template"
+                        OnButtonClicked="@OpenWizard" OnSearchChanged="@SearchChanged" />
+        
+        <table class="table table-striped table-hover">
+            <thead>
+                <th scope="col">Nome template</th>
+                <th scope="col">Data</th>
+                <th scope="col"></th>
+            </thead>
+            <tbody>
+                @for(int i = 0; i < displayedTemplates.Count; i += 1)
+                {
+                    int index = i;
+                    <tr @onclick="@(() => OnTemplateSelected(displayedTemplates[index]))">
+                        <td>@displayedTemplates[i].NameTemplate</td>
+                        <td>@displayedTemplates[i].CreationDate</td>
+                        <td>
+                            <ButtonDropdown Object="@displayedTemplates[i]"
+                                OnUpdateClicked="@OpenModifyTemplate" OnDeleteClicked="@OpenDeleteTemplate"/>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="mt-5">
+            <AxtPager PagingSummaryFormat="@pagingSummaryFormat" Count="@count" PageSize="@pageSize" OnPageChanged="@PageChanged" />
+        </div>
+    </div>
+
+    <script>
+    @*When the user clicks on the button,
+    toggle between hiding and showing the dropdown content *@
+    function myFunction() {
+        document.getElementById("myDropdown").classList.toggle("show");
+    }
+
+    // Close the dropdown if the user clicks outside of it
+    window.onclick = function (event) {
+        if (!event.target.matches('.buttonOptions')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    }
+</script>
+
+    <!--
 
     <h2>@Param</h2>
 
@@ -45,4 +102,6 @@ else
             </RadzenDataGrid>
         </RadzenFieldset>
     </div>
+
+    -->
 }

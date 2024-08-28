@@ -1,4 +1,5 @@
 ﻿@using ConstructionSiteLibrary.Repositories
+@using ConstructionSiteLibrary.Components.Generics
 @using Shared
 @using Shared.Documents
 
@@ -9,12 +10,71 @@
 
 <ScreenComponent @ref="screenComponent" />
 
-@if (initialLoading)
+@if (onLoading)
 {
     <Loading />
 }
 else
 {
+    <div class="mx-2 my-5">
+        <SectionTitle PageTitle="Ditte cantiere" ButtonText="+ aggiungi ditta" SearchPlaceholder="Cerca azienda"
+                    OnButtonClicked="@OpenAddCompanyPage" OnSearchChanged="@SearchChanged" />
+
+        <table class="table table-striped">
+                <thead>
+                <th scope="col">Nome</th>
+                <th scope="col">Indirizzo</th>
+                <th scope="col">Telefono</th>
+                <th scope="col">Email</th>
+                <th scope="col"></th>
+            </thead>
+            <tbody>
+                @for(int i = 0; i < displayedCompanies.Count; i += 1)
+                {
+                    <tr>
+                        <td>@GetName(displayedCompanies[i])</td>
+                        <td>@displayedCompanies[i].Address</td>
+                        <td>@displayedCompanies[i].Phone</td>
+                        <td>@displayedCompanies[i].Email</td>
+                        <td>
+                            <ButtonDropdown Object="@displayedCompanies[i]"
+                                OnUpdateClicked="@OpenUpdateCompany" OnDeleteClicked="@OpenDeleteCompany"/>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        
+        <div class="mt-5">
+            <AxtPager PagingSummaryFormat="@pagingSummaryFormat" Count="@count" PageSize="@pageSize" OnPageChanged="@PageChanged" />
+        </div> 
+    </div>
+
+    <script>
+    @*When the user clicks on the button,
+    toggle between hiding and showing the dropdown content *@
+    function myFunction() {
+        document.getElementById("myDropdown").classList.toggle("show");
+    }
+
+    // Close the dropdown if the user clicks outside of it
+    window.onclick = function (event) {
+        if (!event.target.matches('.buttonOptions')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    }
+    </script>
+
+    <!--
+
     <h2>@Param</h2>
 
     @* La tabella delle Aziende *@
@@ -50,6 +110,8 @@ else
             </RadzenDataGrid>
         </RadzenFieldset>
     </div>
+
+    -->
 
 
 }

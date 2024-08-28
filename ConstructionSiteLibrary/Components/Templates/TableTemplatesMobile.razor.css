@@ -11,7 +11,6 @@
     margin: 1.5rem !important;
 }
 
-
 li { background: none;}
 li:nth-child(odd) { background: var(--axt-table-striped-bg); }
 
