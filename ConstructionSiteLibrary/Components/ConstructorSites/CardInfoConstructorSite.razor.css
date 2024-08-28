@@ -6,6 +6,7 @@
     color: var(--rz-primary);
 }
 
-.info-title{
-/*    border-bottom: 1px solid var(--rz-primary);*/
+.btu-modify:hover, ::deep .btu-modify:hover {
+    background-color: var(--rz-primary) !important;
+    color: white !important;
 }

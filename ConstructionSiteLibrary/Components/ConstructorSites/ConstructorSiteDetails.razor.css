@@ -8,6 +8,7 @@
         color: white !important;
     }
 
+
 .row-border{
     border-bottom: 1px solid var(--rz-primary);
 }
@@ -16,11 +17,13 @@
     width: 350px !important
 }
 
-.btu-section, ::deep .btu-section {
-    min-width: 220px;
+.btu-add, ::deep .btu-add {
+    min-width: 236px;
+    height:36px;
+    margin-top: 10px;
 }
 
-    .btu-section:hover, ::deep .btu-section:hover {
+    .btu-add:hover, ::deep .btu-add:hover {
         background-color: var(--rz-primary) !important;
         color: white !important;
     }
@@ -37,8 +40,20 @@
     padding:10px 0px;
 }
 
-.text-margin{
-    margin:0px !important;
+.icon-document{
+    color: var(--rz-primary);
+}
+
+.icon-document:hover {
+    border: 1px solid var(--rz-primary);
+    box-shadow: 0 1rem 1.5rem rgba(0, 0, 0, .15) !important;
+    background-color: var(--rz-primary) !important;
+    color: white;
+    border-radius: 10px;
+}
+
+.text-margin {
+    margin: 0px !important;
     padding-top: 10px;
 }
 
