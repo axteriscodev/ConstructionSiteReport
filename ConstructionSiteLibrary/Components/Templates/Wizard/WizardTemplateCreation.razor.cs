@@ -11,7 +11,7 @@ public partial class WizardTemplateCreation
 {
 
 
-    private TemplateModel? _template;
+    private TemplateModel? _template = new();
 
 
     /// <summary>
@@ -30,6 +30,19 @@ public partial class WizardTemplateCreation
     private void Back()
     {
         _stepsComponent?.PrevStep();
+    }
+
+    private void OnTemplateChanged(TemplateModel? template)
+    {
+        if(template is not null)
+        {
+            _template = template;
+        }
+        else
+        {
+            _template.IdTemplate = 0;
+        }
+        StateHasChanged();
     }
 
     private void Forward(TemplateStepArgs args)

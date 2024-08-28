@@ -11,7 +11,7 @@
 }
 else
 {
-    <RadzenTemplateForm TItem="string" Data="@Title" Submit="@SaveTemplate">
+    <RadzenTemplateForm TItem="string" Data="@Title">
     <div class="card shadow mb-3 divCard">
         <RadzenText>Inserisci un nome per il template</RadzenText>
         <RadzenFormField Text="Nome <span style='color:red'> (obbligatorio)</span>" Variant="@variant"
@@ -24,19 +24,9 @@ else
             </Helper>
         </RadzenFormField>
 
-        <RecapTemplateQuestions SelectedTemplate="@CurrentTemplate" />
+        @* <RecapTemplateQuestions SelectedTemplate="@CurrentTemplate" /> *@
 
   
-    </div>
-
-    <div class="row">
-        <div class="col">
-            <RadzenButton Icon="arrow_back" Text="Indietro" Click="@Back" />
-        </div>
-        <div class="col divForward">
-            <RadzenButton Click="@SaveTemplate" Icon="save" Text="Salva" class="buttonForward" IsBusy=@onSaving
-                              BusyText="Salva" />
-        </div>
     </div>
 </RadzenTemplateForm>
 }
@@ -65,9 +55,6 @@ else
     [Parameter]
     required public TemplateModel CurrentTemplate { get; set; }
 
-    [Parameter]
-    public EventCallback OnBack { get; set; }
-
     protected override async Task OnInitializedAsync()
     {
         initialLoading = true;
@@ -76,6 +63,8 @@ else
         //InitData();
         initialLoading = false;
     }
+
+    
 
 
     public async Task SaveTemplate()
@@ -97,11 +86,6 @@ else
         {
             Title = null;
         }
-    }
-
-    public void Back()
-    {
-        OnBack.InvokeAsync();
     }
 
 }

@@ -11,7 +11,7 @@
 }
 else
 {
-    <RadzenTemplateForm TItem="TemplateDescriptionModel" Data="@CurrentSelection" Submit="@Forward">
+    <RadzenTemplateForm TItem="TemplateDescriptionModel" Data="@CurrentSelection">
     <div class="card shadow mb-3 divCard">
         <RadzenText>Seleziona una descrizione</RadzenText>
         <RadzenRow>
@@ -30,14 +30,6 @@ else
                 </RadzenFieldset>
             </div>
         }
-    <div class="row">
-        <div class="col">
-            <RadzenButton Icon="arrow_back" Text="Indietro" Click="@Back" />
-        </div>
-        <div class="col divForward">
-            <RadzenButton ButtonType="ButtonType.Submit" Icon="arrow_forward" Text="Avanti" class="buttonForward" />
-        </div>
-    </div>
 </RadzenTemplateForm>
 
 }
@@ -50,12 +42,6 @@ else
 
     [Parameter]
     required public TemplateModel CurrentTemplate { get; set; }
-
-    [Parameter]
-    public EventCallback<TemplateStepArgs> OnForward { get; set; }
-
-    [Parameter]
-    public EventCallback OnBack { get; set; }
 
     /// <summary>
     /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
@@ -86,22 +72,6 @@ else
         }
     }
 
-
-    public void Forward()
-    {
-        TemplateStepArgs args = new()
-            {
-                Object = CurrentSelection,
-                Step = TemplateStep.Description
-            };
-
-        OnForward.InvokeAsync(args);
-    }
-
-    public void Back()
-    {
-        OnBack.InvokeAsync();
-    }
 
     private async Task OpenNewForm()
     {
