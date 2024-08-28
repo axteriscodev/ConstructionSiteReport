@@ -1,0 +1,11 @@
+﻿
+
+.info-label {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--rz-primary);
+}
+
+.info-title{
+/*    border-bottom: 1px solid var(--rz-primary);*/
+}
