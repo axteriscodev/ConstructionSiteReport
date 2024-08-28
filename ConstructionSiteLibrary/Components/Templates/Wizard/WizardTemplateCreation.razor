@@ -11,21 +11,13 @@
 }
 else
 {
-    <RadzenSteps @ref="_stepsComponent" ShowStepsButtons="false">
-        <Steps>
-            <RadzenStepsItem>
-                <TemplateSelectionStep OnForward="@(args=>Forward(args))" />
-            </RadzenStepsItem>
-            <RadzenStepsItem>
-                <TemplateDescriptionSelectionStep  CurrentTemplate="@_template" OnBack="@Back" OnForward="@(args=>Forward(args))" />
-            </RadzenStepsItem>
-            <RadzenStepsItem>
-                <TemplateQuestionsSelectionStep CurrentTemplate="@_template" OnBack="@Back" OnForward="@(args=>Forward(args))" />
-            </RadzenStepsItem>
-            <RadzenStepsItem>
-                <TemplateNameStep CurrentTemplate="@_template" OnBack="@Back" />
-            </RadzenStepsItem>
-        </Steps>
-    </RadzenSteps>
-}
 
+    <TemplateSelectionStep OnForward="@(args=>Forward(args))" />
+
+    <TemplateDescriptionSelectionStep CurrentTemplate="@_template" OnBack="@Back" OnForward="@(args=>Forward(args))" />
+
+    <TemplateQuestionsSelectionStep CurrentTemplate="@_template" OnBack="@Back" OnForward="@(args=>Forward(args))" />
+
+    <TemplateNameStep CurrentTemplate="@_template" OnBack="@Back" />
+
+}
