@@ -13,9 +13,9 @@ else
 {
     <TemplateNameStep CurrentTemplate="@_template" />
 
-    <TemplateDescriptionSelectionStep CurrentTemplate="@_template" />
+    <TemplateSelectionStep CurrentTemplate="@_template" OnTemplateSelected="@OnTemplateChanged"/>
 
-    <TemplateSelectionStep />
+    <TemplateDescriptionSelectionStep CurrentTemplate="@_template" />
 
     <TemplateQuestionsSelectionStep CurrentTemplate="@_template" />
 }

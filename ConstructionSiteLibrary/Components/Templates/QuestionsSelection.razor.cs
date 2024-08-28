@@ -67,6 +67,11 @@ public partial class QuestionsSelection
         initialLoading = false;
     }
 
+    protected override async Task OnParametersSetAsync()
+    {
+        await LoadData(CurrentTemplate);
+    }
+
 
     private void InitData()
     {

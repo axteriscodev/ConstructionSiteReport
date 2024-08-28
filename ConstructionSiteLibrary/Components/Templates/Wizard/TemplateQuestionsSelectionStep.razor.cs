@@ -48,7 +48,10 @@ public partial class TemplateQuestionsSelectionStep
         initialLoading = false;
     }
 
-   
+    protected override async Task OnParametersSetAsync()
+    {
+        StateHasChanged();
+    }
 
     private void Forward()
     {

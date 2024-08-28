@@ -11,7 +11,7 @@
 }
 else
 {
-    <RadzenTemplateForm TItem="string" Data="@Title" Submit="@SaveTemplate">
+    <RadzenTemplateForm TItem="string" Data="@Title">
     <div class="card shadow mb-3 divCard">
         <RadzenText>Inserisci un nome per il template</RadzenText>
         <RadzenFormField Text="Nome <span style='color:red'> (obbligatorio)</span>" Variant="@variant"
@@ -24,7 +24,7 @@ else
             </Helper>
         </RadzenFormField>
 
-        <RecapTemplateQuestions SelectedTemplate="@CurrentTemplate" />
+        @* <RecapTemplateQuestions SelectedTemplate="@CurrentTemplate" /> *@
 
   
     </div>
@@ -63,6 +63,8 @@ else
         //InitData();
         initialLoading = false;
     }
+
+    
 
 
     public async Task SaveTemplate()
