@@ -39,9 +39,6 @@ else
     /// </summary>
     private bool initialLoading;
 
-    [Parameter]
-    public EventCallback<TemplateStepArgs> OnForward { get; set; }
-
     ScreenComponent screenComponent;
 
     protected override async Task OnInitializedAsync()
@@ -55,17 +52,6 @@ else
     private async Task LoadData()
     {
         Templates = await TemplatesRepository.GetTemplates();
-    }
-
-    public void Forward()
-    {
-        TemplateStepArgs args = new()
-            {
-                Object = Data.SelectedTemplate != null ? Data.SelectedTemplate : new TemplateModel(),
-                Step = TemplateStep.TemplateSelection
-            };
-
-        OnForward.InvokeAsync(args);
     }
 
     class FormData

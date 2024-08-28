@@ -43,12 +43,6 @@ else
     [Parameter]
     required public TemplateModel CurrentTemplate { get; set; }
 
-    [Parameter]
-    public EventCallback<TemplateStepArgs> OnForward { get; set; }
-
-    [Parameter]
-    public EventCallback OnBack { get; set; }
-
     /// <summary>
     /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
     /// </summary>
@@ -78,22 +72,6 @@ else
         }
     }
 
-
-    public void Forward()
-    {
-        TemplateStepArgs args = new()
-            {
-                Object = CurrentSelection,
-                Step = TemplateStep.Description
-            };
-
-        OnForward.InvokeAsync(args);
-    }
-
-    public void Back()
-    {
-        OnBack.InvokeAsync();
-    }
 
     private async Task OpenNewForm()
     {

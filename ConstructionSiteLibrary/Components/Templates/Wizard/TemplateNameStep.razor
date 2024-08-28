@@ -55,9 +55,6 @@ else
     [Parameter]
     required public TemplateModel CurrentTemplate { get; set; }
 
-    [Parameter]
-    public EventCallback OnBack { get; set; }
-
     protected override async Task OnInitializedAsync()
     {
         initialLoading = true;
@@ -87,11 +84,6 @@ else
         {
             Title = null;
         }
-    }
-
-    public void Back()
-    {
-        OnBack.InvokeAsync();
     }
 
 }

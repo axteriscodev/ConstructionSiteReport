@@ -11,13 +11,11 @@
 }
 else
 {
+    <TemplateNameStep CurrentTemplate="@_template" />
 
-    <TemplateSelectionStep OnForward="@(args=>Forward(args))" />
+    <TemplateDescriptionSelectionStep CurrentTemplate="@_template" />
 
-    <TemplateDescriptionSelectionStep CurrentTemplate="@_template" OnBack="@Back" OnForward="@(args=>Forward(args))" />
+    <TemplateSelectionStep />
 
-    <TemplateQuestionsSelectionStep CurrentTemplate="@_template" OnBack="@Back" OnForward="@(args=>Forward(args))" />
-
-    <TemplateNameStep CurrentTemplate="@_template" OnBack="@Back" />
-
+    <TemplateQuestionsSelectionStep CurrentTemplate="@_template" />
 }
