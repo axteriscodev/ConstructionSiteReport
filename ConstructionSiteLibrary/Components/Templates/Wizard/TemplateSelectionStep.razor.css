@@ -7,11 +7,28 @@
     margin-bottom: 2rem;
 }
 
-.divForward {
+/* .divForward {
     display: flex;
     justify-content: flex-end;
+} */
+
+/* .buttonForward, ::deep .buttonForward {
+    width: 120px;
+} */
+
+.cardClass {
+    border-radius: 0.8rem !important;
+    background: #FFF;
+    border-color: var(--border-Card);
+    background-color: var(--card-background-color) !important;
 }
 
-.buttonForward, ::deep .buttonForward {
-    width: 120px;
+.fieldset-title, ::deep .fieldset-title {
+    float: none !important;
+    width:inherit; /* Or auto */
+    padding:0 10px; /* To give a bit of padding on the left and right */
+    font-size: medium !important;
+    color: var(--rz-primary) !important;
+    background-color: var(--border-Card);
+    border-radius: 4px;
 }

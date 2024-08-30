@@ -11,34 +11,26 @@
 }
 else
 {
-    <RadzenTemplateForm TItem="string" Data="@Title" Submit="@SaveTemplate">
-    <div class="card shadow mb-3 divCard">
-        <RadzenText>Inserisci un nome per il template</RadzenText>
-        <RadzenFormField Text="Nome <span style='color:red'> (obbligatorio)</span>" Variant="@variant"
-            class="formFieldTitolo">
-            <ChildContent>
-                <RadzenTextBox Name="Nome" @bind-Value="@Title" />
-            </ChildContent>
-            <Helper>
-                <RadzenRequiredValidator @ref="@validator" Component="Nome" Popup=false Text="Il titolo è obbligatorio"  />
-            </Helper>
-        </RadzenFormField>
+    <fieldset class="card cardClass round-border divCard mb-2">
+    @* <RadzenTemplateForm TItem="string" Data="@Title"> *@
+        @* <div class="card round-border mb-3 divCard cardClass"> *@
+            <legend class="fieldset-title">Inserisci un nome per il template</legend>
+            <RadzenFormField Text="Nome <span style='color:red'> (obbligatorio)</span>" Variant="@variant"
+                class="formFieldTitolo">
+                <ChildContent>
+                    <RadzenTextBox Name="Nome" @bind-Value="@Title" />
+                </ChildContent>
+                <Helper>
+                    <RadzenRequiredValidator @ref="@validator" Component="Nome" Popup=false Text="Il titolo è obbligatorio"  />
+                </Helper>
+            </RadzenFormField>
 
-        <RecapTemplateQuestions SelectedTemplate="@CurrentTemplate" />
+            @* <RecapTemplateQuestions SelectedTemplate="@CurrentTemplate" /> *@
 
-  
-    </div>
-
-    <div class="row">
-        <div class="col">
-            <RadzenButton Icon="arrow_back" Text="Indietro" Click="@Back" />
-        </div>
-        <div class="col divForward">
-            <RadzenButton Click="@SaveTemplate" Icon="save" Text="Salva" class="buttonForward" IsBusy=@onSaving
-                              BusyText="Salva" />
-        </div>
-    </div>
-</RadzenTemplateForm>
+    
+        @* </div> *@
+    </fieldset>
+    @* </RadzenTemplateForm> *@
 }
 
 @code
@@ -65,9 +57,6 @@ else
     [Parameter]
     required public TemplateModel CurrentTemplate { get; set; }
 
-    [Parameter]
-    public EventCallback OnBack { get; set; }
-
     protected override async Task OnInitializedAsync()
     {
         initialLoading = true;
@@ -76,6 +65,8 @@ else
         //InitData();
         initialLoading = false;
     }
+
+    
 
 
     public async Task SaveTemplate()
@@ -97,11 +88,6 @@ else
         {
             Title = null;
         }
-    }
-
-    public void Back()
-    {
-        OnBack.InvokeAsync();
     }
 
 }

@@ -24,6 +24,27 @@
     margin-left: 3rem !important;
 }
 
+.divCard{
+    padding:1rem;
+}
+
+.cardClass, ::deep .cardClass {
+    border-radius: 0.8rem !important;
+    background: #FFF;
+    border-color: var(--border-Card);
+    background-color: var(--card-background-color) !important;
+}
+
+.fieldset-title, ::deep .fieldset-title {
+    float: none !important;
+    width:inherit; /* Or auto */
+    padding:0 10px; /* To give a bit of padding on the left and right */
+    font-size: medium !important;
+    color: var(--rz-primary) !important;
+    background-color: var(--border-Card);
+    border-radius: 4px;
+}
+
 @media(max-width: 768px) {
 
     .bordoDomanda {
