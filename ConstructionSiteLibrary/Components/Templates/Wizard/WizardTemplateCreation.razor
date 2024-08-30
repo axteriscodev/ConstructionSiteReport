@@ -3,6 +3,7 @@
 
 
 @inject TemplatesRepository TemplatesRepository
+@inject NavigationService NavigationService
 
 <ScreenComponent @ref="screenComponent" />
 @if (initialLoading)
@@ -11,11 +12,30 @@
 }
 else
 {
+<div class="my-5">
+    <div class="row">
+        <div class="col-12 col-lg-6 d-flex justify-content-center justify-content-lg-start">
+            <h1 class="title">Nuovo template</h1>
+        </div>
+        <div class="col-12 col-lg-6 mt-5 m-lg-0 d-flex justify-content-center justify-content-lg-end">
+            @* <RadzenFormField AllowFloatingLabel="false" Variant="@GlobalVariables.ComponentVariant" class="searchBar">
+                <Start>
+                    <RadzenIcon Icon="search" />
+                </Start>
+                <ChildContent>
+                    <RadzenTextBox Placeholder="@SearchPlaceholder" @oninput="@SearchChanged" />
+                </ChildContent>
+            </RadzenFormField> *@
+            <RadzenButton Icon="save" Text="Salva" ButtonStyle="ButtonStyle.Info" Click="@SaveTemplate" IsBusy="@onSaving"/>
+        </div>
+    </div>
+</div>
+
     <TemplateNameStep CurrentTemplate="@_template" />
 
     <TemplateSelectionStep CurrentTemplate="@_template" OnTemplateSelected="@OnTemplateChanged"/>
 
     <TemplateDescriptionSelectionStep CurrentTemplate="@_template" />
 
-    <TemplateQuestionsSelectionStep CurrentTemplate="@_template" />
+    <TemplateQuestionsSelectionStep @ref="@templateQuestionsSelectionStep" CurrentTemplate="@_template" />
 }

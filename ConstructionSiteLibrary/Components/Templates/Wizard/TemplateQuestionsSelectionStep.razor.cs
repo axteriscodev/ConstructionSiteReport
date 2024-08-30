@@ -53,13 +53,9 @@ public partial class TemplateQuestionsSelectionStep
         StateHasChanged();
     }
 
-    private void Forward()
+    public void OnSave()
     {
-
-        var questionSelected = questionsSelection!.OnForward();
-
-        OnForward.InvokeAsync(questionSelected);
-
+        questionsSelection!.OnSave();
     }
 
 

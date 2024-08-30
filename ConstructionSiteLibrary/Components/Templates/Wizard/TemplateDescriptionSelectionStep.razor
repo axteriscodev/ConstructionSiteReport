@@ -14,7 +14,7 @@ else
     <fieldset class="card cardClass round-border divCard mb-2">
         <legend class="fieldset-title">Seleziona una descrizione</legend>
         <RadzenRow>
-            <RadzenDropDown @bind-Value=@CurrentSelection Data=@TemplatesDescriptions TextProperty="Title"
+            <RadzenDropDown @bind-Value=@CurrentTemplate.Description Data=@TemplatesDescriptions TextProperty="Title"
                 Style="width:70%; max-width: 500px" />
             <RadzenButton Icon="add" Variant="Variant.Text" Click="OpenNewForm" />
         </RadzenRow>
@@ -64,25 +64,27 @@ else
     {
         TemplatesDescriptions = await TemplatesRepository.GetTemplatesDescriptions();
 
-        if (CurrentTemplate.IdTemplate != 0 && CurrentTemplate.Description.Id != 0)
+        if (CurrentTemplate.Description.Id != 0)
         {
             CurrentSelection = CurrentTemplate.Description;
         }
         else
         {
             CurrentSelection = TemplatesDescriptions.FirstOrDefault();
+            CurrentTemplate.Description = CurrentSelection;
         }
     }
 
     protected override async Task OnParametersSetAsync()
     {
-        if (CurrentTemplate.IdTemplate != 0 && CurrentTemplate.Description.Id != 0)
+        if (CurrentTemplate.Description.Id != 0)
         {
             CurrentSelection = CurrentTemplate.Description;
         }
         else
         {
             CurrentSelection = TemplatesDescriptions.FirstOrDefault();
+            CurrentTemplate.Description = CurrentSelection;
         }
     }
 
