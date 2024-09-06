@@ -9,9 +9,9 @@
         </div>
         <div class="col-4 buttonCol">
             <div class="hstack buttonStack">
-                <RadzenButton Icon="arrow_back" Variant="Variant" class="arrowButton" Disabled="DisableBack"
+                <RadzenButton Icon="arrow_back" class="my-button-icon-border" Disabled="DisableBack"
                               Click="@(()=> ChangePage(PageNavigaton.Back))" />
-                <RadzenButton Icon="arrow_forward" Variant="Variant" class="arrowButton" Disabled="DisableForward"
+                <RadzenButton Icon="arrow_forward" class="my-button-icon-border" Disabled="DisableForward"
                               Click="@(()=> ChangePage(PageNavigaton.Forward))" />
             </div>
         </div>
@@ -42,10 +42,6 @@
     /// la pagina corrente
     /// </summary>
     private int? currentPage;
-    /// <summary>
-    /// Variante per i bottoni freccia
-    /// </summary>
-    private Variant Variant = Variant.Outlined;
 
     private bool DisableBack;
     private bool DisableForward;

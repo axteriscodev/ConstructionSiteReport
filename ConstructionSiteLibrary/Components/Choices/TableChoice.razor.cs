@@ -73,7 +73,7 @@ namespace ConstructionSiteLibrary.Components.Choices
             {
                 //tra i parametri che invio al dialog creo un EventCallback da passare al componente
                 { "OnSaveComplete", EventCallback.Factory.Create(this, ReloadTable) },
-                { "Choice", model},
+                { "Choice", model!},
                 { "CreationMode", false },
             };
             await DialogService.OpenAsync<FormChoice>("Aggiorna scelta", parameters: param, options: newOptions);

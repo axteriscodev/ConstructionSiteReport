@@ -39,13 +39,6 @@
 .dropdown-open {
     display: block;
 }
-/* 
-.dropdown-content {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-} */
 
 .show {
     display: block;
@@ -64,3 +57,16 @@
     .dropbtn:focus {
         background-color: #2980b9;
     }
+
+@media (max-width:800px) {
+    .dropdown-content {
+        position: absolute;
+        background-color: #f1f1f1;
+        /*min-width: 160px;*/
+        overflow: auto;
+        z-index: 1;
+        left: 100%;
+        right: auto;
+        transform: translateX(-100%);
+    }
+}

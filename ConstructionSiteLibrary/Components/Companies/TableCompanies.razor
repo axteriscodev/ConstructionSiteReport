@@ -29,26 +29,34 @@ else
                 <th scope="col"></th>
             </thead>
             <tbody>
-                @for(int i = 0; i < displayedCompanies.Count; i += 1)
+                @if(displayedCompanies.Count > 0)
+                {
+                    @foreach(var comp in displayedCompanies)
+                    {
+                        <tr>
+                            <td>@GetName(comp)</td>
+                            <td>@comp.Address</td>
+                            <td>@comp.Phone</td>
+                            <td>@comp.Email</td>
+                            <td>
+                                <ButtonDropdown Object="@comp"
+                                                OnUpdateClicked="@OpenUpdateCompany" OnDeleteClicked="@OpenDeleteCompany" />
+                            </td>
+                        </tr>
+                    }
+                }
+                else
                 {
                     <tr>
-                        <td>@GetName(displayedCompanies[i])</td>
-                        <td>@displayedCompanies[i].Address</td>
-                        <td>@displayedCompanies[i].Phone</td>
-                        <td>@displayedCompanies[i].Email</td>
-                        <td>
-                            <ButtonDropdown Object="@displayedCompanies[i]"
-                                OnUpdateClicked="@OpenUpdateCompany" OnDeleteClicked="@OpenDeleteCompany"/>
-                        </td>
+                        <td colspan="5">Nessuna ditta cantiere trovata</td>
                     </tr>
                 }
+
             </tbody>
         </table>
-
-        
         <div class="mt-5">
             <AxtPager PagingSummaryFormat="@pagingSummaryFormat" Count="@count" PageSize="@pageSize" OnPageChanged="@PageChanged" />
-        </div> 
+        </div>
     </div>
 
     <script>

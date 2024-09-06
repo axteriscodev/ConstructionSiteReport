@@ -45,7 +45,8 @@ else
                 <RadzenFormField Text="Cliente" Variant="@GlobalVariables.ComponentVariant">
                     <ChildContent>
                         <RadzenDropDownDataGrid Data="@clients" @bind-Value="@form.Client" TextProperty="Name"
-                                                AllowFiltering="true" AllowColumnResize="true" AllowSorting="true" Name="Cliente">
+                                                AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                AllowColumnResize="true" AllowSorting="true" Name="Cliente">
                             <Columns>                           
                                 <RadzenDropDownDataGridColumn Property="Id" Title="N." Width="40px" />
                                 <RadzenDropDownDataGridColumn Property="Name" Title="Nome" Width="200px" />
@@ -56,7 +57,8 @@ else
                 <RadzenFormField Text="Aziende" Variant="@GlobalVariables.ComponentVariant">
                     <ChildContent>
                         <RadzenDropDownDataGrid Data="@companies" @bind-Value="@form.Companies" TextProperty="CompanyName" Multiple="true"
-                                                AllowFiltering="true" AllowColumnResize="true" AllowSorting="true" Name="companies"
+                                                AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                AllowColumnResize="true" AllowSorting="true" Name="companies"
                                                 Change="@CheckIfAllSelected">
                             <Columns>
                                 <RadzenDropDownDataGridColumn Width="40px" Sortable="false">

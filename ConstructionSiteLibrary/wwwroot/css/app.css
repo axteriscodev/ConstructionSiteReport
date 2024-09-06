@@ -38,6 +38,55 @@ p,.p {
     color: var(--rz-primary) !important;
 }
 
+/* BUTTONS */
+.my-button {
+    color: white !important;
+    background-color: var(--rz-primary) !important;
+}
+
+    .my-button:hover {
+        color: var(--rz-primary) !important;
+        background-color: white !important;
+        border: 1px solid var(--rz-primary) !important;
+    }
+.my-button-icon {
+    color: var(--rz-primary) !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+    .my-button-icon:hover {
+        /*color: white !important;*/
+        /*background-color: var(--rz-primary) !important;*/
+        box-shadow: var(--rz-button-shadow)!important;
+        border: 1px solid var(--rz-primary) !important;
+        border-radius: 0.5rem !important;
+    }
+
+.my-button-icon-border {
+    color: var(--rz-primary) !important;
+    background-color: white !important;
+    box-shadow: inset 0 0 0 var(--rz-border-width) var(--rz-primary);
+}
+
+.my-button-icon-border:hover {
+    color: white !important;
+    background-color: var(--rz-primary) !important;
+    box-shadow: inset 0 0 0 var(--rz-border-width) var(--rz-primary);
+}
+
+.my-button-text {
+    min-width: 220px;
+    color: var(--rz-primary) !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+    .my-button-text:hover {
+        background-color: var(--rz-primary) !important;
+        color: white !important;
+    }
+
 /* DIMENSIONI TESTI */
 
 .text-100 {

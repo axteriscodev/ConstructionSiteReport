@@ -23,61 +23,48 @@
 else
 {
     <div class="mx-2 my-5">
-    <SectionTitle PageTitle="Domande" ButtonText="+ aggiungi domanda" SearchPlaceholder="Cerca domanda"
-        OnButtonClicked="@OpenForm" OnSearchChanged="@SearchChanged" />
-    <div>
-        <table class="table table-striped">
-            <thead>
-                <th>
-                    <span> Domanda</span>
-                </th>
-                <th>
-                    <span class="">Id Categoria</span>
-                </th>
-            </thead>
-            <tbody>
-                @for (int i = 0; i < displayedQuestions.Count; i += 1)
+        <SectionTitle PageTitle="Domande" ButtonText="+ aggiungi domanda" SearchPlaceholder="Cerca domanda"
+                      OnButtonClicked="@OpenForm" OnSearchChanged="@SearchChanged" />
+        <div>
+            <table class="table table-striped">
+                <thead>
+                    <th>
+                        <span> Domanda</span>
+                    </th>
+                    <th>
+                        <span class="">Id Categoria</span>
+                    </th>
+                </thead>
+                <tbody>
+                    @if (displayedQuestions.Count > 0)
+                    {
+                        @foreach (var question in displayedQuestions)
+                        {
+                            <tr>
+                                <td>@question.Text</td>
+                                <td>@question.IdCategory</td>
+                                <td>
+                                    <ButtonDropdown Object="@question" OnUpdateClicked="@OpenModifyQuestion"
+                                                    OnDeleteClicked="@OpenDeleteQuestion" />
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
                     {
                         <tr>
-                            <td>@displayedQuestions[i].Text</td>
-                            <td>@displayedQuestions[i].IdCategory</td>
-                            <td>
-                                <ButtonDropdown Object="@displayedQuestions[i]" OnUpdateClicked="@OpenModifyQuestion"
-                                    OnDeleteClicked="@OpenDeleteQuestion" />
-                            </td>
+                            <td colspan="3">Nessuna domanda trovata</td>
                         </tr>
                     }
+
                 </tbody>
             </table>
-        </div>
-        <div class="mt-5">
-            <AxtPager PagingSummaryFormat="@pagingSummaryFormat" Count="@count" PageSize="@pageSize"
-                OnPageChanged="@PageChanged" />
+            <div class="mt-5">
+                <AxtPager PagingSummaryFormat="@pagingSummaryFormat" Count="@count" PageSize="@pageSize"
+                          OnPageChanged="@PageChanged" />
+            </div>
         </div>
     </div>
-
-
-
-    <script>
-    function myFunction() {
-        var isAlreadyOpen = false;
-        if (!this.nextElementSibling.classList.contains('hide')) {
-            // if the clicked button dropdown is already open then use this bool to not show it again.
-            isAlreadyOpen = true;
-        }
-        var dropdowns = document.getElementsByClassName("dropdown-content");
-        for (var d = 0; d < dropdowns.length; d++) {
-            var openDropdown = dropdowns[d];
-            if (!openDropdown.classList.contains('hide')) {
-                openDropdown.classList.toggle("hide");
-            }
-        }
-        if (!isAlreadyOpen) {
-            // if the dropdown was hidden when clicked then show it
-            this.nextElementSibling.classList.toggle("hide");
-        }
-    }
-</script>
 }
 
 
@@ -150,11 +137,11 @@ else
             };
         //creo parametri da inviare al componente caricato con il popup
         var param = new Dictionary<string, object>
-{
-//tra i parametri che invio al dialog creo un EventCallback da passare al componente
-{ "OnSaveComplete", EventCallback.Factory.Create(this, Reload) },
-{ "CreationMode", true },
-};
+        {
+            //tra i parametri che invio al dialog creo un EventCallback da passare al componente
+            { "OnSaveComplete", EventCallback.Factory.Create(this, Reload) },
+            { "CreationMode", true },
+        };
         await DialogService.OpenAsync<FormQuestions>("Nuova domanda", parameters: param, options: newOptions);
     }
 
@@ -168,12 +155,47 @@ else
     private async Task OpenModifyQuestion(object question)
     {
         var q = question as TemplateQuestionModel;
-        Console.WriteLine("apro la form di modifica");
+        var width = screenComponent.GetScreenSize();
+
+        // creo uno style aggiuntivo da inviare al componente caricato con il popup come options
+        var additionalStyle = $"min-height:fit-content;height:fit-content;width:{width}px;max-width:600px";
+        var newOptions = new DialogOptions
+            {
+                Style = additionalStyle
+            };
+        //creo parametri da inviare al componente caricato con il popup
+        var param = new Dictionary<string, object>
+        {
+            //tra i parametri che invio al dialog creo un EventCallback da passare al componente
+            { "OnSaveComplete", EventCallback.Factory.Create(this, Reload) },
+            { "CreationMode", false },
+            {"Question", q!}
+        };
+        await DialogService.OpenAsync<FormQuestions>("Nuova domanda", parameters: param, options: newOptions);
     }
 
     private async Task OpenDeleteQuestion(object question)
     {
         var q = question as TemplateQuestionModel;
-        Console.WriteLine("apro la form di conferma cancellazione");
+
+        var titolo = "Disattivazione domanda";
+        var text = "Vuoi disattivare la domanda: " + q.Text + "?";
+        var confirmationResult = await DialogService.Confirm(text, titolo, new ConfirmOptions { OkButtonText = "Si", CancelButtonText = "No" });
+        Console.WriteLine("cliccato: " + confirmationResult);
+        if (confirmationResult == true)
+        {
+            var response = await QuestionRepository.HideQuestions([q]);
+            //NotificationService.Notify(response);
+            if (response)
+            {
+                await ReloadTable();
+            }
+        }
+    }
+
+    private async Task ReloadTable()
+    {
+        DialogService.Close();
+        await LoadData();
     }
 }

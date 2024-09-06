@@ -15,17 +15,17 @@ else
         <legend class="fieldset-title">Seleziona una descrizione</legend>
         <RadzenRow>
             <RadzenDropDown @bind-Value=@CurrentTemplate.Description Data=@TemplatesDescriptions TextProperty="Title"
-                Style="width:70%; max-width: 500px" />
-            <RadzenButton Icon="add" Variant="Variant.Text" Click="OpenNewForm" />
+                            Style="width:70%; max-width: 500px" Change="@(args=>ChangeSelectedDescription(args))" />
+            <RadzenButton Icon="add" Click="OpenNewForm" class="my-button-icon" />
         </RadzenRow>
 
 
-        @if (CurrentSelection is not null)
+        @if (CurrentTemplate.Description is not null)
         {
             <div class="mb-3">
                 <RadzenFieldset Text="Descrizione" class="mt-3">
                     <p>
-                        @CurrentSelection.Description
+                        @CurrentTemplate.Description.Description
                     </p>
                 </RadzenFieldset>
             </div>
@@ -70,8 +70,7 @@ else
         }
         else
         {
-            CurrentSelection = TemplatesDescriptions.FirstOrDefault();
-            CurrentTemplate.Description = CurrentSelection;
+            CurrentTemplate.Description = TemplatesDescriptions.FirstOrDefault() ?? new();
         }
     }
 
@@ -83,9 +82,9 @@ else
         }
         else
         {
-            CurrentSelection = TemplatesDescriptions.FirstOrDefault();
-            CurrentTemplate.Description = CurrentSelection;
+            CurrentTemplate.Description = TemplatesDescriptions.FirstOrDefault() ?? new();
         }
+        await base.OnParametersSetAsync();
     }
 
 
@@ -109,10 +108,18 @@ else
     }
 
 
+    private void ChangeSelectedDescription(object args)
+    {
+        if(args is TemplateDescriptionModel)
+        {
+            StateHasChanged();
+        }
+    }
+
     private void Reload(TemplateDescriptionModel desc)
     {
         TemplatesDescriptions.Add(desc);
-        CurrentSelection = desc;
+        CurrentTemplate.Description = desc;
         StateHasChanged();
     }
 }

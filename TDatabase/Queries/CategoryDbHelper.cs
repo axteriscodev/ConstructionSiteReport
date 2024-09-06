@@ -32,7 +32,8 @@ namespace TDatabase.Queries
             try
             {
                 var nextId = (db.Categories.Any() ? db.Categories.Max(x => x.Id) : 0) + 1;
-                var nextOrder = (db.Categories.Any() ? db.Categories.Max(x => x.Order) : 0) + 1;
+                var organizationCategories = db.Categories.Where(x => x.IdOrganization == organizationId);
+                var nextOrder = (organizationCategories.Any() ? organizationCategories.Max(x => x.Order) : 0) + 1;
                 Category newCat = new()
                 {
                     Id = nextId,

@@ -23,7 +23,8 @@ else
                 <RadzenFormField Text="Categoria <span style='color:red'> (obbligatorio)</span>" Variant="@variant">
                     <ChildContent>
                         <RadzenDropDownDataGrid Data="@categories" TextProperty="Text" ValueProperty="Id" @bind-Value="@form.IdCategory"
-                                                AllowFiltering="true" AllowColumnResize="true" AllowSorting="true" Name="Categoria">
+                                                AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" 
+                                                AllowColumnResize="true" AllowSorting="true" Name="Categoria">
                             <Columns>
                                 <RadzenDropDownDataGridColumn Property="Order" Title="N." Width="40px" />
                                 <RadzenDropDownDataGridColumn Property="Text" Title="Categoria" Width="200px" />
