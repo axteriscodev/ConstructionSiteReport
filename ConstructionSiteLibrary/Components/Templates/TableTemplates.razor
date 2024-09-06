@@ -27,81 +27,31 @@ else
                 <th scope="col"></th>
             </thead>
             <tbody>
-                @for(int i = 0; i < displayedTemplates.Count; i += 1)
+                @if(displayedTemplates.Count > 0)
                 {
-                    int index = i;
-                    <tr @onclick="@(() => OnTemplateSelected(displayedTemplates[index]))">
-                        <td>@displayedTemplates[i].NameTemplate</td>
-                        <td>@displayedTemplates[i].CreationDate</td>
-                        <td>
-                            <ButtonDropdown Object="@displayedTemplates[i]"
-                                OnUpdateClicked="@OpenModifyTemplate" OnDeleteClicked="@OpenDeleteTemplate"/>
-                        </td>
+                    @foreach(var template in displayedTemplates)
+                    {
+                        <tr @onclick="@(() => OnTemplateSelected(template))">
+                            <td>@template.NameTemplate</td>
+                            <td>@template.CreationDate</td>
+                            <td>
+                                <ButtonDropdown Object="@template"
+                                                OnUpdateClicked="@OpenModifyTemplate" OnDeleteClicked="@OpenDeleteTemplate" />
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3">Nessun template trovato</td>
                     </tr>
                 }
             </tbody>
         </table>
-
         <div class="mt-5">
             <AxtPager PagingSummaryFormat="@pagingSummaryFormat" Count="@count" PageSize="@pageSize" OnPageChanged="@PageChanged" />
         </div>
     </div>
 
-    <script>
-    @*When the user clicks on the button,
-    toggle between hiding and showing the dropdown content *@
-    function myFunction() {
-        document.getElementById("myDropdown").classList.toggle("show");
-    }
-
-    // Close the dropdown if the user clicks outside of it
-    window.onclick = function (event) {
-        if (!event.target.matches('.buttonOptions')) {
-            var dropdowns = document.getElementsByClassName("dropdown-content");
-            var i;
-            for (i = 0; i < dropdowns.length; i++) {
-                var openDropdown = dropdowns[i];
-                if (openDropdown.classList.contains('show')) {
-                    openDropdown.classList.remove('show');
-                }
-            }
-        }
-    }
-</script>
-
-    <!--
-
-    <h2>@Param</h2>
-
-    @* La tabella dei template *@
-    <div class="marginComponent">
-        <RadzenFieldset class="shadow rounded" Style="font-weight:400;">
-            <RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Success" class="ButtonAdd"
-                          Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenWizard())" />
-            @* <RadzenButton Icon="sort" Text="Ordina" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
-                          Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenOrderForm())" /> *@
-            <RadzenDataGrid @ref="grid" GridLines="@DataGridGridLines.Both" IsLoading=@isLoading Count="@count" PageSize="@pageSize" Data="@templates" TItem="TemplateModel"
-                            AllowColumnResize="true" AllowAlternatingRows="true" ColumnWidth="200px" AllowFiltering="true" FilterMode="FilterMode.Simple"
-                            AllowSorting="true" AllowPaging="true" ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" PagerHorizontalAlign="HorizontalAlign.Left"
-                            RowClick="@((data) => OnTemplateSelected(data.Data))" Density="Density.Compact">
-
-                <Columns>
-                    @*<RadzenDataGridColumn TItem="CategoryModel" Property="Id" Title="Id" Width="40px" />*@
-                    <RadzenDataGridColumn TItem="TemplateModel" Property="TitleTemplate" Title="Titolo"/>
-                    <RadzenDataGridColumn TItem="TemplateModel" Property="CreationDate" Title="Date" Width="80px" />
-                    <RadzenDataGridColumn TItem="TemplateModel" Title="Azioni" Width="60px" Sortable="false">
-                        <Template Context="data">
-                                @* Mostro i bottoni solo se ho i permessi di modifica *@
-                                @*<RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Filled" Size="ButtonSize.Large"
-                                              Click="@(()=>OpenUpdateForm(data))" class="buttonEdit" Style="width: 45%;" /> *@
-                                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Filled" Size="ButtonSize.Large"
-                                              Click="@(()=>Hide(data))" />
-                        </Template>
-                    </RadzenDataGridColumn>
-                </Columns>
-            </RadzenDataGrid>
-        </RadzenFieldset>
-    </div>
-
-    -->
 }

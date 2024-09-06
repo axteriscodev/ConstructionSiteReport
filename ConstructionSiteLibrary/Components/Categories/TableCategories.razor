@@ -25,15 +25,24 @@ else
                 <th scope="col"></th>
             </thead>
             <tbody>
-                @for(int i = 0; i < displayedCategories.Count; i += 1)
+                @if(displayedCategories.Count > 0)
+                {
+                    @foreach(var cat in displayedCategories)
+                    {
+                        <tr>
+                            <td>@cat.Order</td>
+                            <td>@cat.Text</td>
+                            <td>
+                                <ButtonDropdown Object="@cat"
+                                                OnUpdateClicked="@OpenUpdateForm" OnDeleteClicked="@Hide" />
+                            </td>
+                        </tr>
+                    }
+                }
+                else
                 {
                     <tr>
-                        <td>@displayedCategories[i].Order</td>
-                        <td>@displayedCategories[i].Text</td>
-                        <td>
-                            <ButtonDropdown Object="@displayedCategories[i]"
-                                OnUpdateClicked="@OpenUpdateForm" OnDeleteClicked="@Hide"/>
-                        </td>
+                        <td colspan="3">Nessuna categoria trovata</td>
                     </tr>
                 }
             </tbody>

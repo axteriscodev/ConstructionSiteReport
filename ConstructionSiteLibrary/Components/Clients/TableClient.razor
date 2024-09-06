@@ -24,15 +24,23 @@ else
                 <th scope="col"></th>
             </thead>
             <tbody>
-                @for(int i = 0; i < displayedClients.Count; i += 1)
+                @if(displayedClients.Count > 0)
                 {
-                    int index = i;
+                    @foreach(var client in displayedClients)
+                    {
+                        <tr>
+                            <td>@client.Name</td>
+                            <td>
+                                <ButtonDropdown Object="@client"
+                                                OnUpdateClicked="@OpenUpdateForm" OnDeleteClicked="@Hide" />
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
                     <tr>
-                        <td>@displayedClients[i].Name</td>
-                        <td>
-                            <ButtonDropdown Object="@displayedClients[i]"
-                                OnUpdateClicked="@OpenUpdateForm" OnDeleteClicked="@Hide"/>
-                        </td>
+                        <td colspan="2">Nessun cliente trovato</td>
                     </tr>
                 }
             </tbody>
