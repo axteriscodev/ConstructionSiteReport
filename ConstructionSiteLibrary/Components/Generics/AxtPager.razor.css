@@ -8,18 +8,6 @@
     gap:5px;
 }
 
-.arrowButton :hover, ::deep .arrowButton:hover {
-    color: white !important;
-    background-color: var(--rz-primary) !important;
-    box-shadow: inset 0 0 0 var(--rz-border-width) var(--rz-primary);
-}
-
-.arrowButton, ::deep .arrowButton {
-    color: var(--rz-primary) !important;
-    background-color: white !important;
-    box-shadow: inset 0 0 0 var(--rz-border-width) var(--rz-primary);
-}
-
 p, ::deep p {
     color: var(--rz-primary) !important;
     margin-top: 12px;
