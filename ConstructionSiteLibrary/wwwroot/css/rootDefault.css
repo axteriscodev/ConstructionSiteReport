@@ -10,7 +10,7 @@
     /* Colori principali APP */
     --rz-primary: #0C336E !important;
     --rz-primary-light: #0065ff !important;
-    --rz-primary-lighter: #418bff !important;
+    --rz-primary-lighter: #AFCAF3 !important;
     --rz-primary-dark: #1d5bbb !important;
     --rz-primary-darker: #124188 !important;
     --rz-secondary: #ff0e0e !important;
@@ -38,9 +38,8 @@
     /* Bordi */
     --border-Card: #afcaf3 !important;
     /* Colori tabelle */
-    --axt-table-striped-bg: rgba(175, 201, 243, 0.15) !important; 
+    --axt-table-striped-bg: rgba(175, 201, 243, 0.15) !important;
     /* Colori azioni */
     --action-delete: #ff0e0e !important;
     --action-edit: #0065ff !important;
-    
 }
