@@ -21,8 +21,8 @@ else
             </div>
             <div class="hstack">
                 <RadzenLabel Text="Data:" Component="Data" Style="margin-right: 8px; vertical-align: middle;" />
-                <RadzenDatePicker Value="@Document.SignDate" TValue="DateTime?" DateFormat="dd/MM/yyyy"
-                    Style="max-width:200px;" Change="@(args=> SaveSignDate(args))" />
+                <RadzenDatePicker Value="@Document.SignDate" TValue="DateTime?" DateFormat="dd/MM/yyyy HH:mm"
+                                  ShowTime="true" Change="@(args=> SaveSignDate(args))" class="my-input" />
             </div>
             <div class="row">
                     <div class="col-12 col-md-6 my-2">
@@ -57,7 +57,7 @@ else
                                     <RadzenText>Per: <strong>@reportedCompany.Company.CompanyName</strong></RadzenText>
                                     <RadzenRow>
                                         <RadzenText Style="margin-top: 0.5rem;">Nome:</RadzenText>
-                                        <RadzenTextBox @bind-Value=@reportedCompany.Name />
+                                    <RadzenTextBox @bind-Value=@reportedCompany.Name class="my-input" />
                                     </RadzenRow>
                                     @if (reportedCompany.Sign is not null)
                                     {

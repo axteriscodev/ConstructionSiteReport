@@ -18,7 +18,7 @@
             @foreach (var nota in Document.Notes)
             {
                 <RadzenColumn class="mt-4">
-                    <RadzenTextArea Placeholder="Enter here..." class="w-100" Rows="5" Value="@nota.Text" Change="@(args=> AddTextNote(args, nota.Id))" />
+                    <RadzenTextArea Placeholder="Enter here..." class="w-100 my-input" Rows="5" Value="@nota.Text" Change="@(args=> AddTextNote(args, nota.Id))" />
                     <div class="row">
                         <div class="col-12">
                             <RadzenText TextStyle="TextStyle.Caption" class="mt-2">@ReportedCompany(nota.CompanyListIds)</RadzenText>

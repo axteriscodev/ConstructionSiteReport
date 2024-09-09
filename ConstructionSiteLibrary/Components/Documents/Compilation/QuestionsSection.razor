@@ -37,7 +37,7 @@
                                                 <div class="hstack">
                                                     <div>
                                                         <RadzenDropDown Value="@answer" Data=@question.Choices TValue="DocumentChoiceModel"
-                                                            TextProperty="Value"
+                                                                        TextProperty="Value" class="my-input"
                                                             Change="@(args => SelectedAnswer(args, question, question.CurrentChoices.IndexOf(answer)))" />
                                                     </div>
                                                     @if (ShowDeleteChoiceButton(answer, question))
@@ -74,8 +74,6 @@
                                                 </ChildContent>
                                             </RadzenSplitButton>
                                             <InputFile OnChange="@(args => LoadFile(args, question))" style="display: none;" id="pictureLoader" />
-                                            @*<RadzenButton Icon="photo_camera" Click="@(() => TakePicture(question))"
-                                ButtonStyle="ButtonStyle.Primary" Variant="Variant.Text" class="buttonPhoto" />*@
                                         </div>
                                     </div>
                                 }

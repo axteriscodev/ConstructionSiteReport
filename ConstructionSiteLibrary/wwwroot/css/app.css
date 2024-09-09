@@ -87,6 +87,7 @@ p,.p {
         color: white !important;
     }
 
+/* TABELLE */
 .table > :not(caption) > * > * {
     padding: .5rem .5rem;
     color: var(--bs-table-color-state, var(--bs-table-color-type, var(--bs-table-color)));
@@ -132,6 +133,25 @@ tr {
     tbody > tr {
         height: 40px !important;
     }
+
+
+/* DATEPICKER*/
+
+.rz-datepicker-calendar th {
+    font-weight: normal;
+    font-size: var(--rz-datepicker-calendar-header-font-size);
+    text-transform: var(--rz-datepicker-calendar-header-text-transform);
+    color: var(--rz-primary) !important;
+    padding: var(--rz-datepicker-calendar-padding) !important;
+    text-align: center;
+}
+
+.rz-datepicker-calendar td {
+    text-align: center;
+    border-top: var(--rz-datepicker-calendar-border);
+    padding: 0 !important;
+}
+
 
 /* ACCORDION BOOSTRAP */
 .accordion-button:focus {

@@ -16,11 +16,6 @@ else
         <fieldset class="my-fieldset">
             <legend class="my-legend">Dati Verbale</legend>
             <h3>@Document.Title</h3>
-            @* <div class="SectionTitleDiv">
-                <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" class="SectionTitle">
-                    <strong>@Document.Title</strong>
-                </RadzenText>
-            </div> *@
             <div class="my-1">
                 <RadzenLabel Text="Descrizione:" Component="Descrizione" />
                 <RadzenTextArea @bind-Value="@Document.Description" Name="Descrizione" class="my-input" Style="height:fit-content;" />
@@ -33,7 +28,7 @@ else
                 <div class="col-12 col-md-3">
                     <RadzenLabel Text="Data sopralluogo:" Component="RadzenDatePickerBindValue" />
                     <RadzenDatePicker @bind-Value=@compilationDate DateFormat="dd/MM/yyyy"
-                                        Name="RadzenDatePickerBindValue" ShowCalendarWeek class="w-100"
+                                        Name="RadzenDatePickerBindValue"
                     Change="@(args=> CompilationDateChanged(args))">
                         <FooterTemplate>
                             <RadzenButton Click=@(args =>compilationDate = DateTime.Now) Text="Oggi" class="my-3 w-100" />
