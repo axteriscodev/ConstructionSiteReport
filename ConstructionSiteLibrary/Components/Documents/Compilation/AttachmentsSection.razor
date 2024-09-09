@@ -9,7 +9,7 @@
 
 
     <fieldset class="my-fieldset">
-        <legend class="my-legend">@DocumentCompilationUtils.Attachment</legend>
+        <legend class="my-legend">@DocumentUtils.Attachment</legend>
         <div class="row">
             @foreach (var cat in visualCategories)
             {
@@ -20,7 +20,7 @@
                         <div class="paddingSezione">
                             <RadzenRow JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Start" Gap="0">
                                 <RadzenColumn Size="1" class="rz-text-align-center paddingYResponsive">
-                                    <RadzenText TextStyle="TextStyle.H6">@DocumentCompilationUtils.QuestionNumber(cat.Category, elem.Order)</RadzenText>
+                                    <RadzenText TextStyle="TextStyle.H6">@DocumentUtils.QuestionNumber(cat.Category, elem.Order)</RadzenText>
                                 </RadzenColumn>
                                 <RadzenColumn>
                                     <RadzenRow>
@@ -57,13 +57,13 @@
     protected override async Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
-        visualCategories = DocumentCompilationUtils.CreateVisualCategories(Categories);
+        visualCategories = DocumentUtils.CreateVisualCategories(Categories);
     }
 
     private void DeleteAttachment(List<AttachmentModel> attachments, AttachmentModel attachment)
     {
         attachments.Remove(attachment);
-        visualCategories = DocumentCompilationUtils.CreateVisualCategories(Categories);
+        visualCategories = DocumentUtils.CreateVisualCategories(Categories);
     }
 
 }

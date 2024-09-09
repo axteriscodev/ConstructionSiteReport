@@ -13,7 +13,8 @@ else
 {
     <div class="mt-3">
         @* INTRO DOCUMENTO *@
-        <fieldset class="my-fieldset">
+        <a class="anchor" id="@CreateAnchor(0)"></a>
+        <fieldset class="my-fieldset" >
             <legend class="my-legend">Dati Verbale</legend>
             <h3>@Document.Title</h3>
             <div class="my-1">
@@ -54,8 +55,9 @@ else
             </div>
         </fieldset>
         @* DATI CANTIERE *@
-        <fieldset class="my-fieldset">
-            <legend class="my-legend">@DocumentCompilationUtils.ConstructionSiteData</legend>
+        <a class="anchor" id="@CreateAnchor(1)"></a>
+        <fieldset class="my-fieldset" >
+            <legend class="my-legend">@DocumentUtils.ConstructionSiteData</legend>
             <div class="row my-1">
                 <div class="col-12 col-md-6">
                     <RadzenLabel Text="Committente:" Component="Committente" />
@@ -110,7 +112,8 @@ else
 
     [Parameter]
     public DocumentModel Document { get; set; } = new();
-
+    [Parameter]
+    public List<DocumentAnchor> Anchors { get; set; } = [];
     private List<ClientModel> ClientsList = [];
     private List<MeteoConditionModel> meteoConditions = [];
     private Orientation meteoButtonsOrientation = Orientation.Horizontal;
@@ -189,6 +192,26 @@ else
     public void GetHour()
     {
         compilationHour = Document.CompilationDate.HasValue ? Document.CompilationDate : DateTime.Now;
+    }
+
+    #endregion
+
+
+    #region Gestione Ancore
+
+    private string CreateAnchor(int count)
+    {
+        DocumentAnchor anchor;
+        if(count == 0)
+        {
+            anchor = new DocumentAnchor(count, DocumentUtils.ADatiVerbale.Text, DocumentUtils.ADatiVerbale.Anchor);
+        }
+        else
+        {
+            anchor = new DocumentAnchor(count, DocumentUtils.ADatiCantiere.Text, DocumentUtils.ADatiCantiere.Anchor);
+        }
+        Anchors.Add(anchor);
+        return anchor.Anchor;
     }
 
     #endregion

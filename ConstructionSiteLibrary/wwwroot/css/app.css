@@ -249,6 +249,15 @@ fieldset.my-fieldset{
     border-color: var(--rz-primary-lighter) !important;
 }
 
+/* Navigazione Anchor */
+.anchor {
+    display: block;
+    position: relative;
+    top: -80px;
+    visibility: hidden;
+}
+
+
 /* DIMENSIONI TESTI */
 .text-100 {
     font-size: 100px !important;
@@ -904,7 +913,7 @@ a,
 }
 
 .content {
-    padding-top: 1.1rem;
+    /*padding-top: 1.1rem;*/
 }
 
 .valid.modified:not([type=checkbox]) {

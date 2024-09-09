@@ -1,6 +1,8 @@
 ﻿@using ConstructionSiteLibrary.Model.DocumentWizard;
+@using ConstructionSiteLibrary.Model.DocumentCompilation;
 @using ConstructionSiteLibrary.Repositories;
 @using ConstructionSiteLibrary.Components.Documents.Compilation;
+@using ConstructionSiteLibrary.Components.Generics;
 @using Radzen.Blazor;
 @using Shared.Documents;
 @using Shared.Templates;
@@ -16,18 +18,11 @@
 }
 else
 {
-    <div class="row">
-        <div>
-
-        </div>
-    </div>
+    <ActivityTopBar OnButtonSaveClicked="SaveDocument" ListaAncore="@Anchors" />
     <div class="my-5">
         <div class="row">
             <div class="col-12 col-lg-6 d-flex justify-content-center justify-content-lg-start">
                 <h1 class="title">Nuovo documento</h1>
-            </div>
-            <div class="col-12 col-lg-6 mt-5 m-lg-0 d-flex justify-content-center justify-content-lg-end">
-                <RadzenButton Icon="save" Text="Salva" ButtonStyle="ButtonStyle.Info" Click="@SaveDocument" IsBusy="@onSaving" class="my-button" />
             </div>
         </div>
     </div>
@@ -41,9 +36,10 @@ else
         @* Visualizzazione e compilazione del nuovo documento *@
         @if (_selectedTemplate is not null)
         {
-            <ReportConstructorSiteDataSection Document="@_document" />
-            <CompaniesPresentSection Companies="@_document.Companies" />
-            <QuestionsSection Categories="_document.Categories" Companies="_document.Companies" OnStateChangeNotification="@UpdateDocument" />
+            <ReportConstructorSiteDataSection Document="@_document" Anchors="@Anchors" />
+            <CompaniesPresentSection Companies="@_document.Companies" CompaniesAnchor="@Anchors" OnUpdateState="@UpdateDocument" />
+            <QuestionsSection Categories="_document.Categories" Companies="_document.Companies" OnStateChangeNotification="@UpdateDocument"
+                              QuestionsAnchor="@Anchors" />
             <QuestionNotesSection Document="@_document" />
             <AttachmentsSection Categories="@_document.Categories" />
             <DocumentNoteSection Document="@_document" />
@@ -68,6 +64,8 @@ else
     private bool initialLoading;
     private bool loadTemplate;
     private bool onSaving = false;
+
+    public List<DocumentAnchor> Anchors { get; set; } = [];
 
     protected override async Task OnParametersSetAsync()
     {
@@ -161,7 +159,7 @@ else
 
     public void Back()
     {
-
+        NavigationService.Back();
     }
 
 }

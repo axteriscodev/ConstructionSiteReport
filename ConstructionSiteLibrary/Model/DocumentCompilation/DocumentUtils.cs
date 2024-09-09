@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ConstructionSiteLibrary.Model.DocumentCompilation
 {
-    class DocumentCompilationUtils
+    class DocumentUtils
     {
 
 
@@ -21,6 +21,15 @@ namespace ConstructionSiteLibrary.Model.DocumentCompilation
         public static string DocumentSignatures = "Firme";
 
         #endregion
+
+        #region Ancore per navigazione documento
+
+        public static DocumentAnchor ADatiVerbale = new("Dati Verbale", "DatiVerbale");
+        public static DocumentAnchor ADatiCantiere = new("Dati Cantiere", "DatiCantiere");
+        public static DocumentAnchor ADatiAnziende = new("", "");
+
+        #endregion
+
 
         #region Metodi di visualizzazione per Firme
 

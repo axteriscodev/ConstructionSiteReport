@@ -11,10 +11,10 @@
 else
 {
     <div class="mt-3">
-
         @foreach (var company in Companies)
         {
-            <fieldset class="my-fieldset">
+            <a class="anchor" id="@CreateAnchor(company)"></a>
+            <fieldset class="my-fieldset" >
                 <legend class="my-legend">Impresa Esecutrice</legend>
                 <div class="row">
                     <div class="col impresaEsecutrice">
@@ -28,7 +28,7 @@ else
                     <div class="col-12 col-md-6 my-1">
                         <RadzenLabel Text="Ragione Sociale:" Component="RagioneSociale" />
                         <RadzenTextBox Placeholder="Inserisci Ragione Sociale" Name="RagioneSociale"
-                                        Change=@(args => OnChange(args, "RagioneSociale"))
+                                       Change=@(args => OnChangeRagioneSociale(company,args, "RagioneSociale"))
                                        class="my-input" @bind-Value=@company.CompanyName />
                     </div>
                     <div class="col-12 col-md-6 my-1">
@@ -80,9 +80,15 @@ else
 @code {
 
     [Parameter]
+    public EventCallback OnUpdateState { get; set; }
+    [Parameter]
     public List<CompanyModel> Companies { get; set; } = [];
+    [Parameter]
+    public List<DocumentAnchor> CompaniesAnchor { get; set; } = [];
+
 
     private bool onLoading = false;
+
 
 
     protected override async Task OnInitializedAsync()
@@ -116,7 +122,7 @@ else
             //creo parametri da inviare al componente caricato con il popup
             var param = new Dictionary<string, object>
             {
-               
+
                 { "PresentCompanies", Companies },
             }; 
             CompanyModel? selectedCompany = await DialogService.OpenAsync<FormAddCompany>("Seleziona azienda", parameters: param,  options: newOptions);
@@ -125,16 +131,41 @@ else
             {
                 selectedCompany.Present = true;
                 Companies.Add(selectedCompany);
+                CreateAnchor(selectedCompany);
             }
         }
         else
         {
-            Companies.Add(new CompanyModel(){Present = true});
+            var newComp = new CompanyModel() { Present = true };
+            Companies.Add(newComp);
+            CreateAnchor(newComp);
         }
     }
+
+
 
     private void OnChange(string? args, string name)
     {
 
+    }
+
+    private async Task OnChangeRagioneSociale(CompanyModel comp, string? args, string name)
+    {
+        var index = Companies.IndexOf(comp);
+        var anchor = CompaniesAnchor.Where(x => x.Id == index).FirstOrDefault();
+        if(anchor is not null)
+        {
+            anchor.Text = $"Dati {args}";
+            await OnUpdateState.InvokeAsync();
+        }
+    }
+
+    private string CreateAnchor(CompanyModel comp)
+    {
+        var companyName = comp.CompanyName;
+        var index = Companies.IndexOf(comp);
+        var anchor = new DocumentAnchor(index, $"Dati {companyName}", $"company_{index}");
+        CompaniesAnchor.Add(anchor);
+        return anchor.Anchor;
     }
 }
