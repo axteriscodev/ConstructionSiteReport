@@ -6,6 +6,8 @@ public class CompanyModel
 {
     [JsonPropertyName("Id")]
     public int Id { get; set; }
+    [JsonPropertyName("subcontractedBy")]
+    public int? SubcontractedBy { get; set; }
 
     [JsonPropertyName("companyName")]
     public string CompanyName { get; set; } = "";
@@ -47,7 +49,7 @@ public class CompanyModel
     public string InailId { get; set; } = "";
 
     [JsonPropertyName("inailPat")]
-    public string InailPat { get; set; } = "";
+    public List<PatInailModel> InailPat { get; set; } = [];
 
     [JsonPropertyName("jobsDescriptions")]
     public string JobsDescriptions { get; set; } = "";

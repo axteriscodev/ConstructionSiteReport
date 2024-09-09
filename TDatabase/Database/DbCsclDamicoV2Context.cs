@@ -47,6 +47,8 @@ public partial class DbCsclDamicoV2Context : DbContext
 
     public virtual DbSet<Organization> Organizations { get; set; }
 
+    public virtual DbSet<PatInail> PatInails { get; set; }
+
     public virtual DbSet<Question> Questions { get; set; }
 
     public virtual DbSet<QuestionAnswered> QuestionAnswereds { get; set; }
@@ -64,6 +66,10 @@ public partial class DbCsclDamicoV2Context : DbContext
     public virtual DbSet<TemplateDescription> TemplateDescriptions { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
+
+    public virtual DbSet<UserAttachment> UserAttachments { get; set; }
+
+    public virtual DbSet<UserAttachmentType> UserAttachmentTypes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -210,10 +216,6 @@ public partial class DbCsclDamicoV2Context : DbContext
 
             entity.ToTable("CHOICE");
 
-            entity.HasIndex(e => e.Value, "UQ__CHOICE__44966BCAC68CF288").IsUnique();
-
-            entity.HasIndex(e => e.Tag, "UQ__CHOICE__C456903B1564D97D").IsUnique();
-
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("ID");
@@ -245,8 +247,6 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.HasKey(e => e.Id).HasName("PK__CLIENT__3214EC27CBC770B6");
 
             entity.ToTable("CLIENT");
-
-            entity.HasIndex(e => e.Name, "UQ__CLIENT__D9C1FA000CD70BB0").IsUnique();
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
@@ -309,6 +309,7 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.Property(e => e.JobsDescriptions)
                 .IsUnicode(false)
                 .HasColumnName("JOBS_DESCRIPTIONS");
+            entity.Property(e => e.PatInail).HasColumnName("PAT_INAIL");
             entity.Property(e => e.Pec)
                 .HasMaxLength(50)
                 .IsUnicode(false)
@@ -341,6 +342,10 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.HasOne(d => d.IdOrganizationNavigation).WithMany(p => p.Companies)
                 .HasForeignKey(d => d.IdOrganization)
                 .HasConstraintName("FK_COMPANY_ORGANIZATION");
+
+            entity.HasOne(d => d.PatInailNavigation).WithMany(p => p.Companies)
+                .HasForeignKey(d => d.PatInail)
+                .HasConstraintName("FK_COMPANY_PAT_INAIL");
         });
 
         modelBuilder.Entity<CompanyConstructorSite>(entity =>
@@ -357,8 +362,9 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.Property(e => e.Note)
                 .IsUnicode(false)
                 .HasColumnName("NOTE");
+            entity.Property(e => e.SubcontractedBy).HasColumnName("SUBCONTRACTED_BY");
 
-            entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.CompanyConstructorSites)
+            entity.HasOne(d => d.IdCompanyNavigation).WithMany(p => p.CompanyConstructorSiteIdCompanyNavigations)
                 .HasForeignKey(d => d.IdCompany)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__COMPANY_C__ID_CO__0697FACD");
@@ -367,6 +373,10 @@ public partial class DbCsclDamicoV2Context : DbContext
                 .HasForeignKey(d => d.IdConstructorSite)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__COMPANY_C__ID_CO__19AACF41");
+
+            entity.HasOne(d => d.SubcontractedByNavigation).WithMany(p => p.CompanyConstructorSiteSubcontractedByNavigations)
+                .HasForeignKey(d => d.SubcontractedBy)
+                .HasConstraintName("FK_COMPANY_CONSTRUCTOR_SITE_COMPANY");
         });
 
         modelBuilder.Entity<CompanyDocument>(entity =>
@@ -614,6 +624,23 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.Property(e => e.Phone)
                 .IsUnicode(false)
                 .HasColumnName("PHONE");
+        });
+
+        modelBuilder.Entity<PatInail>(entity =>
+        {
+            entity.ToTable("PAT_INAIL");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("ID");
+            entity.Property(e => e.Active)
+                .HasDefaultValue(true)
+                .HasColumnName("ACTIVE");
+            entity.Property(e => e.Hidden).HasColumnName("HIDDEN");
+            entity.Property(e => e.Name)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .HasColumnName("NAME");
         });
 
         modelBuilder.Entity<Question>(entity =>
@@ -877,6 +904,50 @@ public partial class DbCsclDamicoV2Context : DbContext
                 .HasForeignKey(d => d.IdRole)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_USER_ROLE");
+        });
+
+        modelBuilder.Entity<UserAttachment>(entity =>
+        {
+            entity.ToTable("USER_ATTACHMENT");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("ID");
+            entity.Property(e => e.Active)
+                .HasDefaultValue(true)
+                .HasColumnName("ACTIVE");
+            entity.Property(e => e.Hidden).HasColumnName("HIDDEN");
+            entity.Property(e => e.IdUser).HasColumnName("ID_USER");
+            entity.Property(e => e.Path)
+                .IsUnicode(false)
+                .HasColumnName("PATH");
+            entity.Property(e => e.Type).HasColumnName("TYPE");
+
+            entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.UserAttachments)
+                .HasForeignKey(d => d.IdUser)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_USER_ATTACHMENT_USER");
+
+            entity.HasOne(d => d.TypeNavigation).WithMany(p => p.UserAttachments)
+                .HasForeignKey(d => d.Type)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_USER_ATTACHMENT_USER_ATTACHMENT_TYPE");
+        });
+
+        modelBuilder.Entity<UserAttachmentType>(entity =>
+        {
+            entity.ToTable("USER_ATTACHMENT_TYPE");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("ID");
+            entity.Property(e => e.Active)
+                .HasDefaultValue(true)
+                .HasColumnName("ACTIVE");
+            entity.Property(e => e.Hidden).HasColumnName("HIDDEN");
+            entity.Property(e => e.Name)
+                .IsUnicode(false)
+                .HasColumnName("NAME");
         });
 
         OnModelCreatingPartial(modelBuilder);

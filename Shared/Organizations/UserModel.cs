@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Shared.Documents;
 
 namespace Shared.Organizations
 {
@@ -15,7 +16,8 @@ namespace Shared.Organizations
         public string Password { get; set; } = "";
         public string Phone { get; set; } = "";
         public OrganizationModel Organization { get; set; } = new();
-        public RoleModel Role { get; set; } = new();
+        public RoleModel Role { get; set; } = new();    
+        public List<AttachmentModel> attachments { get; set; } = [];
         public bool Active { get; set; }
         public bool Hidden { get; set; }
     }
