@@ -14,7 +14,7 @@ else
     <div class="mt-3">
         @* INTRO DOCUMENTO *@
         <a class="anchor" id="@CreateAnchor(0)"></a>
-        <fieldset class="my-fieldset" >
+        <fieldset class="my-fieldset">
             <legend class="my-legend">Dati Verbale</legend>
             <h3>@Document.Title</h3>
             <div class="my-1">
@@ -30,7 +30,7 @@ else
                     <RadzenLabel Text="Data sopralluogo:" Component="RadzenDatePickerBindValue" />
                     <RadzenDatePicker @bind-Value=@compilationDate DateFormat="dd/MM/yyyy"
                                       Name="RadzenDatePickerBindValue" class="inputBorder"
-                    Change="@(args=> CompilationDateChanged(args))">
+                                      Change="@(args=> CompilationDateChanged(args))">
                         <FooterTemplate>
                             <RadzenButton Click=@(args =>compilationDate = DateTime.Now) Text="Oggi" class="my-3 w-100" />
                         </FooterTemplate>
@@ -50,13 +50,13 @@ else
                 <RadzenLabel Text="Condizioni meteo" />
                 <div class="bordered text-center p-3">
                     <RadzenRadioButtonList Data="@meteoConditions" TValue="MeteoConditionModel" Orientation="@meteoButtonsOrientation"
-                                            Value="@Document.MeteoCondition" TextProperty="Description" />
+                                           Value="@Document.MeteoCondition" TextProperty="Description" />
                 </div>
             </div>
         </fieldset>
         @* DATI CANTIERE *@
         <a class="anchor" id="@CreateAnchor(1)"></a>
-        <fieldset class="my-fieldset" >
+        <fieldset class="my-fieldset">
             <legend class="my-legend">@DocumentUtils.ConstructionSiteData</legend>
             <div class="row my-1">
                 <div class="col-12 col-md-6">
@@ -68,8 +68,8 @@ else
                     <RadzenDatePicker @bind-Value=@Document.ConstructorSite.StartDate ShowTime="true" DateFormat="dd/MM/yyyy h:mm" Name="InizioLavori" class="w-100 inputBorder">
                         <FooterTemplate>
                             <RadzenButton Click=@(args =>
-                                        Document.ConstructorSite.StartDate = DateTime.Now) Text="Ora"
-                                            class="my-3 w-100" />
+                                      Document.ConstructorSite.StartDate = DateTime.Now) Text="Ora"
+                                          class="my-3 w-100" />
                         </FooterTemplate>
                     </RadzenDatePicker>
                 </div>
@@ -101,7 +101,7 @@ else
                 <div class="col-12 col-md-6">
                     <RadzenLabel Text="Id. SICO:" Component="IdSICOInCorso" />
                     <RadzenTextBox Placeholder="Inserisci Id. SICO" Name="IdSICOInCorso"
-                        class="w-100 inputBorder" @bind-Value=@Document.ConstructorSite.IdSicoInProgress />
+                                   class="w-100 inputBorder" @bind-Value=@Document.ConstructorSite.IdSicoInProgress />
                 </div>
             </div>
         </fieldset>
@@ -110,6 +110,8 @@ else
 
 @code {
 
+    [Parameter]
+    public EventCallback OnAnchorAdd { get; set; }
     [Parameter]
     public DocumentModel Document { get; set; } = new();
     [Parameter]
@@ -122,6 +124,7 @@ else
     //VERBALE DI COORDINAMENTO IN CANTIERE
     DateTime? compilationDate;
     DateTime? compilationHour;
+
 
     void OnChange(string value, string name)
     {
@@ -202,15 +205,16 @@ else
     private string CreateAnchor(int count)
     {
         DocumentAnchor anchor;
-        if(count == 0)
+        if (count == 0)
         {
-            anchor = new DocumentAnchor(count, DocumentUtils.ADatiVerbale.Text, DocumentUtils.ADatiVerbale.Anchor);
+            anchor = new DocumentAnchor(DocumentUtils.TypeConstructionSite, count, DocumentUtils.ADatiVerbale.Text, DocumentUtils.ADatiVerbale.Anchor);
         }
         else
         {
-            anchor = new DocumentAnchor(count, DocumentUtils.ADatiCantiere.Text, DocumentUtils.ADatiCantiere.Anchor);
+            anchor = new DocumentAnchor(DocumentUtils.TypeConstructionSite, count, DocumentUtils.ADatiCantiere.Text, DocumentUtils.ADatiCantiere.Anchor);
         }
         Anchors.Add(anchor);
+        //Task.Run(() => OnAnchorAdd.InvokeAsync());
         return anchor.Anchor;
     }
 

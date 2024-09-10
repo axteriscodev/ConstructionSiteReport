@@ -78,13 +78,14 @@ else
 
 
 @code {
-
+    [Parameter]
+    public EventCallback OnAnchorAdd { get; set; }
     [Parameter]
     public EventCallback OnUpdateState { get; set; }
     [Parameter]
     public List<CompanyModel> Companies { get; set; } = [];
     [Parameter]
-    public List<DocumentAnchor> CompaniesAnchor { get; set; } = [];
+    public List<DocumentAnchor> Anchors { get; set; } = [];
 
 
     private bool onLoading = false;
@@ -102,6 +103,8 @@ else
     {
         await base.OnParametersSetAsync();
     }
+
+
 
     private void AddPresent(bool? isPresent, CompanyModel company)
     {
@@ -152,7 +155,7 @@ else
     private async Task OnChangeRagioneSociale(CompanyModel comp, string? args, string name)
     {
         var index = Companies.IndexOf(comp);
-        var anchor = CompaniesAnchor.Where(x => x.Id == index).FirstOrDefault();
+        var anchor = Anchors.Where(x => x.Index == index).FirstOrDefault();
         if(anchor is not null)
         {
             anchor.Text = $"Dati {args}";
@@ -164,8 +167,10 @@ else
     {
         var companyName = comp.CompanyName;
         var index = Companies.IndexOf(comp);
-        var anchor = new DocumentAnchor(index, $"Dati {companyName}", $"company_{index}");
-        CompaniesAnchor.Add(anchor);
+        var anchor = new DocumentAnchor(DocumentUtils.TypeCompanies, index, $"Dati {companyName}", $"company_{index}");
+        Anchors.Add(anchor);
+        Anchors = Anchors.OrderBy(x => x.TypeIndex).ThenBy(x => x.Index).ToList();
+        // Task.Run(() => OnAnchorAdd.InvokeAsync());
         return anchor.Anchor;
     }
 }

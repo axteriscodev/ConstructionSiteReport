@@ -24,6 +24,14 @@ namespace ConstructionSiteLibrary.Model.DocumentCompilation
 
         #region Ancore per navigazione documento
 
+        public static int TypeConstructionSite = 1;
+        public static int TypeCompanies = 2;
+        public static int TypeQuestions = 3;
+        public static int TypeQuestionNotes = 4;
+        public static int TypeAttachment = 5;
+        public static int TypeDocumentNotes = 6;
+        public static int TypeSign = 7;
+
         public static DocumentAnchor ADatiVerbale = new("Dati Verbale", "DatiVerbale");
         public static DocumentAnchor ADatiCantiere = new("Dati Cantiere", "DatiCantiere");
         public static DocumentAnchor ADatiAnziende = new("", "");

@@ -19,14 +19,14 @@ else
     <meta name="viewport" content="width=@viewSize.Width">
     <div class="">
             <ActivityTopBar OnButtonSaveClicked="SaveDocument" ListaAncore="@Anchors" />
-        <ReportConstructorSiteDataSection Document="@document" />
-        <CompaniesPresentSection Companies="@document.Companies" CompaniesAnchor="@Anchors" />
+        <ReportConstructorSiteDataSection Document="@document" Anchors="@Anchors"  OnAnchorAdd="@AnchorAdd"/>
+        <CompaniesPresentSection Companies="@document.Companies" Anchors="@Anchors" OnAnchorAdd="@AnchorAdd" />
         <QuestionsSection Categories="document.Categories" Companies="document.Companies" OnStateChangeNotification="@UpdateDocument"
-                          QuestionsAnchor="@Anchors" />
-        <QuestionNotesSection Document="@document" />
-        <AttachmentsSection Categories="@document.Categories" />
-        <DocumentNoteSection Document="@document" />
-        <CompaniesSignsSection Document="@document" />
+                          Anchors="@Anchors" OnAnchorAdd="@AnchorAdd" />
+        <QuestionNotesSection Document="@document" Anchors="@Anchors" OnAnchorAdd="@AnchorAdd" />
+        <AttachmentsSection Categories="@document.Categories" Anchors="@Anchors" OnAnchorAdd="@AnchorAdd" />
+        <DocumentNoteSection Document="@document" Anchors="@Anchors" OnAnchorAdd="@AnchorAdd" />
+        <CompaniesSignsSection Document="@document" Anchors="@Anchors" OnAnchorAdd="@AnchorAdd" />
        
     </div>
     <div class="d-flex justify-content-center mt-3">
@@ -58,8 +58,17 @@ else
         await LoadData();
         viewSize = screenComponent.GetScreenSize();
         nativeSize = viewSize.Clone();
+        Anchors.Add(new DocumentAnchor(DocumentUtils.TypeConstructionSite, 0, DocumentUtils.ADatiVerbale.Text, DocumentUtils.ADatiVerbale.Anchor));
+        Anchors.Add(new DocumentAnchor(DocumentUtils.TypeConstructionSite, 1, DocumentUtils.ADatiCantiere.Text, DocumentUtils.ADatiCantiere.Anchor));
         onLoading = false;
     }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        Anchors = Anchors.OrderBy(x => x.TypeIndex).ThenBy(x => x.Index).ToList();
+        base.OnAfterRender(firstRender);
+    }
+
     private async Task LoadData()
     {
         document = await DocumentsRepository.GetDocumentById(DocumentId);
@@ -109,6 +118,11 @@ else
         viewSize = nativeSize.Clone();
         StateHasChanged();
         DialogService.Close();
+    }
+
+    public void AnchorAdd()
+    {
+       // Anchors = Anchors.OrderBy(x => x.TypeIndex).ThenBy(x => x.Index).ToList();
     }
 
 }

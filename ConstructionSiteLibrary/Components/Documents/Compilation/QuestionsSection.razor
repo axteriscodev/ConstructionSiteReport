@@ -90,13 +90,15 @@
 @code {
 
     [Parameter]
+    public EventCallback OnAnchorAdd { get; set; }
+    [Parameter]
     public List<DocumentCategoryModel> Categories { get; set; } = [];
     [Parameter]
     public List<CompanyModel> Companies { get; set; } = [];
     [Parameter]
     public EventCallback OnStateChangeNotification { get; set; }
     [Parameter]
-    public List<DocumentAnchor> QuestionsAnchor { get; set; } = [];
+    public List<DocumentAnchor> Anchors { get; set; } = [];
 
     private List<VisualCategory> visualCategories { get; set; } = [];
 
@@ -333,8 +335,10 @@
     {
         var categoryName = $"{cat.Category.Order}. {cat.Category.Text}";
         var index = cat.Category.Order;
-        var anchor = new DocumentAnchor(index, $"Cat: {categoryName}", $"category_{index}");
-        QuestionsAnchor.Add(anchor);
+        var anchor = new DocumentAnchor(DocumentUtils.TypeQuestions, index, $"Cat: {categoryName}", $"category_{index}");
+        Anchors.Add(anchor);
+        Anchors = Anchors.OrderBy(x => x.TypeIndex).ThenBy(x => x.Index).ToList();
+        // Task.Run(() => OnAnchorAdd.InvokeAsync());
         return anchor.Anchor;
     }
 

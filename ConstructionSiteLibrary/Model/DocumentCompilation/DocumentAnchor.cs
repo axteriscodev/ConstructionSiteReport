@@ -12,8 +12,8 @@ namespace ConstructionSiteLibrary.Model.DocumentCompilation
     /// </summary>
     public class DocumentAnchor
     {
-        public int Id { get; set; }
-        public int Type { get; set; }
+        public int Index { get; set; }
+        public int TypeIndex { get; set; }
         public string Text { get; set; } = "";
         public string Anchor { get; set; } = "";
 
@@ -22,9 +22,13 @@ namespace ConstructionSiteLibrary.Model.DocumentCompilation
         public DocumentAnchor(string text, string anchor) : this (0, text, anchor) { }
         
 
-        public DocumentAnchor(int id, string text, string anchor)
+        public DocumentAnchor(int idx, string text, string anchor) : this(0, idx, text, anchor) { }
+
+
+        public DocumentAnchor(int typeIndex, int idx, string text, string anchor)
         {
-            Id = id;
+            TypeIndex = typeIndex;
+            Index = idx;
             Text = text;
             Anchor = anchor;
         }

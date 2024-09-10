@@ -17,6 +17,7 @@
                 {
                     if (elem.Attachments.Count > 0)
                     {
+                        <a class="anchor" id="@CreateAnchor(cat,elem)"></a>
                         <div class="paddingSezione">
                             <RadzenRow JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Start" Gap="0">
                                 <RadzenColumn Size="1" class="rz-text-align-center paddingYResponsive">
@@ -47,7 +48,11 @@
 @code {
 
     [Parameter]
+    public EventCallback OnAnchorAdd { get; set; }
+    [Parameter]
     public List<DocumentCategoryModel> Categories { get; set; } = [];
+    [Parameter]
+    public List<DocumentAnchor> Anchors { get; set; } = [];
 
     private List<VisualCategory> visualCategories { get; set; } = [];
 
@@ -66,4 +71,19 @@
         visualCategories = DocumentUtils.CreateVisualCategories(Categories);
     }
 
+
+    #region Gestione Ancore
+
+    private string CreateAnchor(VisualCategory cat, DocumentQuestionModel question)
+    {
+        var categoryName = $"{cat.Category.Order}. {question.Order}";
+        var index = cat.Category.Order;
+        var anchor = new DocumentAnchor(DocumentUtils.TypeAttachment, index, $"Allegati cat: {categoryName}", $"allegati_{index}");
+        Anchors.Add(anchor);
+        Anchors = Anchors.OrderBy(x => x.TypeIndex).ThenBy(x => x.Index).ToList();
+        // Task.Run(() => OnAnchorAdd.InvokeAsync());
+        return anchor.Anchor;
+    }
+
+    #endregion
 }

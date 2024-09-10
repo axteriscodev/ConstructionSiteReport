@@ -31,7 +31,7 @@ public class CompanyDbHelper
             Ccnl = c.Ccnl ?? "",
             InpsId = c.InpsId ?? "",
             InailId = c.InailId ?? "",
-            InailPat = c.InailPat ?? "",
+            //InailPat = c.InailPat ?? "",
             JobsDescriptions = c.JobsDescriptions ?? "",
         }).ToList();
     }
@@ -58,7 +58,7 @@ public class CompanyDbHelper
                 Ccnl = company.Ccnl ?? "",
                 InpsId = company.InpsId ?? "",
                 InailId = company.InailId ?? "",
-                InailPat = company.InailPat ?? "",
+                //InailPat = company.InailPat ?? "",
                 JobsDescriptions = company.JobsDescriptions ?? "",
                 Active = true,
                 IdOrganization = organizationId
@@ -98,7 +98,7 @@ public class CompanyDbHelper
                     c.Ccnl = elem.Ccnl;
                     c.InpsId = elem.InpsId;
                     c.InailId = elem.InailId;
-                    c.InailPat = elem.InailPat;
+                    //c.InailPat = elem.InailPat;
                     c.JobsDescriptions = elem.JobsDescriptions;
                     if (await dB.SaveChangesAsync() > 0)
                     {

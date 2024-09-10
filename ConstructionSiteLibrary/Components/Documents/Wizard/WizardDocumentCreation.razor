@@ -37,13 +37,13 @@ else
         @if (_selectedTemplate is not null)
         {
             <ReportConstructorSiteDataSection Document="@_document" Anchors="@Anchors" />
-            <CompaniesPresentSection Companies="@_document.Companies" CompaniesAnchor="@Anchors" OnUpdateState="@UpdateDocument" />
+            <CompaniesPresentSection Companies="@_document.Companies" Anchors="@Anchors" OnUpdateState="@UpdateDocument" OnAnchorAdd="@AnchorAdd" />
             <QuestionsSection Categories="_document.Categories" Companies="_document.Companies" OnStateChangeNotification="@UpdateDocument"
-                              QuestionsAnchor="@Anchors" />
-            <QuestionNotesSection Document="@_document" />
-            <AttachmentsSection Categories="@_document.Categories" />
-            <DocumentNoteSection Document="@_document" />
-            <CompaniesSignsSection Document="@_document" />
+                              Anchors="@Anchors" OnAnchorAdd="@AnchorAdd" />
+            <QuestionNotesSection Document="@_document" Anchors="@Anchors" OnAnchorAdd="@AnchorAdd" />
+            <AttachmentsSection Categories="@_document.Categories" Anchors="@Anchors" OnAnchorAdd="@AnchorAdd" />
+            <DocumentNoteSection Document="@_document" Anchors="@Anchors" OnAnchorAdd="@AnchorAdd" />
+            <CompaniesSignsSection Document="@_document" Anchors="@Anchors" OnAnchorAdd="@AnchorAdd" />
         }
     }
 }
@@ -162,4 +162,8 @@ else
         NavigationService.Back();
     }
 
+    public void AnchorAdd()
+    {
+        Anchors = Anchors.OrderBy(x => x.TypeIndex).ThenBy(x => x.Index).ToList();
+    }
 }

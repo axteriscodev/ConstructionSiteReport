@@ -6,12 +6,17 @@
 
 <div class="row activityBar">
     <div class="col d-flex justify-content-center justify-content-lg-start">
-        <RadzenButton Variant="Variant.Text" Click="@Back" class="btu-back">
+        <RadzenButton Variant="Variant.Text" Click="@Back" class="my-button-text">
             <RadzenIcon Icon="chevron_left" /> Indietro
         </RadzenButton>
     </div>
     <div class="col d-flex justify-content-center">
-        <RadzenDropDown Data="@ListaAncore" TValue="DocumentAnchor" TextProperty="Text" Change="@(args=> NavigaPagina(args))" />
+        <RadzenFormField Text="Navigazione documento" Variant="Variant.Outlined">
+            <ChildContent>
+                <RadzenDropDown Data="@ListaAncore" TValue="DocumentAnchor" TextProperty="Text" Change="@(args=> NavigaPagina(args))"  />
+            </ChildContent>
+        </RadzenFormField>
+
     </div>
     <div class="col d-flex justify-content-center justify-content-lg-end">
         <RadzenButton Icon="save" Text="Salva" Click="@Save" IsBusy="@onSaving" class="my-button" />
@@ -42,6 +47,12 @@
     {
         await base.OnInitializedAsync();
         jsModule = await JS.InvokeAsync<IJSObjectReference>("import", JS_FILE);
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        ListaAncore.OrderBy(x => x.TypeIndex).ThenBy(x => x.Index);
     }
 
     public void ChangeOnSavingStatus(bool newStatus = false)

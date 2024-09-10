@@ -12,6 +12,7 @@
                 <div class="marginYResponsive">
                     @foreach (var elem in NoteList)
                     {
+                        <a class="anchor" id="@CreateAnchor(NotePointList[NoteList.IndexOf(elem)],NoteList.IndexOf(elem))"></a>
                         <RadzenRow JustifyContent="@justifyContent" AlignItems="@alignItems" Gap="0">
                             <RadzenColumn Size="1" class="rz-text-align-center paddingYResponsive">
                                 <RadzenText TextStyle="TextStyle.H6">@NotePointList[NoteList.IndexOf(elem)]</RadzenText>
@@ -38,8 +39,11 @@
     JustifyContent justifyContent = JustifyContent.Center;
 
     [Parameter]
+    public EventCallback OnAnchorAdd { get; set; }
+    [Parameter]
     public EventCallback OnQuestionNoteChanged { get; set; }
-
+    [Parameter]
+    public List<DocumentAnchor> Anchors { get; set; } = [];
     [Parameter]
 
     public DocumentModel Document { get; set; } = new();
@@ -72,4 +76,18 @@
             }
         }
     }
+
+
+    #region Gestione Ancore
+
+    private string CreateAnchor(string cat, int index)
+    {
+        var anchor = new DocumentAnchor(DocumentUtils.TypeQuestionNotes, index, $"Note cat: {cat}", $"categorynotes_{index}");
+        Anchors.Add(anchor);
+        Anchors = Anchors.OrderBy(x => x.TypeIndex).ThenBy(x => x.Index).ToList();
+        // Task.Run(() => OnAnchorAdd.InvokeAsync());
+        return anchor.Anchor;
+    }
+
+    #endregion
 }

@@ -12,6 +12,7 @@
 @* NOTE AGGIUNTIVE *@
 <div class="mt-3">
     <div class="marginYResponsive2 ">
+        <a class="anchor" id="@CreateAnchor()"></a>
         <fieldset class="my-fieldset">
             <legend class="my-legend">@DocumentUtils.DocumentNotes</legend>
 
@@ -38,8 +39,13 @@
 
 
 @code {
+
+    [Parameter]
+    public EventCallback OnAnchorAdd { get; set; }
     [Parameter]
     public EventCallback OnCompaniesSelected { get; set; }
+    [Parameter]
+    public List<DocumentAnchor> Anchors { get; set; } = [];
 
     [Parameter]
     public DocumentModel Document { get; set; } = new();
@@ -112,5 +118,19 @@
 
         return message;
     }
+
+
+    #region Gestione Ancore
+
+    private string CreateAnchor()
+    {
+        var anchor = new DocumentAnchor(DocumentUtils.TypeDocumentNotes, 0, $"Note documento", $"document_notes");
+        Anchors.Add(anchor);
+        Anchors = Anchors.OrderBy(x => x.TypeIndex).ThenBy(x => x.Index).ToList();
+        // Task.Run(() => OnAnchorAdd.InvokeAsync());
+        return anchor.Anchor;
+    }
+
+    #endregion
 
 }

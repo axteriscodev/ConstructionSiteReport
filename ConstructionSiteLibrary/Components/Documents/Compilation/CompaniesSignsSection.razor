@@ -12,6 +12,7 @@
 else
 {
     <div class="mt-3">
+        <a class="anchor" id="@CreateAnchor()"></a>
         <fieldset class="my-fieldset">
             <legend class="my-legend">@DocumentUtils.DocumentSignatures</legend>
             <div class="paddingDescrizione marginYResponsive border">
@@ -95,7 +96,11 @@ else
 @code {
 
     [Parameter]
+    public EventCallback OnAnchorAdd { get; set; }
+    [Parameter]
     public DocumentModel Document { get; set; } = new();
+        [Parameter]
+    public List<DocumentAnchor> Anchors { get; set; } = [];
 
     private List<CompanyQuestionsReported> CompaniesQuestionsReported = [];
 
@@ -293,6 +298,18 @@ else
         {
             return $"{CategoryOrder}.{QuestionOrder}";
         }
+    }
+
+    #endregion
+
+    #region Gestione Ancore
+
+    private string CreateAnchor()
+    {
+        var anchor = new DocumentAnchor(DocumentUtils.TypeSign, 0, $"Firme", $"firme0");
+        Anchors.Add(anchor);
+        // Task.Run(()=> OnAnchorAdd.InvokeAsync());
+        return anchor.Anchor;
     }
 
     #endregion
