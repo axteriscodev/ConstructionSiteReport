@@ -99,8 +99,8 @@ else
     public EventCallback OnAnchorAdd { get; set; }
     [Parameter]
     public DocumentModel Document { get; set; } = new();
-        [Parameter]
-    public List<DocumentAnchor> Anchors { get; set; } = [];
+    [Parameter]
+    public DocumentNavigator DocumentNavigator { get; set; } = new();
 
     private List<CompanyQuestionsReported> CompaniesQuestionsReported = [];
 
@@ -307,8 +307,7 @@ else
     private string CreateAnchor()
     {
         var anchor = new DocumentAnchor(DocumentUtils.TypeSign, 0, $"Firme", $"firme0");
-        Anchors.Add(anchor);
-        // Task.Run(()=> OnAnchorAdd.InvokeAsync());
+        DocumentNavigator.AddAnchor(anchor);
         return anchor.Anchor;
     }
 

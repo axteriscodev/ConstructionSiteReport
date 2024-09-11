@@ -18,7 +18,7 @@
 }
 else
 {
-    <ActivityTopBar OnButtonSaveClicked="SaveDocument" ListaAncore="@Anchors" />
+    <ActivityTopBar @ref="@topBar" OnButtonSaveClicked="SaveDocument" DocumentNavigator="@documenNavigator" />
     <div class="my-5">
         <div class="row">
             <div class="col-12 col-lg-6 d-flex justify-content-center justify-content-lg-start">
@@ -36,14 +36,14 @@ else
         @* Visualizzazione e compilazione del nuovo documento *@
         @if (_selectedTemplate is not null)
         {
-            <ReportConstructorSiteDataSection Document="@_document" Anchors="@Anchors" />
-            <CompaniesPresentSection Companies="@_document.Companies" Anchors="@Anchors" OnUpdateState="@UpdateDocument" OnAnchorAdd="@AnchorAdd" />
+            <ReportConstructorSiteDataSection Document="@_document" DocumentNavigator="@documenNavigator" />
+            <CompaniesPresentSection Companies="@_document.Companies" OnUpdateState="@UpdateDocument" DocumentNavigator="@documenNavigator" />
             <QuestionsSection Categories="_document.Categories" Companies="_document.Companies" OnStateChangeNotification="@UpdateDocument"
-                              Anchors="@Anchors" OnAnchorAdd="@AnchorAdd" />
-            <QuestionNotesSection Document="@_document" Anchors="@Anchors" OnAnchorAdd="@AnchorAdd" />
-            <AttachmentsSection Categories="@_document.Categories" Anchors="@Anchors" OnAnchorAdd="@AnchorAdd" />
-            <DocumentNoteSection Document="@_document" Anchors="@Anchors" OnAnchorAdd="@AnchorAdd" />
-            <CompaniesSignsSection Document="@_document" Anchors="@Anchors" OnAnchorAdd="@AnchorAdd" />
+                              DocumentNavigator="@documenNavigator" />
+            <QuestionNotesSection Document="@_document" DocumentNavigator="@documenNavigator" />
+            <AttachmentsSection Categories="@_document.Categories" DocumentNavigator="@documenNavigator" />
+            <DocumentNoteSection Document="@_document" DocumentNavigator="@documenNavigator" />
+            <CompaniesSignsSection Document="@_document" DocumentNavigator="@documenNavigator" />
         }
     }
 }
@@ -60,27 +60,27 @@ else
 
     private ConstructorSiteModel _constructorSite = new();
 
-    private RadzenSteps? _stepsComponent;
+    private ActivityTopBar topBar;
     private bool initialLoading;
     private bool loadTemplate;
     private bool onSaving = false;
 
-    public List<DocumentAnchor> Anchors { get; set; } = [];
+    private DocumentNavigator documenNavigator { get; set; } = new();
 
     protected override async Task OnParametersSetAsync()
     {
         _constructorSite = await ConstructorSitesRepository.GetConstructorSiteInfo(SiteId);
+        _document.ConstructorSite = _constructorSite;
         await base.OnParametersSetAsync();
     }
 
     public async Task SaveDocument()
     {
-        onSaving = true;
-
         await DocumentsRepository.SaveDocument(_document);
-
-        onSaving = false;
-
+        if (topBar is not null)
+        {
+            topBar.ChangeOnSavingStatus();
+        }
         NavigationService.ChangePage(PageRouting.ConstructorSitePage + _document.ConstructorSite.Id);
 
     }
@@ -162,8 +162,4 @@ else
         NavigationService.Back();
     }
 
-    public void AnchorAdd()
-    {
-        Anchors = Anchors.OrderBy(x => x.TypeIndex).ThenBy(x => x.Index).ToList();
-    }
 }

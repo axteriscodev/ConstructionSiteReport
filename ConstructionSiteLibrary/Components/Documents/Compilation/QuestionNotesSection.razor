@@ -43,10 +43,10 @@
     [Parameter]
     public EventCallback OnQuestionNoteChanged { get; set; }
     [Parameter]
-    public List<DocumentAnchor> Anchors { get; set; } = [];
+    public DocumentNavigator DocumentNavigator { get; set; } = new();
     [Parameter]
-
     public DocumentModel Document { get; set; } = new();
+
     private List<string> NoteList { get; set; } = [];
     private List<string> NotePointList { get; set; } = [];
     protected override async Task OnParametersSetAsync()
@@ -83,9 +83,7 @@
     private string CreateAnchor(string cat, int index)
     {
         var anchor = new DocumentAnchor(DocumentUtils.TypeQuestionNotes, index, $"Note cat: {cat}", $"categorynotes_{index}");
-        Anchors.Add(anchor);
-        Anchors = Anchors.OrderBy(x => x.TypeIndex).ThenBy(x => x.Index).ToList();
-        // Task.Run(() => OnAnchorAdd.InvokeAsync());
+        DocumentNavigator.AddAnchor(anchor);
         return anchor.Anchor;
     }
 

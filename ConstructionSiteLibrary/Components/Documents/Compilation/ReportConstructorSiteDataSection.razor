@@ -5,7 +5,7 @@
 @inject DocumentsRepository DocumentsRepository;
 @inject ClientsRepository ClientsRepository;
 
-@if (onLoading)
+@if (false)
 {
     <Loading />
 }
@@ -16,7 +16,11 @@ else
         <a class="anchor" id="@CreateAnchor(0)"></a>
         <fieldset class="my-fieldset">
             <legend class="my-legend">Dati Verbale</legend>
-            <h3>@Document.Title</h3>
+            @* <h3>@Document.Title</h3> *@
+               <div class="my-1">
+                <RadzenLabel Text="Titolo:" Component="titolo" />
+                <RadzenTextBox @bind-Value="@Document.Title" Name="titolo" class="my-input" />
+               </div>
             <div class="my-1">
                 <RadzenLabel Text="Descrizione:" Component="Descrizione" />
                 <RadzenTextArea @bind-Value="@Document.Description" Name="Descrizione" class="my-input" Style="height:fit-content;" />
@@ -115,7 +119,9 @@ else
     [Parameter]
     public DocumentModel Document { get; set; } = new();
     [Parameter]
-    public List<DocumentAnchor> Anchors { get; set; } = [];
+    public DocumentNavigator DocumentNavigator { get; set; } = new();
+
+
     private List<ClientModel> ClientsList = [];
     private List<MeteoConditionModel> meteoConditions = [];
     private Orientation meteoButtonsOrientation = Orientation.Horizontal;
@@ -213,8 +219,7 @@ else
         {
             anchor = new DocumentAnchor(DocumentUtils.TypeConstructionSite, count, DocumentUtils.ADatiCantiere.Text, DocumentUtils.ADatiCantiere.Anchor);
         }
-        Anchors.Add(anchor);
-        //Task.Run(() => OnAnchorAdd.InvokeAsync());
+        DocumentNavigator.AddAnchor(anchor);
         return anchor.Anchor;
     }
 

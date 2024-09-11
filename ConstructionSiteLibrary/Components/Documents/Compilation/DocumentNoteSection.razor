@@ -45,8 +45,7 @@
     [Parameter]
     public EventCallback OnCompaniesSelected { get; set; }
     [Parameter]
-    public List<DocumentAnchor> Anchors { get; set; } = [];
-
+    public DocumentNavigator DocumentNavigator { get; set; } = new();
     [Parameter]
     public DocumentModel Document { get; set; } = new();
 
@@ -115,19 +114,17 @@
             message = message.Remove(message.Length - 2);
             message += ")";
         }
-
         return message;
     }
 
 
     #region Gestione Ancore
 
+
     private string CreateAnchor()
     {
         var anchor = new DocumentAnchor(DocumentUtils.TypeDocumentNotes, 0, $"Note documento", $"document_notes");
-        Anchors.Add(anchor);
-        Anchors = Anchors.OrderBy(x => x.TypeIndex).ThenBy(x => x.Index).ToList();
-        // Task.Run(() => OnAnchorAdd.InvokeAsync());
+        DocumentNavigator.AddAnchor(anchor);
         return anchor.Anchor;
     }
 

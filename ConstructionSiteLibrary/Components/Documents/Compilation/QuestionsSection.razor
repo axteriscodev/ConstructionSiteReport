@@ -98,7 +98,7 @@
     [Parameter]
     public EventCallback OnStateChangeNotification { get; set; }
     [Parameter]
-    public List<DocumentAnchor> Anchors { get; set; } = [];
+    public DocumentNavigator DocumentNavigator { get; set; } = new();
 
     private List<VisualCategory> visualCategories { get; set; } = [];
 
@@ -336,9 +336,7 @@
         var categoryName = $"{cat.Category.Order}. {cat.Category.Text}";
         var index = cat.Category.Order;
         var anchor = new DocumentAnchor(DocumentUtils.TypeQuestions, index, $"Cat: {categoryName}", $"category_{index}");
-        Anchors.Add(anchor);
-        Anchors = Anchors.OrderBy(x => x.TypeIndex).ThenBy(x => x.Index).ToList();
-        // Task.Run(() => OnAnchorAdd.InvokeAsync());
+        DocumentNavigator.AddAnchor(anchor);
         return anchor.Anchor;
     }
 

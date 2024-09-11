@@ -13,7 +13,7 @@
     <div class="col d-flex justify-content-center">
         <RadzenFormField Text="Navigazione documento" Variant="Variant.Outlined">
             <ChildContent>
-                <RadzenDropDown Data="@ListaAncore" TValue="DocumentAnchor" TextProperty="Text" Change="@(args=> NavigaPagina(args))"  />
+                <RadzenDropDown Data="@DocumentNavigator.Anchors" TValue="DocumentAnchor" TextProperty="Text" Change="@(args=> NavigaPagina(args))" />
             </ChildContent>
         </RadzenFormField>
 
@@ -36,7 +36,7 @@
     [Parameter]
     public string BackButtonText { get; set; } = "Indietro";
     [Parameter]
-    public List<DocumentAnchor> ListaAncore { get; set; } = [];
+    public DocumentNavigator? DocumentNavigator{ get; set; }
 
 
     private bool onSaving; 
@@ -52,7 +52,15 @@
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-        ListaAncore.OrderBy(x => x.TypeIndex).ThenBy(x => x.Index);
+        if(DocumentNavigator is not null)
+        {
+            DocumentNavigator.OnAnchorsChanged += Update;
+        }
+    }
+
+    public void Update(object sender)
+    {
+        StateHasChanged();
     }
 
     public void ChangeOnSavingStatus(bool newStatus = false)
@@ -68,7 +76,7 @@
 
     private async Task Save()
     {
-        onSaving = true;
+        ChangeOnSavingStatus(true);
         await OnButtonSaveClicked.InvokeAsync();
     }
 

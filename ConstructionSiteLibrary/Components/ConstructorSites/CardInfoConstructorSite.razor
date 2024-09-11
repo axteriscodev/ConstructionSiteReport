@@ -20,7 +20,7 @@
         </div>
         <div class="col-6">
             <label class="info-label">Data inizio</label>
-            <p>@ConstructorSite.StartDate</p>
+            <p>@PrintDate(ConstructorSite.StartDate)</p>
         </div>
     </div>
     <div class="row">
@@ -81,6 +81,11 @@
         await DialogService.OpenAsync<FormConstructorSite>("Cantiere", parameters: param, options: newOptions);
     }
 
+
+    private string PrintDate(DateTime? date)
+    {
+        return date.HasValue ? date.Value.ToString("dd/MM/yyyy") : "";
+    }
     private async Task Reload()
     {
         DialogService.Close();

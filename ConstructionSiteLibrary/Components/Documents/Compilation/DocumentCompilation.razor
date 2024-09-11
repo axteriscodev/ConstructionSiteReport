@@ -18,15 +18,15 @@ else
 {
     <meta name="viewport" content="width=@viewSize.Width">
     <div class="">
-            <ActivityTopBar OnButtonSaveClicked="SaveDocument" ListaAncore="@Anchors" />
-        <ReportConstructorSiteDataSection Document="@document" Anchors="@Anchors"  OnAnchorAdd="@AnchorAdd"/>
-        <CompaniesPresentSection Companies="@document.Companies" Anchors="@Anchors" OnAnchorAdd="@AnchorAdd" />
+        <ActivityTopBar @ref="@topBar" OnButtonSaveClicked="SaveDocument" DocumentNavigator="@documenNavigator" />
+        <ReportConstructorSiteDataSection Document="@document" DocumentNavigator="@documenNavigator" />
+        <CompaniesPresentSection Companies="@document.Companies" DocumentNavigator="@documenNavigator" />
         <QuestionsSection Categories="document.Categories" Companies="document.Companies" OnStateChangeNotification="@UpdateDocument"
-                          Anchors="@Anchors" OnAnchorAdd="@AnchorAdd" />
-        <QuestionNotesSection Document="@document" Anchors="@Anchors" OnAnchorAdd="@AnchorAdd" />
-        <AttachmentsSection Categories="@document.Categories" Anchors="@Anchors" OnAnchorAdd="@AnchorAdd" />
-        <DocumentNoteSection Document="@document" Anchors="@Anchors" OnAnchorAdd="@AnchorAdd" />
-        <CompaniesSignsSection Document="@document" Anchors="@Anchors" OnAnchorAdd="@AnchorAdd" />
+                          DocumentNavigator="@documenNavigator" />
+        <QuestionNotesSection Document="@document" DocumentNavigator="@documenNavigator" />
+        <AttachmentsSection Categories="@document.Categories" DocumentNavigator="@documenNavigator" />
+        <DocumentNoteSection Document="@document" DocumentNavigator="@documenNavigator" />
+        <CompaniesSignsSection Document="@document" DocumentNavigator="@documenNavigator" />
        
     </div>
     <div class="d-flex justify-content-center mt-3">
@@ -43,11 +43,14 @@ else
     private DocumentModel document = new();
     private bool onLoading = false;
 
+    private ActivityTopBar topBar;
+
+
     private bool onSaving = false;
     private ScreenSize viewSize = new();
     private ScreenSize nativeSize = new();
 
-    public List<DocumentAnchor> Anchors { get; set; } = [];
+    private DocumentNavigator documenNavigator { get; set; } = new();
 
     ScreenComponent screenComponent;
 
@@ -58,15 +61,7 @@ else
         await LoadData();
         viewSize = screenComponent.GetScreenSize();
         nativeSize = viewSize.Clone();
-        Anchors.Add(new DocumentAnchor(DocumentUtils.TypeConstructionSite, 0, DocumentUtils.ADatiVerbale.Text, DocumentUtils.ADatiVerbale.Anchor));
-        Anchors.Add(new DocumentAnchor(DocumentUtils.TypeConstructionSite, 1, DocumentUtils.ADatiCantiere.Text, DocumentUtils.ADatiCantiere.Anchor));
         onLoading = false;
-    }
-
-    protected override void OnAfterRender(bool firstRender)
-    {
-        Anchors = Anchors.OrderBy(x => x.TypeIndex).ThenBy(x => x.Index).ToList();
-        base.OnAfterRender(firstRender);
     }
 
     private async Task LoadData()
@@ -107,9 +102,11 @@ else
 
     private async Task SaveDocument()
     {
-        onSaving = true;
         await DocumentsRepository.UpdateDocuments([document]);
-        onSaving = false;
+        if(topBar is not null)
+        {
+            topBar.ChangeOnSavingStatus();
+        }
     }
 
 
@@ -120,9 +117,5 @@ else
         DialogService.Close();
     }
 
-    public void AnchorAdd()
-    {
-       // Anchors = Anchors.OrderBy(x => x.TypeIndex).ThenBy(x => x.Index).ToList();
-    }
 
 }
