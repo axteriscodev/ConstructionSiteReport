@@ -23,14 +23,16 @@
     </div>
     <div class="row my-2">
         <div class="col">
-            <RadzenFormField Text="Nome" Variant="@GlobalVariables.ComponentVariant" class="text-field">
+            <h6 class="field-label">Nome</h6>
+            <RadzenFormField Variant="@GlobalVariables.ComponentVariant" class="text-field">
                 <ChildContent>
                     <RadzenTextBox Name="Nome" @bind-Value=@User.Name />
                 </ChildContent>
             </RadzenFormField>
         </div>
         <div class="col">
-            <RadzenFormField Text="Cognome" Variant="@GlobalVariables.ComponentVariant" class="text-field">
+            <h6 class="field-label">Cognome</h6>
+            <RadzenFormField Variant="@GlobalVariables.ComponentVariant" class="text-field">
                 <ChildContent>
                     <RadzenTextBox Name="Cognome" @bind-Value=@User.Surname />
                 </ChildContent>
@@ -38,24 +40,108 @@
         </div>
     </div>
     <div class="row my-2">
-        <RadzenFormField Text="Email" Variant="@GlobalVariables.ComponentVariant" class="text-field">
+        <h6 class="field-label">E-mail</h6>
+        <RadzenFormField Variant="@GlobalVariables.ComponentVariant" class="text-field">
             <ChildContent>
                 <RadzenTextBox Name="Email" @bind-Value=@User.Email Disabled="true" />
             </ChildContent>
         </RadzenFormField>
     </div>
     <div class="row my-2">
-        <RadzenFormField Text="Telefono" Variant="@GlobalVariables.ComponentVariant" class="text-field">
+        <h6 class="field-label">Telefono</h6>
+        <RadzenFormField Variant="@GlobalVariables.ComponentVariant" class="text-field">
             <ChildContent>
                 <RadzenTextBox Name="Telefono" @bind-Value=@User.Phone />
             </ChildContent>
         </RadzenFormField>
     </div>
     <div class="row my-2 justify-content-md-center">
-        <div class="col-4">
-            <img class="profile-img" src="default.png" />
+        <div class="container">
+            <h6 class="field-label">Timbro e firma</h6>
+            <div class="drag-area">
+                <div class="icon">
+                    <RadzenIcon Icon="photo_library" />
+                </div>
+                <span class="header">Trascina qui</span>
+                <span class="header">o <span class="button">seleziona</span></span>
+                <input type="file" hidden />
+                <span class="support">Formato: JPEG, JPG, PNG</span>
+            </div>
+            @* <div>
+            <button class="download">Download</button>
+            </div> *@
         </div>
     </div>
+
+    <script>
+        let dropArea = document.querySelector(".drag-area");
+        let dragText = document.querySelector(".header");
+
+        let button = dropArea.querySelector(".button");
+        let input = dropArea.querySelector("input");
+
+        let file;
+
+        button.onclick = () => {
+            input.click();
+        };
+
+        // when browse
+        input.addEventListener("change", function () {
+            file = this.files[0];
+            dropArea.classList.add("active");
+            displayFile();
+        });
+
+        // when file is inside drag area
+        dropArea.addEventListener("dragover", (event) => {
+            event.preventDefault();
+            dropArea.classList.add("active");
+            dragText.textContent = "Rilascia";
+            // console.log('File is inside the drag area');
+        });
+
+        // when file leave the drag area
+        dropArea.addEventListener("dragleave", () => {
+            dropArea.classList.remove("active");
+            // console.log('File left the drag area');
+            dragText.textContent = "Drag & Drop";
+        });
+
+        // when file is dropped
+        dropArea.addEventListener("drop", (event) => {
+            event.preventDefault();
+            // console.log('File is dropped in drag area');
+
+            file = event.dataTransfer.files[0]; // grab single file even of user selects multiple files
+            // console.log(file);
+            displayFile();
+        });
+
+        function displayFile() {
+            let fileType = file.type;
+            // console.log(fileType);
+
+            let validExtensions = ["image/jpeg", "image/jpg", "image/png"];
+
+            if (validExtensions.includes(fileType)) {
+                // console.log('This is an image file');
+                let fileReader = new FileReader();
+
+                fileReader.onload = () => {
+                    let fileURL = fileReader.result;
+                    // console.log(fileURL);
+                    let imgTag = `<img style="width:300px; height: 200px; object-fit: cover;" src="${fileURL}" alt="">`;
+                    dropArea.innerHTML = imgTag;
+                };
+                fileReader.readAsDataURL(file);
+            } else {
+                alert("Formato non supportato");
+                dropArea.classList.remove("active");
+            }
+        }
+    </script>
+
 </div>
 
 
