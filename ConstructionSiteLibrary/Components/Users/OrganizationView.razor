@@ -1,0 +1,26 @@
+﻿@using Shared.Organizations
+@using Radzen
+
+<div class="card p-4">
+    <div class="vstack gap-5">
+        <div class="vstack">
+            <RadzenText TextStyle="TextStyle.Subtitle1" class="organization-text-weight ">Azienda</RadzenText>
+            <RadzenText TextStyle="TextStyle.H4">@Organization.Name</RadzenText>
+        </div>
+         <div class="vstack">
+            <RadzenText TextStyle="TextStyle.Subtitle1" class="organization-text-weight">Ruolo</RadzenText>
+            <RadzenText TextStyle="TextStyle.H4">@Role.Name</RadzenText>
+        </div>
+    </div>
+
+</div>
+
+@code {
+
+    [Parameter]
+    required public OrganizationModel Organization { get; set; }
+
+    [Parameter]
+    required public RoleModel Role { get; set; }
+
+}

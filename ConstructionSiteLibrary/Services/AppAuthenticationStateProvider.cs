@@ -48,6 +48,8 @@ namespace ConstructionSiteLibrary.Services
         /// </summary>
         public string Token { get; set; } = "";
 
+        public bool updated = false;
+
         #endregion
 
         #region Autenticazione
@@ -67,8 +69,9 @@ namespace ConstructionSiteLibrary.Services
             try
             {
                 //se utente è null controllo nello storage se ho dei dati di accesso per l'autenticazione
-                if (User is null)
+                if (User is null || updated)
                 {
+                    updated = false;
                     //inizializzo il servizio di storage
                     await storageService.LocalStorage.Initialize();
                     //cerco nello storage se ci sono le info di accesso
@@ -119,10 +122,11 @@ namespace ConstructionSiteLibrary.Services
         /// </summary>
         /// <param name="token">stringa che contiene i dati dell'utente autenticato</param>
         /// <returns></returns>
-        public async Task SaveAuthenticationAsync(string token)
+        public async Task SaveAuthenticationAsync(string token, bool isUpdated = false)
         {
             //salvo i dati nel localStorage
             await storageService.LocalStorage.Salva(TAG_ACCESS_INFO, token);
+            updated = isUpdated;
             StateChanged();
         }
 
@@ -155,7 +159,7 @@ namespace ConstructionSiteLibrary.Services
         /// Metodo che restituisce la sede dell'utente loggato
         /// </summary>
         /// <returns></returns>
-        public OrganizationModel GetUserOrganizzation()
+        public OrganizationModel GetUserOrganization()
         {
             var user = GetUserInfo();
             return user.Organization;

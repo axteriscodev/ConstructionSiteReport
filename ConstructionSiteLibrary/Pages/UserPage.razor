@@ -1,0 +1,81 @@
+﻿@using ConstructionSiteLibrary.Components.Users
+@using Shared.Organizations
+
+@inject AppAuthenticationStateProvider AuthProvider
+@inject UserRepository UserRepository
+
+@attribute [Route(PageRouting.UserPage)]
+
+@if (onLoading)
+{
+    <Loading />
+}
+else
+{
+    <div class="my-5">
+    <div class="row">
+        <div class="col-12 col-lg-6 d-flex justify-content-center justify-content-lg-start">
+            <h1 class="title">Il mio profilo</h1>
+        </div>
+        <div class="col-12 col-lg-6 mt-5 m-lg-0 d-flex justify-content-center justify-content-lg-end">
+            <RadzenButton Icon="save" Text="Salva modifiche" ButtonStyle="ButtonStyle.Info" Click="@Save"
+                IsBusy="@onSaving" class="my-button" />
+        </div>
+    </div>
+</div>
+
+    <div class="row">
+        <div class="col-4">
+            <OrganizationView Organization="@organization" Role="@role"/>
+        </div>
+
+        <div class="col-8">
+
+            <UserInfo User="@user" />
+        </div>
+
+    </div>
+}
+
+
+
+
+
+@code {
+
+    private OrganizationModel organization;
+
+    private UserModel user;
+
+    private RoleModel role;
+
+    private bool onLoading;
+
+    private bool onSaving;
+
+    protected override async Task OnInitializedAsync()
+    {
+        onLoading = true;
+        await base.OnInitializedAsync();
+        await LoadData();
+        onLoading = false;
+    }
+
+    private async Task LoadData()
+    {
+        user = AuthProvider.GetUserInfo();
+        organization = AuthProvider.GetUserOrganization();
+        role = AuthProvider.GetUserRole();
+    }
+
+    private async Task Save()
+    {
+       onSaving = true;
+       await UserRepository.UpdateUsers([user]);
+
+       
+       onSaving = false;
+    }
+
+
+}

@@ -1,0 +1,141 @@
+﻿@using Shared.Organizations
+@using ConstructionSiteLibrary.Interfaces
+@using ConstructionSiteLibrary.Components.Generics
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.JSInterop
+
+@inject ICameraService CameraService
+@inject IJSRuntime JS
+
+<div class="card p-4">
+    <div class="row my-2 justify-content-md-center">
+        <div class="col-4 col-avatar">
+            <img class="profile-img" src="@avatarImg" />
+            <InputFile OnChange="@(args => LoadAvatarFile(args))" style="display: none;" id="pictureLoader" />
+            <div class="dropdown button2" @onfocusout="@ToggleDropdown">
+                <RadzenButton Icon="add_a_photo" Click="@ToggleDropdown" class="buttonOptions" />
+                <div id="myDropdown" class="dropdown-content @DropdownCssClass()">
+                    <RadzenButton Icon="photo_camera" Text="Fotocamera" Variant="Variant.Text" class="buttonEdit"
+                        @onmousedown="@OpenCamera" />
+                    <RadzenButton Icon="folder" Text="Archivio" class="buttonDelete" Variant="Variant.Text"
+                        @onmousedown="@OpenDocuments" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row my-2">
+        <div class="col">
+            <h6 class="field-label">Nome</h6>
+            <RadzenFormField Variant="@GlobalVariables.ComponentVariant" class="text-field">
+                <ChildContent>
+                    <RadzenTextBox Name="Nome" @bind-Value=@User.Name />
+                </ChildContent>
+            </RadzenFormField>
+        </div>
+        <div class="col">
+            <h6 class="field-label">Cognome</h6>
+            <RadzenFormField Variant="@GlobalVariables.ComponentVariant" class="text-field">
+                <ChildContent>
+                    <RadzenTextBox Name="Cognome" @bind-Value=@User.Surname />
+                </ChildContent>
+            </RadzenFormField>
+        </div>
+    </div>
+    <div class="row my-2">
+        <h6 class="field-label">E-mail</h6>
+        <RadzenFormField Variant="@GlobalVariables.ComponentVariant" class="text-field">
+            <ChildContent>
+                <RadzenTextBox Name="Email" @bind-Value=@User.Email Disabled="true" />
+            </ChildContent>
+        </RadzenFormField>
+    </div>
+    <div class="row my-2">
+        <h6 class="field-label">Telefono</h6>
+        <RadzenFormField Variant="@GlobalVariables.ComponentVariant" class="text-field">
+            <ChildContent>
+                <RadzenTextBox Name="Telefono" @bind-Value=@User.Phone />
+            </ChildContent>
+        </RadzenFormField>
+    </div>
+    <div class="row my-2 justify-content-md-center">
+        <div class="container">
+            <h6 class="field-label">Timbro e firma</h6>
+            <div class="drag-area">
+                <div class="icon">
+                    <RadzenIcon Icon="photo_library" />
+                </div>
+                <span class="header">Trascina qui</span>
+                <span class="header">o <span class="button">seleziona</span></span>
+                <input type="file" hidden />
+                <span class="support">Formato: JPEG, JPG, PNG</span>
+            </div>
+            @* <div>
+            <button class="download">Download</button>
+            </div> *@
+        </div>
+    </div>
+
+</div>
+
+
+@code {
+
+    [Parameter]
+    required public UserModel User { get; set; }
+
+    private bool dropdownShow;
+
+    private string avatarImg = "default.png";
+
+    IJSObjectReference? module;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        @* if (firstRender)
+        { *@
+            module = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/ConstructionSiteLibrary/dragndrop.js");
+            //await module.InvokeVoidAsync("loadCanvas", canvasId);
+        @* } *@
+    }
+
+    private void ToggleDropdown()
+    {
+        dropdownShow = !dropdownShow;
+        StateHasChanged();
+    }
+
+    private string DropdownCssClass()
+    {
+        return dropdownShow ? "dropdown-open" : "dropdown-close";
+    }
+
+    private void OpenCamera()
+    {
+        CameraService.OpenCamera();
+    }
+
+    private void OpenDocuments()
+    {
+        CameraService.OpenDocuments();
+    }
+
+    private async Task LoadAvatarFile(InputFileChangeEventArgs e)
+    {
+        var readStream = e.File.OpenReadStream(2048000);
+
+        var buffer = new byte[e.File.Size];
+
+        await readStream.ReadAsync(buffer, 0, buffer.Length);
+
+        var base64Image = Convert.ToBase64String(buffer);
+
+        avatarImg = "data:image/jpeg;charset=utf-8;base64," + base64Image;
+
+    }
+
+}

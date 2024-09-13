@@ -91,8 +91,10 @@ namespace TDatabase.Queries
                     }
                 }
             }
-            catch (Exception) { }
-
+            catch (Exception e) {
+                e.ToString();
+             }
+            
             return modified;
         }
 

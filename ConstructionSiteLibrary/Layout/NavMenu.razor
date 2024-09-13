@@ -23,7 +23,7 @@
                     <div class="col-8 profile-container">
                         <div class="user-info">
                             <p class="profile-role">@PrintUserRole()</p>
-                            <h3 class="profileName">@PrintUserName()</h3>
+                            <h3 class="profileName"><a href="@PageRouting.UserPage">@PrintUserName()</a></h3>
                         </div>
                         <RadzenButton Variant="Variant.Text" ButtonStyle="ButtonStyle.Danger" class="buttonLogout" Click="@Logout" >
                             <i><u>Logout</u></i>
