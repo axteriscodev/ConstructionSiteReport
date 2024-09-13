@@ -23,8 +23,8 @@
 
 .profile-img {
     display: block;
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     margin: 0 auto;
 }
@@ -43,8 +43,12 @@
     font-weight: 600 !important;
     margin: 0px !important;
 }
-.profile-container{
-    text-align:left;
+
+    .profile-role > a {
+        color: var(--sidebar-separator-color);
+    }
+.profile-container {
+    text-align: left;
     padding-left: 15px;
 }
 

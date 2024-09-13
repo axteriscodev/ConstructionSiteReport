@@ -40,7 +40,7 @@ else
                                 <RadzenText TextStyle="TextStyle.Body1"><b>@template.NameTemplate</b></RadzenText>
                             </RadzenColumn>
                             <ButtonDropdown Object="@template" OnUpdateClicked="@OpenModifyTemplate"
-                                OnDeleteClicked="@OpenDeleteTemplate" />
+                                OnDeleteClicked="@OpenDeleteTemplate"  DisableDelete="true"/>
                         </RadzenRow>
 
                         <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Data
