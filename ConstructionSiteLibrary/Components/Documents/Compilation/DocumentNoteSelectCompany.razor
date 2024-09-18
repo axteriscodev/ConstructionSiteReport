@@ -18,7 +18,7 @@
             {
                 <tr>
                     <td>
-                        <RadzenCheckBox Value="company.Selected" TValue="bool" Change="@(select => SelectedChanged(select, company))"/>
+                        <RadzenCheckBox Value="company.Selected" TValue="bool" Change="@(select => SelectedChanged(select, company))" class="my-input" />
                     </td>
                     <td>
                         <RadzenText>@company.Company.CompanyName</RadzenText>

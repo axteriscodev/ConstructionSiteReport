@@ -121,11 +121,11 @@
             </div>
 
             <div class="col mt-md-0 mt-3">
-                <RadzenFormField Text="P.A.T. INAIL" Variant="@variant" class="text-field">
+                @* <RadzenFormField Text="P.A.T. INAIL" Variant="@variant" class="text-field">
                     <ChildContent>
-                        <RadzenTextBox Name="InailPat" @bind-Value=@Company.InailPat />
+                        <RadzenTextBox Name="InailPat" @bind-Value=@Company.InailPat.First().Name />
                     </ChildContent>
-                </RadzenFormField>
+                </RadzenFormField> *@
             </div>
 
         </div>

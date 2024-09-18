@@ -1,0 +1,137 @@
+﻿@using Microsoft.JSInterop
+@using ConstructionSiteLibrary.Model.DocumentCompilation
+@using ConstructionSiteLibrary.Components.Utilities;
+@using ConstructionSiteLibrary.Model;
+@using ConstructionSiteLibrary.Utility;
+@using Microsoft.AspNetCore.Components;
+@using Radzen;
+@using Radzen.Blazor;
+@using Shared.Documents;
+@using ConstructionSiteLibrary.Managers
+@using ConstructionSiteLibrary.Repositories
+@using Shared;
+@using Shared.Templates
+@using ConstructionSiteLibrary.Utility
+@using ConstructionSiteLibrary.Components.Generics;
+
+@inject IJSRuntime JS
+@inject NavigationService NavigationService
+@inject DialogService DialogService
+ 
+
+<div class="row activityBar">
+    <div class="col d-flex justify-content-center justify-content-lg-start">
+        <RadzenButton Variant="Variant.Text" Click="@Back" class="my-button-text">
+            <RadzenIcon Icon="chevron_left" /> Indietro
+        </RadzenButton>
+    </div>
+    <div class="col d-flex justify-content-center">
+        <RadzenFormField Text="Navigazione documento" Variant="Variant.Outlined">
+            <ChildContent>
+                <RadzenDropDown Data="@DocumentNavigator.Anchors" TValue="DocumentAnchor" TextProperty="Text"
+                    Change="@(args=> NavigaPagina(args))" />
+            </ChildContent>
+        </RadzenFormField>
+
+    </div>
+    <div class="col d-flex justify-content-center justify-content-lg-end mt-sm-1">
+        @if (ShowPreview)
+        {
+            <RadzenButton Icon="article" Text="Anteprima" Click="@Preview" IsBusy="@onSaving" class="my-button"
+                Style="margin-right:10px;" />
+        }
+        <RadzenButton Icon="save" Text="Salva" Click="@Save" IsBusy="@onSaving" class="my-button" />
+    </div>
+</div>
+
+<script>
+
+
+</script>
+
+@code {
+
+
+    [Parameter]
+    public EventCallback OnButtonSaveClicked { get; set; }
+    [Parameter]
+    public EventCallback OnButtonPreviewClicked { get; set; }
+    [Parameter]
+    public string BackButtonText { get; set; } = "Indietro";
+    [Parameter]
+    public bool ShowPreview { get; set; }
+    [Parameter]
+    public DocumentNavigator? DocumentNavigator { get; set; }
+
+
+    private bool onSaving;
+    private const string JS_FILE = "./_content/ConstructionSiteLibrary/ActivityTopBar.js";
+    private IJSObjectReference? jsModule;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        jsModule = await JS.InvokeAsync<IJSObjectReference>("import", JS_FILE);
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        if (DocumentNavigator is not null)
+        {
+            DocumentNavigator.OnAnchorsChanged += Update;
+        }
+    }
+
+    public void Update(object sender)
+    {
+        StateHasChanged();
+    }
+
+    public void ChangeOnSavingStatus(bool newStatus = false)
+    {
+        onSaving = newStatus;
+    }
+
+    public async Task Back()
+    {
+        var titolo = "ATTENZIONE!";
+        var text = "Sei sicuro di voler abbandonare la compilazione?";
+        var confirmationResult = await DialogService.Confirm(text, titolo, new ConfirmOptions
+            {
+                OkButtonText = "No",
+                CancelButtonText = "Sì"
+            });
+        Console.WriteLine("cliccato: " + confirmationResult);
+        if (confirmationResult == false)
+        {
+            NavigationService.Back();
+        }
+    }
+
+    private async Task Save()
+    {
+        ChangeOnSavingStatus(true);
+        await OnButtonSaveClicked.InvokeAsync();
+    }
+
+    private async Task Preview()
+    {
+        await OnButtonPreviewClicked.InvokeAsync();
+    }
+
+    private async Task NavigaPagina(object args)
+    {
+        if (jsModule is not null)
+        {
+            var ancora = args as DocumentAnchor;
+            await jsModule.InvokeVoidAsync("navigaPagina", ancora.Anchor);
+        }
+        else
+        {
+            Console.WriteLine("ERRORE: jsModule non inizializzato");
+        }
+
+    }
+
+}

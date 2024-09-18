@@ -9,105 +9,103 @@
 <ScreenComponent @ref="screenComponent" />
 
 @* Questionario *@
-<div class="vstack documentSection">
-    @foreach (var visual in visualCategories)
-    {
-        <div class="marginYResponsive2">
-            <div class="SectionTitleDiv">
-                <RadzenRow Style="justify-content:space-between !important;">
-                    <RadzenColumn Size="1" Style="display:flex">
-                        <RadzenText TextStyle="TextStyle.DisplayH6" Style="margin-left:1rem;margin-top:0.5rem;">
-                            <strong>@DocumentCompilationUtils.CategoryNumber(visual.Category)</strong>
-                        </RadzenText>
-                    </RadzenColumn>
-                    <RadzenColumn Size="10" Style="display:flex;justify-content: center;">
-                        <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center"
-                            Style="margin-left:1rem;margin-top:0.5rem;">
-                            <strong>@DocumentCompilationUtils.CategoryText(visual.Category)</strong>
-                        </RadzenText>
-                    </RadzenColumn>
-                    <RadzenColumn Size="1" Style="display:flex;justify-content:end;">
-                        <RadzenButton Icon="@DocumentCompilationUtils.AccordionIcon(visual)" Variant="Variant.Text"
-                            Click="@(()=>DocumentCompilationUtils.ShowQuestions(visual))" />
-                    </RadzenColumn>
-                </RadzenRow>
-            </div>
-            @if (visual.ShowQuestion)
+<div class="mt-3" id="provaAncora">
+    <fieldset class="my-fieldset">
+        <legend class="my-legend">Domande</legend>
+        <div class="accordion" id="accordionDomande">
+            @foreach (var visual in visualCategories)
             {
-                @foreach (var question in visual.Category.Questions)
-                {
-                    <div class="border paddingSezione">
-                        <div class="margineDomande bordoDomanda">
-                            <div class="hstack ">
-                                <RadzenSplitButton Click=@(args => SelectAttachSource(args, question)) Icon="photo_camera"
-                                    class="buttonPhoto">
-                                    <ChildContent>
-                                        <RadzenSplitButtonItem Text="Fotocamera" Value="1" Icon="photo_camera" />
-                                        <RadzenSplitButtonItem Text="Documenti" Value="2" Icon="folder" />
-                                    </ChildContent>
-                                </RadzenSplitButton>
-                                <InputFile OnChange="@(args => LoadFile(args, question))" style="display: none;" id="pictureLoader" />
-                                @*<RadzenButton Icon="photo_camera" Click="@(() => TakePicture(question))"
-                    ButtonStyle="ButtonStyle.Primary" Variant="Variant.Text" class="buttonPhoto" />*@
-                                <RadzenText>@DocumentCompilationUtils.QuestionText(visual.Category, question.Text, question.Order)
-                                </RadzenText>
-                            </div>
-                            @foreach (var answer in question.CurrentChoices)
+                <a class="anchor" id="@CreateAnchor(visual)"></a>
+                <div class="accordion-item" >
+                    <h2 class="mb-0">
+                        <button class="accordion-button titleCategory" type="button" data-bs-toggle="collapse" data-bs-target="@ReturnCollapseTarget(visualCategories.IndexOf(visual), true)" aria-expanded="false" aria-controls="@ReturnCollapseTarget(visualCategories.IndexOf(visual))">
+                            @DocumentUtils.CategoryText(visual.Category)
+                        </button>
+                    </h2>
+                    <div id="@ReturnCollapseTarget(visualCategories.IndexOf(visual))" class="accordion-collapse collapse show">
+                        <div class="accordion-body">
+                            @if (visual.ShowQuestion)
                             {
-                                <div class="hstack">
-                                    <div>
-                                        <RadzenDropDown Value="@answer" Data=@question.Choices TValue="DocumentChoiceModel"
-                                            TextProperty="Value" class="selectChoice"
-                                            Change="@(args => SelectedAnswer(args, question, question.CurrentChoices.IndexOf(answer)))" />
+                                @foreach (var question in visual.Category.Questions)
+                                {
+                                    <div class="row mt-3 border-bottom">
+                                        <div class="col bor">
+                                            <p><strong>@DocumentUtils.QuestionNumber(visual.Category, question.Order)</strong> @DocumentUtils.QuestionText(visual.Category, question.Text)</p>
+                                        </div>
+                                        <div class="col-md-auto">
+                                            @foreach (var answer in question.CurrentChoices)
+                                            {
+                                                <div class="hstack">
+                                                    <div>
+                                                        <RadzenDropDown Value="@answer" Data=@question.Choices TValue="DocumentChoiceModel"
+                                                                        TextProperty="Value" class="inputBorder"
+                                                            Change="@(args => SelectedAnswer(args, question, question.CurrentChoices.IndexOf(answer)))" />
+                                                    </div>
+                                                    @if (ShowDeleteChoiceButton(answer, question))
+                                                    {
+                                                        <div>
+                                                            <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Text"
+                                                                class="buttonChoice" Click="@(()=>RemoveAnswer(question, answer))" />
+                                                        </div>
+                                                    }
+                                                    @if (ShowAddChoiceButton(answer, question))
+                                                    {
+                                                        <div>
+                                                            <RadzenButton Icon="add" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Text"
+                                                                class="buttonChoice" Click="@(()=>AddAnswer(question))" />
+                                                        </div>
+                                                    }
+                                                </div>
+                                                <div>
+                                                    <RadzenText TextStyle="TextStyle.Body1" onclick="@{()=>OpenCompanyListDialog(answer) }">
+                                                        @ReportedCompany(answer)</RadzenText>
+                                                </div>
+                                            }
+                                            <div>
+                                                <RadzenButton Text="Aggiungi note" Variant="Variant.Text" Click="@(()=>OpenNoteDialog(question))"
+                                                    Style="width: 170px;" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-auto">
+                                            <RadzenSplitButton Click=@(args => SelectAttachSource(args, question)) Icon="photo_camera"
+                                                               class="buttonPhoto">
+                                                <ChildContent>
+                                                    <RadzenSplitButtonItem Text="Fotocamera" Value="1" Icon="photo_camera" />
+                                                    <RadzenSplitButtonItem Text="Documenti" Value="2" Icon="folder" />
+                                                </ChildContent>
+                                            </RadzenSplitButton>
+                                            <InputFile OnChange="@(args => LoadFile(args, question))" style="display: none;" id="pictureLoader" />
+                                        </div>
                                     </div>
-                                    @if (ShowDeleteChoiceButton(answer, question))
-                                    {
-                                        <div>
-                                            <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Text"
-                                                class="buttonChoice" Click="@(()=>RemoveAnswer(question, answer))" />
-                                        </div>
-                                    }
-                                    @if (ShowAddChoiceButton(answer, question))
-                                    {
-                                        <div>
-                                            <RadzenButton Icon="add" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Text"
-                                                class="buttonChoice" Click="@(()=>AddAnswer(question))" />
-                                        </div>
-                                    }
-                                </div>
-                                <div>
-                                    <RadzenText TextStyle="TextStyle.Body1" onclick="@{
-                        ()=>OpenCompanyListDialog(answer)
-}">
-                                        @ReportedCompany(answer)</RadzenText>
-                                </div>
+                                }
                             }
-                            <div class="row align-content-center">
-                                <RadzenButton Text="Aggiungi note" Variant="Variant.Text" Click="@(()=>OpenNoteDialog(question))"
-                                    Style="width: 170px;" />
-                            </div>
                         </div>
                     </div>
-                }
+                </div>
             }
         </div>
-    }
+    </fieldset>
 </div>
 
 @code {
 
+    [Parameter]
+    public EventCallback OnAnchorAdd { get; set; }
     [Parameter]
     public List<DocumentCategoryModel> Categories { get; set; } = [];
     [Parameter]
     public List<CompanyModel> Companies { get; set; } = [];
     [Parameter]
     public EventCallback OnStateChangeNotification { get; set; }
+    [Parameter]
+    public DocumentNavigator DocumentNavigator { get; set; } = new();
+
     private List<VisualCategory> visualCategories { get; set; } = [];
 
     ScreenComponent? screenComponent;
 
 
-  
+
     protected override async Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
@@ -123,7 +121,7 @@
     {
         if (item is null)
         {
-           await TakePicture(question);
+            await TakePicture(question);
         }
         else
         {
@@ -194,6 +192,12 @@
                 }
             }
         }
+    }
+
+    private string ReturnCollapseTarget(int index, bool aggiungiCancelletto = false)
+    {
+        string valore = (aggiungiCancelletto ? "#" : "") + "collapse" + index.ToString();
+        return valore;
     }
 
     #region GestioneRisposte
@@ -321,6 +325,19 @@
     private bool ShowDeleteChoiceButton(DocumentChoiceModel answer, DocumentQuestionModel question)
     {
         return question.CurrentChoices.IndexOf(answer) != 0;
+    }
+
+    #endregion
+
+    #region Gestione Ancore
+
+    private string CreateAnchor(VisualCategory cat)
+    {
+        var categoryName = $"{cat.Category.Order}. {cat.Category.Text}";
+        var index = cat.Category.Order;
+        var anchor = new DocumentAnchor(DocumentUtils.TypeQuestions, index, $"Cat: {categoryName}", $"category_{index}");
+        DocumentNavigator.AddAnchor(anchor);
+        return anchor.Anchor;
     }
 
     #endregion

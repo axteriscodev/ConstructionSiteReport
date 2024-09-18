@@ -12,53 +12,26 @@
     }
     else
     {
-        <RadzenTemplateForm TItem="TemplateModel" Data="@SelectedTemplate" Submit="@Forward">
-            <div class="card shadow mb-3 divCard">
-                <RadzenText TextStyle="TextStyle.Body1" class="mb-2">
-                    Seleziona il template da cui partire per la creazione del nuovo documento
-                </RadzenText>
-                <RadzenFormField Text="Scelta template <span style='color:red'> (obbligatorio)</span>"
-                    Variant="@GlobalVariables.ComponentVariant" class="selectTemplate">
-                    <ChildContent>
-                        <RadzenDropDown TValue="TemplateModel" Name="TemplateChoice" @bind-Value="@SelectedTemplate"
-                            Data="@templates" TextProperty="NameTemplate" AllowClear="true" />
-                    </ChildContent>
-                    <Helper>
-                        <RadzenRequiredValidator Component="TemplateChoice" Popup=false
-                            Text="La scelta di un template è obbligatoria" />
-                    </Helper>
-                </RadzenFormField>
-
-                <RecapTemplateQuestions SelectedTemplate="@SelectedTemplate" />
-
-            </div>
-            <div class="row">
-                <div class="col">
-                </div>
-                <div class="col divForward">
-                    <RadzenButton ButtonType="ButtonType.Submit" Icon="arrow_forward" Text="Avanti" class="buttonForward" />
-                </div>
-            </div>
-        </RadzenTemplateForm>
+                <fieldset class="my-fieldset">
+            <legend class="my-legend">Seleziona un template</legend>
+            <RadzenDropDown TValue="TemplateModel" Name="TemplateChoice" @bind-Value="@selectedTemplate" class="inputBorder"
+                            Data="@templates" TextProperty="NameTemplate" Change="@(args=>  ChangedSelectedTemplate(args))" />
+        </fieldset>
     }
 </div>
 
 
 
 @code {
+
     [Parameter]
-    public EventCallback<DocumentStepArgs> OnForward { get; set; }
-    [Parameter]
-    public TemplateModel? SelectedTemplate { get; set; }
+    public EventCallback<TemplateModel> OnTemplateSelected{ get; set; }
+
+    private TemplateModel? selectedTemplate { get; set; }
 
     private List<TemplateModel> templates = [];
 
-    private List<CategoryQuestionsGroup> groups = [];
-
     private bool onloading = false;
-    private bool forwardDisabled = true;
-
-
 
     protected override async Task OnInitializedAsync()
     {
@@ -71,61 +44,18 @@
     protected override async Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
-
-
-
-        CanForward();
     }
 
-    
+
 
     public async Task LoadData()
     {
         templates = await TemplateRepository.GetTemplates();
     }
 
-    public void ChangedSelectedTemplate(object args)
+    public async Task ChangedSelectedTemplate(object args)
     {
-        CanForward();
+        await OnTemplateSelected.InvokeAsync(selectedTemplate);
     }
-
-    public void CanForward()
-    {
-        forwardDisabled = SelectedTemplate is null;
-    }
-
-    public void Forward()
-    {
-        DocumentStepArgs args = new()
-            {
-                Object = SelectedTemplate,
-                Step = DocumentStep.ChoiceTemplate
-            };
-
-        OnForward.InvokeAsync(args);
-    }
-
-    
-
-    private void OrderList(ChangeObjectIndex indici)
-    {
-
-        var items = groups.Where(x => x.Id == indici.GroupNumber).SingleOrDefault().Questions;
-        var itemToMove = items[indici.OldIndex];
-        items.RemoveAt(indici.OldIndex);
-
-        if (indici.NewIndex < items.Count)
-        {
-            items.Insert(indici.NewIndex, itemToMove);
-        }
-        else
-        {
-            items.Add(itemToMove);
-        }
-
-        //OrderElements(items);
-        StateHasChanged();
-    }
-
 
 }

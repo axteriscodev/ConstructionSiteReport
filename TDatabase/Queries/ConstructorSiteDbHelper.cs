@@ -69,12 +69,14 @@ public class ConstructorSiteDbHelper
                 var m = db.ConstructorSites.Where(x => x.Id == elem.Id).SingleOrDefault();
                 if (m is not null)
                 {
-                    m.Id = elem.Id;
                     m.Name = elem.Name;
                     m.Address = elem.Address;
                     m.StartDate = elem.StartDate;
                     m.EndDate = elem.EndDate;
-                    m.IdClient = elem.Client?.Id;
+                    if (elem.Client is not null && elem.Client.Id > 0)
+                    {
+                        m.IdClient = elem.Client.Id;
+                    }
                     m.JobDescription = elem.JobDescription;
                     if (await db.SaveChangesAsync() > 0)
                     {

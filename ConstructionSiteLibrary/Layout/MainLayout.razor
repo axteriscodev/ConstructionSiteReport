@@ -8,11 +8,9 @@
 
 <ScreenComponent @ref="@screenComponent" SizeM="GlobalVariables.MinNavbarPx" OnScreenDimensionChanged="ScreenDimensionObserver" />
 <div class="page">
-    <div class="sidebar" style="@IconMenuCssClass">
+    <div class="sidebar @IconMenuCssClass" >
         <NavMenu ShowIconMenu="ToggleIconMenu" IconMenuActive="@_iconMenuActive"/>
     </div>
-    
-
     <main>
         <article class="content articlePadding">
             @Body
@@ -28,7 +26,9 @@
     private string? IconMenuCssClass => navbarState switch
     {
         NavbarState.Collapse => "",
-        _ => $"width:{(int)navbarState}px;"
+        NavbarState.Open => "sidebar-opened",
+        NavbarState.Close => "sidebar-closed",
+        _ => ""
     };
 
     protected override async Task OnInitializedAsync()

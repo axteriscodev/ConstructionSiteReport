@@ -1,4 +1,5 @@
 ﻿@using ConstructionSiteLibrary.Repositories
+@using ConstructionSiteLibrary.Components.Generics
 @using Shared
 @using Shared.Templates
 
@@ -6,44 +7,50 @@
 @inject DialogService DialogService
 
 <ScreenComponent @ref="screenComponent" />
-@if (initialLoading)
+
+@if (onLoading)
 {
     <Loading />
 }
 else
 {
-    <h2>@Param</h2>
+    <div class="mx-2 my-5">
+        <SectionTitle PageTitle="Categorie" ButtonText="+ aggiungi categoria" SearchPlaceholder="Cerca categoria"
+        OnButtonClicked="@OpenNewForm" OnSearchChanged="@SearchChanged" />
 
-    @* La tabella delle Categorie *@
-    <div class="marginComponent">
+        <table class="table table-sm table-striped my-table">
+            <thead>
+                <th scope="col">N.</th>
+                <th scope="col">Nome</th>
+                <th scope="col"></th>
+            </thead>
+            <tbody>
+                @if(displayedCategories.Count > 0)
+                {
+                    @foreach(var cat in displayedCategories)
+                    {
+                        <tr>
+                            <td>@cat.Order</td>
+                            <td>@cat.Text</td>
+                            <td>
+                                <ButtonDropdown Object="@cat"
+                                                OnUpdateClicked="@OpenUpdateForm" OnDeleteClicked="@Hide" />
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3">Nessuna categoria trovata</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
 
-        <RadzenFieldset Text="Categorie" class="shadow rounded" Style="font-weight:400;">
-            <RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Success" class="ButtonAdd"
-                          Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenNewForm())" />
-            <RadzenButton Icon="sort" Text="Ordina" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
-                          Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenOrderForm())" />
-            <RadzenDataGrid @ref="grid" GridLines="@DataGridGridLines.Both" IsLoading=@isLoading Count="@count" PageSize="@pageSize" Data="@categories" TItem="TemplateCategoryModel"
-                            AllowColumnResize="true" AllowAlternatingRows="true" ColumnWidth="200px" AllowFiltering="true" FilterMode="FilterMode.Simple"
-                            AllowSorting="true" AllowPaging="true" ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" PagerHorizontalAlign="HorizontalAlign.Left"
-                            Density="Density.Compact">
-
-                <Columns>
-                    @*<RadzenDataGridColumn TItem="CategoryModel" Property="Id" Title="Id" Width="40px" />*@
-                    <RadzenDataGridColumn TItem="TemplateCategoryModel" Property="Order" Title="N." Width="40px" />
-                    <RadzenDataGridColumn TItem="TemplateCategoryModel" Property="Text" Title="Nome" />
-                    <RadzenDataGridColumn TItem="TemplateCategoryModel" Title="Azioni" Width="60px" Sortable="false">
-                        <Template Context="data">
-                                @* Mostro i bottoni solo se ho i permessi di modifica *@
-                            <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Info" Variant="Variant.Filled" Size="ButtonSize.Large"
-                                              Click="@(()=>OpenUpdateForm(data))" />
-                                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Filled" Size="ButtonSize.Large"
-                                              Click="@(()=>Hide(data))" />
-                        </Template>
-                    </RadzenDataGridColumn>
-                </Columns>
-            </RadzenDataGrid>
-        </RadzenFieldset>
+        <div class="mt-5">
+            <AxtPager PagingSummaryFormat="@pagingSummaryFormat" Count="@count" PageSize="@pageSize" OnPageChanged="@PageChanged" />
+        </div>
+    
     </div>
-
-
 }

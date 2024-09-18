@@ -7,20 +7,37 @@ using System.Threading.Tasks;
 
 namespace ConstructionSiteLibrary.Model.DocumentCompilation
 {
-    class DocumentCompilationUtils
+    class DocumentUtils
     {
 
 
         #region Titoli macro categorie documento
 
-        public static string ConstructionSiteData = "DATI,CANTIERE,FIGURE RESPONSABILI,PROGETTISTI,RIUNIONI";
-        public static string Companies = "IMPRESE PRESENTI: FIGURE RESPONSABILI,PERSONALE,FORMALE,ATTREZZATURA";
-        public static string QuestionNotes = "ULTERIORI PRECISAZIONI ED EVENTUALI PRESCRIZIONI";
-        public static string Attachment = "ALLEGATI";
-        public static string DocumentNotes = "NOTE AGGIUNTIVE";
-        public static string DocumentSignatures = "FIRME";
+        public static string ConstructionSiteData = "Dati, cantiere, figure responsabili, progettisti, riunioni";
+        public static string Companies = "Imprese presenti: figure responsabili, personale, formale, attrezzatura";
+        public static string QuestionNotes = "Ulteriori precisazioni ed eventuali prescrizioni";
+        public static string Attachment = "Allegati";
+        public static string DocumentNotes = "Note aggiuntive";
+        public static string DocumentSignatures = "Firme";
 
         #endregion
+
+        #region Ancore per navigazione documento
+
+        public static int TypeConstructionSite = 1;
+        public static int TypeCompanies = 2;
+        public static int TypeQuestions = 3;
+        public static int TypeQuestionNotes = 4;
+        public static int TypeAttachment = 5;
+        public static int TypeDocumentNotes = 6;
+        public static int TypeSign = 7;
+
+        public static DocumentAnchor ADatiVerbale = new("Dati Verbale", "DatiVerbale");
+        public static DocumentAnchor ADatiCantiere = new("Dati Cantiere", "DatiCantiere");
+        public static DocumentAnchor ADatiAnziende = new("", "");
+
+        #endregion
+
 
         #region Metodi di visualizzazione per Firme
 
@@ -85,12 +102,17 @@ namespace ConstructionSiteLibrary.Model.DocumentCompilation
 
         public static string CategoryText(DocumentCategoryModel cat)
         {
-            return cat.Text;
+            return cat.Order +". " + cat.Text;
         }
 
-        public static string QuestionText(DocumentCategoryModel cat, string questionText, int order)
+        public static string QuestionTextNumber(DocumentCategoryModel cat, string questionText, int order)
         {
             return cat.Order + "." + order + " " + questionText;
+        }
+
+        public static string QuestionText(DocumentCategoryModel cat, string questionText)
+        {
+            return questionText;
         }
 
         public static string QuestionNumber(DocumentCategoryModel cat, int order)

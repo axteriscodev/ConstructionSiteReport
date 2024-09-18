@@ -1,4 +1,5 @@
 ﻿using ConstructionSiteLibrary.Components.Utilities;
+using ConstructionSiteLibrary.Model;
 using ConstructionSiteLibrary.Repositories;
 using ConstructionSiteLibrary.Utility;
 using Microsoft.AspNetCore.Components;
@@ -11,56 +12,71 @@ namespace ConstructionSiteLibrary.Components.Categories;
 
 public partial class TableCategories
 {
+    ScreenComponent screenComponent;
+
     private List<TemplateCategoryModel> categories = [];
 
-    /// <summary>
-    /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
-    /// </summary>
-    private bool initialLoading;
+    private List<TemplateCategoryModel> displayedCategories = [];
 
-    /// <summary>
-    /// Booleano che è impostata durante una ricerca
-    /// </summary>
-    private bool isLoading = false;
+    private bool onLoading = false;
 
+    private string search = "";
 
-    /// <summary>
-    /// Intero che ci dice quanti sono gli elementi
-    /// </summary>
-    private int count;
+    private int count = 0;
 
-    /// <summary>
-    /// Intero che ci dice quanti elementi possono stare in una pagina
-    /// </summary>
     private int pageSize = GlobalVariables.PageSize;
 
-    /// <summary>
-    /// Stringa indica la pagina e gli elementi
-    /// </summary>
+    private int pageIndex = 0;
+
     private string pagingSummaryFormat = "Pagina {0} di {1} (Totale {2} categorie)";
 
-    /// <summary>
-    /// Riferimento al componente tabella
-    /// </summary>
-    private RadzenDataGrid<TemplateCategoryModel>? grid;
+    
 
-    [Parameter]
-    public string Param { get; set; } = "";
-
-    ScreenComponent screenComponent;
+    
 
     protected override async Task OnInitializedAsync()
     {
-        initialLoading = true;
+        onLoading = true;
         await base.OnInitializedAsync();
         await LoadData();
-        initialLoading = false;
+        onLoading = false;
     }
 
     private async Task LoadData()
     {
         categories = await CategoriesRepository.GetCategories();
-        count = categories.Count;
+        FilterCategories();
+    }
+
+    private void PageChanged(AxtPagerEventArgs args)
+    {
+        pageIndex = args.CurrentPage;
+        FilterCategories();
+    }
+
+    private void SearchChanged(string args)
+    {
+        search = args;
+        FilterCategories();
+    }
+
+    private void FilterCategories()
+    {
+        displayedCategories = categories;
+        search = search.TrimStart().TrimEnd();
+        if(!string.IsNullOrEmpty(search))
+        {
+            displayedCategories = categories.Where(x => x.Text.Contains(search, StringComparison.InvariantCultureIgnoreCase)).ToList();
+        }
+
+        count = displayedCategories.Count;
+        SelectCurrentPage();
+    }
+
+    private void SelectCurrentPage()
+    {
+        var skip = pageIndex * pageSize;
+        displayedCategories = displayedCategories.Skip(skip).Take(pageSize).ToList();
     }
 
     private async Task OpenOrderForm()
@@ -108,8 +124,10 @@ public partial class TableCategories
     }
 
 
-    private async Task OpenUpdateForm(CategoryModel item)
+    private async Task OpenUpdateForm(object category)
     {
+        var item = category as TemplateCategoryModel;
+
         var width = screenComponent.ScreenSize.Width;
 
         //creo uno style aggiuntivo da inviare al componente caricato con il popup come options
@@ -123,21 +141,23 @@ public partial class TableCategories
             {
                 //tra i parametri che invio al dialog creo un EventCallback da passare al componente
                 { "OnSaveComplete", EventCallback.Factory.Create(this, ReloadTable) },
-                { "Object", item},
+                { "Object", item ?? new()},
                 {"CreationMode", false },
             };
         await DialogService.OpenAsync<FormCategories>("Aggiorna categoria", parameters: param, options: newOptions);
     }
 
-    private async Task Hide(TemplateCategoryModel category)
+    private async Task Hide(object category)
     {
-        var titolo = "Disattivazione sezione";
-        var text = "Vuoi disattivare la sezione: " + category.Text + "?";
+        var item = category as TemplateCategoryModel;
+
+        var titolo = "Disattivazione categoria";
+        var text = "Vuoi disattivare la categoria: " + item.Text + "?";
         var confirmationResult = await DialogService.Confirm(text, titolo, new ConfirmOptions { OkButtonText = "Si", CancelButtonText = "No" });
         Console.WriteLine("cliccato: " + confirmationResult);
         if (confirmationResult == true)
         {
-            var response = await CategoriesRepository.HideCategories([category]);
+            var response = await CategoriesRepository.HideCategories([item]);
             //NotificationService.Notify(response);
             if (response)
             {
@@ -150,6 +170,5 @@ public partial class TableCategories
     {
         DialogService.Close();
         await LoadData();
-        await grid!.Reload();
     }
 }

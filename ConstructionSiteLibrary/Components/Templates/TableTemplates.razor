@@ -1,4 +1,5 @@
 ﻿@using ConstructionSiteLibrary.Repositories
+@using ConstructionSiteLibrary.Components.Generics
 @using Shared
 @using Shared.Templates
 
@@ -7,42 +8,49 @@
 @inject DialogService DialogService
 
 <ScreenComponent @ref="screenComponent" />
-@if (initialLoading)
+
+@if (onLoading)
 {
     <Loading />
 }
 else
-{
+{   
 
-    <h2>@Param</h2>
+    <div class="mx-2 my-5">
+        <SectionTitle PageTitle="Template" ButtonText="+ aggiungi template" SearchPlaceholder="Cerca template"
+                        OnButtonClicked="@OpenWizard" OnSearchChanged="@SearchChanged" />
 
-    @* La tabella dei template *@
-    <div class="marginComponent">
-        <RadzenFieldset class="shadow rounded" Style="font-weight:400;">
-            <RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Success" class="ButtonAdd"
-                          Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenWizard())" />
-            @* <RadzenButton Icon="sort" Text="Ordina" ButtonStyle="ButtonStyle.Primary" class="ButtonAdd"
-                          Style="margin-bottom:2rem;margin-top:1rem;" Click="@(()=>OpenOrderForm())" /> *@
-            <RadzenDataGrid @ref="grid" GridLines="@DataGridGridLines.Both" IsLoading=@isLoading Count="@count" PageSize="@pageSize" Data="@templates" TItem="TemplateModel"
-                            AllowColumnResize="true" AllowAlternatingRows="true" ColumnWidth="200px" AllowFiltering="true" FilterMode="FilterMode.Simple"
-                            AllowSorting="true" AllowPaging="true" ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" PagerHorizontalAlign="HorizontalAlign.Left"
-                            RowClick="@((data) => OnTemplateSelected(data.Data))" Density="Density.Compact">
-
-                <Columns>
-                    @*<RadzenDataGridColumn TItem="CategoryModel" Property="Id" Title="Id" Width="40px" />*@
-                    <RadzenDataGridColumn TItem="TemplateModel" Property="TitleTemplate" Title="Titolo"/>
-                    <RadzenDataGridColumn TItem="TemplateModel" Property="CreationDate" Title="Date" Width="80px" />
-                    <RadzenDataGridColumn TItem="TemplateModel" Title="Azioni" Width="60px" Sortable="false">
-                        <Template Context="data">
-                                @* Mostro i bottoni solo se ho i permessi di modifica *@
-                                @*<RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Filled" Size="ButtonSize.Large"
-                                              Click="@(()=>OpenUpdateForm(data))" class="buttonEdit" Style="width: 45%;" /> *@
-                                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Filled" Size="ButtonSize.Large"
-                                              Click="@(()=>Hide(data))" />
-                        </Template>
-                    </RadzenDataGridColumn>
-                </Columns>
-            </RadzenDataGrid>
-        </RadzenFieldset>
+        <table class="table table-striped table-hover my-table">
+            <thead>
+                <th scope="col">Nome template</th>
+                <th scope="col">Data</th>
+                <th scope="col"></th>
+            </thead>
+            <tbody>
+                @if(displayedTemplates.Count > 0)
+                {
+                    @foreach(var template in displayedTemplates)
+                    {
+                        <tr @onclick="@(() => OnTemplateSelected(template))">
+                            <td>@template.NameTemplate</td>
+                            <td>@template.CreationDate</td>
+                            <td>
+                                <ButtonDropdown Object="@template" OnDeleteClicked="@OpenDeleteTemplate" DisableModify="true" />
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3">Nessun template trovato</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="mt-5">
+            <AxtPager PagingSummaryFormat="@pagingSummaryFormat" Count="@count" PageSize="@pageSize" OnPageChanged="@PageChanged" />
+        </div>
     </div>
+
 }

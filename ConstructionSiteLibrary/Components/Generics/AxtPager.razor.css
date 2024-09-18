@@ -1,0 +1,14 @@
+﻿
+.buttonCol{
+    display:flex;
+    justify-content:end;
+}
+
+.buttonStack{
+    gap:5px;
+}
+
+p, ::deep p {
+    color: var(--rz-primary) !important;
+    margin-top: 12px;
+}

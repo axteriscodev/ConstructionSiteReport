@@ -5,8 +5,6 @@
 @using ConstructionSiteLibrary.Model
 @attribute [Route(PageRouting.CompaniesPage)]
 
-<h3>Aziende</h3>
-
 <ScreenComponent SizeS="800" OnScreenDimensionChanged="ScreenDimensionObserver" />
 
 <DynamicComponent @ref=dynamicComponent Type=@selectedType/>

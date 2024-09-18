@@ -48,15 +48,14 @@ public partial class TemplateQuestionsSelectionStep
         initialLoading = false;
     }
 
-   
-
-    private void Forward()
+    protected override async Task OnParametersSetAsync()
     {
+        StateHasChanged();
+    }
 
-        var questionSelected = questionsSelection!.OnForward();
-
-        OnForward.InvokeAsync(questionSelected);
-
+    public void OnSave()
+    {
+        questionsSelection!.OnSave();
     }
 
 

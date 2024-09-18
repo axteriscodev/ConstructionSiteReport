@@ -1,4 +1,8 @@
 ﻿
+.border, ::deep .border {
+    border-radius: 0.5rem !important;
+    border-color: var(--rz-primary-lighter) !important;
+}
 
 .SectionTitleDiv {
     border: solid 1px black;
@@ -26,6 +30,7 @@
     padding: 0rem 0.7rem 0.7rem 0.7rem;
     margin-top: 1.5rem !important;
     margin-bottom: 1.5rem !important;
+
 }
 
 .paddingDescrizione{

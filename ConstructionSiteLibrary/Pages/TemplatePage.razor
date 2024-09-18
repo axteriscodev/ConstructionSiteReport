@@ -1,22 +1,31 @@
 ﻿@using ConstructionSiteLibrary.Components.Templates;
+@using ConstructionSiteLibrary.Model;
 @using Shared.Templates;
 
 @attribute [Route(PageRouting.TemplatePage)]
 
-<h3>Gestione Template</h3>
+<ScreenComponent SizeS="800" OnScreenDimensionChanged="ScreenDimensionObserver" />
 
-<TableTemplates />
+<DynamicComponent @ref=dynamicComponent Type=@selectedType/>
 
 @*<TemplateCreation SelectedTemplate=@selectedTemplate/>*@
 
-@* @code
-{
-    TemplateModel? selectedTemplate;
+@code
+{    
+    private DynamicComponent? dynamicComponent;
+    private Type selectedType = typeof(TableTemplates);
 
-    public void TemplateSelected(TemplateModel tm)
+     private void ScreenDimensionObserver(ScreenDimension? dimension)
     {
-        selectedTemplate = tm;
+        if (dimension == ScreenDimension.S || dimension == ScreenDimension.XS)
+        {
+            selectedType = typeof(TableTemplatesMobile);
+        }
+        else
+        {
+            selectedType = typeof(TableTemplates);
+        }
 
         StateHasChanged();
     }
-} *@
+}

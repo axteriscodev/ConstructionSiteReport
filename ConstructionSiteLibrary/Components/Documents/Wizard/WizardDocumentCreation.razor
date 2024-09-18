@@ -1,22 +1,165 @@
-﻿@using ConstructionSiteLibrary.Model.DocumentWizard
+﻿@using ConstructionSiteLibrary.Model.DocumentWizard;
+@using ConstructionSiteLibrary.Model.DocumentCompilation;
+@using ConstructionSiteLibrary.Repositories;
+@using ConstructionSiteLibrary.Components.Documents.Compilation;
+@using ConstructionSiteLibrary.Components.Generics;
+@using Radzen.Blazor;
+@using Shared.Documents;
+@using Shared.Templates;
 
 @inject ConstructorSitesRepository ConstructorSitesRepository
+@inject DocumentsRepository DocumentsRepository
+@inject NavigationService NavigationService
 
-<div>
-    <RadzenSteps @ref="_stepsComponent" ShowStepsButtons="false">
-        <Steps>
-            <RadzenStepsItem Text="Step1">
-                <TemplateChoiceStep SelectedTemplate="@_selectedTemplate" OnForward="@(args=>Forward(args))" />
-            </RadzenStepsItem>
-            <RadzenStepsItem Text="Step2">
-                <DescriptionStep SelectedTemplate="@_selectedTemplate" Document="@_document" OnBack="@Back" OnForward="@(args=>Forward(args))"/>
-            </RadzenStepsItem>
-            <RadzenStepsItem Text="Step3">
-                <CompaniesStep SelectedCompanies="@_document.Companies" OnBack="@Back" OnForward="@(args=>Forward(args))" />
-            </RadzenStepsItem>
-            <RadzenStepsItem Text="Step4">
-                <SummaryStep Document= "@_document" SelectedTemplate="@_selectedTemplate" OnBack="@Back"/>
-            </RadzenStepsItem>
-        </Steps>
-    </RadzenSteps>
-</div>
+
+@if (initialLoading)
+{
+    <Loading />
+}
+else
+{
+    <ActivityTopBar @ref="@topBar" OnButtonSaveClicked="SaveDocument" DocumentNavigator="@documenNavigator" />
+    <div class="my-5">
+        <div class="row">
+            <div class="col-12 col-lg-6 d-flex justify-content-center justify-content-lg-start">
+                <h1 class="title">Nuovo documento</h1>
+            </div>
+        </div>
+    </div>
+    <TemplateChoiceStep OnTemplateSelected="@TemplateSelected" />
+    @if (loadTemplate)
+    {
+        <Loading />
+    }
+    else
+    {
+        @* Visualizzazione e compilazione del nuovo documento *@
+        @if (_selectedTemplate is not null)
+        {
+            <ReportConstructorSiteDataSection Document="@_document" DocumentNavigator="@documenNavigator" />
+            <CompaniesPresentSection Companies="@_document.Companies" OnUpdateState="@UpdateDocument" DocumentNavigator="@documenNavigator" />
+            <QuestionsSection Categories="_document.Categories" Companies="_document.Companies" OnStateChangeNotification="@UpdateDocument"
+                              DocumentNavigator="@documenNavigator" />
+            <QuestionNotesSection Document="@_document" DocumentNavigator="@documenNavigator" />
+            <AttachmentsSection Categories="@_document.Categories" DocumentNavigator="@documenNavigator" />
+            <DocumentNoteSection Document="@_document" DocumentNavigator="@documenNavigator" />
+            <CompaniesSignsSection Document="@_document" DocumentNavigator="@documenNavigator" />
+        }
+    }
+}
+
+
+@code {
+    [Parameter]
+    public EventCallback OnSaveComplete { get; set; }
+    [Parameter]
+    public int SiteId { get; set; }
+
+    private TemplateModel? _selectedTemplate;
+    private DocumentModel _document = new();
+
+    private ConstructorSiteModel _constructorSite = new();
+
+    private ActivityTopBar topBar;
+    private bool initialLoading;
+    private bool loadTemplate;
+    private bool onSaving = false;
+
+    private DocumentNavigator documenNavigator { get; set; } = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _constructorSite = await ConstructorSitesRepository.GetConstructorSiteInfo(SiteId);
+        _document.ConstructorSite = _constructorSite;
+        await base.OnParametersSetAsync();
+    }
+
+    public async Task SaveDocument()
+    {
+        await DocumentsRepository.SaveDocument(_document);
+        if (topBar is not null)
+        {
+            topBar.ChangeOnSavingStatus();
+        }
+        NavigationService.ChangePage(PageRouting.ConstructorSitePage + _document.ConstructorSite.Id);
+
+    }
+
+    public void TemplateSelected(TemplateModel template)
+    {
+        loadTemplate = true;
+        _selectedTemplate = template;
+        CaricaDatiDaTemplate();
+        loadTemplate = false;
+    }
+
+    public void CaricaDatiDaTemplate()
+    {
+        if (_document is null)
+        {
+            _document = new();
+            //mi salvo solo l'id perchè al momento non mi interessano i dati del cantiere
+            _document.ConstructorSite = new() { Id = SiteId };
+        }
+        _document.Title = _selectedTemplate.Description.Title;
+        _document.Description = _selectedTemplate.Description.Description;
+        _document.Categories = CreaCategorie(_selectedTemplate.Categories);
+        StateHasChanged();
+    }
+
+    private void UpdateDocument()
+    {
+        StateHasChanged();
+    }
+
+    public List<DocumentCategoryModel> CreaCategorie(List<TemplateCategoryModel> tCategories)
+    {
+        List<DocumentCategoryModel> dCategories = [];
+        foreach (var cat in tCategories)
+        {
+            List<DocumentQuestionModel> dQuestions = [];
+            foreach (var q in cat.Questions)
+            {
+                List<DocumentChoiceModel> dChoices = [];
+                foreach (var c in q.Choices)
+                {
+                    DocumentChoiceModel dChoice = new()
+                        {
+                            Id = c.Id,
+                            Reportable = c.Reportable,
+                            Tag = c.Tag,
+                            Value = c.Value,
+                            Color = c.Color,
+                        };
+                    dChoices.Add(dChoice);
+                }
+
+                DocumentQuestionModel dQuestion = new()
+                    {
+                        Id = q.Id,
+                        Order = q.Order,
+                        Text = q.Text,
+                        Choices = dChoices
+                    };
+                dQuestions.Add(dQuestion);
+            }
+
+            DocumentCategoryModel dcat = new()
+                {
+                    Id = cat.Id,
+                    Order = cat.Order,
+                    Text = cat.Text,
+                    Questions = dQuestions
+                };
+            dCategories.Add(dcat);
+        }
+
+        return dCategories;
+    }
+
+    public void Back()
+    {
+        NavigationService.Back();
+    }
+
+}

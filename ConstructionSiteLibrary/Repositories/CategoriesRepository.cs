@@ -20,6 +20,7 @@ public class CategoriesRepository(HttpManager httpManager)
 
     public async Task<List<TemplateCategoryModel>> GetCategories()
     {
+
         try
         {
             var response = await _httpManager.SendHttpRequest(ApiRouting.CategoriesList, "");
@@ -32,6 +33,8 @@ public class CategoriesRepository(HttpManager httpManager)
         {
             var msg = e.Message;
         }
+
+
         return Categories;
     }
 
@@ -62,7 +65,7 @@ public class CategoriesRepository(HttpManager httpManager)
         return false;
     }
 
-    
+
     public async Task<bool> HideCategories(List<TemplateCategoryModel> categories)
     {
         var response = await _httpManager.SendHttpRequest(ApiRouting.HideCategories, categories);

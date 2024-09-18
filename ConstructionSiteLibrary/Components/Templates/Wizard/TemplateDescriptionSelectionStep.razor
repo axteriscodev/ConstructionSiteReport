@@ -11,34 +11,28 @@
 }
 else
 {
-    <RadzenTemplateForm TItem="TemplateDescriptionModel" Data="@CurrentSelection" Submit="@Forward">
-    <div class="card shadow mb-3 divCard">
-        <RadzenText>Seleziona una descrizione</RadzenText>
+    <fieldset class="card cardClass round-border divCard mb-2">
+        <legend class="fieldset-title">Seleziona una descrizione</legend>
         <RadzenRow>
-                <RadzenDropDown @bind-Value=@CurrentSelection Data=@TemplatesDescriptions TextProperty="Title" Style="width:70%; max-width: 500px" />
-                <RadzenButton Icon="add" Variant="Variant.Text" Click="OpenNewForm" />
+            <RadzenDropDown @bind-Value=@CurrentTemplate.Description Data=@TemplatesDescriptions TextProperty="Title"
+                            Style="width:70%; max-width: 500px" Change="@(args=>ChangeSelectedDescription(args))" />
+            <RadzenButton Icon="add" Click="OpenNewForm" class="my-button-icon" />
         </RadzenRow>
 
-    </div>
-        @if (CurrentSelection is not null)
+
+        @if (CurrentTemplate.Description is not null)
         {
             <div class="mb-3">
                 <RadzenFieldset Text="Descrizione" class="mt-3">
                     <p>
-                        @CurrentSelection.Description
+                        @CurrentTemplate.Description.Description
                     </p>
                 </RadzenFieldset>
             </div>
         }
-    <div class="row">
-        <div class="col">
-            <RadzenButton Icon="arrow_back" Text="Indietro" Click="@Back" />
-        </div>
-        <div class="col divForward">
-            <RadzenButton ButtonType="ButtonType.Submit" Icon="arrow_forward" Text="Avanti" class="buttonForward" />
-        </div>
-    </div>
-</RadzenTemplateForm>
+    </fieldset>
+
+
 
 }
 
@@ -50,12 +44,6 @@ else
 
     [Parameter]
     required public TemplateModel CurrentTemplate { get; set; }
-
-    [Parameter]
-    public EventCallback<TemplateStepArgs> OnForward { get; set; }
-
-    [Parameter]
-    public EventCallback OnBack { get; set; }
 
     /// <summary>
     /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
@@ -76,32 +64,29 @@ else
     {
         TemplatesDescriptions = await TemplatesRepository.GetTemplatesDescriptions();
 
-        if (CurrentTemplate.IdTemplate != 0 && CurrentTemplate.Description.Id != 0)
+        if (CurrentTemplate.Description.Id != 0)
         {
             CurrentSelection = CurrentTemplate.Description;
         }
         else
         {
-            CurrentSelection = TemplatesDescriptions.FirstOrDefault();
+            CurrentTemplate.Description = TemplatesDescriptions.FirstOrDefault() ?? new();
         }
     }
 
-
-    public void Forward()
+    protected override async Task OnParametersSetAsync()
     {
-        TemplateStepArgs args = new()
-            {
-                Object = CurrentSelection,
-                Step = TemplateStep.Description
-            };
-
-        OnForward.InvokeAsync(args);
+        if (CurrentTemplate.Description.Id != 0)
+        {
+            CurrentSelection = CurrentTemplate.Description;
+        }
+        else
+        {
+            CurrentTemplate.Description = TemplatesDescriptions.FirstOrDefault() ?? new();
+        }
+        await base.OnParametersSetAsync();
     }
 
-    public void Back()
-    {
-        OnBack.InvokeAsync();
-    }
 
     private async Task OpenNewForm()
     {
@@ -115,18 +100,26 @@ else
             };
         //creo parametri da inviare al componente caricato con il popup
         var param = new Dictionary<string, object>
-            {
-                //tra i parametri che invio al dialog creo un EventCallback da passare al componente
-                { "OnSaveComplete", EventCallback.Factory.Create<TemplateDescriptionModel>(this, Reload) },
-            };
+{
+//tra i parametri che invio al dialog creo un EventCallback da passare al componente
+{ "OnSaveComplete", EventCallback.Factory.Create<TemplateDescriptionModel>(this, Reload) },
+};
         await DialogService.OpenAsync<FormTemplateDescription>("Nuova scelta", parameters: param, options: newOptions);
     }
 
 
+    private void ChangeSelectedDescription(object args)
+    {
+        if(args is TemplateDescriptionModel)
+        {
+            StateHasChanged();
+        }
+    }
+
     private void Reload(TemplateDescriptionModel desc)
     {
         TemplatesDescriptions.Add(desc);
-        CurrentSelection = desc;
+        CurrentTemplate.Description = desc;
         StateHasChanged();
     }
 }

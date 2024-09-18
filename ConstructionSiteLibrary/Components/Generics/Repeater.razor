@@ -1,0 +1,39 @@
+﻿@typeparam TItem
+
+@if (HeaderTemplate is not null)
+{
+    @HeaderTemplate
+}
+@if (ContentTemplate is not null)
+{
+    @foreach (var element in Data)
+    {
+        @ContentTemplate(element)
+    }
+}
+@if (FooterTemplate is not null)
+{
+    @FooterTemplate
+}
+
+@code {
+
+    [Parameter]
+    public List<TItem> Data { get; set; } = [];
+    [Parameter]
+    public RenderFragment? HeaderTemplate { get; set; }
+    [Parameter]
+    public RenderFragment<TItem>? ContentTemplate { get; set; }
+    [Parameter]
+    public RenderFragment? FooterTemplate { get; set; }
+    [Parameter]
+    public string Name { get; set; } = "";
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+
+    }
+
+}

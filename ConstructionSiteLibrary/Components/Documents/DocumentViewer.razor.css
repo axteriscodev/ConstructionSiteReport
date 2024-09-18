@@ -58,7 +58,7 @@
 .SectionTitleDiv, ::deep .SectionTitleDiv {
     border: solid 1px black;
     padding: 0.5rem;
-    background-color: #ebebeb;
+    background-color: var(--rz-primary-lighter);
     margin: 0rem;
 }
 

@@ -8,9 +8,8 @@
 @inject GlobalVariables GlobalVariables
 
 
-<div class="card shadow mb-3 divCard">
-    <RadzenText>Seleziona le domande</RadzenText>
-    <RadzenFieldset class="selezioneDomande">
+ <fieldset class="card cardClass round-border divCard mb-2">
+    <legend class="fieldset-title">Seleziona le domande</legend>
         @foreach (var g in groups)
             {
                 <div class="m-2 p-2 pt-3">
@@ -47,5 +46,4 @@
                 }
             }
 
-        </RadzenFieldset>
-    </div>
+ </fieldset>

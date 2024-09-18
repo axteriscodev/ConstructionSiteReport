@@ -122,7 +122,8 @@ namespace ServerHost.Controllers
             {
                 var db = GetDbConnection();
                 var list = await UserDbHelper.Update(db, users);
-                response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), list);
+                var jwt = JWTManager.GeneraJSONWebToken(users.First());
+                response.AddResponse(StatusResponse.GetStatus(Status.SUCCESS), jwt);
 
             }
             catch (Exception ex)

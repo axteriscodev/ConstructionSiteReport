@@ -30,4 +30,6 @@ public partial class User
     public virtual Organization IdOrganizationNavigation { get; set; } = null!;
 
     public virtual Role IdRoleNavigation { get; set; } = null!;
+
+    public virtual ICollection<UserAttachment> UserAttachments { get; set; } = new List<UserAttachment>();
 }

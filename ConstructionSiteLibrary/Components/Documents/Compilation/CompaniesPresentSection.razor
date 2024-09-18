@@ -10,96 +10,86 @@
 }
 else
 {
-    <div>
-        <div class="vstack documentSection">
-            <div class="marginYResponsive2">
-                <div class="row SectionTitleDiv">
-                    <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" class="SectionTitle">
-                        <strong>
-                            @DocumentCompilationUtils.Companies
-                        </strong>
-                    </RadzenText>
-                </div>
-
-                @foreach (var company in Companies)
-                {
-                    <div class="border marginYResponsive paddingSezione">
-                        <div class=" row my-2 borderBottom">
-                            <div class="col ">
-                                <RadzenText>Impresa Esecutrice</RadzenText>
-                            </div>
-                            <div class="col impresaEsecutrice">
-                                <RadzenRow>
-                                    <RadzenLabel Text="Presente" Component="Presente" />
-                                    <RadzenCheckBox Value="@company.Present" Name="Presente" TValue="bool?" Change="@(args=>AddPresent(args, company))" />
-                                </RadzenRow>
-                            </div>
-                        </div>
-                        <div class="row my-2">
-                            <div class="col-12 col-md-6 my-2">
-                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Ragione Sociale: </RadzenText>
-                                <RadzenTextArea Placeholder="Inserisci Ragione Sociale"
-                                                Change=@(args => OnChange(args, "RagioneSociale"))
-                                                class="w-100" @bind-Value=@company.CompanyName />
-                            </div>
-                            <div class="col-12 col-md-6 my-2">
-                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Sede legale: </RadzenText>
-                                <RadzenTextArea Placeholder="Inserisci Sede Legale"
-                                                Change=@(args => OnChange(args, "Sedelegale"))
-                                                class="w-100" @bind-Value=@company.Address />
-                            </div>
-                        </div>
-                        <div class="row my-2">
-                            <div class="col-12 col-md-6 my-2">
-                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Lavori previsti: </RadzenText>
-                                <RadzenTextArea Placeholder="Inserisci Lavori previsti"
-                                                Change=@(args => OnChange(args, "LavoriPrevisti"))
-                                                class="w-100" @bind-Value=@company.JobsDescriptions />
-                            </div>
-                            <div class="col-12 col-md-6 my-2">
-                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">P. Iva: </RadzenText>
-                                <RadzenTextArea Placeholder="Inserisci P. Iva"
-                                                Change=@(args => OnChange(args, "PIva"))
-                                                class="w-100" @bind-Value=@company.VatCode />
-                            </div>
-                        </div>
-                        <div class="row my-2">
-                            <div class="col-12 col-md-6 my-2">
-                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Reponsabile: </RadzenText>
-                                <RadzenTextArea Placeholder="Reponsabile"
-                                                Change=@(args => OnChange(args, "Responsabile"))
-                                                class="w-100" @bind-Value=@company.InChargeWorker />
-                            </div>
-                            <div class="col-12 col-md-6 my-2">
-                                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Lavoratori: </RadzenText>
-                                <RadzenTextArea Placeholder="Lavoratori"
-                                                Change=@(args => OnChange(args, "PIva"))
-                                                class="w-100" @bind-Value=@company.Workers />
-                            </div>
-                        </div>
+    <div class="mt-3">
+        @foreach (var company in Companies)
+        {
+            <a class="anchor" id="@CreateAnchor(company)"></a>
+            <fieldset class="my-fieldset" >
+                <legend class="my-legend">Impresa Esecutrice</legend>
+                <div class="row">
+                    <div class="col impresaEsecutrice">
+                        <RadzenRow>
+                            <RadzenLabel Text="Presente" Component="Presente" />
+                            <RadzenCheckBox Value="@company.Present" Name="Presente" TValue="bool?" Change="@(args=>AddPresent(args, company))" />
+                        </RadzenRow>
                     </div>
-                }
-
-                <div class="text-center">
-                    <RadzenSplitButton Click=@(args => AddCompany(args)) AlwaysOpenPopup=true Text="Aggiungi">
-                        <ChildContent>
-                            <RadzenSplitButtonItem Text="Da anagrafica" Value="Anagrafica" />
-                            <RadzenSplitButtonItem Text="Nuova" Value="Nuova" />
-                        </ChildContent>
-                    </RadzenSplitButton>                
                 </div>
-            </div>
+                <div class="row">
+                    <div class="col-12 col-md-6 my-1">
+                        <RadzenLabel Text="Ragione Sociale:" Component="RagioneSociale" />
+                        <RadzenTextBox Placeholder="Inserisci Ragione Sociale" Name="RagioneSociale"
+                                       Change=@(args => OnChangeRagioneSociale(company,args, "RagioneSociale"))
+                                       class="my-input" @bind-Value=@company.CompanyName />
+                    </div>
+                    <div class="col-12 col-md-6 my-1">
+                        <RadzenLabel Text="Sede Legale:" Component="SedeLegale" />
+                        <RadzenTextBox Placeholder="Inserisci Sede Legale" Name="SedeLegale"
+                                        Change=@(args => OnChange(args, "SedeLegale"))
+                                       class="my-input" @bind-Value=@company.Address />
+                    </div>
+                    <div class="col-12 col-md-6 my-1">
+                        <RadzenLabel Text="Lavori previsti:" Component="LavoriPrevisti" />
+                        <RadzenTextBox Placeholder="Inserisci Lavori previsti" Name="LavoriPrevisti"
+                                        Change=@(args => OnChange(args, "LavoriPrevisti"))
+                                       class="my-input" @bind-Value=@company.JobsDescriptions />
+                    </div>
+                    <div class="col-12 col-md-6 my-1">
+                        <RadzenLabel Text="P. Iva:" Component="PartitaIVA" />
+                        <RadzenTextBox Placeholder="Inserisci P. Iva" Name="PartitaIVA"
+                                        Change=@(args => OnChange(args, "PIva"))
+                                       class="my-input" @bind-Value=@company.VatCode />
+                    </div>
+                    <div class="col-12 col-md-6 my-1">
+                        <RadzenLabel Text="Reponsabile:" Component="Reponsabile" />
+                        <RadzenTextBox Placeholder="Reponsabile" Name="Reponsabile"
+                                        Change=@(args => OnChange(args, "Responsabile"))
+                                       class="my-input" @bind-Value=@company.InChargeWorker />
+                    </div>
+                    <div class="col-12 col-md-6 my-1">
+                        <RadzenLabel Text="Lavoratori:" Component="Lavoratori" />
+                        <RadzenTextBox Placeholder="Lavoratori" Name="Lavoratori"
+                                        Change=@(args => OnChange(args, "Lavoratori"))
+                                       class="my-input" @bind-Value=@company.Workers />
+                    </div>
+                </div>
+            </fieldset>
+        }
+
+        <div class="button-container">
+            <RadzenSplitButton Click=@(args => AddCompany(args)) AlwaysOpenPopup=true Text="Aggiungi impresa esecutrice">
+                <ChildContent>
+                    <RadzenSplitButtonItem Text="Da anagrafica" Value="Anagrafica" />
+                    <RadzenSplitButtonItem Text="Nuova" Value="Nuova" />
+                </ChildContent>
+            </RadzenSplitButton>                
         </div>
     </div>
 }
 
 
 @code {
-
+    [Parameter]
+    public EventCallback OnAnchorAdd { get; set; }
+    [Parameter]
+    public EventCallback OnUpdateState { get; set; }
     [Parameter]
     public List<CompanyModel> Companies { get; set; } = [];
+    [Parameter]
+    public DocumentNavigator DocumentNavigator { get; set; } = new();
+
 
     private bool onLoading = false;
+
 
 
     protected override async Task OnInitializedAsync()
@@ -113,6 +103,16 @@ else
     {
         await base.OnParametersSetAsync();
     }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+        if (firstRender)
+        {
+            OnAnchorAdd.InvokeAsync();
+        }
+    }
+
 
     private void AddPresent(bool? isPresent, CompanyModel company)
     {
@@ -133,7 +133,7 @@ else
             //creo parametri da inviare al componente caricato con il popup
             var param = new Dictionary<string, object>
             {
-               
+
                 { "PresentCompanies", Companies },
             }; 
             CompanyModel? selectedCompany = await DialogService.OpenAsync<FormAddCompany>("Seleziona azienda", parameters: param,  options: newOptions);
@@ -142,16 +142,40 @@ else
             {
                 selectedCompany.Present = true;
                 Companies.Add(selectedCompany);
+                CreateAnchor(selectedCompany);
             }
         }
         else
         {
-            Companies.Add(new CompanyModel(){Present = true});
+            var newComp = new CompanyModel() { Present = true };
+            Companies.Add(newComp);
+            CreateAnchor(newComp);
         }
     }
+
+
 
     private void OnChange(string? args, string name)
     {
 
+    }
+
+    private async Task OnChangeRagioneSociale(CompanyModel comp, string? args, string name)
+    {
+        var index = Companies.IndexOf(comp);
+        var anchor = DocumentNavigator.Anchors.Where(x => x.TypeIndex == DocumentUtils.TypeCompanies && x.Index == index).FirstOrDefault();
+        if(anchor is not null)
+        {
+            anchor.Text = $"Dati {args}";
+        }
+    }
+
+    private string CreateAnchor(CompanyModel comp)
+    {
+        var companyName = comp.CompanyName;
+        var index = Companies.IndexOf(comp);
+        var anchor = new DocumentAnchor(DocumentUtils.TypeCompanies, index, $"Dati {companyName}", $"company_{index}");
+        DocumentNavigator.AddAnchor(anchor);
+        return anchor.Anchor;
     }
 }

@@ -1,0 +1,63 @@
+﻿@using Shared.Templates
+
+<div class="dropdown" @onfocusout="@OnFocusOut">
+    <RadzenButton Icon="more_vert" Click="@ToggleDropdown" class="buttonOptions" />
+    <div id="myDropdown" class="dropdown-content @DropdownCssClass()">
+        @if (!DisableModify)
+        {
+            <RadzenButton Icon="edit" Text="Modifica" Variant="Variant.Text" class="buttonEdit" @onmousedown="Modify" />
+        }
+        @if (!DisableDelete)
+        {
+            <RadzenButton Icon="delete" Text="Elimina " class="buttonDelete" Variant="Variant.Text" @onmousedown="Delete" />
+        }
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public EventCallback<object> OnUpdateClicked { get; set; }
+    [Parameter]
+    public EventCallback<object> OnDeleteClicked { get; set; }
+    [Parameter]
+    public object Object { get; set; } = new();
+    [Parameter]
+    public bool DisableModify { get; set; }
+    [Parameter]
+    public bool DisableDelete { get; set; }
+
+    private bool dropdownShow;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+
+    private void OnFocusOut()
+    {
+        ToggleDropdown();
+    }
+
+    private void ToggleDropdown()
+    {
+        dropdownShow = !dropdownShow;
+        StateHasChanged();
+    }
+
+    private string DropdownCssClass()
+    {
+        return dropdownShow ? "dropdown-open" : "dropdown-close";
+    }
+
+    private void Delete()
+    {
+        OnDeleteClicked.InvokeAsync(Object);
+    }
+
+    private void Modify()
+    {
+        OnUpdateClicked.InvokeAsync(Object);
+    }
+}

@@ -1,7 +1,12 @@
-﻿::deep .buttonDelete {
-    background-color: #ff9f9f !important;
+﻿
+
+::deep .buttonOptions {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  color: var(--rz-primary) !important;
 }
 
-::deep .buttonEdit {
-    background-color: #ffe8a1 !important;
+
+::deep .title {
+  margin-top: 0px !important;
 }

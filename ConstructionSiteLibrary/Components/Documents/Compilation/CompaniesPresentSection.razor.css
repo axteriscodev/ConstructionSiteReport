@@ -1,5 +1,4 @@
 ﻿
-
 .SectionTitleDiv {
     border: solid 1px black;
     padding: 0.5rem;
@@ -12,21 +11,12 @@
     margin: 0px;
 }
 
-.documentSection {
-    padding-right: 1.5rem !important;
-    padding-left: 1.5rem !important;
-}
-
 .SectionTitle, ::deep .SectionTitle {
     margin: 0px;
 }
 
 .spaceBetween, ::deep .spaceBetween {
     justify-content: space-between !important;
-}
-
-.borderBottom, ::deep .borderBottom {
-    border-bottom: solid 1px #dee2e6;
 }
 
 .paddingSezione, ::deep .paddingSezione {

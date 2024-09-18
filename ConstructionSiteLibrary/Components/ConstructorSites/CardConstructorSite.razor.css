@@ -3,25 +3,30 @@
     border-radius: 1.2rem !important;
 }
 
-.text-bborder {
+.text-border {
     margin-bottom: 0rem !important
 }
 
-.text-size {
-    font-size: 15px;
+
+
+.title-weight {
+    font-weight: 900;
 }
 
+
 .cardClass {
-    max-width: 800px;
+    border-radius: 0.8rem !important;
+    background: #FFF;
+    border-color: var(--border-Card);
+    padding: 1rem 2.5rem !important;
+    background-color: var(--card-background-color) !important;
 }
 
     .cardClass:hover {
         border: 1px solid var(--rz-primary);
         box-shadow: 0 1rem 1.5rem rgba(0, 0, 0, .15) !important;
-        background-color: var(--background-Card-color2) !important;
+        background-color: var(--card-background-color-hover) !important;
     }
 
 /* CARDS */
-.cardColor1 {
-    background-color: var(--background-Card-color1) !important;
-}
+

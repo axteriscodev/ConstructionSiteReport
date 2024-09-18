@@ -1,0 +1,12 @@
+﻿
+.searchBar, ::deep .searchBar {
+    width: 350px !important;
+    margin-bottom: 1.5rem;
+}
+
+
+
+
+.title, ::deep .title {
+    margin-top: 20px !important;
+}

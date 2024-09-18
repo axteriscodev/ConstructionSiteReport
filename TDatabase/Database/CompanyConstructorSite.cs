@@ -13,7 +13,11 @@ public partial class CompanyConstructorSite
 
     public string? Note { get; set; }
 
+    public int? SubcontractedBy { get; set; }
+
     public virtual Company IdCompanyNavigation { get; set; } = null!;
 
     public virtual ConstructorSite IdConstructorSiteNavigation { get; set; } = null!;
+
+    public virtual Company? SubcontractedByNavigation { get; set; }
 }

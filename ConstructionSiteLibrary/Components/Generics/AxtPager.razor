@@ -1,0 +1,134 @@
+﻿@using System.Text;
+@using ConstructionSiteLibrary.Model
+
+@if (singlePage)
+{
+    <div class="row">
+        <div class="col-8">
+            <p>@PrintSummary()</p>
+        </div>
+        <div class="col-4 buttonCol">
+            <div class="hstack buttonStack">
+                <RadzenButton Icon="arrow_back" class="my-button-icon-border" Disabled="DisableBack"
+                              Click="@(()=> ChangePage(PageNavigaton.Back))" />
+                <RadzenButton Icon="arrow_forward" class="my-button-icon-border" Disabled="DisableForward"
+                              Click="@(()=> ChangePage(PageNavigaton.Forward))" />
+            </div>
+        </div>
+    </div>
+}
+
+
+
+@code {
+
+    [Parameter]
+    public EventCallback<AxtPagerEventArgs> OnPageChanged { get; set; }
+
+    [Parameter]
+    public int Count { get; set; } = 13;
+
+    [Parameter]
+    public int PageSize { get; set; } = 3;
+
+    [Parameter]
+    public string PagingSummaryFormat { get; set; } = "";
+
+    /// <summary>
+    /// numero totale di pagine
+    /// </summary>
+    private int totPages;
+    /// <summary>
+    /// la pagina corrente
+    /// </summary>
+    private int? currentPage;
+
+    private bool DisableBack;
+    private bool DisableForward;
+
+    private bool singlePage;
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        CalculatePages();
+    }
+
+    private void CalculatePages()
+    {
+        if (Count > 0 && PageSize > 0)
+        {
+            totPages = (Count + (PageSize - 1)) / PageSize;
+        }
+        if (currentPage is null)
+        {
+            currentPage = 0;
+        }
+        singlePage = totPages > 1;
+        CheckCurrentPage();
+    }
+
+    private string PrintSummary()
+    {
+        var summary = "";
+        if (!string.IsNullOrEmpty(PagingSummaryFormat))
+        {
+            var sb = new StringBuilder();
+            summary = sb.AppendFormat(PagingSummaryFormat, currentPage + 1, totPages, Count).ToString();
+        }
+
+        return summary;
+    }
+
+    private void CheckCurrentPage()
+    {
+        if (currentPage == 0)
+        {
+            DisableBack = true;
+            DisableForward = false;
+        }
+        else if (currentPage == totPages - 1)
+        {
+            DisableBack = false;
+            DisableForward = true;
+        }
+        else
+        {
+            DisableBack = false;
+            DisableForward = false;
+        }
+    }
+
+    private void ChangePage(PageNavigaton navigaton)
+    {
+        switch (navigaton)
+        {
+            case PageNavigaton.Back:
+                currentPage = currentPage > 0 ? currentPage-1 : currentPage;
+                break;
+            case PageNavigaton.Forward:
+                currentPage = currentPage < totPages - 1 ? currentPage+1 : currentPage;
+                break;
+            default:
+                break;
+        }
+
+        CheckCurrentPage();
+        AxtPagerEventArgs args = new()
+        {
+            CurrentPage = currentPage!.Value,
+            Top = PageSize,
+            Skip = currentPage!.Value * PageSize
+        };
+
+        OnPageChanged.InvokeAsync(args);
+
+    }
+
+
+    private enum PageNavigaton
+    {
+        Back,
+        Forward
+    }
+}

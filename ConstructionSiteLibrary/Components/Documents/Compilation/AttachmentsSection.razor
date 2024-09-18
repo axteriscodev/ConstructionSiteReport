@@ -7,51 +7,52 @@
 {
     <ScreenComponent @ref="screenComponent" />
 
-    <div class="vstack documentSection">
-        <div class="row SectionTitleDiv">
-            <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center">
-                <strong>
-                    @DocumentCompilationUtils.Attachment
-                </strong>
-            </RadzenText>
-        </div>
-        @foreach (var cat in visualCategories)
-        {
-            foreach (var elem in cat.Category.Questions)
+
+    <fieldset class="my-fieldset">
+        <legend class="my-legend">@DocumentUtils.Attachment</legend>
+        <div class="row">
+            @foreach (var cat in visualCategories)
             {
-                if (elem.Attachments.Count > 0)
+                foreach (var elem in cat.Category.Questions)
                 {
-                    <div class="paddingSezione">
-                        <RadzenRow JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Start" Gap="0">
-                            <RadzenColumn Size="1" class="rz-text-align-center paddingYResponsive">
-                                <RadzenText TextStyle="TextStyle.H6">@DocumentCompilationUtils.QuestionNumber(cat.Category, elem.Order)</RadzenText>
-                            </RadzenColumn>
-                            <RadzenColumn>
-                                <RadzenRow>
-                                    @foreach (var attach in elem.Attachments)
-                                    {
-                                        <RadzenStack Orientation="Orientation.Vertical">
-                                            <RadzenImage Path="@attach.Image" Style="width: 10rem;" />
-                                            <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Filled"
-                                            Click="@(() => DeleteAttachment(elem.Attachments, attach))"/>
-                                        </RadzenStack>
-                                    }
-                                </RadzenRow>
-                            </RadzenColumn>
-                        </RadzenRow>
-                    </div>
+                    if (elem.Attachments.Count > 0)
+                    {
+                        <a class="anchor" id="@CreateAnchor(cat,elem)"></a>
+                        <div class="paddingSezione">
+                            <RadzenRow JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Start" Gap="0">
+                                <RadzenColumn Size="1" class="rz-text-align-center paddingYResponsive">
+                                    <RadzenText TextStyle="TextStyle.H6">@DocumentUtils.QuestionNumber(cat.Category, elem.Order)</RadzenText>
+                                </RadzenColumn>
+                                <RadzenColumn>
+                                    <RadzenRow>
+                                        @foreach (var attach in elem.Attachments)
+                                        {
+                                            <RadzenStack Orientation="Orientation.Vertical">
+                                                <RadzenImage Path="@attach.Image" Style="width: 10rem;" />
+                                                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Filled"
+                                                              Click="@(() => DeleteAttachment(elem.Attachments, attach))" />
+                                            </RadzenStack>
+                                        }
+                                    </RadzenRow>
+                                </RadzenColumn>
+                            </RadzenRow>
+                        </div>
+                    }
                 }
             }
-        }
-
-    </div>
+        </div>
+    </fieldset>
 }
 
 
 @code {
 
     [Parameter]
+    public EventCallback OnAnchorAdd { get; set; }
+    [Parameter]
     public List<DocumentCategoryModel> Categories { get; set; } = [];
+    [Parameter]
+    public DocumentNavigator DocumentNavigator { get; set; } = new();
 
     private List<VisualCategory> visualCategories { get; set; } = [];
 
@@ -61,13 +62,26 @@
     protected override async Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
-        visualCategories = DocumentCompilationUtils.CreateVisualCategories(Categories);
+        visualCategories = DocumentUtils.CreateVisualCategories(Categories);
     }
 
     private void DeleteAttachment(List<AttachmentModel> attachments, AttachmentModel attachment)
     {
         attachments.Remove(attachment);
-        visualCategories = DocumentCompilationUtils.CreateVisualCategories(Categories);
+        visualCategories = DocumentUtils.CreateVisualCategories(Categories);
     }
 
+
+    #region Gestione Ancore
+
+    private string CreateAnchor(VisualCategory cat, DocumentQuestionModel question)
+    {
+        var categoryName = $"{cat.Category.Order}. {question.Order}";
+        var index = cat.Category.Order;
+        var anchor = new DocumentAnchor(DocumentUtils.TypeAttachment, index, $"Allegati cat: {categoryName}", $"allegati_{index}");
+        DocumentNavigator.AddAnchor(anchor);
+        return anchor.Anchor;
+    }
+
+    #endregion
 }

@@ -1,0 +1,72 @@
+﻿/* Dropdown */
+
+::deep .buttonOptions {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    color: var(--rz-primary) !important;
+}
+
+.buttonDelete:hover, ::deep .buttonDelete:hover,
+.buttonEdit:hover, ::deep .buttonEdit:hover {
+    background-color: var(--rz-primary) !important;
+    color: white !important;
+}
+
+.buttonDelete, ::deep .buttonDelete {
+    /*width: 100%;*/
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    position: absolute;
+    background-color: #f1f1f1;
+    /*min-width: 160px;*/
+    overflow: auto;
+    z-index: 1;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+}
+
+.dropdown-close {
+    display: none;
+}
+
+.dropdown-open {
+    display: block;
+}
+
+.show {
+    display: block;
+}
+
+.dropbtn {
+    background-color: #3498db;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+    .dropbtn:hover,
+    .dropbtn:focus {
+        background-color: #2980b9;
+    }
+
+@media (max-width:800px) {
+    .dropdown-content {
+        position: absolute;
+        background-color: #f1f1f1;
+        /*min-width: 160px;*/
+        overflow: auto;
+        z-index: 1;
+        left: 100%;
+        right: auto;
+        transform: translateX(-100%);
+    }
+}

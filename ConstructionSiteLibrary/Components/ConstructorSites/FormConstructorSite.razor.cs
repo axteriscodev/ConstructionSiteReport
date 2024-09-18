@@ -51,7 +51,7 @@ namespace ConstructionSiteLibrary.Components.ConstructorSites
 
         private bool CheckIfSelected(CompanyModel company)
         {
-            return form.Companies.Any(x => x.Id == company.Id);
+            return form.Companies.Exists(x => x.Id == company.Id);
         }
 
         private void CheckIfAllSelected()
@@ -96,7 +96,7 @@ namespace ConstructionSiteLibrary.Components.ConstructorSites
                 Name = form.Name!,
                 JobDescription = form.JobDescription ?? "",
                 Address = form.Address!,
-                StartDate = form.StartDate.HasValue ? form.StartDate.Value : DateTime.Today,
+                StartDate = form.StartDate ?? DateTime.Today,
                 Client = form.Client,
                 Companies = companies
             };

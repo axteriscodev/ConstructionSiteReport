@@ -11,6 +11,8 @@ public partial class TableCompaniesMobile
 {
     private List<CompanyModel> companies = [];
 
+    private List<CompanyModel> displayedCompanies = [];
+
     private bool initialLoading;
 
     private bool isLoading = false;
@@ -19,12 +21,9 @@ public partial class TableCompaniesMobile
 
     private int pageSize = GlobalVariables.PageSize;
 
-    private string pagingSummaryFormat = "Pagina {0} di {1} (Totale {2} aziende)";
+    private string pagingSummaryFormat = "Pagina {0} di {1} (Totale {2} ditte)";
 
-    private RadzenDataGrid<CompanyModel>? grid;
-
-    [Parameter]
-    public string Param { get; set; } = "";
+    private string search = ""; 
 
     ScreenComponent screenComponent;
 
@@ -39,7 +38,25 @@ public partial class TableCompaniesMobile
     private async Task LoadData()
     {
         companies = await CompaniesRepository.GetCompanies();
-        count = companies.Count;
+        FilterCompanies();
+    }
+
+    private void SearchChanged(string args)
+    {
+        search = args;
+        FilterCompanies();
+    }
+
+     private void FilterCompanies()
+    {
+        displayedCompanies = companies;
+        search = search.TrimStart().TrimEnd();
+        if(!string.IsNullOrEmpty(search))
+        {
+            displayedCompanies = companies.Where(x => x.CompanyName.Contains(search, StringComparison.InvariantCultureIgnoreCase) || x.SelfEmployedName.Contains(search, StringComparison.InvariantCultureIgnoreCase)).ToList();
+        }
+
+        count = displayedCompanies.Count;
     }
 
     private void OpenAddCompanyPage()
@@ -47,13 +64,15 @@ public partial class TableCompaniesMobile
         Navigation.ChangePage(PageRouting.AddCompanyPage);
     }
 
-    private void OpenUpdateCompany(CompanyModel company)
+    private void OpenUpdateCompany(object item)
     {
+        var company = item as CompanyModel;
         Navigation.ChangePage(PageRouting.AddCompanyPage + company.Id);
     }
 
-    private async Task Hide(CompanyModel company)
+    private async Task Hide(object item)
     {
+        var company = item as CompanyModel;
         var titolo = "Elimina Azienda";
         var text = "Vuoi eliminare l'azienda selezionata?";
         var confirmationResult = await DialogService.Confirm(text, titolo, new ConfirmOptions { OkButtonText = "Sì", CancelButtonText = "No" });
@@ -76,6 +95,6 @@ public partial class TableCompaniesMobile
     {
         DialogService.Close();
         await LoadData();
-        await grid.Reload();
+        //await grid.Reload();
     }
 }

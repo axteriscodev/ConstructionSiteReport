@@ -1,0 +1,12 @@
+﻿
+.searchBar, ::deep .searchBar {
+    width: 350px !important;
+    margin-bottom: 1.5rem;
+}
+
+
+.buttonNewSite, ::deep .buttonNewSite {
+    min-width: 220px;
+}
+
+

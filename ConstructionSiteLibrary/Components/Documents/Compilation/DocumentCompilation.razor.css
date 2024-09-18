@@ -1,4 +1,18 @@
 ﻿
+.button-container, ::deep .button-container {
+    border-radius: 12px;
+    border: 1px solid #AFCAF3;
+    display: flex;
+    padding: 15px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+}
+.bordered, ::deep .bordered {
+    border-radius: 12px;
+    border: 1px solid #AFCAF3;
+}
 
 .DocumentCard{
     padding:1rem;

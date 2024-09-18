@@ -1,4 +1,5 @@
 ﻿@using ConstructionSiteLibrary.Repositories
+@using ConstructionSiteLibrary.Components.Generics
 @using Shared
 @using Shared.Documents
 
@@ -9,47 +10,52 @@
 
 <ScreenComponent @ref="screenComponent" />
 
-@if (initialLoading)
+@if (onLoading)
 {
     <Loading />
 }
 else
 {
-    <h2>@Param</h2>
+    <div class="mx-2 my-5">
+        <SectionTitle PageTitle="Ditte cantiere" ButtonText="+ aggiungi ditta" SearchPlaceholder="Cerca azienda"
+                    OnButtonClicked="@OpenAddCompanyPage" OnSearchChanged="@SearchChanged" />
 
-    @* La tabella delle Aziende *@
-    <div class="marginComponent">
+        <table class="table table-striped my-table">
+                <thead>
+                <th scope="col">Nome</th>
+                <th scope="col">Indirizzo</th>
+                <th scope="col">Telefono</th>
+                <th scope="col">Email</th>
+                <th scope="col"></th>
+            </thead>
+            <tbody>
+                @if(displayedCompanies.Count > 0)
+                {
+                    @foreach(var comp in displayedCompanies)
+                    {
+                        <tr>
+                            <td>@GetName(comp)</td>
+                            <td>@comp.Address</td>
+                            <td>@comp.Phone</td>
+                            <td>@comp.Email</td>
+                            <td>
+                                <ButtonDropdown Object="@comp"
+                                                OnUpdateClicked="@OpenUpdateCompany" OnDeleteClicked="@OpenDeleteCompany" />
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5">Nessuna ditta cantiere trovata</td>
+                    </tr>
+                }
 
-        <RadzenFieldset class="shadow rounded" Style="font-weight:400;">
-            <RadzenButton Icon="add" Text="Nuovo" ButtonStyle="ButtonStyle.Success" class="ButtonAdd"
-                          Click="@(() => OpenAddCompanyPage())" Style="margin-bottom:2rem;margin-top:1rem;"  />
-            <RadzenDataGrid @ref="grid" GridLines="@DataGridGridLines.Both" IsLoading=@isLoading Count="@count" PageSize="@pageSize" Data="@companies" TItem="CompanyModel"
-                            AllowColumnResize="true" AllowAlternatingRows="true" ColumnWidth="200px" AllowFiltering="true" FilterMode="FilterMode.Simple"
-                            AllowSorting="true" AllowPaging="true" ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat" PagerHorizontalAlign="HorizontalAlign.Left"
-                            Density="Density.Compact">
-
-                <Columns>
-                    <RadzenDataGridColumn TItem="CompanyModel"  Title="Nome" >
-                        <Template Context="data">
-                            @GetName(data)
-                        </Template>
-                    </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="CompanyModel" Property="Address" Title="Indirizzo" Width="150px" />
-                    <RadzenDataGridColumn TItem="CompanyModel" Property="Phone" Title="Telefono" Width="120px" />
-                    <RadzenDataGridColumn TItem="CompanyModel" Property="Email" Title="Email" Width="120px" />
-                    <RadzenDataGridColumn TItem="CompanyModel" Title="Azioni" Width="60px" Sortable="false">
-                        <Template Context="data">
-                                @* Mostro i bottoni solo se ho i permessi di modifica *@
-                            <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Info" Variant="Variant.Filled" Size="ButtonSize.Large"
-                                               Click="@(() => OpenUpdateCompany(data))" />
-                                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Variant="Variant.Filled" Size="ButtonSize.Large"
-                                               Click="@(() => Hide(data))" />
-                        </Template>
-                    </RadzenDataGridColumn>
-                </Columns>
-            </RadzenDataGrid>
-        </RadzenFieldset>
+            </tbody>
+        </table>
+        <div class="mt-5">
+            <AxtPager PagingSummaryFormat="@pagingSummaryFormat" Count="@count" PageSize="@pageSize" OnPageChanged="@PageChanged" />
+        </div>
     </div>
-
-
 }

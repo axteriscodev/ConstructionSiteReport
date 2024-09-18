@@ -1,0 +1,96 @@
+﻿@using Shared.Documents
+@inject DialogService DialogService
+
+<ScreenComponent @ref="screenComponent" />
+
+<div class="card p-4">
+    <div class="row mt-3">
+        <div class="col-10">
+            <h2>@ConstructorSite.Name</h2>
+        </div>
+        <div class="col-2 d-flex justify-content-end">
+            <RadzenButton Variant="Variant.Text" Icon="edit" class="btu-modify" Click="@OpenForm"></RadzenButton>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-6">
+            <label class="info-label">Descrizione</label>
+            <p>@ConstructorSite.JobDescription</p>
+        </div>
+        <div class="col-6">
+            <label class="info-label">Data inizio</label>
+            <p>@PrintDate(ConstructorSite.StartDate)</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <label class="info-label">Cliente</label>
+            <p>@PrintClient()</p>
+        </div>
+        <div class="col-6">
+            <label class="info-label">Indirizzo</label>
+            <p>@ConstructorSite.Address</p>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public EventCallback ReloadInfo { get; set; }
+    [Parameter]
+    public ConstructorSiteModel ConstructorSite { get; set; } = new();
+
+    ScreenComponent? screenComponent;
+
+    #region Visualizzazione
+
+    public string PrintClient()
+    {
+        var client = "";
+        if (ConstructorSite.Client is not null)
+        {
+            client = ConstructorSite.Client.Name;
+        }
+        return client;
+    }
+
+    #endregion
+
+    #region form
+
+    private async Task OpenForm()
+    {
+        var width = screenComponent.GetScreenSize();
+
+        // creo uno style aggiuntivo da inviare al componente caricato con il popup come options
+        var additionalStyle = $"min-height:fit-content;height:fit-content;width:{width}px;max-width:600px";
+        var newOptions = new DialogOptions
+            {
+                Style = additionalStyle
+            };
+        //creo parametri da inviare al componente caricato con il popup
+        var param = new Dictionary<string, object>
+        {
+            //tra i parametri che invio al dialog creo un EventCallback da passare al componente
+            { "OnSaveComplete", EventCallback.Factory.Create(this, Reload) },
+            { "CreationMode", false },
+            { "Site", ConstructorSite },
+        };
+        await DialogService.OpenAsync<FormConstructorSite>("Cantiere", parameters: param, options: newOptions);
+    }
+
+
+    private string PrintDate(DateTime? date)
+    {
+        return date.HasValue ? date.Value.ToString("dd/MM/yyyy") : "";
+    }
+    private async Task Reload()
+    {
+        DialogService.Close();
+        await ReloadInfo.InvokeAsync();
+    }
+
+    #endregion
+}

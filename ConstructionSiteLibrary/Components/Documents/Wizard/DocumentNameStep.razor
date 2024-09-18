@@ -1,0 +1,50 @@
+﻿@using Shared.Documents
+@using ConstructionSiteLibrary.Model
+
+@if (initialLoading)
+{
+    <Loading />
+}
+else
+{
+    <fieldset class="card cardClass round-border divCard mb-2">
+        <legend class="fieldset-title">Inserisci un nome per il Documento</legend>
+        <RadzenFormField Text="Nome <span style='color:red'> (obbligatorio)</span>" Variant="@variant"
+                         class="formFieldTitolo">
+            <ChildContent>
+                <RadzenTextBox Name="Nome" @bind-Value="@CurrentDocument.Title" />
+            </ChildContent>
+            <Helper>
+                <RadzenRequiredValidator @ref="@validator" Component="Nome" Popup=false Text="Il titolo è obbligatorio" />
+            </Helper>
+        </RadzenFormField>
+    </fieldset>
+
+}
+
+@code
+{
+    /// <summary>
+    /// booleano che indica se la pagina sta eseguendo il caricamento iniziale
+    /// </summary>
+    private bool initialLoading;
+
+    private bool onSaving = false;
+
+    /// <summary>
+    /// il design degli elementi della form
+    /// </summary>
+    readonly Variant variant = Variant.Outlined;
+    RadzenRequiredValidator validator;
+
+
+    [Parameter]
+    required public DocumentModel CurrentDocument { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        initialLoading = true;
+        await base.OnInitializedAsync();
+        initialLoading = false;
+    }
+}

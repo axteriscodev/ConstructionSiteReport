@@ -67,6 +67,11 @@ public partial class QuestionsSelection
         initialLoading = false;
     }
 
+    protected override async Task OnParametersSetAsync()
+    {
+        await LoadData(CurrentTemplate);
+    }
+
 
     private void InitData()
     {
@@ -92,7 +97,7 @@ public partial class QuestionsSelection
         {
             List<int> templateSelectedId = [];
 
-            if (selectedTemplate.IdTemplate != 0)
+            if (selectedTemplate.Categories.Count != 0)
             {
                 var tempCat = selectedTemplate.Categories.Where(c => c.Id == category.Id).FirstOrDefault();
 
@@ -139,7 +144,7 @@ public partial class QuestionsSelection
         await grid!.Reload();
     }
 
-    public TemplateStepArgs OnForward()
+    public TemplateStepArgs OnSave()
     {
         onSaving = true;
         List<TemplateCategoryModel> templateCategories = [];

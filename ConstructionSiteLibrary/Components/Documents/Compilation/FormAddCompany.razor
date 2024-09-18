@@ -13,7 +13,7 @@ else
         <RadzenFormField Variant="@GlobalVariables.ComponentVariant" class="formField"> 
             <ChildContent>
                 <RadzenDropDown TValue="CompanyModel" @bind-Value=@selectedCompany Data=@Companies Name="Companies"
-                    TextProperty="CompanyName" />
+                                TextProperty="CompanyName" class="my-input" />
             </ChildContent>
         </RadzenFormField>
     </div>

@@ -91,8 +91,10 @@ namespace TDatabase.Queries
                     }
                 }
             }
-            catch (Exception) { }
-
+            catch (Exception e) {
+                e.ToString();
+             }
+            
             return modified;
         }
 
@@ -125,7 +127,7 @@ namespace TDatabase.Queries
             {
                 Id = user.Id,
                 Name = user.Name ?? "",
-                Surname = user.Email,
+                Surname = user.Surname ?? "",
                 Email = user.Email,
                 Phone = user.Phone ?? "",
                 Organization = db.Organizations.Where(org => org.Id == user.IdOrganization).Select(org => new OrganizationModel()

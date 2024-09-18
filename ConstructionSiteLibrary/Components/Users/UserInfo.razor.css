@@ -1,0 +1,125 @@
+.text-field,
+::deep .text-field {
+    width: 100% !important;
+}
+
+.field-label {
+    margin-bottom: 0 !important;
+    font-weight: 400 !important;
+}
+
+::deep .buttonOptions {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    color: var(--rz-primary) !important;
+}
+
+.profile-img {
+    object-fit: cover;
+    display: block;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin: 0 auto;
+}
+
+.button2 {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.col-avatar {
+    position: relative;
+    max-width: 200px;
+    min-width: 200px;
+}
+
+.dropdown {
+    display: inline-block;
+}
+
+.dropdown-content {
+    position: absolute;
+    background-color: #f1f1f1;
+    /*min-width: 160px;*/
+    overflow: auto;
+    z-index: 1;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+}
+
+.dropdown-close {
+    display: none;
+}
+
+.dropdown-open {
+    display: block;
+}
+
+/* Drag & Drop - Start */
+
+.container {
+    /* max-width: 650px; */
+    width: 100%;
+    /* padding: 30px; */
+    background: #fff;
+    border-radius: 20px;
+    /* box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px; */
+}
+
+.drag-area {
+    height: 300px;
+    border: 2px dashed var(--rz-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: 10px auto;
+}
+
+.drag-area .icon {
+    font-size: 50px;
+    color: var(--rz-primary);
+}
+
+.drag-area .header {
+    font-size: 20px;
+    font-weight: 500;
+    color: #34495e;
+}
+
+.drag-area .support {
+    font-size: 12px;
+    color: gray;
+    margin: 10px 0 15px 0;
+}
+
+.drag-area .button {
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--rz-primary);
+    cursor: pointer;
+}
+
+.drag-area.active {
+    border: 2px solid var(--rz-primary);
+}
+
+.download {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 6px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 3px 1px;
+    border-radius: 12px;
+    cursor: pointer;
+    width: 100%;
+}
+
+/* Drag & Drop - End */
