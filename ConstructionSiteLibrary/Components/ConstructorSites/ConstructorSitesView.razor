@@ -8,7 +8,7 @@
 @inject NavigationManager NavigationManager
 
 
-@* <ScreenComponent @ref="screenComponent" /> *@
+ <ScreenComponent @ref="screenComponent" /> 
 
 @if (onLoading)
 {
@@ -107,11 +107,11 @@ else
             };
         //creo parametri da inviare al componente caricato con il popup
         var param = new Dictionary<string, object>
-{
-//tra i parametri che invio al dialog creo un EventCallback da passare al componente
-{ "OnSaveComplete", EventCallback.Factory.Create(this, Reload) },
-{ "CreationMode", true },
-};
+        {
+            //tra i parametri che invio al dialog creo un EventCallback da passare al componente
+            { "OnSaveComplete", EventCallback.Factory.Create(this, Reload) },
+            { "CreationMode", true },
+        };
         await DialogService.OpenAsync<FormConstructorSite>("Nuovo cantiere", parameters: param, options: newOptions);
     }
 

@@ -113,13 +113,13 @@ p,.p {
     box-shadow: inset 0 0 0 9999px var(--bs-table-bg-state, var(--bs-table-bg-type, var(--bs-table-accent-bg)));
 }
 
-.table-striped > tbody > tr:nth-child(odd) > td,
-.table-striped > tbody > tr:nth-child(odd) > th {
+.my-table > tbody > tr:nth-child(odd) > td,
+.my-table > tbody > tr:nth-child(odd) > th {
     background-color: var(--axt-table-striped-bg);
 }
 
-.table-striped > tbody > tr > td:not(:last-child),
-.table-striped > tbody > tr > th:not(:last-child) {
+.my-table > tbody > tr > td:not(:last-child),
+.my-table > tbody > tr > th:not(:last-child) {
     border-right: 1px solid #afcaf3;
 }
 
@@ -135,21 +135,21 @@ tr {
     color: var(--rz-primary);
 }
 
-    thead > tr > th {
-        font-size: 12px;
-        padding-left: 48px !important;
-        padding-right: 48px !important;
-        font-weight: normal;
-    }
+.my-table > thead > tr > th {
+    font-size: 12px;
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+    font-weight: normal;
+}
 
-    tbody > tr > td {
-        font-size: 16px !important;
-        padding: 24px 48px !important;
-    }
+.my-table > tbody > tr > td {
+    font-size: 16px !important;
+    padding: 12px 24px !important;
+}
 
-    tbody > tr {
-        height: 40px !important;
-    }
+.my-table > tbody > tr {
+    height: 40px !important;
+}
 
 
 /* DATEPICKER*/
