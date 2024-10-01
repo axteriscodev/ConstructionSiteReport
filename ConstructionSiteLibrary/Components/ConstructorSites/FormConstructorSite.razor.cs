@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Shared.Documents;
+using System.Text.Json.Serialization;
 
 namespace ConstructionSiteLibrary.Components.ConstructorSites
 {
@@ -42,6 +43,8 @@ namespace ConstructionSiteLibrary.Components.ConstructorSites
                     Address = Site.Address,
                     StartDate = Site.StartDate,
                     Client = Site.Client,
+                    PreliminaryNotificationStartDate = Site.PreliminaryNotificationStartDate,
+                    IdSico = Site.IdSico,
                     Companies = Site.Companies
                 };
             }
@@ -97,6 +100,8 @@ namespace ConstructionSiteLibrary.Components.ConstructorSites
                 JobDescription = form.JobDescription ?? "",
                 Address = form.Address!,
                 StartDate = form.StartDate ?? DateTime.Today,
+                PreliminaryNotificationStartDate = form.PreliminaryNotificationStartDate,
+                IdSico = form.IdSico,
                 Client = form.Client,
                 Companies = companies
             };
@@ -115,6 +120,9 @@ namespace ConstructionSiteLibrary.Components.ConstructorSites
             public string? JobDescription { get; set; }
             public string? Address { get; set; }
             public DateTime? StartDate { get; set; }
+            public DateTime? PreliminaryNotificationStartDate { get; set; }
+            [JsonPropertyName("idSico")]
+            public string? IdSico { get; set; }
             public ClientModel? Client {  get; set; }
             public List<CompanyModel> Companies { get; set; } = [];
         }

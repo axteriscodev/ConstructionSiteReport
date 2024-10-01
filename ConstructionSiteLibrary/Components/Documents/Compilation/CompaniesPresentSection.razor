@@ -26,7 +26,7 @@ else
                 </div>
                 <div class="row">
                     <div class="col-12 col-md-6 my-1">
-                        <RadzenLabel Text="Ragione Sociale:" Component="RagioneSociale" />
+                        <RadzenLabel Text="Rag. sociale impresa/Nominativo lav. autonomo" Component="RagioneSociale" />
                         <RadzenTextBox Placeholder="Inserisci Ragione Sociale" Name="RagioneSociale"
                                        Change=@(args => OnChangeRagioneSociale(company,args, "RagioneSociale"))
                                        class="my-input" @bind-Value=@company.CompanyName />

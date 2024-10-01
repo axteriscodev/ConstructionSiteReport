@@ -100,9 +100,14 @@ namespace ConstructionSiteLibrary.Model.DocumentCompilation
             return cat.Order + ".";
         }
 
-        public static string CategoryText(DocumentCategoryModel cat)
+        public static string CategoryNumberAndText(DocumentCategoryModel cat)
         {
             return cat.Order +". " + cat.Text;
+        }
+
+        public static string CategoryText(DocumentCategoryModel cat)
+        {
+            return cat.Text;
         }
 
         public static string QuestionTextNumber(DocumentCategoryModel cat, string questionText, int order)

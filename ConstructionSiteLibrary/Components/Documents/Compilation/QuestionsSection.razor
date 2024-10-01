@@ -19,7 +19,7 @@
                 <div class="accordion-item" >
                     <h2 class="mb-0">
                         <button class="accordion-button titleCategory" type="button" data-bs-toggle="collapse" data-bs-target="@ReturnCollapseTarget(visualCategories.IndexOf(visual), true)" aria-expanded="false" aria-controls="@ReturnCollapseTarget(visualCategories.IndexOf(visual))">
-                            @DocumentUtils.CategoryText(visual.Category)
+                            @DocumentUtils.CategoryNumberAndText(visual.Category)
                         </button>
                     </h2>
                     <div id="@ReturnCollapseTarget(visualCategories.IndexOf(visual))" class="accordion-collapse collapse show">

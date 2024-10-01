@@ -33,6 +33,16 @@
             <p>@ConstructorSite.Address</p>
         </div>
     </div>
+    <div class="row">
+        <div class="col-6">
+            <label class="info-label">Notifica preliminare inizio cantiere</label>
+            <p>@PrintDate(ConstructorSite.PreliminaryNotificationInProgress)</p>
+        </div>
+        <div class="col-6">
+            <label class="info-label">Id. SICO</label>
+            <p>@PrintNullableString(ConstructorSite.IdSico)</p>
+        </div>
+    </div>
 </div>
 
 @code {
@@ -86,6 +96,12 @@
     {
         return date.HasValue ? date.Value.ToString("dd/MM/yyyy") : "";
     }
+
+    private string PrintNullableString(string? s)
+    {
+        return string.IsNullOrEmpty(s) ? "" : s;    
+    }
+
     private async Task Reload()
     {
         DialogService.Close();

@@ -36,11 +36,21 @@ else
                 </RadzenFormField>
                 <RadzenFormField Text="Data inizio cantiere <span style='color:red'> (obbligatorio)</span>" Variant="@GlobalVariables.ComponentVariant">
                     <ChildContent>
-                        <RadzenDatePicker @bind-Value="@form.StartDate" DateFormat="dd/MM/yyyy" ShowTime="false" />
+                        <RadzenDatePicker Name="DataInizio" @bind-Value="@form.StartDate" DateFormat="dd/MM/yyyy" ShowTime="false" />
                     </ChildContent>
                     <Helper>
-                        <RadzenRequiredValidator Component="Indirizzo" Popup=false Text="Il campo Indirizzo è obbligatorio" />
+                        <RadzenRequiredValidator Component="DataInizio" Popup=false Text="Il campo data inizio è obbligatorio" />
                     </Helper>
+                </RadzenFormField>
+                <RadzenFormField Text="Notifica preliminare inizio cantiere" Variant="@GlobalVariables.ComponentVariant">
+                    <ChildContent>
+                        <RadzenDatePicker @bind-Value="@form.PreliminaryNotificationStartDate" DateFormat="dd/MM/yyyy" ShowTime="false" />
+                    </ChildContent>
+                </RadzenFormField>
+                <RadzenFormField Text="Id. SICO" Variant="@GlobalVariables.ComponentVariant">
+                    <ChildContent>
+                        <RadzenTextBox Name="IdSico" @bind-Value="@form.IdSico" />
+                    </ChildContent>
                 </RadzenFormField>
                 <RadzenFormField Text="Cliente" Variant="@GlobalVariables.ComponentVariant">
                     <ChildContent>
@@ -49,7 +59,7 @@ else
                                                 AllowColumnResize="true" AllowSorting="true" Name="Cliente">
                             <Columns>                           
 @*                                 <RadzenDropDownDataGridColumn Property="Id" Title="N." Width="40px" /> *@
-                                <RadzenDropDownDataGridColumn Property="Name" Title="Nome" Width="200px" />
+                                <RadzenDropDownDataGridColumn Property="Name" Title="Rag.Sociale/Nominativo lav. autonomo" Width="200px" />
                             </Columns>
                         </RadzenDropDownDataGrid>
                     </ChildContent>
