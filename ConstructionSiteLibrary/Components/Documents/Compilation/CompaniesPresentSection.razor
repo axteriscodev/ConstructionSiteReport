@@ -3,7 +3,6 @@
 
 @inject DialogService DialogService
 
-
 @if (onLoading)
 {
     <Loading />
@@ -18,9 +17,14 @@ else
                 <legend class="my-legend">Impresa Esecutrice</legend>
                 <div class="row">
                     <div class="col impresaEsecutrice">
-                        <RadzenRow>
-                            <RadzenLabel Text="Presente" Component="Presente" />
-                            <RadzenCheckBox Value="@company.Present" Name="Presente" TValue="bool?" Change="@(args=>AddPresent(args, company))" />
+                        <RadzenRow class="row-button">
+                            <div >
+                                <RadzenButton Icon="delete" Variant="Variant.Text" Click="@(()=>DeleteCompany(company))" />
+                            </div>
+                            <div class="present-container">
+                                <RadzenLabel Text="Presente" Component="Presente" />
+                                <RadzenCheckBox Value="@company.Present" Name="Presente" TValue="bool?" Change="@(args=>AddPresent(args, company))" />
+                            </div>
                         </RadzenRow>
                     </div>
                 </div>
@@ -153,6 +157,20 @@ else
         }
     }
 
+
+    private async Task DeleteCompany(CompanyModel company)
+    {
+        var titolo = $"Cancellazione {company.CompanyName}" ;
+        var text = $"Vuoi togliere {company.CompanyName} dal documento?";
+        var confirmationResult = await DialogService.Confirm(text, titolo,
+        new ConfirmOptions { OkButtonText = "Si", CancelButtonText = "No" });
+        Console.WriteLine("cliccato: " + confirmationResult);
+        if (confirmationResult == true)
+        {
+            Companies.Remove(company);
+            StateHasChanged();
+        }
+    }
 
 
     private void OnChange(string? args, string name)
