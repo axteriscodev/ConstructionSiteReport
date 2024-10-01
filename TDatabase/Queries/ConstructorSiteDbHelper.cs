@@ -8,6 +8,9 @@ using DB = TDatabase.Database.DbCsclDamicoV2Context;
 
 public class ConstructorSiteDbHelper
 {
+
+    #region Query principali cantiere
+
     public static List<ConstructorSiteModel> Select(DB db, int organizationId, int idConstructorSite = 0)
     {
         var constructorSites = db.ConstructorSites.AsQueryable();
@@ -50,6 +53,9 @@ public class ConstructorSiteDbHelper
                 IdClient = constructorSite.Client.Id > 0 ? constructorSite.Client.Id : null,
                 IdOrganization = organizationId
             };
+            //associo le aziende al cantiere
+            AddCompaniesToConstructionSite(db, constructorSite.Companies, constructorSite.Id);
+
             db.ConstructorSites.Add(newConstructorSite);
             await db.SaveChangesAsync();
             siteId = nextId;
@@ -118,4 +124,58 @@ public class ConstructorSiteDbHelper
             return hiddenItems;
 
     }
+
+    #endregion
+
+    #region Associazione Cantiere ed Aziende 
+
+
+    /// <summary>
+    /// Query parziale (non viene eseguito il salvataggio) per associare le anziede al cantiere
+    /// </summary>
+    /// <param name="db"></param>
+    /// <param name="companies"></param>
+    /// <param name="idContructorSite"></param>
+    public static void AddCompaniesToConstructionSite(DB db, List<CompanyModel> companies, int idContructorSite)
+    {
+        foreach (var comp in companies)
+        {
+            var select = db.CompanyConstructorSites.Where(x => x.IdCompany == comp.Id && x.IdConstructorSite == idContructorSite).SingleOrDefault();
+            if (select is null)
+            {
+                var CompConstruct = new CompanyConstructorSite()
+                {
+                    IdCompany = comp.Id,
+                    IdConstructorSite = idContructorSite,
+                    JobsDescription = comp.JobsDescriptions,
+                    SubcontractedBy = comp.SubcontractedBy,
+                };
+                db.CompanyConstructorSites.Add(CompConstruct);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Query parziale (non viene eseguito il salvataggio) per associare una singola azienda al cantiere
+    /// </summary>
+    /// <param name="db"></param>
+    /// <param name="companies"></param>
+    /// <param name="idContructorSite"></param>
+    public static void AddCompanyToConstructionSite(DB db, CompanyModel company, int idContructorSite)
+    {
+        var select = db.CompanyConstructorSites.Where(x => x.IdCompany == company.Id && x.IdConstructorSite == idContructorSite).SingleOrDefault();
+        if (select is null)
+        {
+            var CompConstruct = new CompanyConstructorSite()
+            {
+                IdCompany = company.Id,
+                IdConstructorSite = idContructorSite,
+                JobsDescription = company.JobsDescriptions,
+                SubcontractedBy = company.SubcontractedBy,
+            };
+            db.CompanyConstructorSites.Add(CompConstruct);
+        }
+    }
+
+    #endregion
 }

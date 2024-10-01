@@ -26,7 +26,8 @@
     /* Dimensioni Sidebar */
     --sidebar-width-open: 370px !important;
     --sidebar-width-close: 80px !important;
-    --sidebar-top-hight: 186px !important;
+    /*--sidebar-top-hight: 186px !important;*/
+    --sidebar-top-hight: 125px !important;
     --nav-item-border-radius: 8px !important;
     /* Colori sidebar */
     --nav-item-selected-bg: #07234F !important;

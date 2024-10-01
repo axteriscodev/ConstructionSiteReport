@@ -222,7 +222,7 @@ fieldset.my-fieldset{
     fieldset.my-fieldset input.my-input,
     fieldset.my-fieldset textarea.my-input{
         border-color: #AFCAF3 !important;
-        width: 100%;
+        width:100%;
         color: #0C336E;
         font-feature-settings: 'liga' off, 'clig' off;
         font-family: Inter;

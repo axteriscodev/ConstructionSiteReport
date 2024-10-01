@@ -20,12 +20,12 @@
  
 
 <div class="row activityBar">
-    <div class="col d-flex justify-content-center justify-content-lg-start">
+    <div class="col d-flex justify-content-center justify-content-lg-start  my-2">
         <RadzenButton Variant="Variant.Text" Click="@Back" class="my-button-text">
             <RadzenIcon Icon="chevron_left" /> Indietro
         </RadzenButton>
     </div>
-    <div class="col d-flex justify-content-center">
+    <div class="col d-flex justify-content-center  my-2">
         <RadzenFormField Text="Navigazione documento" Variant="Variant.Outlined">
             <ChildContent>
                 <RadzenDropDown Data="@DocumentNavigator.Anchors" TValue="DocumentAnchor" TextProperty="Text"
@@ -34,7 +34,7 @@
         </RadzenFormField>
 
     </div>
-    <div class="col d-flex justify-content-center justify-content-lg-end mt-sm-1">
+    <div class="col d-flex justify-content-center justify-content-lg-end my-2">
         @if (ShowPreview)
         {
             <RadzenButton Icon="article" Text="Anteprima" Click="@Preview" IsBusy="@onSaving" class="my-button"

@@ -118,6 +118,7 @@ public class DocumentDbHelper
                                            select new ConstructorSiteModel()
                                            {
                                                Id = cs.Id,
+                                               Name = cs.Name,
                                                JobDescription = cs.JobDescription ?? "",
                                                StartDate = cs.StartDate ?? DateTime.Now,
                                                Address = cs.Address ?? "",
@@ -143,6 +144,10 @@ public class DocumentDbHelper
 
                         Companies = (from compDoc in db.CompanyDocuments
                                      from comp in db.Companies
+                                     join cc in (from cc in db.CompanyConstructorSites
+                                                 where cc.IdConstructorSite == d.IdConstructorSite
+                                                 select cc).DefaultIfEmpty() on comp.Id equals cc.IdCompany into constrComp
+                                     from compJoin in constrComp.DefaultIfEmpty()
                                      where compDoc.IdDocument == d.Id
                                      && comp.Id == compDoc.IdCompany
                                      select new CompanyModel()
@@ -153,7 +158,9 @@ public class DocumentDbHelper
                                          VatCode = comp.Vatcode ?? "",
                                          Present = compDoc.Present,
                                          InChargeWorker = compDoc.InChargeWorker ?? "",
-                                         Workers = compDoc.Workers ?? ""
+                                         Workers = compDoc.Workers ?? "",
+                                         JobsDescriptions = compJoin.JobsDescription ?? "" 
+                                         
                                      }).ToList(),
                         Notes = (from n in db.Notes
                                  where n.IdDocument == d.Id
@@ -271,6 +278,10 @@ public class DocumentDbHelper
                     companyDoc.Id = await CompanyDbHelper.Insert(db, companyDoc, organizationId, false);
                 }
 
+                //associo le aziende al cantiere
+                ConstructorSiteDbHelper.AddCompanyToConstructionSite(db, companyDoc, document.ConstructorSite.Id);
+
+                //associazione con il documento
                 CompanyDocument cd = new()
                 {
                     IdCompany = companyDoc.Id,

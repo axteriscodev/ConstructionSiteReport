@@ -156,7 +156,10 @@ else
     {
         meteoConditions = await DocumentsRepository.GetMeteoConditions();
         ClientsList = await ClientsRepository.GetClients();
-        Document.MeteoCondition = meteoConditions.Where(x => x.Id == Document.MeteoCondition.Id).SingleOrDefault();
+        if(Document.MeteoCondition is not null)
+        {
+            Document.MeteoCondition = meteoConditions.Where(x => x.Id == Document.MeteoCondition.Id).SingleOrDefault();
+        }
     }
 
 
