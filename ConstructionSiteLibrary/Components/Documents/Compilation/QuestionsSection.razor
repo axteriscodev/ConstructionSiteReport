@@ -38,7 +38,7 @@
                                                 <div class="hstack">
                                                     <div>
                                                         <RadzenDropDown Value="@answer" Data=@question.Choices TValue="DocumentChoiceModel"
-                                                                        TextProperty="Value" class="inputBorder"
+                                                                        TextProperty="Value" AllowClear="true" class="inputBorder"
                                                             Change="@(args => SelectedAnswer(args, question, question.CurrentChoices.IndexOf(answer)))" />
                                                     </div>
                                                     @if (ShowDeleteChoiceButton(answer, question))
