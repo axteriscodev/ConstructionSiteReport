@@ -128,8 +128,12 @@ public partial class QuestionsSelection
                 groupState = true;
             }
 
-            OrderElements(category.Questions);
-            groups.Add(new() { Id = category.Id, Order = category.Order, Text = category.Text, State = groupState, Questions = category.Questions, SelectedQuestionIds = templateSelectedId });
+            //se non ho già la categoria nel gruppo la aggiungo
+            if(!groups.Where(x=>x.Id == category.Id).Any())
+            {
+                OrderElements(category.Questions);
+                groups.Add(new() { Id = category.Id, Order = category.Order, Text = category.Text, State = groupState, Questions = category.Questions, SelectedQuestionIds = templateSelectedId });
+            }
 
         }
 

@@ -37,10 +37,10 @@
     <div class="col d-flex justify-content-center justify-content-lg-end my-2">
         @if (ShowPreview)
         {
-            <RadzenButton Icon="article" Text="Anteprima" Click="@Preview" IsBusy="@onSaving" class="my-button"
+            <RadzenButton Icon="article" Text="Anteprima" Click="@Preview" class="my-button"
                 Style="margin-right:10px;" />
         }
-        <RadzenButton Icon="save" Text="Salva" Click="@Save" IsBusy="@onSaving" class="my-button" />
+        <RadzenButton Icon="save" Text="Salva" Click="@Save" IsBusy="@onSaving" BusyText="Salva" class="my-button" />
     </div>
 </div>
 
