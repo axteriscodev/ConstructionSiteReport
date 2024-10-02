@@ -11,6 +11,10 @@ public partial class QuestionChosen
 
     public int IdQuestion { get; set; }
 
+    public int? IdCategory { get; set; }
+
+    public int? OrderCategory { get; set; }
+
     public int Order { get; set; }
 
     public string? Note { get; set; }

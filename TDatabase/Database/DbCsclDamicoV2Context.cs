@@ -71,9 +71,7 @@ public partial class DbCsclDamicoV2Context : DbContext
 
     public virtual DbSet<UserAttachmentType> UserAttachmentTypes { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=v00rca2-vm.sphostserver.com\\axterisco2019;Initial Catalog=DB_CSCL_DAMICO_V2;User ID=sa;password=AdmP@ss2003;TrustServerCertificate=True");
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -166,7 +164,7 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.HasOne(d => d.IdQuestionNavigation).WithMany(p => p.AttachmentQuestions)
                 .HasForeignKey(d => d.IdQuestion)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__ATTACHMEN__ID_QU__681373AD");
+                .HasConstraintName("FK__ATTACHMEN__ID_QU__56B3DD81");
         });
 
         modelBuilder.Entity<AttachmentType>(entity =>
@@ -696,7 +694,7 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.HasOne(d => d.IdQuestionChosenNavigation).WithMany(p => p.QuestionAnswereds)
                 .HasForeignKey(d => d.IdQuestionChosen)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__QUESTION___ID_QU__693CA210");
+                .HasConstraintName("FK__QUESTION___ID_QU__59904A2C");
         });
 
         modelBuilder.Entity<QuestionChoice>(entity =>
@@ -723,29 +721,30 @@ public partial class DbCsclDamicoV2Context : DbContext
 
         modelBuilder.Entity<QuestionChosen>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__QUESTION__3214EC27AD0BD79E");
+            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3214EC27C8161326");
 
             entity.ToTable("QUESTION_CHOSEN");
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("ID");
+            entity.Property(e => e.IdCategory).HasColumnName("ID_CATEGORY");
             entity.Property(e => e.IdQuestion).HasColumnName("ID_QUESTION");
             entity.Property(e => e.IdTemplate).HasColumnName("ID_TEMPLATE");
             entity.Property(e => e.Note)
                 .IsUnicode(false)
                 .HasColumnName("NOTE");
             entity.Property(e => e.Order).HasColumnName("ORDER");
+            entity.Property(e => e.OrderCategory).HasColumnName("ORDER_CATEGORY");
 
             entity.HasOne(d => d.IdQuestionNavigation).WithMany(p => p.QuestionChosens)
                 .HasForeignKey(d => d.IdQuestion)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__QUESTION___ID_QU__656C112C");
+                .HasConstraintName("FK__QUESTION___ID_QU__589C25F3");
 
             entity.HasOne(d => d.IdTemplateNavigation).WithMany(p => p.QuestionChosens)
                 .HasForeignKey(d => d.IdTemplate)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__QUESTION___ID_TE__4E53A1AA");
+                .HasConstraintName("FK__QUESTION___ID_TE__57A801BA");
         });
 
         modelBuilder.Entity<ReportedCompany>(entity =>

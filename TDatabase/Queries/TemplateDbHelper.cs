@@ -38,22 +38,22 @@ public class TemplateDbHelper
                                                  from q in db.Questions
                                                  where qc.IdTemplate == t.Id
                                                  && q.Id == qc.IdQuestion
-                                                 group q by q.IdCategory into q2
-                                                 select new { q2.First().IdCategory })
+                                                 group qc by qc.IdCategory into q2
+                                                 select new { q2.First().IdCategory, q2.First().OrderCategory})
 
                                       from c in db.Categories
                                       where c.Id == r.IdCategory
-                                      orderby c.Order
+                                      orderby r.OrderCategory
                                       select new TemplateCategoryModel()
                                       {
                                           Id = c.Id,
                                           Text = c.Text,
-                                          Order = c.Order,
+                                          Order = r.OrderCategory != null ? r.OrderCategory.Value : c.Order,
                                           Questions = (from qc in db.QuestionChosens
                                                        from q in db.Questions
                                                        where qc.IdTemplate == t.Id
                                                        && q.Id == qc.IdQuestion
-                                                       && q.IdCategory == c.Id
+                                                       && qc.IdCategory == c.Id
                                                        select new TemplateQuestionModel()
                                                        {
                                                            Id = qc.IdQuestion,
@@ -117,6 +117,8 @@ public class TemplateDbHelper
                         IdTemplate = nextId,
                         IdQuestion = tq.Id,
                         Order = tq.Order,
+                        IdCategory = c.Id,
+                        OrderCategory = c.Order,
                     };
                     db.QuestionChosens.Add(qc);
                     nextQuestionChosenId++;
