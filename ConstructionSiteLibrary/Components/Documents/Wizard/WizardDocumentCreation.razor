@@ -101,6 +101,7 @@ else
             //mi salvo solo l'id perchè al momento non mi interessano i dati del cantiere
             _document.ConstructorSite = new() { Id = SiteId };
         }
+        _document.IdTemplate = _selectedTemplate.IdTemplate;
         _document.Title = _selectedTemplate.Description.Title;
         _document.Description = _selectedTemplate.Description.Description;
         _document.Categories = CreaCategorie(_selectedTemplate.Categories);

@@ -182,8 +182,11 @@
         if (Categories is not null)
         {
             visualCategories = [];
+            int countCat = 1;
             foreach (var cat in Categories)
             {
+                //numero le categorie partendo dalla prima (non uso l'ordinamento base delle categorie)
+                cat.Order = countCat++;
                 visualCategories.Add(new() { Category = cat });
 
                 foreach (var question in cat.Questions)
