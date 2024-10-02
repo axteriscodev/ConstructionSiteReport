@@ -16,6 +16,10 @@
     }
     else
     {
+        <RadzenStack Orientation="Orientation.Horizontal">
+            <RadzenLabel Text="Ordina categorie:" />
+            <RadzenSwitch @bind-Value=@ChangeCategoryOrder Style="margin-top: 5px;" />
+        </RadzenStack>
         @foreach (var g in groups)
         {
             <div class="m-2 p-2 pt-3">
@@ -27,12 +31,22 @@
                             <strong>@CategoryText(g)</strong>
                         </RadzenText>
                     </RadzenColumn>
-                    <RadzenColumn Size="1" Style="display:flex;justify-content:end;">
-                        <RadzenButton Icon="@AccordionIcon(g)" Variant="Variant.Text" Click="@(()=>ShowQuestions(g))" />
-                    </RadzenColumn>
+                    @if (ChangeCategoryOrder)
+                    {
+                        <RadzenColumn Size="1" Style="display:flex;justify-content:end;">
+                            <RadzenButton Icon="arrow_upward" Variant="Variant.Text" Click="@(()=>Reorder(g, false))" Disabled="DisableButton(g, false)" />
+                            <RadzenButton Icon="arrow_downward" Variant="Variant.Text" Click="@(()=>Reorder(g, true))" Disabled="DisableButton(g, true)" />
+                        </RadzenColumn>
+                    }
+                    else
+                    {
+                        <RadzenColumn Size="1" Style="display:flex;justify-content:end;">
+                            <RadzenButton Icon="@AccordionIcon(g)" Variant="Variant.Text" Click="@(()=>ShowQuestions(g))" />
+                        </RadzenColumn>
+                    }
                 </RadzenRow>
             </div>
-            @if (g.ShowQuestion)
+            @if (!ChangeCategoryOrder && g.ShowQuestion)
             {
                 <div style="margin-bottom:1rem;">
                     <SortableList Id="sortable" GroupNumber="@g.Id" Items="@g.Questions" OnGroupUpdate="@OrderList"
