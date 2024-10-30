@@ -1,40 +1,80 @@
-﻿
-/**
+﻿/**
  * Metodo usato per creare il PDF del documento compilato
  * @param {any} filename il nome del file
  * @returns il file pdf come download dal browser
  */
-export async function generaPDFDocumento(filename, dotnet) {
+export async function generaPDFDocumento(
+    filename,
+    dotnet,
+    templateString, 
+    compilatorString,
+    committenteString,
+    indirizzoCantiereString,
+) {
 
     const doc = new jspdf.jsPDF({
         orientation: 'p',
         unit: 'pt',
         format: 'a4',
-
     });
 
+    const addFooters = doc => {
+        const pageCount = doc.internal.getNumberOfPages();
+        for (let i = 1; i <= pageCount; i++) {
+            doc.setPage(i);
+
+            let x = 15;
+            let y = 20;
+
+
+            //Template
+            doc.setDrawColor(192, 192, 192);
+            doc.setFillColor(210, 210, 210);
+            doc.rect(x, y, 60, 15, 'FD');
+            doc.text(templateString, x + 10, y + 10);
+
+
+            const pageSize = doc.internal.pageSize;
+            const pageWidth = pageSize.width ? pageSize.width : pageSize.getWidth();
+            const pageHeight = pageSize.height ? pageSize.height : pageSize.getHeight();
+            const footer = `Page ${i} of ${pageCount}`;
+
+
+            console.log("pdfLog - pageWidth: " + pageWidth);
+            console.log("pdfLog - pageHeight: " + pageHeight);
+            console.log("pdfLog - footer: " + footer);
+            console.log("pdfLog - alt: " + pageHeight - 15);
+            console.log("pdfLog - largh: " + pageWidth / 2 - (doc.getTextWidth(footer) / 2));
+
+            // Footer
+            doc.text(footer, pageWidth / 2 - (doc.getTextWidth(footer) / 2), pageHeight - 15, {
+                baseline: 'bottom'
+            });
+        }
+    }
+
     const content = document.getElementById('printPDF').innerHTML;
-    console.log("content: " + content.offsetHeight);
+    console.log("pdfLog - content offsetHeight: " + content.offsetHeight);
     //seleziono gli elementi che 
     const elements = document.querySelectorAll('.pdfElement');
-    let yPosition = 15;
+    let headerY = 30; // Altezza header
+    let yPosition = 15 + headerY;
     let xPosition = 12;
     let pageCount = 0;
     let currentSize = 0;
     let pageHeight = doc.internal.pageSize.getHeight();
     let pages = [];
-    console.log("ph= " + pageHeight);
+    console.log("pdfLog - ph= " + pageHeight);
+    let max = 1350 - headerY;
 
     let tempDiv = document.createElement('div');
     pages.push(tempDiv);
     //Ciclo ogni elemento per verificare se aggiungerlo in una pagina o creare una pagina nuova in base all'altezza
     elements.forEach((elem, index) => {
-        console.log(elem.innerHTML);
+        console.log("pdfLog - elem= " + elem.innerHTML);
+
         let altezza = elem.offsetHeight + currentSize;
-        //console.log(" currentSize= " + currentSize + " offsetHeight= " + elem.offsetHeight);
-        //console.log(" pagina " + pageCount + " altezza= " + altezza);
-        if (altezza < 1350) {
-            //console.log("dentro if, pagina " + pageCount);
+        if (altezza < max) {
             pages[pageCount].innerHTML += elem.innerHTML;
             currentSize = altezza;
         } else {
@@ -43,14 +83,11 @@ export async function generaPDFDocumento(filename, dotnet) {
             pages.push(tempDiv);
             pages[pageCount].innerHTML += elem.innerHTML;
             currentSize = elem.offsetHeight;
-            //console.log("dentro else, pagina " + pageCount);
         }
     });
-    console.log("creazione pagine - N.pagine= " + pages.length)
+    console.log("pdfLog - creazione pagine - N.pagine= " + pages.length)
     //creo le pagine in base alla divisione dell html fatta in precedenza
     for (let i = 0; i < pages.length; i++) {
-        //console.log("pagina " + i);
-        //console.log(pages[i]);
         await doc.html(pages[i], {
             callback: function (doc) {
                 return doc;
@@ -70,21 +107,23 @@ export async function generaPDFDocumento(filename, dotnet) {
                 }]
             }]
         });
+
+        addFooters(doc);
     }
 
 
     return new Promise((resolve, reject) => {
         // invoco il metodo di c# per settare la nuova dimensione dello schermo
 
-        console.log("ciao");
+        console.log("pdfLog - creazione...");
         dotnet.invokeMethodAsync('DocumentCreated').then(() => {
-            console.log("ciao2");
+            console.log("pdfLog - creato!");
         }).catch(error => {
-            console.log("Errore durante il ridimensionamento dello schermo: " + error);
+            console.log("pdfLog - Errore durante il ridimensionamento dello schermo: " + error);
         });
+
         //salvo il file
         doc.save(filename);
         resolve();
     });
-
 }

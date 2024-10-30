@@ -488,8 +488,14 @@ else
                 jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/ConstructionSiteLibrary/pdfManager.js");
             }
 
+            String templateString = "templateString";
+            String compilatorString = "compilatorString";
+            String committenteString = "committenteString";
+            String indirizzoCantiereString = "indirizzoCantiereString";
+
+
             // Generate and download the PDF
-            await jsModule.InvokeVoidAsync("generaPDFDocumento", fileName, DotNetObjectReference.Create(this));
+            await jsModule.InvokeVoidAsync("generaPDFDocumento", fileName, DotNetObjectReference.Create(this), templateString, compilatorString, committenteString, indirizzoCantiereString);
         }
         catch (Exception e)
         {
@@ -502,7 +508,7 @@ else
     public void DocumentCreated()
     {
         creation = false;
-        DialogService.Close(true);
+        //DialogService.Close(true);
     }
 
     private bool CheckCompanyPresent(bool? value)
