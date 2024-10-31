@@ -13,10 +13,10 @@
 
   <ItemGroup>
     <PackageReference Include="AXT_WebComunication" Version="1.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.7" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.7" />
-    <PackageReference Include="Radzen.Blazor" Version="4.32.7" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.8" />
+    <PackageReference Include="Radzen.Blazor" Version="5.2.8" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.1.0" />
     <PackageReference Include="System.Text.Json" Version="8.0.4" />
     <PackageReference Include="WebStorageManagement" Version="1.0.1" />
   </ItemGroup>

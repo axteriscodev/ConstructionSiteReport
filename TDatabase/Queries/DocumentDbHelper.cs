@@ -39,25 +39,25 @@ public class DocumentDbHelper
                                               Description = m.Description,
                                           }).SingleOrDefault(),
                         Categories = (from r in (from qc in db.QuestionChosens
+                                                 from q in db.Questions
                                                  where qc.IdTemplate == d.IdTemplate
-                                                 join q in db.Questions on qc.IdQuestion equals q.Id
-                                                 select new { q.IdCategory }).Distinct()
+                                                 && q.Id == qc.IdQuestion
+                                                 group qc by qc.IdCategory into q2
+                                                 select new { q2.First().IdCategory, q2.First().OrderCategory })
 
                                       from c in db.Categories
                                       where c.Id == r.IdCategory
-                                      orderby c.Order
+                                      orderby r.OrderCategory
                                       select new DocumentCategoryModel()
                                       {
-                                          Id = r.IdCategory,
+                                          Id = c.Id,
                                           Text = c.Text,
-                                          Order = c.Order,
-                                          Questions = (from tc in db.Templates
-                                                       from qc in db.QuestionChosens
+                                          Order = r.OrderCategory != null ? r.OrderCategory.Value : c.Order,
+                                          Questions = (from qc in db.QuestionChosens
                                                        from q in db.Questions
-                                                       where tc.Id == d.IdTemplate
-                                                       && qc.IdTemplate == tc.Id
+                                                       where qc.IdTemplate == d.IdTemplate
                                                        && q.Id == qc.IdQuestion
-                                                       && q.IdCategory == c.Id
+                                                       && qc.IdCategory == c.Id
                                                        orderby qc.Order
                                                        select new DocumentQuestionModel()
                                                        {

@@ -7,20 +7,22 @@ using Radzen.Blazor;
 using Shared.Documents;
 using Shared.Templates;
 using ConstructionSiteLibrary.Components.Utilities;
+using Shared.Defaults;
 
 namespace ConstructionSiteLibrary.Components.Templates;
 
 public partial class QuestionsSelection
 {
-    private List<TemplateCategoryModel> categories = [];
 
-
-
-    private List<CategoryQuestionsGroup> groups = [];
 
     [Parameter]
     required public TemplateModel CurrentTemplate { get; set; }
 
+    private const int NOT_ORDER = 10000; 
+    private List<TemplateCategoryModel> categories = [];
+    private List<CategoryQuestionsGroup> groups = [];
+
+    private bool ChangeCategoryOrder;
 
 
 
@@ -63,7 +65,6 @@ public partial class QuestionsSelection
         initialLoading = true;
         await base.OnInitializedAsync();
         await LoadData(CurrentTemplate);
-        //InitData();
         initialLoading = false;
     }
 
@@ -72,25 +73,14 @@ public partial class QuestionsSelection
         await LoadData(CurrentTemplate);
     }
 
-
-    private void InitData()
-    {
-        foreach (var group in groups)
-        {
-            group.State = true;
-            foreach (var question in group.Questions)
-            {
-                group.SelectedQuestionIds.Add(question.Id);
-            }
-        }
-    }
+    #region Caricamento e Salvataggio
 
     private async Task LoadData(TemplateModel selectedTemplate)
     {
         groups = [];
         categories = await CategoriesRepository.GetCategories();
         count = categories.Count;
-
+        int categoryCount = 0;
         //title = selectedTemplate?.TitleTemplate ?? "";
 
         foreach (var category in categories)
@@ -129,23 +119,14 @@ public partial class QuestionsSelection
             }
 
             //se non ho già la categoria nel gruppo la aggiungo
-            if(!groups.Where(x=>x.Id == category.Id).Any())
+            if (!groups.Where(x => x.Id == category.Id).Any())
             {
                 OrderElements(category.Questions);
-                groups.Add(new() { Id = category.Id, Order = category.Order, Text = category.Text, State = groupState, Questions = category.Questions, SelectedQuestionIds = templateSelectedId });
+                var order = groupState == false ? NOT_ORDER : categoryCount++;
+                groups.Add(new() { Id = category.Id, Order = categoryCount, Text = category.Text, State = groupState, Questions = category.Questions, SelectedQuestionIds = templateSelectedId });
             }
-
+            ReorderActiveCategory();
         }
-
-
-    }
-
-
-    private async Task ReloadTable()
-    {
-        DialogService.Close();
-        await LoadData(CurrentTemplate);
-        await grid!.Reload();
     }
 
     public TemplateStepArgs OnSave()
@@ -169,7 +150,6 @@ public partial class QuestionsSelection
                     var selectedQuestion = group.Questions.First(x => x.Id == selectedQuestionId);
                     category.Questions.Add(selectedQuestion);
                 }
-
                 templateCategories.Add(category);
             }
         }
@@ -183,20 +163,29 @@ public partial class QuestionsSelection
         };
 
         return args;
-
-
     }
+
+    private async Task ReloadTable()
+    {
+        DialogService.Close();
+        await LoadData(CurrentTemplate);
+        await grid!.Reload();
+    }
+
+    #endregion 
 
     #region Visualizzazione
 
     private static string CategoryText(CategoryQuestionsGroup group)
     {
-        return group.Order + ". " + group.Text;
+        string order = group.Order == NOT_ORDER ? "X" : group.Order.ToString();
+        return   $"{order}. {group.Text}";
     }
 
     private static string QuestionText(CategoryQuestionsGroup group, string questionText, int order)
     {
-        return group.Order + "." + order + " " + questionText;
+        string gOrder = group.Order == NOT_ORDER ? "x" : group.Order.ToString();
+        return gOrder + "." + order + " " + questionText;
     }
 
     private void ShowQuestions(CategoryQuestionsGroup group)
@@ -213,7 +202,7 @@ public partial class QuestionsSelection
 
     #region Selezione categorie e domande 
 
-    private async Task<bool> ChangeCheckBoxCategory(bool? value, CategoryQuestionsGroup group)
+    private bool ChangeCheckBoxCategory(bool? value, CategoryQuestionsGroup group)
     {
         value ??= true;
         if (value.Value)
@@ -228,6 +217,7 @@ public partial class QuestionsSelection
             group.SelectedQuestionIds = [];
         }
         group.State = value.Value;
+        ReorderActiveCategory();
         return false;
     }
 
@@ -236,7 +226,7 @@ public partial class QuestionsSelection
         return group.SelectedQuestionIds.Contains(id);
     }
 
-    private async Task<bool> ChangeCheckBoxQuestion(bool value, int id, CategoryQuestionsGroup group)
+    private bool ChangeCheckBoxQuestion(bool value, int id, CategoryQuestionsGroup group)
     {
         if (value)
         {
@@ -248,6 +238,10 @@ public partial class QuestionsSelection
             group.SelectedQuestionIds.Remove(id);
             group.State = group.SelectedQuestionIds.Count > 0 ? null : false;
         }
+        if(group.State == false)
+        {
+            ReorderActiveCategory();
+        }
         return false;
     }
 
@@ -255,6 +249,26 @@ public partial class QuestionsSelection
 
     #region Ordinamento domande 
 
+
+    private void ReorderActiveCategory()
+    {
+        var count = 1;
+        foreach(var g in groups)
+        {
+            if(!g.State.HasValue || g.State.Value)
+            {
+                g.Order = count;
+                count++;
+            }
+            else
+            {
+                g.Order = NOT_ORDER;
+            }        
+        }
+
+        //groups = groups.OrderBy(x => x.Order).ToList();
+        StateHasChanged();
+    }
 
     private void OrderCategories(ChangeObjectIndex indici)
     {
@@ -305,6 +319,54 @@ public partial class QuestionsSelection
         }
     }
 
+
+    #endregion
+
+    #region Ordinamento Categorie
+
+    public void ToggleOrderCategory(bool isActive)
+    {
+        ChangeCategoryOrder = isActive;
+        StateHasChanged();
+    }
+
+    public void Reorder(CategoryQuestionsGroup catGroup, bool forward)
+    {
+       var index = groups.IndexOf(groups.FirstOrDefault(x=>x.Id == catGroup.Id) ?? new());
+        if(forward && index < groups.Count - 1)
+        {
+            groups.RemoveAt(index);
+            groups.Insert(index + 1, catGroup);
+            ReorderActiveCategory();
+        }
+        else if(!forward && index > 0)
+        {
+            groups.RemoveAt(index);
+            groups.Insert(index-1, catGroup);
+            ReorderActiveCategory();
+        }
+    }
+
+    /// <summary>
+    /// Controllo per disabilitare i bottoni nel primo (bottone indietro) e ultimo elemento (bottone avanti)
+    /// </summary>
+    /// <param name="catGroup"></param>
+    /// <param name="forward"></param>
+    /// <returns></returns>
+    public bool DisableButton(CategoryQuestionsGroup catGroup, bool forward)
+    {
+        var disable = false;
+        var index = groups.IndexOf(groups.FirstOrDefault(x => x.Id == catGroup.Id) ?? new());
+        if(forward && index == groups.Count - 1)
+        {
+            disable = true;
+        }
+        if(!forward && index == 0)
+        {
+            disable = true;
+        }
+        return disable;
+    }
 
     #endregion
 }

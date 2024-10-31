@@ -91,69 +91,71 @@ else
                 </div>
 
             </div>
-            @* COMPANY DOCUMENTO *@
-            <div class="pdfElement">
-                <div class="row SectionTitleDiv">
-                    <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center">
-                        <strong>
-                            @DocumentUtils.Companies
-                        </strong>
-                    </RadzenText>
-                </div>
-            </div>
-            @foreach (var company in Document?.Companies)
+            @if(Document?.Companies.Count > 0)
             {
                 <div class="pdfElement">
-                    <div class="border paddingSezione">
-                        <div class=" row my-2 borderBottom">
-                            <div class="col impresaEsecutriceCol1">
-                                <RadzenText>Impresa Esecutrice</RadzenText>
+                    <div class="row SectionTitleDiv">
+                        <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center">
+                            <strong>
+                                @DocumentUtils.Companies
+                            </strong>
+                        </RadzenText>
+                    </div>
+                </div>
+                        @* COMPANY DOCUMENTO *@
+                @foreach (var company in Document?.Companies)
+                {
+                    <div class="pdfElement">
+                        <div class="border paddingSezione">
+                            <div class=" row my-2 borderBottom">
+                                <div class="col impresaEsecutriceCol1">
+                                    <RadzenText>Impresa Esecutrice</RadzenText>
+                                </div>
+                                <div class="col impresaEsecutrice">
+                                    <RadzenRow Style="align-items: center !important;">
+                                        <RadzenLabel Text="Presente" />
+                                        <div>
+                                            @if(CheckCompanyPresent(company.Present))
+                                            {
+                                                <span class="material-icons" style="font-family: 'Material Icons'; font-size: 24px">&#xe834;</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="material-icons" style="font-family: 'Material Icons'; font-size: 24px">&#xe835;</span>                           
+                                            }
+                                        </div>
+                                    </RadzenRow>
+                                </div>
                             </div>
-                            <div class="col impresaEsecutrice">
-                                <RadzenRow Style="align-items: center !important;">
-                                    <RadzenLabel Text="Presente" />
-                                    <div>
-                                        @if(CheckCompanyPresent(company.Present))
-                                        {
-                                            <span class="material-icons" style="font-family: 'Material Icons'; font-size: 24px">&#xe834;</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="material-icons" style="font-family: 'Material Icons'; font-size: 24px">&#xe835;</span>                           
-                                        }
-
-                                    </div>
-                                </RadzenRow>
+                            <div class="row my-2">
+                                <div class="col">
+                                    <RadzenText>Ragione Sociale: <strong>@company.CompanyName</strong></RadzenText>
+                                </div>
+                                <div class="col">
+                                    <RadzenText>Sede legale: <strong>@company.Address</strong</RadzenText>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row my-2">
-                            <div class="col">
-                                <RadzenText>Ragione Sociale: <strong>@company.CompanyName</strong></RadzenText>
+                            <div class="row my-2">
+                                <div class="col">
+                                    <RadzenText>Lavori previsti: <strong>@company.JobsDescriptions</strong</RadzenText>
+                                </div>
+                                <div class="col">
+                                    <RadzenText>P. Iva: <strong>@DocumentUtils.PrintDocumentField(company.VatCode)</strong></RadzenText>
+                                </div>
                             </div>
-                            <div class="col">
-                                <RadzenText>Sede legale: <strong>@company.Address</strong</RadzenText>
+                            <div class="row my-2">
+                                <div class="col-12">
+                                    <RadzenText>Responsabile: <strong>@DocumentUtils.PrintDocumentField(company.InChargeWorker)</strong</RadzenText>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row my-2">
-                            <div class="col">
-                                <RadzenText>Lavori previsti: <strong>@company.JobsDescriptions</strong</RadzenText>
-                            </div>
-                            <div class="col">
-                                <RadzenText>P. Iva: <strong>@DocumentUtils.PrintDocumentField(company.VatCode)</strong></RadzenText>
-                            </div>
-                        </div>
-                        <div class="row my-2">
-                            <div class="col-12">
-                                <RadzenText>Responsabile: <strong>@DocumentUtils.PrintDocumentField(company.InChargeWorker)</strong</RadzenText>
-                            </div>
-                        </div>
-                        <div class="row my-2">
-                            <div class="col-12">
-                                <RadzenText>Lavoratori: <strong>@DocumentUtils.PrintDocumentField(company.Workers)</strong></RadzenText>
+                            <div class="row my-2">
+                                <div class="col-12">
+                                    <RadzenText>Lavoratori: <strong>@DocumentUtils.PrintDocumentField(company.Workers)</strong></RadzenText>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                }
             }
             @* DOMANDE DOCUMENTO *@
             @foreach (var category in Document.Categories)
@@ -488,8 +490,14 @@ else
                 jsModule = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/ConstructionSiteLibrary/pdfManager.js");
             }
 
+            String documentString = Document.Title;
+            String compilatorString = Document.CSE ?? "";
+            String committenteString = Document.Client.Name ?? "";
+            String indirizzoCantiereString = Document.ConstructorSite.Address ?? "";
+
+
             // Generate and download the PDF
-            await jsModule.InvokeVoidAsync("generaPDFDocumento", fileName, DotNetObjectReference.Create(this));
+            await jsModule.InvokeVoidAsync("generaPDFDocumento", fileName, DotNetObjectReference.Create(this), documentString, compilatorString, committenteString, indirizzoCantiereString);
         }
         catch (Exception e)
         {
@@ -502,7 +510,7 @@ else
     public void DocumentCreated()
     {
         creation = false;
-        DialogService.Close(true);
+        //DialogService.Close(true);
     }
 
     private bool CheckCompanyPresent(bool? value)

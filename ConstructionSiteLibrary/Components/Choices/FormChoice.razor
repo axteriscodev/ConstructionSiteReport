@@ -9,7 +9,7 @@
         <RadzenStack class="px-2">
             <RadzenFormField Text="Tag - Max 10 caratteri<span style='color:red'> (obbligatorio)</span>" Variant="@variant">
                 <ChildContent>
-                    <RadzenTextBox Name="Tag" @bind-Value="@form.Tag" />
+                    <RadzenTextBox Name="Tag" @bind-Value="@form.Tag" MaxLength="10" />
                 </ChildContent>
                 <Helper>
                     <RadzenRequiredValidator Component="Tag" Popup=false Text="Il campo Tag è obbligatorio" />

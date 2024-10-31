@@ -130,6 +130,7 @@ public class TemplatesRepository(HttpManager httpManager, IndexedDBService index
 
     #endregion
 
+    #region Template description 
 
     public async Task<List<TemplateDescriptionModel>> GetTemplatesDescriptions()
     {
@@ -179,6 +180,8 @@ public class TemplatesRepository(HttpManager httpManager, IndexedDBService index
 
         return result;
     }
+
+    #endregion 
 
     #region Metodi per effettuare la sincronizzazione con il server
 
@@ -254,4 +257,5 @@ public class TemplatesRepository(HttpManager httpManager, IndexedDBService index
     }
 
     #endregion
+
 }
