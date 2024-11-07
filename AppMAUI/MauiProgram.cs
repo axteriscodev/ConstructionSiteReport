@@ -1,8 +1,11 @@
-﻿using AppMAUI.Services;
+﻿using WebStorageManagement.Models;
+using AppMAUI.Services;
 using ConstructionSiteLibrary.Interfaces;
 using ConstructionSiteLibrary.Managers;
 using ConstructionSiteLibrary.Repositories;
 using ConstructionSiteLibrary.Services;
+using ConstructionSiteLibrary.Utility;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Logging;
 using Radzen;
 
@@ -43,17 +46,33 @@ public static class MauiProgram
         builder.Services.AddScoped<ClientsRepository>();
         //repository per le aziende
         builder.Services.AddScoped<CompaniesRepository>();
-        //componenti radzen
-        builder.Services.AddRadzenComponents();
+        //repository per utenti e login
+        builder.Services.AddScoped<UserRepository>();
+
+        builder.Services.AddScoped<IWebStorageService, WebStorageService>();
+
         //Componente fotocamera
         builder.Services.AddScoped<ICameraService, CameraService>();
+
         builder.Services.AddSingleton<IndexedDBService>();
         //Componente GPS
         builder.Services.AddScoped<ILocationService, LocationService>();
 
+        builder.Services.AddScoped<IndexedDBService>();
+        //Global Variables
+        builder.Services.AddSingleton<GlobalVariables>();
         /* Servizi per la navigazione delle pagine */
         builder.Services.AddScoped<NavigationService>();
         builder.Services.AddScoped<InvokeJSRuntime>();
+
+        //componenti radzen
+        builder.Services.AddRadzenComponents();
+
+        //gestione autenticazione e autorizzazione
+        builder.Services.AddAuthorizationCore();
+        builder.Services.AddScoped<AppAuthenticationStateProvider>();
+        builder.Services.AddScoped<AuthenticationStateProvider>(provider =>
+            provider.GetRequiredService<AppAuthenticationStateProvider>());
 
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
