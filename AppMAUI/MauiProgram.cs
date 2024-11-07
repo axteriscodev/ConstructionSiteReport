@@ -8,27 +8,23 @@ using ConstructionSiteLibrary.Utility;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Logging;
 using Radzen;
+using CommunityToolkit.Maui;
 
 namespace AppMAUI;
-
 public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();
-        builder
-            .UseMauiApp<App>()
-            .ConfigureFonts(fonts =>
-            {
-                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-            });
-
+        builder.UseMauiApp<App>().ConfigureFonts(fonts =>
+        {
+            fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+        }).UseMauiCommunityToolkit();
         builder.Services.AddMauiBlazorWebView();
         //screen manager per catturare il resize della view
         builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://constructionsitereport.axterisco.it/") });
         //screen manager per catturare il resize della view
         builder.Services.AddScoped<HttpManager>();
-
         builder.Services.AddSingleton<ScreenManager>();
         //notify manager per notificare all'utente il risultato delle operazioni compiute
         builder.Services.AddScoped<NotificationManager>();
@@ -48,37 +44,28 @@ public static class MauiProgram
         builder.Services.AddScoped<CompaniesRepository>();
         //repository per utenti e login
         builder.Services.AddScoped<UserRepository>();
-
         builder.Services.AddScoped<IWebStorageService, WebStorageService>();
-
         //Componente fotocamera
         builder.Services.AddScoped<ICameraService, CameraService>();
-
         builder.Services.AddSingleton<IndexedDBService>();
         //Componente GPS
         builder.Services.AddScoped<ILocationService, LocationService>();
-
         builder.Services.AddScoped<IndexedDBService>();
         //Global Variables
         builder.Services.AddSingleton<GlobalVariables>();
         /* Servizi per la navigazione delle pagine */
         builder.Services.AddScoped<NavigationService>();
         builder.Services.AddScoped<InvokeJSRuntime>();
-
         //componenti radzen
         builder.Services.AddRadzenComponents();
-
         //gestione autenticazione e autorizzazione
         builder.Services.AddAuthorizationCore();
         builder.Services.AddScoped<AppAuthenticationStateProvider>();
-        builder.Services.AddScoped<AuthenticationStateProvider>(provider =>
-            provider.GetRequiredService<AppAuthenticationStateProvider>());
-
+        builder.Services.AddScoped<AuthenticationStateProvider>(provider => provider.GetRequiredService<AppAuthenticationStateProvider>());
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
         builder.Logging.AddDebug();
 #endif
-
         return builder.Build();
     }
 }
