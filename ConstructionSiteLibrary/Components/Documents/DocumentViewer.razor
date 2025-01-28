@@ -159,10 +159,12 @@ else
                 }
             }
             @* DOMANDE DOCUMENTO *@
-            @foreach (var category in Document.Categories)
+            @foreach (var category in Document!.Categories)
             {
-                <div class="pdfElement">
-                    <div class="SectionTitleDiv">
+                @if(category.Printable)
+                {
+                    <div class="pdfElement">
+                        <div class="SectionTitleDiv">
                         <RadzenRow Style="justify-content:space-between !important;">
                             <RadzenColumn Size="1" Style="display:flex">
                                 <RadzenText TextStyle="TextStyle.DisplayH6" Style="margin-left:1rem;margin-top:0.5rem;"><strong>@DocumentUtils.CategoryNumber(category)</strong></RadzenText>
@@ -173,34 +175,38 @@ else
                             <RadzenColumn Size="1" Style="display:flex;justify-content:end;">
                             </RadzenColumn>
                         </RadzenRow>
+                        </div>
                     </div>
-                </div>
-                @foreach (var question in category.Questions)
-                {
-                    <div class="pdfElement">
-                        <div class="border paddingSezione">
-                            <div class="margineDomande bordoDomanda">
-                                <div class="hstack ">
-                                    <RadzenText>@DocumentUtils.QuestionTextNumber(category, question.Text, question.Order)</RadzenText>
-                                </div>
-                                <ul>
-                                @foreach (var answer in question.CurrentChoices)
-                                {
-                                    <li>
-                                    <div class="hstack">
-                                        <div>
-                                            <RadzenText class="selectChoice"><strong>@DocumentUtils.PrintDocumentField(answer.Value)</strong></RadzenText>
-                                        </div>
+                    @foreach (var question in category.Questions)
+                    {
+                        @if(question.Printable)
+                        {
+                            <div class="pdfElement">
+                            <div class="border paddingSezione">
+                                <div class="margineDomande bordoDomanda">
+                                    <div class="hstack ">
+                                        <RadzenText>@DocumentUtils.QuestionTextNumber(category, question.Text, question.Order)</RadzenText>
                                     </div>
-                                    <div>
-                                        <RadzenText TextStyle="TextStyle.Caption">@DocumentUtils.ReportedCompany(answer.ReportedCompanyIds, Document)</RadzenText>
-                                    </div>
-                                    </li>
-                                }
+                                    <ul>
+                                    @foreach (var answer in question.CurrentChoices)
+                                    {
+                                        <li>
+                                            <div class="hstack">
+                                                <div>
+                                                    <RadzenText class="selectChoice"><strong>@DocumentUtils.PrintDocumentField(answer.Value)</strong></RadzenText>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <RadzenText TextStyle="TextStyle.Caption">@DocumentUtils.ReportedCompany(answer.ReportedCompanyIds, Document)</RadzenText>
+                                            </div>
+                                        </li>
+                                    }
                                 </ul>
                             </div>
                         </div>
-                    </div>
+                        </div>
+                        }
+                    }
                 }
             }
             @* NOTE AGGIUNTIVE DOMANDE *@
