@@ -1,13 +1,14 @@
 ﻿@using Shared.Documents
 @using ConstructionSiteLibrary.Model.DocumentCompilation
 
+@inject DialogService DialogService
 
 @if(NoteList.Count > 0)
 {
     @* NOTE AGGIUNTIVE *@
     <div class="mt-3">
         <div class="marginYResponsive2 ">
-             <fieldset class="my-fieldset">
+            <fieldset class="my-fieldset">
                 <legend class="my-legend">@DocumentUtils.QuestionNotes</legend>
                 <div class="marginYResponsive">
                     @foreach (var elem in NoteList)
@@ -21,6 +22,8 @@
                                 <div class="paddingYResponsive">
                                     <RadzenTextArea Rows="3" Style="width:100%" Value="@elem" class="my-input" />
                                     <div>
+                                        <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Text="elimina"
+                                                      Variant="Variant.Text" Click="@(() => DeleteQuestionNote(NoteList.IndexOf(elem)))" />
                                     </div>
                                 </div>
                             </RadzenColumn>
@@ -85,6 +88,38 @@
         var anchor = new DocumentAnchor(DocumentUtils.TypeQuestionNotes, index, $"Note cat: {cat}", $"categorynotes_{index}");
         DocumentNavigator.AddAnchor(anchor);
         return anchor.Anchor;
+    }
+
+    private async Task DeleteQuestionNote(int index)
+    {
+        var result = await DialogService.Confirm("Sei sicuro di voler eliminare la nota?", "Conferma eliminazione nota") ?? false;
+        if(result)
+        {
+            SelectQuestionFromNotePoint(NotePointList[index]);
+            NoteList.RemoveAt(index);
+            NotePointList.RemoveAt(index);
+            StateHasChanged();
+        }
+    }
+
+    private void SelectQuestionFromNotePoint(string notePoint)
+    {
+        try
+        {
+            var array = notePoint.Split(".");
+            if(array.Length == 2)
+            {
+                var catOrder = int.Parse(array[0]);
+                var qOrder = int.Parse(array[1]);
+                var question = Document.Categories.Where(c => c.Order == catOrder).First()
+                                   .Questions.Where(q => q.Order == qOrder).First();
+                question.Note = string.Empty;
+            }
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine($"Errore in QuestionNotesSection: {ex.Message}");
+        }
     }
 
     #endregion

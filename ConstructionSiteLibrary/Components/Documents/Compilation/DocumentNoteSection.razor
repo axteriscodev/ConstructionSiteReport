@@ -23,8 +23,12 @@
                     <div class="row">
                         <div class="col-12">
                             <RadzenText TextStyle="TextStyle.Caption" class="mt-2">@ReportedCompany(nota.CompanyListIds)</RadzenText>
-                            <RadzenButton Icon="edit" Text="Assegna" Variant="Variant.Text" Style="width:140px;"
-                                            Click="@(()=>OpenCompanyListDialog(nota))" />
+                            <div class="hstack">
+                                <RadzenButton Icon="edit" Text="Assegna" Variant="Variant.Text" Style="width:140px;"
+                                Click="@(()=>OpenCompanyListDialog(nota))" />
+                                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Text="elimina"
+                                Variant="Variant.Text" Click="@(() => DeleteNote(nota))" />
+                            </div>
                         </div>
                     </div>
                 </RadzenColumn>
@@ -117,6 +121,15 @@
         return message;
     }
 
+    public async Task DeleteNote(NoteModel nota)
+    {
+        var result = await DialogService.Confirm("Sei sicuro di voler eliminare la nota?", "Conferma eliminazione nota") ?? false;
+        if (result)
+        {
+            Document.Notes.Remove(nota);
+            StateHasChanged();
+        }
+    }
 
     #region Gestione Ancore
 
