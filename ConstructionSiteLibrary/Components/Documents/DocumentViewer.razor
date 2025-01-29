@@ -359,10 +359,10 @@ else
                                 <div class="hstack mt-2">
                                     <RadzenText TextStyle="TextStyle.Caption" class="mb-0">Riferimento quesiti:</RadzenText>
                                     <RadzenText TextStyle="TextStyle.Caption" class="mb-0 rz-text-wrap">
-                                    @foreach (var questionId in Document.Signatures[0].ReporteQuestionsIds)
-                                    {
-                                        @DocumentUtils.PrintQuestionForReported(questionId, Document)
-                                    }
+                                        @foreach (var questionId in Document.Signatures[0].ReporteQuestionsIds)
+                                        {
+                                            @DocumentUtils.PrintQuestionForReported(questionId, Document)
+                                        }
                                     </RadzenText>
                                 </div>
                             </div>
@@ -397,10 +397,10 @@ else
                                 <div class="hstack mt-2">
                                     <RadzenText  class="mb-0">Riferimento quesiti:</RadzenText>
                                     <RadzenText TextStyle="TextStyle.Caption" class="mb-0 rz-text-wrap">
-                                    @foreach (var questionId in sign.ReporteQuestionsIds)
-                                    {
-                                        @DocumentUtils.PrintQuestionForReported(questionId, Document);
-                                    }
+                                        @foreach (var questionId in sign.ReporteQuestionsIds)
+                                        {
+                                            @DocumentUtils.PrintQuestionForReported(questionId, Document);
+                                        }
                                     </RadzenText>
                                 </div>
                             </div>
@@ -423,9 +423,6 @@ else
     public EventCallback OnPrintComplete { get; set; }
     [Parameter]
     public DocumentModel? Document { get; set; }
-
-    // Categorie da stampare nel pdf (printable = true)
-    private List<DocumentCategoryModel> printableCategory { get; set; } = [];
     // Categorie visualizzate nel pdf
     private List<VisualCategory> visualCategories { get; set; } = [];
     private List<QuestionNote> NoteList { get; set; } = [];
@@ -446,15 +443,15 @@ else
     {
         await base.OnParametersSetAsync();
         LoadData();
-
     }
 
     private void LoadData()
     {
         if(Document is not null)
         {
+            //chiamo questo metodo per selezionare solo le categorie e domande stampabili
             CreatePrintableCategories();
-            visualCategories = DocumentUtils.CreateVisualCategories(Document.Categories);
+            //visualCategories = DocumentUtils.CreateVisualCategories(Document.Categories);
             LoadQuestionNotes();
             if(Document.Signatures.Count > 0)
             {
@@ -468,6 +465,49 @@ else
         }
     }
 
+    /// <summary>
+    /// Metodo per creare una lista di categorie stampabili con domande stampabili
+    /// e crea le VisualCategory
+    /// </summary>
+    private void CreatePrintableCategories()
+    {
+
+        List<DocumentCategoryModel> catList = [];
+        var countCategory = 1;
+        foreach (var c in Document!.Categories)
+        {
+            //controllo che la categoria sia stampabile
+            if (c.Printable)
+            {
+                var countQuestion = 1;
+                //clono la categoria
+                var catClone = c.Clone();
+                List<DocumentQuestionModel> qList = [];
+                foreach (var q in catClone.Questions)
+                {
+                    if(q.Printable)
+                    {
+                        //per ogni domanda stampabile aggiorno l ordine
+                        q.Order = countQuestion;
+                        countQuestion++;
+                        qList.Add(q);
+                    }
+                }
+                // se ci sono domande stampabili sostituisco le domande
+                if (qList.Count > 0)
+                {
+                    catClone.Order = countCategory;
+                    //per ogni domanda stampabile aggiorno l ordine
+                    catClone.Questions = qList;
+                    //inserisco la categoria nella lista
+                    catList.Add(catClone);
+                    //aumento il count
+                    countCategory++;
+                } 
+            }
+        }
+        visualCategories = DocumentUtils.CreateVisualCategories(catList);
+    }
 
     private void LoadQuestionNotes()
     {
@@ -478,16 +518,15 @@ else
         {
             var printableCategories = Document.Categories.Where(c => c.Printable);
 
-            foreach (var cat in printableCategories)
+            foreach (var cat in visualCategories)
             {
-                var printableQuestion = cat.Questions.Where(q => q.Printable);
-                foreach (var question in printableQuestion)
+                foreach (var question in cat.Category.Questions)
                 {
                     if (!string.IsNullOrEmpty(question.Note.Trim()))
                     {
                         var qNote = new QuestionNote()
                         {
-                                QuestionNumber = cat.Order.ToString() + "." + question.Order.ToString(),
+                                QuestionNumber = cat.Category.Order.ToString() + "." + question.Order.ToString(),
                                 Note = question.Note
                         };
                         NoteList.Add(qNote);
@@ -534,12 +573,6 @@ else
     private bool CheckCompanyPresent(bool? value)
     {
         return value.HasValue ? value.Value : false;
-    }
-
-    private void CreatePrintableCategories()
-    {
-        var list = Document!.Categories.Where(c => c.Printable);
-        //fore
     }
 
     #region Visualizzazione

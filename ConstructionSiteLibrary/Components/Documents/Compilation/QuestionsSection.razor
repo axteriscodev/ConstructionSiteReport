@@ -17,14 +17,14 @@
             {
                 <a class="anchor" id="@CreateAnchor(visual)"></a>
                 <div class="accordion-item">
-                    <h2 class="mb-0">
+                    <div class="hstack g-0">
                         <RadzenCheckBox Value="@visual.Category.Printable" TValue="bool" @onclick:preventDefault="true" />
-
-                        <button class="accordion-button titleCategory" type="button" data-bs-toggle="collapse" data-bs-target="@ReturnCollapseTarget(visualCategories.IndexOf(visual), true)" aria-expanded="false" aria-controls="@ReturnCollapseTarget(visualCategories.IndexOf(visual))">
-                            @DocumentUtils.CategoryNumberAndText(visual.Category)
-                        </button>
-                        
-                    </h2>
+                        <h2 class="mb-0 w-100">
+                            <button class="accordion-button titleCategory" type="button" data-bs-toggle="collapse" data-bs-target="@ReturnCollapseTarget(visualCategories.IndexOf(visual), true)" aria-expanded="false" aria-controls="@ReturnCollapseTarget(visualCategories.IndexOf(visual))">
+                                @DocumentUtils.CategoryNumberAndText(visual.Category)
+                            </button>
+                        </h2>
+                    </div>
                     <div id="@ReturnCollapseTarget(visualCategories.IndexOf(visual))" class="accordion-collapse collapse show">
                         <div class="accordion-body">
                             @if (visual.ShowQuestion)
@@ -32,6 +32,9 @@
                                 @foreach (var question in visual.Category.Questions)
                                 {
                                     <div class="row mt-3 border-bottom">
+                                        <div class="col-md-auto">
+                                            <RadzenCheckBox Value="@question.Printable" TValue="bool" />
+                                        </div>
                                         <div class="col bor">
                                             <p><strong>@DocumentUtils.QuestionNumber(visual.Category, question.Order)</strong> @DocumentUtils.QuestionText(visual.Category, question.Text)</p>
                                             @if (question.Attachments.Count > 0)
@@ -66,9 +69,7 @@
                                                     }
                                                 </div>
                                                 <div>
-                                                    <RadzenText TextStyle="TextStyle.Body1" onclick="@{
-                                        ()=>OpenCompanyListDialog(answer)
- }">
+                                                    <RadzenText TextStyle="TextStyle.Body1" onclick="@{()=>OpenCompanyListDialog(answer)}">
                                                         @ReportedCompany(answer)
                                                     </RadzenText>
                                                 </div>
@@ -87,9 +88,6 @@
                                                 </ChildContent>
                                             </RadzenSplitButton>
                                             <InputFile OnChange="@(args => LoadFile(args, question))" style="display: none;" id="pictureLoader" />
-                                        </div>
-                                        <div class="col-md-auto">
-                                            <RadzenCheckBox Value="@question.Printable" TValue="bool" />
                                         </div>
                                     </div>
                                 }
