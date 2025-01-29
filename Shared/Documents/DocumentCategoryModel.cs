@@ -13,10 +13,8 @@ namespace Shared.Documents
 
         public DocumentCategoryModel Clone()
         {
-
             string serializedObject = JsonSerializer.Serialize(this);
             var newObject = JsonSerializer.Deserialize<DocumentCategoryModel>(serializedObject) ?? new();
-
             return newObject;
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Shared.Documents;
 
@@ -16,4 +17,11 @@ public class SignatureModel
     public int Width { get; set; }
     [JsonPropertyName("height")]
     public int Height { get; set; }
+
+    public SignatureModel Clone()
+    {
+        string serializedObject = JsonSerializer.Serialize(this);
+        var newObject = JsonSerializer.Deserialize<SignatureModel>(serializedObject) ?? new();
+        return newObject;
+    }
 }

@@ -361,7 +361,7 @@ else
                                     <RadzenText TextStyle="TextStyle.Caption" class="mb-0 rz-text-wrap">
                                         @foreach (var questionId in Document.Signatures[0].ReporteQuestionsIds)
                                         {
-                                            @DocumentUtils.PrintQuestionForReported(questionId, Document)
+                                            @DocumentUtils.PrintQuestionForReported(questionId, visualCategories)
                                         }
                                     </RadzenText>
                                 </div>
@@ -399,7 +399,7 @@ else
                                     <RadzenText TextStyle="TextStyle.Caption" class="mb-0 rz-text-wrap">
                                         @foreach (var questionId in sign.ReporteQuestionsIds)
                                         {
-                                            @DocumentUtils.PrintQuestionForReported(questionId, Document);
+                                            @DocumentUtils.PrintQuestionForReported(questionId, visualCategories);
                                         }
                                     </RadzenText>
                                 </div>
@@ -449,20 +449,27 @@ else
     {
         if(Document is not null)
         {
+            //prendo le signature dal documento
+            GetSignatures();
             //chiamo questo metodo per selezionare solo le categorie e domande stampabili
             CreatePrintableCategories();
             //visualCategories = DocumentUtils.CreateVisualCategories(Document.Categories);
             LoadQuestionNotes();
-            if(Document.Signatures.Count > 0)
-            {
-                firstCompanySignature = Document.Signatures.FirstOrDefault();
-                for(int i = 1; i < Document.Signatures.Count; i++)
-                {
-                    OthercompanySignatures.Add(Document.Signatures[i]);
-                }
-            }
+
             onLoading = false;           
         }
+    }
+
+    private void GetSignatures()
+    {
+            if(Document!.Signatures.Count > 0)
+            {
+                firstCompanySignature = Document.Signatures.Select(s=> s.Clone()).FirstOrDefault();
+                for(int i = 1; i < Document.Signatures.Count; i++)
+                {
+                    OthercompanySignatures.Add(Document.Signatures[i].Clone());
+                }
+            }
     }
 
     /// <summary>
