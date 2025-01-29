@@ -6,6 +6,20 @@
     page-break-after: always;
 }
 
+p, .p, ::deep p{
+    margin-bottom:0.1rem !important;
+}
+
+.paddingSezione, ::deep .paddingSezione {
+    padding: 0.2rem 0rem 0.2rem 0.7rem;
+    margin-top: 0.2rem !important;
+    margin-bottom: 0.2rem !important;
+}
+
+.paddingDescrizione {
+    padding: 0.5rem;
+}
+
 .pdfElement{
 
 }
@@ -77,18 +91,8 @@
 
 .borderBottom, ::deep .borderBottom {
     border-bottom: solid 1px #dee2e6;
+    margin-right: 0rem;
 }
-
-.paddingSezione, ::deep .paddingSezione {
-    padding: 0rem 0.7rem 0.7rem 0.7rem;
-    margin-top: 1.5rem !important;
-    margin-bottom: 1.5rem !important;
-}
-
-.paddingDescrizione {
-    padding: 3rem;
-}
-
 
 .marginYResponsive {
     margin-top: 1.5rem !important;

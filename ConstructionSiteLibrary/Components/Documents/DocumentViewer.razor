@@ -21,12 +21,12 @@ else
                     <RadzenText TextStyle="TextStyle.DisplayH6" TextAlign="TextAlign.Center" class="SectionTitle"><strong>@DocumentUtils.PrintDocumentField(Document.Title)</strong> </RadzenText>
                 </div>
                 <div class="border paddingSezione">
-                    <div class="row my-2">
+                    <div class="row">
                         <RadzenText>@DocumentUtils.PrintDocumentField(Document?.Description)</RadzenText>
                     </div>
                 </div>
                 <div class="border paddingSezione">
-                    <div class=" row my-2">
+                    <div class=" row">
                         <div class="col-6">
                             <RadzenText>Il C.S.E.: <strong>@DocumentUtils.PrintDocumentField(Document?.CSE)</strong></RadzenText>
                         </div>
@@ -57,7 +57,7 @@ else
                     </RadzenText>
                 </div>
                 <div class="border my-4 paddingSezione">
-                    <div class="row my-2">
+                    <div class="row">
                         <div class="col">
                             <RadzenText>Committente: <strong>@DocumentUtils.PrintDocumentField("")</strong></RadzenText>
                         </div>
@@ -65,7 +65,7 @@ else
                             <RadzenText>Lavori di: <strong>@DocumentUtils.PrintDocumentField(Document?.ConstructorSite.JobDescription)</strong></RadzenText>
                         </div>
                     </div>
-                    <div class="row my-2">
+                    <div class="row">
                         <div class="col">
                             <RadzenText>Indirizzo cantiere: <strong>@DocumentUtils.PrintDocumentField(Document?.ConstructorSite.Address)</strong></RadzenText>
                         </div>
@@ -73,7 +73,7 @@ else
                             <RadzenText>Inizio lavori: <strong>@StampaData(Document?.ConstructorSite.StartDate)</strong></RadzenText>
                         </div>
                     </div>
-                    <div class="row my-2">
+                    <div class="row">
                         <div class="col">
                             <RadzenText>Notifica preliminare inizio cantiere del: <strong>@StampaData(Document?.ConstructorSite.PreliminaryNotificationStartDate)</strong></RadzenText>
                         </div>
@@ -81,7 +81,7 @@ else
                             <RadzenText>Id. SICO: <strong>@DocumentUtils.PrintDocumentField(Document?.ConstructorSite.IdSico)</strong></RadzenText>
                         </div>
                     </div>
-                    <div class="row my-2">
+                    <div class="row">
                         <div class="col">
                             <RadzenText> Notifica preliminare in corso: <strong>@StampaData(Document?.ConstructorSite.PreliminaryNotificationInProgress)</strong></RadzenText>
                         </div>
@@ -108,13 +108,13 @@ else
                 {
                     <div class="pdfElement">
                         <div class="border paddingSezione">
-                            <div class=" row my-2 borderBottom">
+                            <div class=" row borderBottom">
                                 <div class="col impresaEsecutriceCol1">
                                     <RadzenText>Impresa Esecutrice</RadzenText>
                                 </div>
                                 <div class="col impresaEsecutrice">
                                     <RadzenRow Style="align-items: center !important;">
-                                        <RadzenLabel Text="Presente" />
+                                        <RadzenLabel Text="Presente" Style="padding-bottom: 5px;"/>
                                         <div>
                                             @if(CheckCompanyPresent(company.Present))
                                             {
@@ -128,7 +128,7 @@ else
                                     </RadzenRow>
                                 </div>
                             </div>
-                            <div class="row my-2">
+                            <div class="row">
                                 <div class="col">
                                     <RadzenText>Ragione Sociale: <strong>@company.CompanyName</strong></RadzenText>
                                 </div>
@@ -136,7 +136,7 @@ else
                                     <RadzenText>Sede legale: <strong>@company.Address</strong</RadzenText>
                                 </div>
                             </div>
-                            <div class="row my-2">
+                            <div class="row">
                                 <div class="col">
                                     <RadzenText>Lavori previsti: <strong>@company.JobsDescriptions</strong</RadzenText>
                                 </div>
@@ -144,12 +144,12 @@ else
                                     <RadzenText>P. Iva: <strong>@DocumentUtils.PrintDocumentField(company.VatCode)</strong></RadzenText>
                                 </div>
                             </div>
-                            <div class="row my-2">
+                            <div class="row">
                                 <div class="col-12">
                                     <RadzenText>Figure responsabili individuate: <strong>@DocumentUtils.PrintDocumentField(company.InChargeWorker)</strong</RadzenText>
                                 </div>
                             </div>
-                            <div class="row my-2">
+                            <div class="row">
                                 <div class="col-12">
                                     <RadzenText>Lavoratori: <strong>@DocumentUtils.PrintDocumentField(company.Workers)</strong></RadzenText>
                                 </div>
@@ -319,7 +319,7 @@ else
                     <div class="col-6">
                         <div style="margin-bottom:2rem;">
                         </div>
-                        <div class="paddingDescrizione border my-2">
+                        <div class="paddingDescrizione border">
                             <RadzenText>Il C.S.E: <strong>@Document.CSE</strong></RadzenText>
                             @if (Document.CseSignature is not null)
                             {
@@ -340,7 +340,7 @@ else
                         </div>
                         @if(Document.Signatures.Count > 0)
                         {
-                            <div class="paddingDescrizione border my-2">
+                            <div class="paddingDescrizione border">
                                 <RadzenText>Per: <strong>@DocumentUtils.PrintCompanyFromSignature(Document.Signatures[0], Document)</strong></RadzenText>
                                 @if (!string.IsNullOrEmpty(firstCompanySignature.Sign))
                                 {
@@ -378,7 +378,7 @@ else
                         <div class="col-6">
                         </div>
                         <div class="col-6">
-                            <div class="paddingDescrizione border my-2">
+                            <div class="paddingDescrizione border">
                                 <RadzenText>Per: <strong>@DocumentUtils.PrintCompanyFromSignature(sign, Document)</strong></RadzenText>
                                 @if (!string.IsNullOrEmpty(sign.Sign))
                                 {
