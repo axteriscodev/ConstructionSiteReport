@@ -7,7 +7,7 @@
 }
 
 p, .p, ::deep p{
-    margin-bottom:0.1rem !important;
+    /*margin-bottom:0.1rem !important;*/
 }
 
 .paddingSezione, ::deep .paddingSezione {

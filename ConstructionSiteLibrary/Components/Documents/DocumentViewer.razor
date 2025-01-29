@@ -572,7 +572,7 @@ else
 
             String documentString = Document.Title;
             String compilatorString = Document.CSE ?? "";
-            String committenteString = Document.Client.Name ?? "";
+            String committenteString = Document.Client?.Name ?? "";
             String indirizzoCantiereString = Document.ConstructorSite.Address ?? "";
 
 
