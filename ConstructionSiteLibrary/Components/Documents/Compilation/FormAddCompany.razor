@@ -10,15 +10,15 @@
 else
 {
     <div class="vstack mb-5">
-        <RadzenFormField Variant="@GlobalVariables.ComponentVariant" class="formField"> 
-            <ChildContent>
-                <RadzenDropDown TValue="CompanyModel" @bind-Value=@selectedCompany Data=@Companies Name="Companies"
-                                TextProperty="CompanyName" class="my-input" />
-            </ChildContent>
-        </RadzenFormField>
-    </div>
+    <RadzenFormField Variant="@GlobalVariables.ComponentVariant" class="formField">
+        <ChildContent>
+            <RadzenDropDown TValue="CompanyModel" @bind-Value=@selectedCompany Data=@Companies Name="Companies"
+                TextProperty="CompanyName" class="my-input" />
+        </ChildContent>
+    </RadzenFormField>
+</div>
     <RadzenButton Text="Conferma" ButtonStyle="ButtonStyle.Info" Click="@Confirm" />
-    
+
 }
 
 
@@ -29,7 +29,8 @@ else
 
     private bool onLoading = false;
 
-    private List<CompanyModel> Companies = [];
+    [Parameter]
+    public  List<CompanyModel> Companies { get; set;} = [];
 
     private CompanyModel selectedCompany;
     protected override async Task OnInitializedAsync()
@@ -42,7 +43,11 @@ else
 
     public async Task LoadData()
     {
-        Companies = await CompaniesRepository.GetCompanies();
+        if (Companies.Count == 0)
+        {
+            Companies = await CompaniesRepository.GetCompanies();
+        }
+
         Companies = Companies.Where(x => !PresentCompanies.Select(y => y.Id).Contains(x.Id)).ToList();
     }
 

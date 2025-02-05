@@ -32,7 +32,16 @@ public class ConstructorSiteDbHelper
             {
                 Id = nc.Id,
                 Name = nc.Name,
-            }).FirstOrDefault() ?? new()
+            }).FirstOrDefault() ?? new(),
+            Companies = (from cc in db.CompanyConstructorSites
+                         join c in db.Companies on cc.IdCompany equals c.Id
+                         where cc.IdConstructorSite == x.Id
+                         select new CompanyModel()
+                         {
+                             Id = c.Id,
+                             CompanyName = c.CompanyName ?? "",
+                             JobsDescriptions = cc.JobsDescription ?? "",
+                             SubcontractedBy = cc.SubcontractedBy }).ToList(),
         }).ToList();
     }
 
@@ -54,7 +63,7 @@ public class ConstructorSiteDbHelper
                 IdOrganization = organizationId
             };
             //associo le aziende al cantiere
-            AddCompaniesToConstructionSite(db, constructorSite.Companies, constructorSite.Id);
+            HandleCompaniesToConstructionSite(db, constructorSite.Companies, constructorSite.Id);
 
             db.ConstructorSites.Add(newConstructorSite);
             await db.SaveChangesAsync();
@@ -88,6 +97,9 @@ public class ConstructorSiteDbHelper
                         m.IdClient = elem.Client.Id;
                     }
                     m.JobDescription = elem.JobDescription;
+
+                    HandleCompaniesToConstructionSite(db, elem.Companies, elem.Id);
+
                     if (await db.SaveChangesAsync() > 0)
                     {
                         modified.Add(elem.Id);
@@ -136,13 +148,25 @@ public class ConstructorSiteDbHelper
     /// <param name="db"></param>
     /// <param name="companies"></param>
     /// <param name="idContructorSite"></param>
-    public static void AddCompaniesToConstructionSite(DB db, List<CompanyModel> companies, int idContructorSite)
+    public static void HandleCompaniesToConstructionSite(DB db, List<CompanyModel> companies, int idContructorSite)
     {
-        foreach (var comp in companies)
+        var newCompaniesIds = companies.Select(x => x.Id).ToList();
+
+        var currentAssociatedCompanies = db.CompanyConstructorSites.Where(x => x.IdConstructorSite == idContructorSite).ToList();
+
+        var currentAssociatedCompaniesIds = currentAssociatedCompanies.Select(x => x.IdCompany).ToList();
+
+        var companiesToRemove = currentAssociatedCompanies.Where(x => !newCompaniesIds.Contains(x.IdCompany)).ToList();
+
+        var companiesToAdd = companies.Where(x => !currentAssociatedCompaniesIds.Contains(x.Id)).ToList();
+
+        foreach (var comp in companiesToRemove)
         {
-            var select = db.CompanyConstructorSites.Where(x => x.IdCompany == comp.Id && x.IdConstructorSite == idContructorSite).SingleOrDefault();
-            if (select is null)
-            {
+            db.CompanyConstructorSites.Remove(comp);
+        }
+
+        foreach (var comp in companiesToAdd)
+        {
                 var CompConstruct = new CompanyConstructorSite()
                 {
                     IdCompany = comp.Id,
@@ -151,29 +175,8 @@ public class ConstructorSiteDbHelper
                     SubcontractedBy = comp.SubcontractedBy,
                 };
                 db.CompanyConstructorSites.Add(CompConstruct);
-            }
-        }
-    }
-
-    /// <summary>
-    /// Query parziale (non viene eseguito il salvataggio) per associare una singola azienda al cantiere
-    /// </summary>
-    /// <param name="db"></param>
-    /// <param name="companies"></param>
-    /// <param name="idContructorSite"></param>
-    public static void AddCompanyToConstructionSite(DB db, CompanyModel company, int idContructorSite)
-    {
-        var select = db.CompanyConstructorSites.Where(x => x.IdCompany == company.Id && x.IdConstructorSite == idContructorSite).SingleOrDefault();
-        if (select is null)
-        {
-            var CompConstruct = new CompanyConstructorSite()
-            {
-                IdCompany = company.Id,
-                IdConstructorSite = idContructorSite,
-                JobsDescription = company.JobsDescriptions,
-                SubcontractedBy = company.SubcontractedBy,
-            };
-            db.CompanyConstructorSites.Add(CompConstruct);
+            // quando inseriremo i valori di JobsDescription e SubcontractedBy aggiungere anche else
+            // di aggiornamento, visto che potrebbe aver aggiornato anche quei campi
         }
     }
 

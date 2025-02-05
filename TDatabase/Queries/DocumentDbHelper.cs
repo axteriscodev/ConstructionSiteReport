@@ -133,6 +133,18 @@ public class DocumentDbHelper
                                                              Id = cl.Id,
                                                              Name = cl.Name
                                                          }).SingleOrDefault() ?? new(),
+                                               Companies = (from cc in db.CompanyConstructorSites
+                                                            join comp in db.Companies on cc.IdCompany equals comp.Id
+                                                            where cc.IdConstructorSite == cs.Id
+                                                            select new CompanyModel()
+                                                            {
+                                                                Id = comp.Id,
+                                                                CompanyName = comp.CompanyName ?? "",
+                                                                JobsDescriptions = cc.JobsDescription ?? "",
+                                                                SubcontractedBy = cc.SubcontractedBy,
+                                                                Address = comp.Address ?? "",
+                                                                VatCode = comp.Vatcode ?? "",                                      
+                                                            }).ToList(),
                                            }).SingleOrDefault() ?? new(),
                         Client = (from cl in db.Clients
                                   where cl.Id == d.IdClient
@@ -159,8 +171,8 @@ public class DocumentDbHelper
                                          Present = compDoc.Present,
                                          InChargeWorker = compDoc.InChargeWorker ?? "",
                                          Workers = compDoc.Workers ?? "",
-                                         JobsDescriptions = compJoin.JobsDescription ?? "" 
-                                         
+                                         JobsDescriptions = compJoin.JobsDescription ?? ""
+
                                      }).ToList(),
                         Notes = (from n in db.Notes
                                  where n.IdDocument == d.Id
@@ -206,8 +218,8 @@ public class DocumentDbHelper
                         CreationDate = d.CreationDate ?? DateTime.Now,
                         CompilationDate = d.CompilationDate,
                         LastEditDate = d.LastEditDate,
-                        MeteoCondition = db.MeteoConditions.Where(m=>m.Id == d.IdMeteo)
-                                                           .Select(m=> new MeteoConditionModel() { Id = m.Id, Description = m.Description  })
+                        MeteoCondition = db.MeteoConditions.Where(m => m.Id == d.IdMeteo)
+                                                           .Select(m => new MeteoConditionModel() { Id = m.Id, Description = m.Description })
                                                            .SingleOrDefault(),
                         ConstructorSite = new()
                         {
@@ -265,7 +277,7 @@ public class DocumentDbHelper
                 DraftedIn = document.DraftedIn,
                 CompletedIn = document.CompletedIn,
                 IdMeteo = document.MeteoCondition?.Id,
-                
+
             };
 
             db.Documents.Add(newDocument);
@@ -280,7 +292,7 @@ public class DocumentDbHelper
                 }
 
                 //associo le aziende al cantiere
-                ConstructorSiteDbHelper.AddCompanyToConstructionSite(db, companyDoc, document.ConstructorSite.Id);
+                ConstructorSiteDbHelper.HandleCompaniesToConstructionSite(db, [companyDoc], document.ConstructorSite.Id);
 
                 //associazione con il documento
                 CompanyDocument cd = new()
@@ -417,7 +429,7 @@ public class DocumentDbHelper
                 var doc = db.Documents.Where(x => x.Id == document.Id).SingleOrDefault();
                 if (doc is not null)
                 {
-                    await ConstructorSiteDbHelper.Update(db,[document.ConstructorSite]);
+                    await ConstructorSiteDbHelper.Update(db, [document.ConstructorSite]);
                     db.Documents.Remove(doc);
                     await db.SaveChangesAsync();
                     await Insert(db, document, organizationId);

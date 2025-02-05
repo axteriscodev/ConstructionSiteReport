@@ -103,7 +103,7 @@ namespace ConstructionSiteLibrary.Components.ConstructorSites
                 PreliminaryNotificationStartDate = form.PreliminaryNotificationStartDate,
                 IdSico = form.IdSico,
                 Client = form.Client,
-                Companies = companies
+                Companies = form.Companies
             };
             var success = CreationMode ? await SiteRepository.SaveContructorSite(Site)
                                        : await SiteRepository.UpdateContructorSites([Site]);

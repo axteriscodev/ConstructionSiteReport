@@ -62,4 +62,17 @@ public class CompanyModel
 
     [JsonPropertyName("workers")]
     public string? Workers { get; set; } = "";
+
+
+    public override bool Equals(object? obj)
+    {
+        var result = false;
+        var comp = obj as CompanyModel;
+        if(comp is not null)
+        {
+            result = Id == comp.Id;
+        }
+
+        return result;
+    }
 }

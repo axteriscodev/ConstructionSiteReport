@@ -73,6 +73,7 @@ else
             <RadzenSplitButton Click=@(args => AddCompany(args)) AlwaysOpenPopup=true Text="Aggiungi impresa esecutrice">
                 <ChildContent>
                     <RadzenSplitButtonItem Text="Da anagrafica" Value="Anagrafica" />
+                    <RadzenSplitButtonItem Text="Da cantiere" Value="Cantiere" />
                     <RadzenSplitButtonItem Text="Nuova" Value="Nuova" />
                 </ChildContent>
             </RadzenSplitButton>                
@@ -88,6 +89,8 @@ else
     public EventCallback OnUpdateState { get; set; }
     [Parameter]
     public List<CompanyModel> Companies { get; set; } = [];
+    [Parameter]
+    public DocumentModel Document { get; set; } = new();
     [Parameter]
     public DocumentNavigator DocumentNavigator { get; set; } = new();
 
@@ -139,6 +142,31 @@ else
             {
 
                 { "PresentCompanies", Companies },
+            }; 
+            CompanyModel? selectedCompany = await DialogService.OpenAsync<FormAddCompany>("Seleziona azienda", parameters: param,  options: newOptions);
+
+            if(selectedCompany is not null)
+            {
+                selectedCompany.Present = true;
+                Companies.Add(selectedCompany);
+                CreateAnchor(selectedCompany);
+            }
+        }
+        else if(item.Value.Equals("Cantiere"))
+        {
+            //popup
+            // creo uno style aggiuntivo da inviare al componente caricato con il popup come options
+            var additionalStyle = $"min-height:fit-content;height:fit-content;max-width:600px";
+            var newOptions = new DialogOptions
+                {
+                    Style = additionalStyle
+                };
+            //creo parametri da inviare al componente caricato con il popup
+            var param = new Dictionary<string, object>
+            {
+
+                { "Companies", Document.ConstructorSite.Companies },
+                { "PresentCompanies", Companies }, 
             }; 
             CompanyModel? selectedCompany = await DialogService.OpenAsync<FormAddCompany>("Seleziona azienda", parameters: param,  options: newOptions);
 
