@@ -14,13 +14,13 @@
             <img class="profile-img" src="@avatarImg" />
             <InputFile OnChange="@(args => LoadAvatarFile(args))" style="display: none;" id="pictureLoader" />
             <div class="dropdown button2" @onfocusout="@ToggleDropdown">
-                <RadzenButton Icon="add_a_photo" Click="@ToggleDropdown" class="buttonOptions" />
+               @*  <RadzenButton Icon="add_a_photo" Click="@ToggleDropdown" class="buttonOptions" />
                 <div id="myDropdown" class="dropdown-content @DropdownCssClass()">
                     <RadzenButton Icon="photo_camera" Text="Fotocamera" Variant="Variant.Text" class="buttonEdit"
                     @onmousedown="@OpenCamera" />
                     <RadzenButton Icon="folder" Text="Archivio" class="buttonDelete" Variant="Variant.Text"
                     @onmousedown="@OpenDocuments" />
-                </div>
+                </div> *@
             </div>
         </div>
     </div>
@@ -58,7 +58,7 @@
             </ChildContent>
         </RadzenFormField>
     </div>
-    <div class="row my-2 justify-content-md-center">
+@*     <div class="row my-2 justify-content-md-center">
         <div class="container">
             <h6 class="field-label">Timbro e firma</h6>
             <div class="drag-area">
@@ -72,9 +72,9 @@
             </div>
             @* <div>
             <button class="download">Download</button>
-            </div> *@
+            </div>
         </div>
-    </div>
+    </div> *@
 
 </div>
 
@@ -99,7 +99,7 @@
     {
         @* if (firstRender)
         { *@
-        module = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/ConstructionSiteLibrary/dragndrop.js");
+       // module = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/ConstructionSiteLibrary/dragndrop.js");
         //await module.InvokeVoidAsync("loadCanvas", canvasId);
         @* } *@
     }
