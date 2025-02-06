@@ -863,7 +863,7 @@ public partial class DbCsclDamicoV2Context : DbContext
         {
             entity.ToTable("USER");
 
-            entity.HasIndex(e => e.Email, "UQ__USER__161CF72434EE76E0").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__tmp_ms_x__161CF724AF36A7CF").IsUnique();
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
@@ -887,6 +887,10 @@ public partial class DbCsclDamicoV2Context : DbContext
             entity.Property(e => e.Phone)
                 .IsUnicode(false)
                 .HasColumnName("PHONE");
+            entity.Property(e => e.ResetToken).HasColumnName("RESET_TOKEN");
+            entity.Property(e => e.ResetTokenExpirationDate)
+                .HasColumnType("datetime")
+                .HasColumnName("RESET_TOKEN_EXPIRATION_DATE");
             entity.Property(e => e.Salt)
                 .IsUnicode(false)
                 .HasColumnName("SALT");

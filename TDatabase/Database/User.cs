@@ -23,6 +23,10 @@ public partial class User
 
     public string? Phone { get; set; }
 
+    public string? ResetToken { get; set; }
+
+    public DateTime? ResetTokenExpirationDate { get; set; }
+
     public bool Active { get; set; }
 
     public bool Hidden { get; set; }
