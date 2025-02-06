@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using ServerHost.Model;
+using System.Runtime.InteropServices;
 using System.Text.Json;
 
 namespace ServerHost.Services
@@ -10,6 +11,7 @@ namespace ServerHost.Services
         private static readonly string DEFAULT_CONFIG = @"appsettings.json";
         private static readonly string WIN_CONFIG_FILE = @"config\appsettings.json";
         private static readonly string LINUX_CONFIG_FILE = "config/appsettings.json";
+        private const string MAIL_SETTINGS_TAG = "MailSettings";
 
         /// <summary>
         /// Metodo statico che legge la stringa di connesione al database dall' appsettings.json
@@ -25,6 +27,17 @@ namespace ServerHost.Services
             }
             catch (Exception) { }
             return conn;
+        }
+
+        /// <summary>
+        /// Metodo statico per recuperare la configurazione per l invio delle email
+        /// dall'appsettings.json
+        /// </summary>
+        /// <returns></returns>
+        public static MailSettings GetEmailSettings()
+        {
+            var config = GetConfigFile();
+            return config.GetSection(MAIL_SETTINGS_TAG).Get<MailSettings>() ?? new();
         }
 
         public static string? GetConfiguration(string key)
