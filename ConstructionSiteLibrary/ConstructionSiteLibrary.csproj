@@ -15,7 +15,7 @@
     <PackageReference Include="AXT_WebComunication" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="9.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="9.0.10" />
-    <PackageReference Include="Radzen.Blazor" Version="5.2.8" />
+    <PackageReference Include="Radzen.Blazor" Version="8.2.2" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
     <PackageReference Include="System.Text.Json" Version="9.0.10" />
     <PackageReference Include="WebStorageManagement" Version="9.0.0" />
